@@ -1,0 +1,10 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Copyright (C) CoolBitX Technology - All Rights Reserved
+${licensePrefix}Unauthorized copying of this file, via any medium is strictly prohibited
+${licensePrefix}Proprietary and confidential
+${licensePrefix}Written by ${user}, ${date?date?string("yyyy")}
+<#if licenseLast??>
+${licenseLast}
+</#if>
