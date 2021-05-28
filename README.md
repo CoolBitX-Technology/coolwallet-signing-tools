@@ -7,35 +7,11 @@ Scriptable Signing SDK 為一個開源的工具，將工具產生出的 script �
 
 目前支援 Coolwallet Pro SE 最低版本為 `v308`
 ## Introduction
----
+
 Use the command (Script) to copy/code the data between the buffers... etc. to compose the signature data and display the transaction content correctly
 
-## Composition
----
-
-  [Header][Command][Command] … [Command]
-
-The Header is followed by a sequence of commands that run in order.
-
-### Header
-
-  [headerLength 1B][version 1B][hashType 1B][signType 1B][remainDataType 1B]
-
-
-When the header length is 03, it means that the remainDataType is not required and the 80A2 will generate a signature without executing the 80A4.
-
-When the header length is 04, it means that the remainDataType is needed for 80A4 to execute, then 80A2 will not generate a signature.
-
-Example.
-
-0300[hashType][signType]
-
-0400[hashType][signType][remainDataType]
-
-
-
 ## Supported algorithms
----
+
 - SHA1
 - SHA256
 - SHA512
@@ -52,10 +28,10 @@ Example.
 
 
 ## Buffer type
----
+
 
 Buffer type | Description | Buffer size (bytes)
----|---|---
+||
 script | store script | 600 bytes
 argument | Save the signature parameters, each transaction is different, but the data is in a fixed format | 3800 bytes
 free | Staging space | 300 bytes
@@ -63,11 +39,80 @@ extended | Staging space | 300 bytes
 transaction | The final composition of the transaction content (raw signing data) | 3800 bytes
 detail | Transaction summary displayed on the card (symbol/amount/address) | 100 bytes
 
+
+## Composition
+
+
+  [Header][setCoinType Command][Payload Command]x N[Display Command]x N
+
+script 組成由 header、coin type、該幣種的payload、螢幕顯示資訊，四個部分組成，除了 header 以及 coin type 以外，payload 以及顯示資訊為多個指令
+
+The Header is followed by a sequence of commands that run in order.
+
+### Header
+
+  [headerLength 1B][version 1B][hashType 1B][signType 1B][remainDataType 1B]
+
+
+When the header length is 03, it means that the remainDataType is not required and the 80A2(txPrepArgument) will generate a signature without executing the 80A4.
+
+When the header length is 04, it means that the remainDataType is needed for 80A4(txPrepUtxo) to execute, then 80A2 will not generate a signature.
+
+Example.
+
+ETH script header: 03000601
+BTC script header: 0400000010
 ## Library documentation
----
 
 你可以到 XXX 查看詳細的函式庫用法。
 
 ### Usage
----
+
+- 依照交易的 payload 決定傳入卡片所需要的 Argument 種類並定義好資料長度。
+- 寫入 header （03000601）
+- 寫入 Coin type (ScriptAssembler.setCoinType(0x3C)) 
+- 組合 payload
+- 組合顯示資訊
+
+```java
+    public static String getETHScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptBuffer argTo = sac.getArgument(20);
+        ScriptBuffer argValue = sac.getArgumentRightJustified(10);
+        ScriptBuffer argGasPrice = sac.getArgumentRightJustified(10);
+        ScriptBuffer argGasLimit = sac.getArgumentRightJustified(10);
+        ScriptBuffer argNonce = sac.getArgumentRightJustified(8);
+        ScriptBuffer argChainId = sac.getArgumentRightJustified(2);
+        //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        return "03000601"
+                // set coinType to 3C
+                + ScriptAssembler.setCoinType(0x3C)
+                // temp byte for rlpList
+                + ScriptAssembler.copyString("C0")
+                // nonce
+                + ScriptAssembler.rlpString(argNonce)
+                // gasPrice
+                + ScriptAssembler.rlpString(argGasPrice)
+                // gasLimit
+                + ScriptAssembler.rlpString(argGasLimit)
+                // toAddress
+                + ScriptAssembler.copyString("94")
+                + ScriptAssembler.copyArgument(argTo)
+                // value
+                + ScriptAssembler.rlpString(argValue)
+                // data
+                + ScriptAssembler.copyString("80")
+                // chainId v
+                + ScriptAssembler.rlpString(argChainId)
+                // r,s
+                + ScriptAssembler.copyString("8080")
+                + ScriptAssembler.rlpList(1)
+                + ScriptAssembler.showMessage("ETH")
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), BufferType.FREE)
+                + ScriptAssembler.baseConvert(argTo, BufferType.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptBuffer.getDataBufferAll(BufferType.FREE))
+                + ScriptAssembler.showAmount(argValue, 18)
+                + ScriptAssembler.showPressButton();
+    }
+```
 
