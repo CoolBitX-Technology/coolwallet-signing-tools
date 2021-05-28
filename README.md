@@ -31,7 +31,7 @@ Use the command (Script) to copy/code the data between the buffers... etc. to co
 
 
 Buffer type | Description | Buffer size (bytes)
-||
+---|---|---
 script | store script | 600 bytes
 argument | Save the signature parameters, each transaction is different, but the data is in a fixed format | 3800 bytes
 free | Staging space | 300 bytes
@@ -68,13 +68,9 @@ BTC script header: 0400000010
 
 ### Usage
 
-- 依照交易的 payload 決定傳入卡片所需要的 Argument 種類並定義好資料長度。
-- 寫入 header （03000601）
-- 寫入 Coin type (ScriptAssembler.setCoinType(0x3C)) 
-- 組合 payload
-- 組合顯示資訊
+- 依照交易的 payload 決定傳入卡片所需要的 Argument
 
-```java
+```
     public static String getETHScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptBuffer argTo = sac.getArgument(20);
