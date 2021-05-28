@@ -1,6 +1,6 @@
 # Coolwallet Scriptable Signing SDK
 
-Scriptable Signing SDK 為一個開源的工具，你可藉由此工具所支援的演算法以及提供的指令，產生 Coolwallet Pro 簽章所需要的 script ，經由 Coolwallet Pro 組成 transaction payload 並簽署，最後產生出交易簽張。
+Scriptable Signing SDK 為 Coolbitx 的一個開源的工具，你可藉由此工具所支援的演算法以及提供的指令，產生 Coolwallet Pro 簽章所需要的 script ，經由 Coolwallet Pro 組成 transaction payload 並簽署，最後產生出交易簽張。
 
 目前支援 Coolwallet Pro SE 最低版本為 `v308`
 ## Introduction
@@ -42,7 +42,7 @@ detail | Transaction summary displayed on the card (symbol/amount/address) | 100
 
   [Header][setCoinType Command][Payload Command]...[Display Command]...
 
-script 組成由 header、coin type、該幣種的payload、螢幕顯示資訊，四個部分組成，payload 以及顯示資訊為多個指令組成
+script 組成由 header、coin type、payload、display detail 四個部分組成，payload 以及 display detail 為多個指令組成
 
 The Header is followed by a sequence of commands that run in order.
 
@@ -55,10 +55,10 @@ When the header length is 03, it means that the remainDataType is not required a
 
 When the header length is 04, it means that the remainDataType is needed for 80A4(txPrepUtxo) to execute, then 80A2 will not generate a signature.
 
-Example.
+#### Example
 
-ETH script header: 03000601
-BTC script header: 0400000010
+- ETH script header: 03000601
+- BTC script header: 0400000010
 ### Other command
 
 你可以到 XXX 查看詳細的函式庫用法。
