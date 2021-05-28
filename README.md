@@ -1,9 +1,6 @@
 # Coolwallet Scriptable Signing SDK
 
-Scriptable Signing SDK 為一個開源的工具，將工具產生出的 script ，經由 Coolwallet Pro 組成 transaction payload 進而產生出交易簽章。
-
-這個函式庫支援
-
+Scriptable Signing SDK 為一個開源的工具，你可藉由此工具所支援的演算法以及提供的指令，產生 Coolwallet Pro 簽章所需要的 script ，經由 Coolwallet Pro 組成 transaction payload 並簽署，最後產生出交易簽張。
 
 目前支援 Coolwallet Pro SE 最低版本為 `v308`
 ## Introduction
@@ -62,11 +59,11 @@ Example.
 
 ETH script header: 03000601
 BTC script header: 0400000010
-## Other command
+### Other command
 
 你可以到 XXX 查看詳細的函式庫用法。
 
-### Usage
+## Usage
 
 - 依照交易的 payload 決定傳入卡片所需要的 Argument
 - 決定 header 格式
@@ -92,8 +89,10 @@ public class ETHScript {
         ScriptBuffer argChainId = sac.getArgumentRightJustified(2);
         //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
         String header = "03000601";
+
                 // set coinType to 3C
         String coinType = ScriptAssembler.setCoinType(0x3C);
+
                 // temp byte for rlpList
         String payload = ScriptAssembler.copyString("C0")
                 // nonce
@@ -114,12 +113,14 @@ public class ETHScript {
                 // r,s
                 + ScriptAssembler.copyString("8080")
                 + ScriptAssembler.rlpList(1);
+
         String display = ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), BufferType.FREE)
                 + ScriptAssembler.baseConvert(argTo, BufferType.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.showAddress(ScriptBuffer.getDataBufferAll(BufferType.FREE))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
+
         return header + coinType + payload + display;
     }
     
