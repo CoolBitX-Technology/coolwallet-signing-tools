@@ -43,9 +43,9 @@ detail | Transaction summary displayed on the card (symbol/amount/address) | 100
 ## Composition
 
 
-  [Header][setCoinType Command][Payload Command]x N[Display Command]x N
+  [Header][setCoinType Command][Payload Command]...[Display Command]...
 
-script 組成由 header、coin type、該幣種的payload、螢幕顯示資訊，四個部分組成，除了 header 以及 coin type 以外，payload 以及顯示資訊為多個指令
+script 組成由 header、coin type、該幣種的payload、螢幕顯示資訊，四個部分組成，payload 以及顯示資訊為多個指令組成
 
 The Header is followed by a sequence of commands that run in order.
 
@@ -62,15 +62,26 @@ Example.
 
 ETH script header: 03000601
 BTC script header: 0400000010
-## Library documentation
+## Other command
 
 你可以到 XXX 查看詳細的函式庫用法。
 
 ### Usage
 
 - 依照交易的 payload 決定傳入卡片所需要的 Argument
+- 決定 header 格式
+- 寫入 coin type
+- 組合 payload string
+- 組合 display string
+- 執行程式
 
-```
+```java class:"lineNo"
+public class ETHScript {
+	
+    public static void main(String[] args) throws Exception {
+	    System.out.println("ETHScript: " + getETHScript());
+	}
+	
     public static String getETHScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptBuffer argTo = sac.getArgument(20);
@@ -80,11 +91,11 @@ BTC script header: 0400000010
         ScriptBuffer argNonce = sac.getArgumentRightJustified(8);
         ScriptBuffer argChainId = sac.getArgumentRightJustified(2);
         //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        return "03000601"
+        String header = "03000601";
                 // set coinType to 3C
-                + ScriptAssembler.setCoinType(0x3C)
+        String coinType = ScriptAssembler.setCoinType(0x3C);
                 // temp byte for rlpList
-                + ScriptAssembler.copyString("C0")
+        String payload = ScriptAssembler.copyString("C0")
                 // nonce
                 + ScriptAssembler.rlpString(argNonce)
                 // gasPrice
@@ -102,13 +113,17 @@ BTC script header: 0400000010
                 + ScriptAssembler.rlpString(argChainId)
                 // r,s
                 + ScriptAssembler.copyString("8080")
-                + ScriptAssembler.rlpList(1)
-                + ScriptAssembler.showMessage("ETH")
+                + ScriptAssembler.rlpList(1);
+        String display = ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), BufferType.FREE)
                 + ScriptAssembler.baseConvert(argTo, BufferType.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.showAddress(ScriptBuffer.getDataBufferAll(BufferType.FREE))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
+        return header + coinType + payload + display;
     }
+    
+}
+
 ```
 
