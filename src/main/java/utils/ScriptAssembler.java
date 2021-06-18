@@ -226,7 +226,16 @@ public class ScriptAssembler {
         return checkRegularString(data)
                 + copyArgument(data, dest);
     }
-
+    
+    /**
+     * 
+     * @param data
+     * @param dest
+     * @param outputLimit
+     * @param charset
+     * @param baseConvertArg
+     * @return
+     */
     public static String baseConvert(ScriptBuffer data, BufferType dest, int outputLimit, String charset, int baseConvertArg) {
         if (outputLimit == 0) {
             outputLimit = 64;
@@ -255,6 +264,13 @@ public class ScriptAssembler {
         return compose("BA", data, dest, outputLimit, HexUtil.toInt(charsetIndex)) + HexUtil.toHexString(baseConvertArg, 1);
     }
 
+    /**
+     * 
+     * @param data
+     * @param dest
+     * @param hashType
+     * @return
+     */
     public static String hash(ScriptBuffer data, BufferType dest, int hashType) {
         return compose("5A", data, dest, hashType, 0);
     }
