@@ -387,7 +387,11 @@ public class ScriptAssembler {
     }
 
     public static String arrayEnd() {
-        return compose("BE", null, null, 0, 0);
+        return arrayEnd(0);
+    }
+
+    public static String arrayEnd(int type) {
+        return compose("BE", null, null, type, 0);
     }
 
     public static String scaleEncode(ScriptBuffer data, BufferType dest) {
