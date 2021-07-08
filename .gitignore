@@ -1,0 +1,10 @@
+**/nbproject/
+**/dist
+**/build
+**/target
+**/.DS_Store
+**/nbbuild/
+**/nbdist/
+**/.nb-gradle/
+**/node_modules/
+/bin/
