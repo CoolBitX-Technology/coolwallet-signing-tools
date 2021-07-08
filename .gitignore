@@ -7,7 +7,4 @@
 **/nbdist/
 **/.nb-gradle/
 **/node_modules/
-src/test/java/coolwallets/se/test/Erc20Signer.java
-src/test/java/coolwallets/se/test/UnitFunctionTest.java
-src/test/java/coolwallets/se/test/BnbTokenSigner.java
 /bin/
