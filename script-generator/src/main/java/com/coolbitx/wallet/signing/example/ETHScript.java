@@ -7,11 +7,11 @@ package example;
 
 import org.spongycastle.util.encoders.Hex;
 
-import utils.HexUtil;
-import utils.ScriptArgumentComposer;
-import utils.ScriptAssembler;
-import utils.ScriptBuffer;
-import utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler;
+import com.coolbitx.wallet.signing.utils.ScriptBuffer;
+import com.coolbitx.wallet.signing.utils.HexUtil;
 
 /**
  *
