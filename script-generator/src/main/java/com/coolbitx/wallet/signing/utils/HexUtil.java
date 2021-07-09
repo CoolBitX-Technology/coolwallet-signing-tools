@@ -7,7 +7,6 @@ package utils;
 
 import java.math.BigInteger;
 import org.spongycastle.util.encoders.Hex;
-import static org.junit.Assert.*;
 
 /**
  *
