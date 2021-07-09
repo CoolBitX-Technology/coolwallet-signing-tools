@@ -9,7 +9,7 @@ import utils.ScriptBuffer.BufferType;
 
 /**
  *
- * @author Hank Liu <hankliu@coolbitx.com>
+ * @author Hank Liu (hankliu@coolbitx.com)
  */
 public class ScriptArgumentComposer {
 
@@ -19,75 +19,65 @@ public class ScriptArgumentComposer {
         this.offset = 0;
     }
 
+    /**
+     * Get fixed length long argument buffer, and add length to the
+     * ScriptArgumentComposer‘s offset.
+     *
+     * @param length The length of argument.
+     * @return Buffer object with fixed length.
+     */
     public ScriptBuffer getArgument(int length) {
         ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, length);
         this.offset += length;
         return db;
     }
 
+    /**
+     * Get variable length long argument buffer, and add length to the
+     * ScriptArgumentComposer offset.
+     *
+     * @param length The length of argument.
+     * @return Buffer object with zero padding to left-side of argument.
+     */
     public ScriptBuffer getArgumentRightJustified(int length) {
         ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, -length);
         this.offset += length;
         return db;
     }
 
+    /**
+     * Get specified range long argument buffer from the offset now, and won't
+     * change the ScriptArgumentComposer offset.
+     *
+     * @param offset The offset from ScriptArgumentComposer offset now.
+     * @param length The length of argument.
+     * @return Buffer object with fixed length.
+     */
     public ScriptBuffer getArgumentUnion(int offset, int length) {
         return ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset + offset, length);
     }
-    
+
+    /**
+     * Get fixed length long argument buffer, but the actual usage length
+     * defined in BufferInt. Will add length to the ScriptArgumentComposer offset.
+     *
+     * @param length The max length of argument.
+     * @return Buffer object with zero padding to left-side of argument.
+     */
     public ScriptBuffer getArgumentVariableLength(int length) {
-        ScriptBuffer db =  ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.bufInt);
+        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.bufInt);
         this.offset += length;
         return db;
     }
 
+    /**
+     * Get all rest argument buffer.
+     *
+     * @return Buffer object with the rest argument length.
+     */
     public ScriptBuffer getArgumentAll() {
-        ScriptBuffer db =  ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.max);
+        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.max);
         this.offset += 9999;
         return db;
     }
-
-//    private static int getDataOffset(String data) {
-//        String range = data.substring(8, data.length());
-//
-//        String s = range.substring(1, 4);
-//        int ret;
-//        switch (s) {
-//            case "buf":
-//                ret = 1000;
-//                break;
-//            case "max":
-//                ret = 2000;
-//                break;
-//            default:
-//                ret = Integer.parseInt(s);
-//                break;
-//        }
-//
-//        return ret;
-//    }
-//
-//    private static int getDataLength(String data) {
-//        String range = data.substring(8, data.length());
-//
-//        String s = range.substring(5, 8);
-//        int ret;
-//        switch (s) {
-//            case "buf":
-//                ret = 1000;
-//                break;
-//            case "max":
-//                ret = 2000;
-//                break;
-//            default:
-//                ret = Integer.parseInt(s);
-//                break;
-//        }
-//
-//        if (data.charAt(4) == '~') {
-//            ret -= getDataOffset(data);
-//        }
-//
-//        return ret;
-//    }
 }

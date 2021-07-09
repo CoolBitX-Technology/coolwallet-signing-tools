@@ -9,11 +9,11 @@ import utils.ScriptBuffer.BufferType;
 
 /**
  *
- * @author Hank Liu <hankliu@coolbitx.com>
+ * @author Hank Liu (hankliu@coolbitx.com)
  */
 public class ScriptAssembler {
-    
-    public static final String binaryCharset = "binaryCharset";
+
+    private static final String binaryCharset = "binaryCharset";
     public static final String hexadecimalCharset = "hexadecimalCharset";
     public static final String bcdCharset = "bcdCharset";
     public static final String decimalCharset = "decimalCharset";
@@ -47,7 +47,7 @@ public class ScriptAssembler {
 
     private static int argumentOffset = 0;
 
-    public static String compose(String command, ScriptBuffer dataBuf, BufferType destBuf, int arg0, int arg1) {
+    private static String compose(String command, ScriptBuffer dataBuf, BufferType destBuf, int arg0, int arg1) {
         clearParameter();
         if (dataBuf == null) {
             firstParameter += "0";
@@ -137,27 +137,61 @@ public class ScriptAssembler {
         }
     }
 
+    /**
+     *
+     * @param coinType
+     * @return
+     */
     public static String setCoinType(int coinType) {
         String hexCoinType = HexUtil.toHexString(coinType, 4);
         return compose("C7", null, null, 0, 0) + hexCoinType;
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String copyArgument(ScriptBuffer data) {
         return copyArgument(data, BufferType.TRANSACTION);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String copyArgument(ScriptBuffer data, BufferType dest) {
         return compose("CA", data, dest, 0, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String copyString(String data) {
         return copyString(data, BufferType.TRANSACTION);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String copyString(String data, BufferType dest) {
         return compose("CC", null, dest, data.length() / 2, 0) + data;
     }
 
+    /**
+     *
+     * @param conditionData
+     * @param dest
+     * @param str
+     * @return
+     */
     public static String switchString(ScriptBuffer conditionData, BufferType dest, String str) {
         String[] strList = str.split(",");
         String ret = compose("C1", conditionData, dest, strList.length, 0);
@@ -173,6 +207,13 @@ public class ScriptAssembler {
         return ret;
     }
 
+    /**
+     *
+     * @param scriptTypeData
+     * @param supportType
+     * @param content
+     * @return
+     */
     public static String btcScript(ScriptBuffer scriptTypeData, int supportType, String content) {
         switch (supportType) {
             case 2:
@@ -198,37 +239,75 @@ public class ScriptAssembler {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String rlpString(ScriptBuffer data) {
         return rlpString(data, BufferType.TRANSACTION);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String rlpString(ScriptBuffer data, BufferType dest) {
         return compose("C2", data, dest, 0, 0);
     }
 
+    /**
+     *
+     * @param preserveLength
+     * @return
+     */
     public static String rlpList(int preserveLength) {
         return rlpList(preserveLength, BufferType.TRANSACTION);
     }
 
+    /**
+     *
+     * @param preserveLength
+     * @param dest
+     * @return
+     */
     public static String rlpList(int preserveLength, BufferType dest) {
         return compose("C3", ScriptBuffer.getDataBufferAll(dest), dest, preserveLength, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String checkRegularString(ScriptBuffer data) {
         return compose("29", data, null, 0, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String copyRegularString(ScriptBuffer data) {
         return copyRegularString(data, BufferType.TRANSACTION);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String copyRegularString(ScriptBuffer data, BufferType dest) {
         return checkRegularString(data)
                 + copyArgument(data, dest);
     }
-    
+
     /**
-     * 
+     *
      * @param data
      * @param dest
      * @param outputLimit
@@ -265,7 +344,7 @@ public class ScriptAssembler {
     }
 
     /**
-     * 
+     *
      * @param data
      * @param dest
      * @param hashType
@@ -275,43 +354,93 @@ public class ScriptAssembler {
         return compose("5A", data, dest, hashType, 0);
     }
 
+    /**
+     *
+     * @param pathData
+     * @param dest
+     * @return
+     */
     public static String derivePublicKey(ScriptBuffer pathData, BufferType dest) {
         return compose("6C", pathData, dest, 0, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String bech32Polymod(ScriptBuffer data, BufferType dest) {
         return compose("5A", data, dest, 0xB, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String bchPolymod(ScriptBuffer data, BufferType dest) {
         return compose("5A", data, dest, 0xC, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @param min
+     * @param max
+     * @return
+     */
     public static String setBufferInt(ScriptBuffer data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         return ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError) + setB;
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String setBufferIntToDataLength(ScriptBuffer data) {
         return compose("B1", data, null, 0, 0);
     }
 
+    /**
+     *
+     * @param dest
+     * @return
+     */
     public static String putBufferInt(BufferType dest) {
         return compose("B9", null, dest, 0, 0);
     }
 
+    /**
+     *
+     * @param dest
+     * @param base
+     * @return
+     */
     public static String paddingZero(BufferType dest, int base) {
         return compose("C6", null, dest, base, 0);
     }
 
-//    public static String paddingZero(String data, String dest, int base) {
-//        return setBufferIntToDataLength(data) + ScriptCommand.compose("C6", null, dest, base, 0);
-//    }
-
+    /**
+     *
+     * @param skipee
+     * @return
+     */
     public static String skip(String skipee) {
         return compose("15", null, null, skipee.length() / 2, 0);
     }
 
+    /**
+     *
+     * @param argData
+     * @param expect
+     * @param trueStatement
+     * @param falseStatement
+     * @return
+     */
     public static String ifEqual(ScriptBuffer argData, String expect, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
@@ -321,6 +450,15 @@ public class ScriptAssembler {
                 + trueStatement + falseStatement;
     }
 
+    /**
+     *
+     * @param argData
+     * @param min
+     * @param max
+     * @param trueStatement
+     * @param falseStatement
+     * @return
+     */
     public static String ifRange(ScriptBuffer argData, String min, String max, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
@@ -331,6 +469,14 @@ public class ScriptAssembler {
                 + trueStatement + falseStatement;
     }
 
+    /**
+     *
+     * @param argData
+     * @param signData
+     * @param trueStatement
+     * @param falseStatement
+     * @return
+     */
     public static String ifSigned(ScriptBuffer argData, ScriptBuffer signData, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
@@ -339,61 +485,124 @@ public class ScriptAssembler {
                 + trueStatement + falseStatement;
     }
 
+    /**
+     *
+     * @param dest
+     * @return
+     */
     public static String resetDest(BufferType dest) {
         return compose("25", null, dest, 0, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String showMessage(String data) {
         return compose("DC", null, null, data.length(), 0) + HexUtil.toHexString(data);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String showMessage(ScriptBuffer data) {
         return compose("DE", data, null, 0, 0);
     }
 
+    /**
+     *
+     * @param data0
+     * @param data1
+     * @return
+     */
     public static String showWrap(String data0, String data1) {
-        /*if(isDataBuf(data)){
-            clearParameter();
-            addDataParameter(data);
-            ret+="0";
-            return "DE"+ret+secondParameter;
-        } else {*/
         return compose("D2", null, null, data0.length(), data1.length()) + HexUtil.toHexString(data0) + HexUtil.toHexString(data1);
         //}
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public static String showAddress(ScriptBuffer data) {
         return compose("DD", data, null, 0, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @param decimal
+     * @return
+     */
     public static String showAmount(ScriptBuffer data, int decimal) {
         return compose("DA", data, null, decimal, 0);
     }
 
+    /**
+     *
+     * @return
+     */
     public static String showPressButton() {
         return showWrap("PRESS", "BUTToN");
     }
 
+    /**
+     *
+     * @param data
+     * @param wireType
+     * @return
+     */
     public static String protobuf(ScriptBuffer data, int wireType) {
         return protobuf(data, BufferType.TRANSACTION, wireType);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @param wireType
+     * @return
+     */
     public static String protobuf(ScriptBuffer data, BufferType dest, int wireType) {
         return compose("BF", data, dest, wireType, 0);
     }
 
+    /**
+     *
+     * @return
+     */
     public static String arrayPointer() {
         return compose("A0", null, null, 0, 0);
     }
 
+    /**
+     *
+     * @return
+     */
     public static String arrayEnd() {
         return compose("BE", null, null, 0, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String scaleEncode(ScriptBuffer data, BufferType dest) {
         return compose("A2", data, dest, 0, 0);
     }
 
+    /**
+     *
+     * @param data
+     * @param dest
+     * @return
+     */
     public static String scaleDecode(ScriptBuffer data, BufferType dest) {
         return compose("A3", data, dest, 0, 0);
     }

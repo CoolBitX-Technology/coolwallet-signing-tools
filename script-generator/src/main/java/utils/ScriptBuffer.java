@@ -7,7 +7,7 @@ package utils;
 
 /**
  *
- * @author Hank Liu <hankliu@coolbitx.com>
+ * @author Hank Liu (hankliu@coolbitx.com)
  */
 public class ScriptBuffer {
 
