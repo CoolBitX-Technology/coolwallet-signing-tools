@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package utils;
+package com.coolbitx.wallet.signing.utils;
 
-import utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
 
 /**
  *

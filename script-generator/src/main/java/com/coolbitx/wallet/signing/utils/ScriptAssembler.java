@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package utils;
+package com.coolbitx.wallet.signing.utils;
 
-import utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
 
 /**
  *
@@ -387,7 +387,11 @@ public class ScriptAssembler {
     }
 
     public static String arrayEnd() {
-        return compose("BE", null, null, 0, 0);
+        return arrayEnd(0);
+    }
+
+    public static String arrayEnd(int type) {
+        return compose("BE", null, null, type, 0);
     }
 
     public static String scaleEncode(ScriptBuffer data, BufferType dest) {
