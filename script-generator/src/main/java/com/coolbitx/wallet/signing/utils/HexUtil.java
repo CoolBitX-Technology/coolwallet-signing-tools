@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package utils;
+package com.coolbitx.wallet.signing.utils;
 
 import java.math.BigInteger;
 import org.spongycastle.util.encoders.Hex;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -69,7 +68,7 @@ public class HexUtil {
 
     public static String leftJustify(String str, int byteLength) {
         if (str.length() > byteLength * 2) {
-            assertTrue("leftJustify", false);
+            throw new java.lang.Error("str length too long");
         }
         while (str.length() < byteLength * 2) {
             str = str + "0";
@@ -79,7 +78,7 @@ public class HexUtil {
 
     public static String rightJustify(String str, int byteLength) {
         if (str.length() > byteLength * 2) {
-            assertTrue("rightJustify", false);
+            throw new java.lang.Error("str length too long");
         }
         while (str.length() < byteLength * 2) {
             str = "0" + str;
@@ -90,7 +89,7 @@ public class HexUtil {
     public static String addZeroForNum(String str, int strLength) {
         if (str.length() > strLength) {
             System.out.println("addZero:\"" + str + "\" " + strLength);
-            assertTrue("addZeroForNum", false);
+            throw new java.lang.Error("str length too long");
         }
         while (str.length() < strLength) {
             str = "0" + str;

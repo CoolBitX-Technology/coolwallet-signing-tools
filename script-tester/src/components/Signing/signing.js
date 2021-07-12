@@ -43,8 +43,17 @@ function Signing({ transport, appId, appPrivateKey, isLocked, setIsLocked }) {
 
       const encryptedSignature = await action();
 
+      // finish prepare
+      await apdu.tx.finishPrepare(transport);
+
+      // get tx detail
+      await apdu.tx.getTxDetail(transport)
+
+      await apdu.tx.clearTransaction(transport);
+      await apdu.mcu.control.powerOff(transport);
       
       setSignature(encryptedSignature)
+      
     } catch (error) {
 
       console.error(error);
@@ -88,6 +97,16 @@ function Signing({ transport, appId, appPrivateKey, isLocked, setIsLocked }) {
       // encryptedSignatureArray.push(await actions());
       
       console.log("encryptedSignatureArray: ", encryptedSignatureArray)
+
+      
+      // finish prepare
+      await apdu.tx.finishPrepare(transport);
+
+      // get tx detail
+      await apdu.tx.getTxDetail(transport)
+
+      await apdu.tx.clearTransaction(transport);
+      await apdu.mcu.control.powerOff(transport);
 
       setUtxoSignature(encryptedSignatureArray)
     } catch (error) {

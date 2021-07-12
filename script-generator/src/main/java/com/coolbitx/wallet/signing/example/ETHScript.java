@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package example;
+package com.coolbitx.wallet.signing.example;
 
 import org.spongycastle.util.encoders.Hex;
 
-import utils.HexUtil;
-import utils.ScriptArgumentComposer;
-import utils.ScriptAssembler;
-import utils.ScriptBuffer;
-import utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.*;
+import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
 
 /**
  *
