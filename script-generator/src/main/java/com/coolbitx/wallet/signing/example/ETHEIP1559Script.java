@@ -1,7 +1,6 @@
 package com.coolbitx.wallet.signing.example;
 
 import org.spongycastle.util.encoders.Hex;
-
 import com.coolbitx.wallet.signing.utils.*;
 import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
 

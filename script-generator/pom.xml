@@ -74,7 +74,7 @@
               <goal>java</goal>
             </goals>
             <configuration>
-              <mainClass>com.coolbitx.wallet.signing.example.ETHEIP1559Script</mainClass>
+              <mainClass>com.coolbitx.wallet.signing.main.main</mainClass>
             </configuration>
           </execution>
         </executions>
