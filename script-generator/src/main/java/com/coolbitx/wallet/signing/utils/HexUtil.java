@@ -14,9 +14,9 @@ import org.spongycastle.util.encoders.Hex;
  */
 public class HexUtil {
 
-    public static String getOriginalStringFromHexString(String str) {
-        return new String(Hex.decode(str));
-    }
+//    public static String getOriginalStringFromHexString(String str) {
+//        return new String(Hex.decode(str));
+//    }
 
     public static String toHexString(String stringData) {
         return toHexString(stringData.getBytes(), stringData.length());

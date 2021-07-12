@@ -13,7 +13,7 @@ import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
  */
 public class ScriptAssembler {
 
-    private static final String binaryCharset = "binaryCharset";
+    public static final String binaryCharset = "binaryCharset";
     public static final String hexadecimalCharset = "hexadecimalCharset";
     public static final String bcdCharset = "bcdCharset";
     public static final String decimalCharset = "decimalCharset";
@@ -138,7 +138,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * Set coin type, should use in the begin of script.
      * @param coinType
      * @return
      */
@@ -148,7 +148,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * Copy argument to transaction buffer.
      * @param data
      * @return
      */
@@ -167,7 +167,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * Copy string to transaction buffer.
      * @param data
      * @return
      */
@@ -240,7 +240,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * Put rlp encode string to transaction buffer.
      * @param data
      * @return
      */
@@ -259,7 +259,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * Copy rlp encode list to transaction buffer.
      * @param preserveLength
      * @return
      */
@@ -278,7 +278,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * Check the buffer data in range of asc-ii code encode (0x20~0x7e).
      * @param data
      * @return
      */
@@ -287,7 +287,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * Copy string to transaction buffer, and check the buffer data in range of asc-ii code encode (0x20~0x7e).FF
      * @param data
      * @return
      */
@@ -308,11 +308,11 @@ public class ScriptAssembler {
 
     /**
      *
-     * @param data
-     * @param dest
-     * @param outputLimit
-     * @param charset
-     * @param baseConvertArg
+     * @param data The data should to encode.
+     * @param dest The destination of the encoded data.
+     * @param outputLimit The limit length of encoded result.
+     * @param charset The name of the charset requested: "binaryCharset", "hexadecimalCharset", "bcdCharset", "decimalCharset", "binary32Charset", "base32BitcoinCashCharset", "base58Charset", "extentetCharset".
+     * @param baseConvertArg The number of the base-enoding requested: leftJustify = 0x01, littleEndian = 0x02, zeroInherit = 0x04, bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return
      */
     public static String baseConvert(ScriptBuffer data, BufferType dest, int outputLimit, String charset, int baseConvertArg) {
@@ -344,7 +344,7 @@ public class ScriptAssembler {
     }
 
     /**
-     *
+     * 
      * @param data
      * @param dest
      * @param hashType
