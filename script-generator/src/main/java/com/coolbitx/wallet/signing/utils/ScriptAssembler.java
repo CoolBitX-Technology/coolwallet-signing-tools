@@ -139,6 +139,7 @@ public class ScriptAssembler {
 
     /**
      * Set coin type, should use in the begin of script.
+     *
      * @param coinType
      * @return
      */
@@ -149,6 +150,7 @@ public class ScriptAssembler {
 
     /**
      * Copy argument to transaction buffer.
+     *
      * @param data
      * @return
      */
@@ -157,9 +159,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Copy argument to specified buffer.
      *
      * @param data
-     * @param dest
+     * @param dest The destination buffer.
      * @return
      */
     public static String copyArgument(ScriptBuffer data, BufferType dest) {
@@ -168,6 +171,7 @@ public class ScriptAssembler {
 
     /**
      * Copy string to transaction buffer.
+     *
      * @param data
      * @return
      */
@@ -176,9 +180,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Copy string to specified buffer.
      *
      * @param data
-     * @param dest
+     * @param dest The destination buffer.
      * @return
      */
     public static String copyString(String data, BufferType dest) {
@@ -241,6 +246,7 @@ public class ScriptAssembler {
 
     /**
      * Put rlp encode string to transaction buffer.
+     *
      * @param data
      * @return
      */
@@ -249,9 +255,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Put rlp encode string to specified buffer.
      *
      * @param data
-     * @param dest
+     * @param dest The destination buffer.
      * @return
      */
     public static String rlpString(ScriptBuffer data, BufferType dest) {
@@ -259,7 +266,8 @@ public class ScriptAssembler {
     }
 
     /**
-     * Copy rlp encode list to transaction buffer.
+     * (deprecated)rlp list encode to transaction buffer.
+     *
      * @param preserveLength
      * @return
      */
@@ -268,9 +276,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * (deprecated)rlp list encode to specified buffer.
      *
      * @param preserveLength
-     * @param dest
+     * @param dest The destination buffer.
      * @return
      */
     public static String rlpList(int preserveLength, BufferType dest) {
@@ -279,6 +288,7 @@ public class ScriptAssembler {
 
     /**
      * Check the buffer data in range of asc-ii code encode (0x20~0x7e).
+     *
      * @param data
      * @return
      */
@@ -287,7 +297,9 @@ public class ScriptAssembler {
     }
 
     /**
-     * Copy string to transaction buffer, and check the buffer data in range of asc-ii code encode (0x20~0x7e).FF
+     * Copy buffer data to transaction buffer, and check the buffer data in
+     * range of asc-ii code encode (0x20~0x7e).
+     *
      * @param data
      * @return
      */
@@ -296,9 +308,11 @@ public class ScriptAssembler {
     }
 
     /**
+     * Copy buffer data to specified buffer, and check the buffer data in range
+     * of asc-ii code encode (0x20~0x7e).
      *
      * @param data
-     * @param dest
+     * @param dest The destination buffer.
      * @return
      */
     public static String copyRegularString(ScriptBuffer data, BufferType dest) {
@@ -311,8 +325,12 @@ public class ScriptAssembler {
      * @param data The data should to encode.
      * @param dest The destination of the encoded data.
      * @param outputLimit The limit length of encoded result.
-     * @param charset The name of the charset requested: "binaryCharset", "hexadecimalCharset", "bcdCharset", "decimalCharset", "binary32Charset", "base32BitcoinCashCharset", "base58Charset", "extentetCharset".
-     * @param baseConvertArg The number of the base-enoding requested: leftJustify = 0x01, littleEndian = 0x02, zeroInherit = 0x04, bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
+     * @param charset The name of the charset requested: "binaryCharset",
+     * "hexadecimalCharset", "bcdCharset", "decimalCharset", "binary32Charset",
+     * "base32BitcoinCashCharset", "base58Charset", "extentetCharset".
+     * @param baseConvertArg The number of the base-enoding requested:
+     * leftJustify = 0x01, littleEndian = 0x02, zeroInherit = 0x04,
+     * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return
      */
     public static String baseConvert(ScriptBuffer data, BufferType dest, int outputLimit, String charset, int baseConvertArg) {
@@ -344,10 +362,14 @@ public class ScriptAssembler {
     }
 
     /**
-     * 
-     * @param data
-     * @param dest
-     * @param hashType
+     * Bech32 hash data to specified buffer.
+     *
+     * @param data The input buffer data.
+     * @param dest The destination buffer.
+     * @param hashType SHA1 = 0x01, SHA256 = 0x02, SHA512 = 0x03, SHA3256 =
+     * 0x04, SHA3512 = 0x05, Keccak256 = 0x06, Keccak512 = 0x07, RipeMD160 =
+     * 0x08, SHA256RipeMD160 = 0x09, DoubleSHA256 = 0x0D, CRC16 = 0x0A,
+     * Blake2b512 = 0x0F;
      * @return
      */
     public static String hash(ScriptBuffer data, BufferType dest, int hashType) {
@@ -355,9 +377,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Derive public key to specified buffer.
      *
-     * @param pathData
-     * @param dest
+     * @param pathData Derive path.
+     * @param dest The destination buffer.
      * @return
      */
     public static String derivePublicKey(ScriptBuffer pathData, BufferType dest) {
@@ -365,9 +388,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Bech32 hash data to specified buffer.
      *
-     * @param data
-     * @param dest
+     * @param data The input buffer data.
+     * @param dest The destination buffer.
      * @return
      */
     public static String bech32Polymod(ScriptBuffer data, BufferType dest) {
@@ -375,9 +399,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Polymod hash data to specified buffer.
      *
-     * @param data
-     * @param dest
+     * @param data The input buffer data.
+     * @param dest The destination buffer.
      * @return
      */
     public static String bchPolymod(ScriptBuffer data, BufferType dest) {
@@ -385,6 +410,7 @@ public class ScriptAssembler {
     }
 
     /**
+     * Set bufferInt from buffer length and check range.
      *
      * @param data
      * @param min
@@ -397,6 +423,7 @@ public class ScriptAssembler {
     }
 
     /**
+     * Set bufferInt from buffer length.
      *
      * @param data
      * @return
@@ -406,6 +433,7 @@ public class ScriptAssembler {
     }
 
     /**
+     * Put bufferInt into destination buffer(cast short to 2 bytes).
      *
      * @param dest
      * @return
@@ -415,9 +443,11 @@ public class ScriptAssembler {
     }
 
     /**
+     * Padding zero to the destination buffer.
      *
-     * @param dest
-     * @param base
+     * @param dest Destination buffer.
+     * @param base The number of padding zero is the base minus the remainder of
+     * bufferInt divided by base(base - (bufferInt % base)).
      * @return
      */
     public static String paddingZero(BufferType dest, int base) {
@@ -486,8 +516,9 @@ public class ScriptAssembler {
     }
 
     /**
+     * Reset the specified buffer.
      *
-     * @param dest
+     * @param dest Target buffer.
      * @return
      */
     public static String resetDest(BufferType dest) {
@@ -495,8 +526,9 @@ public class ScriptAssembler {
     }
 
     /**
+     * Show word on card.
      *
-     * @param data
+     * @param data The word would show on card.
      * @return
      */
     public static String showMessage(String data) {
@@ -504,8 +536,9 @@ public class ScriptAssembler {
     }
 
     /**
+     * Show word on card from specified buffer.
      *
-     * @param data
+     * @param data The buffer of word.
      * @return
      */
     public static String showMessage(ScriptBuffer data) {
@@ -513,9 +546,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Show word on card with two line.
      *
-     * @param data0
-     * @param data1
+     * @param data0 The word in line one.
+     * @param data1 The word in line two.
      * @return
      */
     public static String showWrap(String data0, String data1) {
@@ -524,8 +558,9 @@ public class ScriptAssembler {
     }
 
     /**
+     * Show transaction address on card.
      *
-     * @param data
+     * @param data The transaction address data.
      * @return
      */
     public static String showAddress(ScriptBuffer data) {
@@ -533,9 +568,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Show transaction amount on card.
      *
-     * @param data
-     * @param decimal
+     * @param data The transaction amount data.
+     * @param decimal The decimal in this transaction.
      * @return
      */
     public static String showAmount(ScriptBuffer data, int decimal) {
@@ -543,6 +579,7 @@ public class ScriptAssembler {
     }
 
     /**
+     * Show "PRESS BOTTON" on card.
      *
      * @return
      */
@@ -551,8 +588,9 @@ public class ScriptAssembler {
     }
 
     /**
+     * Protobuf decode data to transaction buffer.
      *
-     * @param data
+     * @param data The input buffer data.
      * @param wireType
      * @return
      */
@@ -561,9 +599,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Protobuf decode data to specified buffer.
      *
-     * @param data
-     * @param dest
+     * @param data The input buffer data.
+     * @param dest The destination buffer.
      * @param wireType
      * @return
      */
@@ -572,6 +611,7 @@ public class ScriptAssembler {
     }
 
     /**
+     * Point the array start position.
      *
      * @return
      */
@@ -580,6 +620,8 @@ public class ScriptAssembler {
     }
 
     /**
+     * Encode data from the last position point in arrayPointer function with
+     * protobuf encoding.
      *
      * @return
      */
@@ -587,14 +629,22 @@ public class ScriptAssembler {
         return arrayEnd(0);
     }
 
+    /**
+     * Encode data from the last position point in arrayPointer function with
+     * specified encoding.
+     *
+     * @param type 0: protobuf, 1: rlp
+     * @return
+     */
     public static String arrayEnd(int type) {
         return compose("BE", null, null, type, 0);
     }
 
     /**
+     * Scale decode data to specified buffer.
      *
-     * @param data
-     * @param dest
+     * @param data The input buffer data.
+     * @param dest The destination buffer.
      * @return
      */
     public static String scaleEncode(ScriptBuffer data, BufferType dest) {
@@ -602,9 +652,10 @@ public class ScriptAssembler {
     }
 
     /**
+     * Scale encode data to specified buffer.
      *
-     * @param data
-     * @param dest
+     * @param data The input buffer data.
+     * @param dest The destination buffer.
      * @return
      */
     public static String scaleDecode(ScriptBuffer data, BufferType dest) {
