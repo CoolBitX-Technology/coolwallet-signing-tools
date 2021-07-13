@@ -17,11 +17,12 @@ import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
 public class ETHScript {
 	
     public static void main(String[] args) throws Exception {
-	    System.out.println("ETHScript: " + getETHScript());
-	    System.out.println("ERC20Script: " + getERC20Script());
+	    System.out.println("\nETH Normal Script: " + getNormalScript());
+	    System.out.println("\nETH ERC-20 Script: " + getERC20Script());
+	    System.out.println();
 	}
 	
-    public static String getETHScript() {
+    public static String getNormalScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptBuffer argTo = sac.getArgument(20);
         ScriptBuffer argValue = sac.getArgumentRightJustified(10);

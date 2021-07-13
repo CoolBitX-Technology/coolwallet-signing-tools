@@ -65,65 +65,70 @@ When the header length is 04, it means that the remainDataType is needed for 80A
 
 ## Usage
 
+- 修改檔案 src/main/java/com/coolbitx/wallet/signing/main/main.java
 - 依照交易的 payload 決定傳入卡片所需要的 Argument
 - 決定 header 格式
 - 寫入 coin type
 - 組合 payload string
 - 組合 display string
-- 執行程式
+- 執行程式: `mvn compile -q`
 
 ```java class:"lineNo"
-public class ETHScript {
-	
+public class main {
+
     public static void main(String[] args) throws Exception {
-	    System.out.println("ETHScript: " + getETHScript());
-	}
-	
-    public static String getETHScript() {
+
+        // Step 1. Define Arguments.
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptBuffer argTo = sac.getArgument(20);
         ScriptBuffer argValue = sac.getArgumentRightJustified(10);
-        ScriptBuffer argGasPrice = sac.getArgumentRightJustified(10);
-        ScriptBuffer argGasLimit = sac.getArgumentRightJustified(10);
-        ScriptBuffer argNonce = sac.getArgumentRightJustified(8);
-        ScriptBuffer argChainId = sac.getArgumentRightJustified(2);
-        //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        String header = "03000601";
+        ScriptBuffer argDecimal = sac.getArgument(1);
 
-                // set coinType to 3C
+        // Step 2. Set up Script Header.
+        // length | version | hash | sign
+        String header =  "03040601";
+        // length: 03
+        // version: 04
+        // hash: choose one in ScriptAssembler
+        // sign: 01 (ECDSA), 02 (EDDSA)
+
+        // Step 3. Set BIP-44/SLIP0010 CoinType for validation to the path.
         String coinType = ScriptAssembler.setCoinType(0x3C);
 
-                // temp byte for rlpList
-        String payload = ScriptAssembler.copyString("C0")
-                // nonce
-                + ScriptAssembler.rlpString(argNonce)
-                // gasPrice
-                + ScriptAssembler.rlpString(argGasPrice)
-                // gasLimit
-                + ScriptAssembler.rlpString(argGasLimit)
-                // toAddress
+        // Step 4. Compose the raw transaction from arguments for signing.
+        String payload = ScriptAssembler.copyString("02")
+                + ScriptAssembler.arrayPointer()
                 + ScriptAssembler.copyString("94")
                 + ScriptAssembler.copyArgument(argTo)
-                // value
                 + ScriptAssembler.rlpString(argValue)
-                // data
-                + ScriptAssembler.copyString("80")
-                // chainId v
-                + ScriptAssembler.rlpString(argChainId)
-                // r,s
-                + ScriptAssembler.copyString("8080")
-                + ScriptAssembler.rlpList(1);
+                + ScriptAssembler.copyString("C0")
+                + ScriptAssembler.arrayEnd(1);
 
-        String display = ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), BufferType.FREE)
-                + ScriptAssembler.baseConvert(argTo, BufferType.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptBuffer.getDataBufferAll(BufferType.FREE))
-                + ScriptAssembler.showAmount(argValue, 18)
+        // Step 5. Define which parts of the arguments shall be showed on the screen to be validated.
+        String display = ScriptAssembler.showMessage("TEMPLATE")
+                + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
+                + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
 
-        return header + coinType + payload + display;
+        // Step 6. Generate the script using maven
+        //
+        // $ mvn compile -q
+        //
+        // ------------------------------ Print the result -----------------------------------//
+        String script = header + coinType + payload + display;
+        System.out.println("\n============================== Script Start ==============================\n");
+        System.out.println(script);
+        System.out.println("\n============================== Script End ==============================\n");
+        System.out.println("Please copy the above script to test in the script-tester.\n");
+        System.out.println("The argument input should be a hex string which composed of");
+        System.out.println("the arguments in the order you defined.");
+        System.out.println("\nFor example, below arguments");
+        System.out.println("  to: 86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0");
+        System.out.println("  value: 000000004563918244f4");
+        System.out.println("  decimal: 12");
+        System.out.println("\nshould composed to the argument input.");
+        System.out.println("  86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0000000004563918244f412\n");
     }
-    
 }
 
 ```
