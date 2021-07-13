@@ -46,11 +46,11 @@ public class main {
         //
         // ------------------------------ Print the result -----------------------------------//
         String script = header + coinType + payload + display;
-	      System.out.println("\n============================== Script Start ==============================\n");
-	      System.out.println(script);
-	      System.out.println("\n============================== Script End ==============================\n");
-	      System.out.println("Please copy the above script to test in the script-tester.\n");
-	      System.out.println("The argument input should be a hex string which composed of");
+        System.out.println("\n============================== Script Start ==============================\n");
+        System.out.println(script);
+        System.out.println("\n============================== Script End ==============================\n");
+        System.out.println("Please copy the above script to test in the script-tester.\n");
+        System.out.println("The argument input should be a hex string which composed of");
         System.out.println("the arguments in the order you defined.");
         System.out.println("\nFor example, below arguments");
         System.out.println("  to: 86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0");
