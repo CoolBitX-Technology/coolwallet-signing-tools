@@ -40,6 +40,11 @@ public class main {
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
 
+        // Step 6. Generate the script using maven
+        //
+        // $ mvn compile -q
+        //
+        // ------------------------------ Print the result -----------------------------------//
         String script = header + coinType + payload + display;
 	      System.out.println("\n============================== Script Start ==============================\n");
 	      System.out.println(script);
