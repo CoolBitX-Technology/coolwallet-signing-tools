@@ -12,6 +12,7 @@ public class main {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptBuffer argTo = sac.getArgument(20);
         ScriptBuffer argValue = sac.getArgumentRightJustified(10);
+        ScriptBuffer argDecimal = sac.getArgument(1);
 
         // Step 2. Set up Script Header
         // length | version | hash | sign
@@ -24,7 +25,7 @@ public class main {
         // Step 3. Define BIP-44/SLIP0010 CoinType for validation in the path
         String coinType = ScriptAssembler.setCoinType(0x3C);
 
-        // Step 4. Define Script Header
+        // Step 4. Compose the raw transaction for signing
         String payload = ScriptAssembler.copyString("02")
                 + ScriptAssembler.arrayPointer()
                 + ScriptAssembler.copyString("94")
@@ -35,6 +36,7 @@ public class main {
 
         // Step 5. Define which parts of the arguments shall be showed on the screen
         String display = ScriptAssembler.showMessage("TEMPLATE")
+                + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
 
