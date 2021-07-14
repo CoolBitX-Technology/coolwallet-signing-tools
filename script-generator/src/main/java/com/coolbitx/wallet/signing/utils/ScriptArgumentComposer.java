@@ -5,7 +5,7 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptData.BufferType;
 
 /**
  *
@@ -26,8 +26,8 @@ public class ScriptArgumentComposer {
      * @param length The length of argument.
      * @return Buffer object with fixed length.
      */
-    public ScriptBuffer getArgument(int length) {
-        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, length);
+    public ScriptData getArgument(int length) {
+        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, length);
         this.offset += length;
         return db;
     }
@@ -39,8 +39,8 @@ public class ScriptArgumentComposer {
      * @param length The length of argument.
      * @return Buffer object with zero padding to left-side of argument.
      */
-    public ScriptBuffer getArgumentRightJustified(int length) {
-        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, -length);
+    public ScriptData getArgumentRightJustified(int length) {
+        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, -length);
         this.offset += length;
         return db;
     }
@@ -53,8 +53,8 @@ public class ScriptArgumentComposer {
      * @param length The length of argument.
      * @return Buffer object with fixed length.
      */
-    public ScriptBuffer getArgumentUnion(int offset, int length) {
-        return ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset + offset, length);
+    public ScriptData getArgumentUnion(int offset, int length) {
+        return ScriptData.getBufer(BufferType.ARGUMENT, this.offset + offset, length);
     }
 
     /**
@@ -64,8 +64,8 @@ public class ScriptArgumentComposer {
      * @param length The max length of argument.
      * @return Buffer object with zero padding to left-side of argument.
      */
-    public ScriptBuffer getArgumentVariableLength(int length) {
-        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.bufInt);
+    public ScriptData getArgumentVariableLength(int length) {
+        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, ScriptData.bufInt);
         this.offset += length;
         return db;
     }
@@ -75,8 +75,8 @@ public class ScriptArgumentComposer {
      *
      * @return Buffer object with the rest argument length.
      */
-    public ScriptBuffer getArgumentAll() {
-        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.max);
+    public ScriptData getArgumentAll() {
+        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, ScriptData.max);
         this.offset += 9999;
         return db;
     }

@@ -5,7 +5,7 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptData.BufferType;
 
 /**
  *
@@ -47,7 +47,7 @@ public class ScriptAssembler {
 
     private static int argumentOffset = 0;
 
-    private static String compose(String command, ScriptBuffer dataBuf, BufferType destBuf, int arg0, int arg1) {
+    private static String compose(String command, ScriptData dataBuf, BufferType destBuf, int arg0, int arg1) {
         clearParameter();
         if (dataBuf == null) {
             firstParameter += "0";
@@ -154,19 +154,19 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String copyArgument(ScriptBuffer data) {
+    public static String copyArgument(ScriptData data) {
         return copyArgument(data, BufferType.TRANSACTION);
     }
 
     /**
-     * Copy argument to specified buffer.
+     * Copy argument to destination buffer.
      *
      * @param data
-     * @param dest The destination buffer.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyArgument(ScriptBuffer data, BufferType dest) {
-        return compose("CA", data, dest, 0, 0);
+    public static String copyArgument(ScriptData data, BufferType destinationBuf) {
+        return compose("CA", data, destinationBuf, 0, 0);
     }
 
     /**
@@ -180,26 +180,26 @@ public class ScriptAssembler {
     }
 
     /**
-     * Copy string to specified buffer.
+     * Copy string to destination buffer.
      *
      * @param data
-     * @param dest The destination buffer.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyString(String data, BufferType dest) {
-        return compose("CC", null, dest, data.length() / 2, 0) + data;
+    public static String copyString(String data, BufferType destinationBuf) {
+        return compose("CC", null, destinationBuf, data.length() / 2, 0) + data;
     }
 
     /**
      *
      * @param conditionData
-     * @param dest
+     * @param destinationBuf
      * @param str
      * @return
      */
-    public static String switchString(ScriptBuffer conditionData, BufferType dest, String str) {
+    public static String switchString(ScriptData conditionData, BufferType destinationBuf, String str) {
         String[] strList = str.split(",");
-        String ret = compose("C1", conditionData, dest, strList.length, 0);
+        String ret = compose("C1", conditionData, destinationBuf, strList.length, 0);
 
         for (int i = 0; i < strList.length; i++) {
             if (strList[i].equals("[]")) {
@@ -219,7 +219,7 @@ public class ScriptAssembler {
      * @param content
      * @return
      */
-    public static String btcScript(ScriptBuffer scriptTypeData, int supportType, String content) {
+    public static String btcScript(ScriptData scriptTypeData, int supportType, String content) {
         switch (supportType) {
             case 2:
                 return switchString(scriptTypeData, BufferType.TRANSACTION, "1976A914,17A914")
@@ -245,28 +245,28 @@ public class ScriptAssembler {
     }
 
     /**
-     * Put rlp encode string to transaction buffer.
+     * rlp encode string and put the output to transaction buffer.
      *
      * @param data
      * @return
      */
-    public static String rlpString(ScriptBuffer data) {
+    public static String rlpString(ScriptData data) {
         return rlpString(data, BufferType.TRANSACTION);
     }
 
     /**
-     * Put rlp encode string to specified buffer.
+     * rlp encode string and put the output to destination buffer.
      *
      * @param data
-     * @param dest The destination buffer.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String rlpString(ScriptBuffer data, BufferType dest) {
-        return compose("C2", data, dest, 0, 0);
+    public static String rlpString(ScriptData data, BufferType destinationBuf) {
+        return compose("C2", data, destinationBuf, 0, 0);
     }
 
     /**
-     * (deprecated)rlp list encode to transaction buffer.
+     * (deprecated)rlp list encode and put the output to transaction buffer.
      *
      * @param preserveLength
      * @return
@@ -276,54 +276,58 @@ public class ScriptAssembler {
     }
 
     /**
-     * (deprecated)rlp list encode to specified buffer.
+     * (deprecated)rlp list encode and put the output to destination buffer.
      *
      * @param preserveLength
-     * @param dest The destination buffer.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String rlpList(int preserveLength, BufferType dest) {
-        return compose("C3", ScriptBuffer.getDataBufferAll(dest), dest, preserveLength, 0);
+    public static String rlpList(int preserveLength, BufferType destinationBuf) {
+        return compose("C3", ScriptData.getDataBufferAll(destinationBuf), destinationBuf, preserveLength, 0);
     }
 
     /**
-     * Check the buffer data in range of asc-ii code encode (0x20~0x7e).
+     * Check whether the data is in range of asc-ii code encode (0x20~0x7e,
+     * except 0x23(")) or not.
      *
      * @param data
      * @return
      */
-    public static String checkRegularString(ScriptBuffer data) {
+    public static String checkRegularString(ScriptData data) {
         return compose("29", data, null, 0, 0);
     }
 
     /**
-     * Copy buffer data to transaction buffer, and check the buffer data in
-     * range of asc-ii code encode (0x20~0x7e).
+     * Copy buffer data and put the output to transaction buffer. At the same
+     * time will check whether the data is in range of asc-ii code encode
+     * (0x20~0x7e, except 0x23(")) or not.
      *
      * @param data
      * @return
      */
-    public static String copyRegularString(ScriptBuffer data) {
+    public static String copyRegularString(ScriptData data) {
         return copyRegularString(data, BufferType.TRANSACTION);
     }
 
     /**
-     * Copy buffer data to specified buffer, and check the buffer data in range
-     * of asc-ii code encode (0x20~0x7e).
+     * Copy buffer data and put the output to destination buffer. At the same
+     * time will check whether the data is in range of asc-ii code encode
+     * (0x20~0x7e, except 0x23(")) or not.
      *
      * @param data
-     * @param dest The destination buffer.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyRegularString(ScriptBuffer data, BufferType dest) {
+    public static String copyRegularString(ScriptData data, BufferType destinationBuf) {
         return checkRegularString(data)
-                + copyArgument(data, dest);
+                + copyArgument(data, destinationBuf);
     }
 
     /**
+     * Convert the data encode and put the output to destination buffer.
      *
      * @param data The data should to encode.
-     * @param dest The destination of the encoded data.
+     * @param destinationBuf The destination of the encoded data.
      * @param outputLimit The limit length of encoded result.
      * @param charset The name of the charset requested: "binaryCharset",
      * "hexadecimalCharset", "bcdCharset", "decimalCharset", "binary32Charset",
@@ -333,7 +337,7 @@ public class ScriptAssembler {
      * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return
      */
-    public static String baseConvert(ScriptBuffer data, BufferType dest, int outputLimit, String charset, int baseConvertArg) {
+    public static String baseConvert(ScriptData data, BufferType destinationBuf, int outputLimit, String charset, int baseConvertArg) {
         if (outputLimit == 0) {
             outputLimit = 64;
         }
@@ -358,66 +362,67 @@ public class ScriptAssembler {
         } else {
             return "XX";
         }
-        return compose("BA", data, dest, outputLimit, HexUtil.toInt(charsetIndex)) + HexUtil.toHexString(baseConvertArg, 1);
+        return compose("BA", data, destinationBuf, outputLimit, HexUtil.toInt(charsetIndex)) + HexUtil.toHexString(baseConvertArg, 1);
     }
 
     /**
-     * Bech32 hash data to specified buffer.
+     * Bech32 hash data and put the output to destination buffer.
      *
-     * @param data The input buffer data.
-     * @param dest The destination buffer.
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
      * @param hashType SHA1 = 0x01, SHA256 = 0x02, SHA512 = 0x03, SHA3256 =
      * 0x04, SHA3512 = 0x05, Keccak256 = 0x06, Keccak512 = 0x07, RipeMD160 =
      * 0x08, SHA256RipeMD160 = 0x09, DoubleSHA256 = 0x0D, CRC16 = 0x0A,
      * Blake2b512 = 0x0F;
      * @return
      */
-    public static String hash(ScriptBuffer data, BufferType dest, int hashType) {
-        return compose("5A", data, dest, hashType, 0);
+    public static String hash(ScriptData data, BufferType destinationBuf, int hashType) {
+        return compose("5A", data, destinationBuf, hashType, 0);
     }
 
     /**
-     * Derive public key to specified buffer.
+     * Derive public key by derive path and put the output to destination
+     * buffer.
      *
      * @param pathData Derive path.
-     * @param dest The destination buffer.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String derivePublicKey(ScriptBuffer pathData, BufferType dest) {
-        return compose("6C", pathData, dest, 0, 0);
+    public static String derivePublicKey(ScriptData pathData, BufferType destinationBuf) {
+        return compose("6C", pathData, destinationBuf, 0, 0);
     }
 
     /**
-     * Bech32 hash data to specified buffer.
+     * Compute Bech32 ploymod checksum and put the output to destination buffer.
      *
-     * @param data The input buffer data.
-     * @param dest The destination buffer.
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String bech32Polymod(ScriptBuffer data, BufferType dest) {
-        return compose("5A", data, dest, 0xB, 0);
+    public static String bech32Polymod(ScriptData data, BufferType destinationBuf) {
+        return compose("5A", data, destinationBuf, 0xB, 0);
     }
 
     /**
-     * Polymod hash data to specified buffer.
+     * Compute BCH ploymod checksum and put the output to destination buffer.
      *
-     * @param data The input buffer data.
-     * @param dest The destination buffer.
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String bchPolymod(ScriptBuffer data, BufferType dest) {
-        return compose("5A", data, dest, 0xC, 0);
+    public static String bchPolymod(ScriptData data, BufferType destinationBuf) {
+        return compose("5A", data, destinationBuf, 0xC, 0);
     }
 
     /**
-     * Set bufferInt from buffer length and check range.
+     * Set bufferInt from data length and check range.
      *
      * @param data
      * @param min
      * @param max
      * @return
      */
-    public static String setBufferInt(ScriptBuffer data, int min, int max) {
+    public static String setBufferInt(ScriptData data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         return ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError) + setB;
     }
@@ -428,30 +433,30 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String setBufferIntToDataLength(ScriptBuffer data) {
+    public static String setBufferIntFromDataLength(ScriptData data) {
         return compose("B1", data, null, 0, 0);
     }
 
     /**
      * Put bufferInt into destination buffer(cast short to 2 bytes).
      *
-     * @param dest
+     * @param destinationBuf
      * @return
      */
-    public static String putBufferInt(BufferType dest) {
-        return compose("B9", null, dest, 0, 0);
+    public static String putBufferInt(BufferType destinationBuf) {
+        return compose("B9", null, destinationBuf, 0, 0);
     }
 
     /**
      * Padding zero to the destination buffer.
      *
-     * @param dest Destination buffer.
+     * @param destinationBuf Destination buffer.
      * @param base The number of padding zero is the base minus the remainder of
      * bufferInt divided by base(base - (bufferInt % base)).
      * @return
      */
-    public static String paddingZero(BufferType dest, int base) {
-        return compose("C6", null, dest, base, 0);
+    public static String paddingZero(BufferType destinationBuf, int base) {
+        return compose("C6", null, destinationBuf, base, 0);
     }
 
     /**
@@ -471,7 +476,7 @@ public class ScriptAssembler {
      * @param falseStatement
      * @return
      */
-    public static String ifEqual(ScriptBuffer argData, String expect, String trueStatement, String falseStatement) {
+    public static String ifEqual(ScriptData argData, String expect, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -489,7 +494,7 @@ public class ScriptAssembler {
      * @param falseStatement
      * @return
      */
-    public static String ifRange(ScriptBuffer argData, String min, String max, String trueStatement, String falseStatement) {
+    public static String ifRange(ScriptData argData, String min, String max, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -507,7 +512,7 @@ public class ScriptAssembler {
      * @param falseStatement
      * @return
      */
-    public static String ifSigned(ScriptBuffer argData, ScriptBuffer signData, String trueStatement, String falseStatement) {
+    public static String ifSigned(ScriptData argData, ScriptData signData, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -516,13 +521,13 @@ public class ScriptAssembler {
     }
 
     /**
-     * Reset the specified buffer.
+     * Reset the destination buffer.
      *
-     * @param dest Target buffer.
+     * @param destinationBuf Target buffer.
      * @return
      */
-    public static String resetDest(BufferType dest) {
-        return compose("25", null, dest, 0, 0);
+    public static String clearBuffer(BufferType destinationBuf) {
+        return compose("25", null, destinationBuf, 0, 0);
     }
 
     /**
@@ -536,12 +541,12 @@ public class ScriptAssembler {
     }
 
     /**
-     * Show word on card from specified buffer.
+     * Show word on card from data.
      *
-     * @param data The buffer of word.
+     * @param data The word wanted to show on card.
      * @return
      */
-    public static String showMessage(ScriptBuffer data) {
+    public static String showMessage(ScriptData data) {
         return compose("DE", data, null, 0, 0);
     }
 
@@ -563,7 +568,7 @@ public class ScriptAssembler {
      * @param data The transaction address data.
      * @return
      */
-    public static String showAddress(ScriptBuffer data) {
+    public static String showAddress(ScriptData data) {
         return compose("DD", data, null, 0, 0);
     }
 
@@ -574,7 +579,7 @@ public class ScriptAssembler {
      * @param decimal The decimal in this transaction.
      * @return
      */
-    public static String showAmount(ScriptBuffer data, int decimal) {
+    public static String showAmount(ScriptData data, int decimal) {
         return compose("DA", data, null, decimal, 0);
     }
 
@@ -588,26 +593,26 @@ public class ScriptAssembler {
     }
 
     /**
-     * Protobuf decode data to transaction buffer.
+     * Protobuf decode data put the output to transaction buffer.
      *
-     * @param data The input buffer data.
+     * @param data The input data.
      * @param wireType
      * @return
      */
-    public static String protobuf(ScriptBuffer data, int wireType) {
+    public static String protobuf(ScriptData data, int wireType) {
         return protobuf(data, BufferType.TRANSACTION, wireType);
     }
 
     /**
-     * Protobuf decode data to specified buffer.
+     * Protobuf decode data put the output to destination buffer.
      *
-     * @param data The input buffer data.
-     * @param dest The destination buffer.
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
      * @param wireType
      * @return
      */
-    public static String protobuf(ScriptBuffer data, BufferType dest, int wireType) {
-        return compose("BF", data, dest, wireType, 0);
+    public static String protobuf(ScriptData data, BufferType destinationBuf, int wireType) {
+        return compose("BF", data, destinationBuf, wireType, 0);
     }
 
     /**
@@ -641,24 +646,24 @@ public class ScriptAssembler {
     }
 
     /**
-     * Scale decode data to specified buffer.
+     * Scale decode data and put the output to destination buffer.
      *
-     * @param data The input buffer data.
-     * @param dest The destination buffer.
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String scaleEncode(ScriptBuffer data, BufferType dest) {
-        return compose("A2", data, dest, 0, 0);
+    public static String scaleEncode(ScriptData data, BufferType destinationBuf) {
+        return compose("A2", data, destinationBuf, 0, 0);
     }
 
     /**
-     * Scale encode data to specified buffer.
+     * Scale encode data and put the output to destination buffer.
      *
-     * @param data The input buffer data.
-     * @param dest The destination buffer.
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String scaleDecode(ScriptBuffer data, BufferType dest) {
-        return compose("A3", data, dest, 0, 0);
+    public static String scaleDecode(ScriptData data, BufferType destinationBuf) {
+        return compose("A3", data, destinationBuf, 0, 0);
     }
 }
