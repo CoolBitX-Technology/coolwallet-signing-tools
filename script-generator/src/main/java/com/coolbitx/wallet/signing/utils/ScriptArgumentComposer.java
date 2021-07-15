@@ -5,7 +5,7 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-import com.coolbitx.wallet.signing.utils.ScriptData.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
  *
@@ -20,63 +20,64 @@ public class ScriptArgumentComposer {
     }
 
     /**
-     * Get fixed length long argument buffer, and add length to the
-     * ScriptArgumentComposer‘s offset.
+     * Get specified length argument data, and add the length to the offset of
+     * argument buffer.
      *
      * @param length The length of argument.
-     * @return Buffer object with fixed length.
+     * @return Buffer data with fixed length.
      */
     public ScriptData getArgument(int length) {
-        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, length);
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, length);
         this.offset += length;
         return db;
     }
 
     /**
-     * Get variable length long argument buffer, and add length to the
-     * ScriptArgumentComposer offset.
+     * Get specified length argument data, if the data length is not long
+     * enough, padding zero on the left-side to the specified length. Will add
+     * length to the offset of argument buffer.
      *
      * @param length The length of argument.
-     * @return Buffer object with zero padding to left-side of argument.
+     * @return Buffer data with zero padding to left-side of argument.
      */
     public ScriptData getArgumentRightJustified(int length) {
-        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, -length);
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, -length);
         this.offset += length;
         return db;
     }
 
     /**
-     * Get specified range long argument buffer from the offset now, and won't
-     * change the ScriptArgumentComposer offset.
+     * Get specified range long argument data, and won't change the offset of
+     * argument buffer.
      *
-     * @param offset The offset from ScriptArgumentComposer offset now.
-     * @param length The length of argument.
-     * @return Buffer object with fixed length.
+     * @param offset The offset diff from ScriptArgumentComposer offset now.
+     * @param length The length of argument data.
+     * @return Buffer data with fixed length.
      */
     public ScriptData getArgumentUnion(int offset, int length) {
-        return ScriptData.getBufer(BufferType.ARGUMENT, this.offset + offset, length);
+        return ScriptData.getBufer(Buffer.ARGUMENT, this.offset + offset, length);
     }
 
     /**
-     * Get fixed length long argument buffer, but the actual usage length
-     * defined in BufferInt. Will add length to the ScriptArgumentComposer offset.
+     * Get specified length argument data, but the actual usage length defined
+     * in BufferInt. Will add length to the offset of argument buffer.
      *
      * @param length The max length of argument.
-     * @return Buffer object with zero padding to left-side of argument.
+     * @return Buffer data with zero padding to left-side of argument.
      */
     public ScriptData getArgumentVariableLength(int length) {
-        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, ScriptData.bufInt);
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, ScriptData.bufInt);
         this.offset += length;
         return db;
     }
 
     /**
-     * Get all rest argument buffer.
+     * Get all the rest argument buffer.
      *
-     * @return Buffer object with the rest argument length.
+     * @return Buffer data with the rest argument length.
      */
     public ScriptData getArgumentAll() {
-        ScriptData db = ScriptData.getBufer(BufferType.ARGUMENT, this.offset, ScriptData.max);
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, ScriptData.max);
         this.offset += 9999;
         return db;
     }

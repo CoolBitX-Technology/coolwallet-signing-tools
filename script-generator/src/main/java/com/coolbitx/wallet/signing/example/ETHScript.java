@@ -5,22 +5,20 @@
  */
 package com.coolbitx.wallet.signing.example;
 
-import org.spongycastle.util.encoders.Hex;
-
 import com.coolbitx.wallet.signing.utils.*;
-import com.coolbitx.wallet.signing.utils.ScriptData.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
  *
  * @author derek
  */
 public class ETHScript {
-	
+
     public static void main(String[] args) throws Exception {
-	    System.out.println("ETHScript: " + getETHScript());
-	    System.out.println("ERC20Script: " + getERC20Script());
-	}
-	
+        System.out.println("ETHScript: " + getETHScript());
+        System.out.println("ERC20Script: " + getERC20Script());
+    }
+
     public static String getETHScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -31,9 +29,9 @@ public class ETHScript {
         ScriptData argChainId = sac.getArgumentRightJustified(2);
         //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
         String header = "03000601";
-                // set coinType to 3C
+        // set coinType to 3C
         String coinType = ScriptAssembler.setCoinType(0x3C);
-                // temp byte for rlpList
+        // temp byte for rlpList
         String payload = ScriptAssembler.copyString("C0")
                 // nonce
                 + ScriptAssembler.rlpString(argNonce)
@@ -54,14 +52,14 @@ public class ETHScript {
                 + ScriptAssembler.copyString("8080")
                 + ScriptAssembler.rlpList(1);
         String display = ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), BufferType.FREE)
-                + ScriptAssembler.baseConvert(argTo, BufferType.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(BufferType.FREE))
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
+                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
         return header + coinType + payload + display;
     }
-    
+
     public static String getERC20Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -98,15 +96,15 @@ public class ETHScript {
                 + ScriptAssembler.rlpList(2)
                 + ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                        ScriptAssembler.copyString(HexUtil.toHexString("@"), BufferType.FREE)
+                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.FREE)
                 )
                 + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                + ScriptAssembler.copyArgument(argName, BufferType.FREE)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(BufferType.FREE))
-                + ScriptAssembler.clearBuffer(BufferType.FREE)
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), BufferType.FREE)
-                + ScriptAssembler.baseConvert(argTo, BufferType.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(BufferType.FREE))
+                + ScriptAssembler.copyArgument(argName, Buffer.FREE)
+                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.clearBuffer(Buffer.FREE)
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
+                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();

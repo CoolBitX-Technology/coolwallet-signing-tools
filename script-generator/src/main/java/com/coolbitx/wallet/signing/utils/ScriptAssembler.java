@@ -5,7 +5,7 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-import com.coolbitx.wallet.signing.utils.ScriptData.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
  *
@@ -47,7 +47,7 @@ public class ScriptAssembler {
 
     private static int argumentOffset = 0;
 
-    private static String compose(String command, ScriptData dataBuf, BufferType destBuf, int arg0, int arg1) {
+    private static String compose(String command, ScriptData dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
         if (dataBuf == null) {
             firstParameter += "0";
@@ -155,7 +155,7 @@ public class ScriptAssembler {
      * @return
      */
     public static String copyArgument(ScriptData data) {
-        return copyArgument(data, BufferType.TRANSACTION);
+        return copyArgument(data, Buffer.TRANSACTION);
     }
 
     /**
@@ -165,7 +165,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyArgument(ScriptData data, BufferType destinationBuf) {
+    public static String copyArgument(ScriptData data, Buffer destinationBuf) {
         return compose("CA", data, destinationBuf, 0, 0);
     }
 
@@ -176,7 +176,7 @@ public class ScriptAssembler {
      * @return
      */
     public static String copyString(String data) {
-        return copyString(data, BufferType.TRANSACTION);
+        return copyString(data, Buffer.TRANSACTION);
     }
 
     /**
@@ -186,19 +186,25 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyString(String data, BufferType destinationBuf) {
+    public static String copyString(String data, Buffer destinationBuf) {
         return compose("CC", null, destinationBuf, data.length() / 2, 0) + data;
     }
 
     /**
+     * Copy string to destination buffer with switch condition.
      *
-     * @param conditionData
-     * @param destinationBuf
-     * @param str
+     * @param conditionData One byte condition data, number only(
+     * "00","01","02"...). For example, if the condition data is "01", will copy
+     * the second(start from zero) string in the stringArray to destination
+     * buffer. If conditionData is greater the the size of stringArray or less
+     * zero will throw 0x6A0D error.
+     * @param destinationBuf The destination buffer.
+     * @param stringArray The string array concatenate with comma(ex.
+     * "A,B,C,D").
      * @return
      */
-    public static String switchString(ScriptData conditionData, BufferType destinationBuf, String str) {
-        String[] strList = str.split(",");
+    public static String switchString(ScriptData conditionData, Buffer destinationBuf, String stringArray) {
+        String[] strList = stringArray.split(",");
         String ret = compose("C1", conditionData, destinationBuf, strList.length, 0);
 
         for (int i = 0; i < strList.length; i++) {
@@ -213,6 +219,7 @@ public class ScriptAssembler {
     }
 
     /**
+     * (deprecated) Compose BTC-like coin redeem script.
      *
      * @param scriptTypeData
      * @param supportType
@@ -222,23 +229,23 @@ public class ScriptAssembler {
     public static String btcScript(ScriptData scriptTypeData, int supportType, String content) {
         switch (supportType) {
             case 2:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "1976A914,17A914")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914")
                         + content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87");
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
             case 3:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "1976A914,17A914,160014")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014")
                         + content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87,[]");
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[]");
             case 4:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "1976A914,17A914,160014,220020")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014,220020")
                         + // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
                         content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87,[],[]") // switch redeemScript end
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]") // switch redeemScript end
                         ;
             case 79:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "3F76A914,3DA914")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "3F76A914,3DA914")
                         + content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87");
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
             default:
                 return "XX";
         }
@@ -251,7 +258,7 @@ public class ScriptAssembler {
      * @return
      */
     public static String rlpString(ScriptData data) {
-        return rlpString(data, BufferType.TRANSACTION);
+        return rlpString(data, Buffer.TRANSACTION);
     }
 
     /**
@@ -261,7 +268,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String rlpString(ScriptData data, BufferType destinationBuf) {
+    public static String rlpString(ScriptData data, Buffer destinationBuf) {
         return compose("C2", data, destinationBuf, 0, 0);
     }
 
@@ -272,7 +279,7 @@ public class ScriptAssembler {
      * @return
      */
     public static String rlpList(int preserveLength) {
-        return rlpList(preserveLength, BufferType.TRANSACTION);
+        return rlpList(preserveLength, Buffer.TRANSACTION);
     }
 
     /**
@@ -282,7 +289,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String rlpList(int preserveLength, BufferType destinationBuf) {
+    public static String rlpList(int preserveLength, Buffer destinationBuf) {
         return compose("C3", ScriptData.getDataBufferAll(destinationBuf), destinationBuf, preserveLength, 0);
     }
 
@@ -306,7 +313,7 @@ public class ScriptAssembler {
      * @return
      */
     public static String copyRegularString(ScriptData data) {
-        return copyRegularString(data, BufferType.TRANSACTION);
+        return copyRegularString(data, Buffer.TRANSACTION);
     }
 
     /**
@@ -318,7 +325,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyRegularString(ScriptData data, BufferType destinationBuf) {
+    public static String copyRegularString(ScriptData data, Buffer destinationBuf) {
         return checkRegularString(data)
                 + copyArgument(data, destinationBuf);
     }
@@ -337,7 +344,7 @@ public class ScriptAssembler {
      * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return
      */
-    public static String baseConvert(ScriptData data, BufferType destinationBuf, int outputLimit, String charset, int baseConvertArg) {
+    public static String baseConvert(ScriptData data, Buffer destinationBuf, int outputLimit, String charset, int baseConvertArg) {
         if (outputLimit == 0) {
             outputLimit = 64;
         }
@@ -376,7 +383,7 @@ public class ScriptAssembler {
      * Blake2b512 = 0x0F;
      * @return
      */
-    public static String hash(ScriptData data, BufferType destinationBuf, int hashType) {
+    public static String hash(ScriptData data, Buffer destinationBuf, int hashType) {
         return compose("5A", data, destinationBuf, hashType, 0);
     }
 
@@ -388,7 +395,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String derivePublicKey(ScriptData pathData, BufferType destinationBuf) {
+    public static String derivePublicKey(ScriptData pathData, Buffer destinationBuf) {
         return compose("6C", pathData, destinationBuf, 0, 0);
     }
 
@@ -399,7 +406,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String bech32Polymod(ScriptData data, BufferType destinationBuf) {
+    public static String bech32Polymod(ScriptData data, Buffer destinationBuf) {
         return compose("5A", data, destinationBuf, 0xB, 0);
     }
 
@@ -410,7 +417,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String bchPolymod(ScriptData data, BufferType destinationBuf) {
+    public static String bchPolymod(ScriptData data, Buffer destinationBuf) {
         return compose("5A", data, destinationBuf, 0xC, 0);
     }
 
@@ -443,7 +450,7 @@ public class ScriptAssembler {
      * @param destinationBuf
      * @return
      */
-    public static String putBufferInt(BufferType destinationBuf) {
+    public static String putBufferInt(Buffer destinationBuf) {
         return compose("B9", null, destinationBuf, 0, 0);
     }
 
@@ -455,25 +462,28 @@ public class ScriptAssembler {
      * bufferInt divided by base(base - (bufferInt % base)).
      * @return
      */
-    public static String paddingZero(BufferType destinationBuf, int base) {
+    public static String paddingZero(Buffer destinationBuf, int base) {
         return compose("C6", null, destinationBuf, base, 0);
     }
 
     /**
+     * Skip part script
      *
-     * @param skipee
+     * @param script The script want to skip.
      * @return
      */
-    public static String skip(String skipee) {
-        return compose("15", null, null, skipee.length() / 2, 0);
+    public static String skip(String script) {
+        return compose("15", null, null, script.length() / 2, 0);
     }
 
     /**
+     * If argData equals to expect, the the card execute the trueStatement,
+     * otherwise execute the falseStatement.
      *
-     * @param argData
-     * @param expect
-     * @param trueStatement
-     * @param falseStatement
+     * @param argData Requirement.
+     * @param expect Analyzing conditions.
+     * @param trueStatement The script wanna execute when the status is true.
+     * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
     public static String ifEqual(ScriptData argData, String expect, String trueStatement, String falseStatement) {
@@ -486,12 +496,14 @@ public class ScriptAssembler {
     }
 
     /**
+     * If the value of argData lies between min and max(min ≤ argData ≤ max)
+     * then run trueStatement; if not, please run falseStatement.
      *
-     * @param argData
-     * @param min
-     * @param max
-     * @param trueStatement
-     * @param falseStatement
+     * @param argData Requirement.
+     * @param min The min value of the range.
+     * @param max The min value of the range.
+     * @param trueStatement The script wanna execute when the status is true.
+     * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
     public static String ifRange(ScriptData argData, String min, String max, String trueStatement, String falseStatement) {
@@ -505,11 +517,15 @@ public class ScriptAssembler {
     }
 
     /**
+     * Use CoolBitX public key to verify that the signature is valid or not. If
+     * the result is true, the the card execute the trueStatement, otherwise
+     * execute the falseStatement.
      *
-     * @param argData
-     * @param signData
-     * @param trueStatement
-     * @param falseStatement
+     * @param argData Requirement.
+     * @param signData The encoded ECDSA(CBKey) signature. Signing:
+     * SHA256(argData).
+     * @param trueStatement The script wanna execute when the status is true.
+     * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
     public static String ifSigned(ScriptData argData, ScriptData signData, String trueStatement, String falseStatement) {
@@ -526,7 +542,7 @@ public class ScriptAssembler {
      * @param destinationBuf Target buffer.
      * @return
      */
-    public static String clearBuffer(BufferType destinationBuf) {
+    public static String clearBuffer(Buffer destinationBuf) {
         return compose("25", null, destinationBuf, 0, 0);
     }
 
@@ -600,7 +616,7 @@ public class ScriptAssembler {
      * @return
      */
     public static String protobuf(ScriptData data, int wireType) {
-        return protobuf(data, BufferType.TRANSACTION, wireType);
+        return protobuf(data, Buffer.TRANSACTION, wireType);
     }
 
     /**
@@ -611,7 +627,7 @@ public class ScriptAssembler {
      * @param wireType
      * @return
      */
-    public static String protobuf(ScriptData data, BufferType destinationBuf, int wireType) {
+    public static String protobuf(ScriptData data, Buffer destinationBuf, int wireType) {
         return compose("BF", data, destinationBuf, wireType, 0);
     }
 
@@ -652,7 +668,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String scaleEncode(ScriptData data, BufferType destinationBuf) {
+    public static String scaleEncode(ScriptData data, Buffer destinationBuf) {
         return compose("A2", data, destinationBuf, 0, 0);
     }
 
@@ -663,7 +679,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String scaleDecode(ScriptData data, BufferType destinationBuf) {
+    public static String scaleDecode(ScriptData data, Buffer destinationBuf) {
         return compose("A3", data, destinationBuf, 0, 0);
     }
 }

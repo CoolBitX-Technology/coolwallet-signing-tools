@@ -11,17 +11,17 @@ package com.coolbitx.wallet.signing.utils;
  */
 public class ScriptData {
 
-    protected BufferType bufferType;
+    protected Buffer bufferType;
     protected int offset;
     protected int length;
 
-    private ScriptData(BufferType type, int offset, int length) {
+    private ScriptData(Buffer type, int offset, int length) {
         this.bufferType = type;
         this.offset = offset;
         this.length = length;
     }
 
-    public static enum BufferType {
+    public static enum Buffer {
         ARGUMENT,
         TRANSACTION,
         EXTENDED,
@@ -36,15 +36,15 @@ public class ScriptData {
     public static final int bufInt = 1000;
     public static final int max = 2000;
 
-    public static ScriptData getBufer(BufferType bufferType, int offset, int length) {
+    public static ScriptData getBufer(Buffer bufferType, int offset, int length) {
         return new ScriptData(bufferType, offset, length);
     }
 
-    public static ScriptData getDataBufferAll(BufferType buf) {
+    public static ScriptData getDataBufferAll(Buffer buf) {
         return getDataBufferAll(buf, 0);
     }
 
-    public static ScriptData getDataBufferAll(BufferType buf, int offset) {
+    public static ScriptData getDataBufferAll(Buffer buf, int offset) {
         return new ScriptData(buf, offset, max);
     }
 }

@@ -1,4 +1,4 @@
-package main;
+package com.coolbitx.wallet.signing.main;
 
 public class main {
 
