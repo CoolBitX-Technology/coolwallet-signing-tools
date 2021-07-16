@@ -8,6 +8,8 @@ package com.coolbitx.wallet.signing.utils;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
+ * This class is designed for creating diverse script data which is used in
+ * generating script in ScriptAssembler class.
  *
  * @author Hank Liu (hankliu@coolbitx.com)
  */

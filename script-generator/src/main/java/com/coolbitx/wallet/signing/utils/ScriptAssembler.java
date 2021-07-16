@@ -8,6 +8,9 @@ package com.coolbitx.wallet.signing.utils;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
+ * This ScriptAssembler class provide all the function to generator single
+ * script, you can concatenate all the script to become a signing script for
+ * CoolWallet Pro that can sign any cryptocurrency with any supported algorithm.
  *
  * @author Hank Liu (hankliu@coolbitx.com)
  */
