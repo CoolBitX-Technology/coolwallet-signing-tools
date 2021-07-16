@@ -219,13 +219,14 @@ public class ScriptAssembler {
     }
 
     /**
-     * (deprecated) Compose BTC-like coin redeem script.
+     * Compose BTC-like coin redeem script.
      *
      * @param scriptTypeData
      * @param supportType
      * @param content
      * @return
      */
+    @Deprecated
     public static String btcScript(ScriptData scriptTypeData, int supportType, String content) {
         switch (supportType) {
             case 2:
@@ -273,22 +274,24 @@ public class ScriptAssembler {
     }
 
     /**
-     * (deprecated)rlp list encode and put the output to transaction buffer.
+     * rlp list encode and put the output to transaction buffer.
      *
      * @param preserveLength
      * @return
      */
+    @Deprecated
     public static String rlpList(int preserveLength) {
         return rlpList(preserveLength, Buffer.TRANSACTION);
     }
 
     /**
-     * (deprecated)rlp list encode and put the output to destination buffer.
+     * rlp list encode and put the output to destination buffer.
      *
      * @param preserveLength
      * @param destinationBuf The destination buffer.
      * @return
      */
+    @Deprecated
     public static String rlpList(int preserveLength, Buffer destinationBuf) {
         return compose("C3", ScriptData.getDataBufferAll(destinationBuf), destinationBuf, preserveLength, 0);
     }
