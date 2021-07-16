@@ -5,8 +5,6 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-import org.spongycastle.util.encoders.Hex;
-
 /**
  *
  * @author derek

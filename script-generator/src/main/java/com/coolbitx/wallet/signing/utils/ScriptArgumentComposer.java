@@ -5,11 +5,13 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
+ * This class is designed for creating diverse script data which is used in
+ * generating script in ScriptAssembler class.
  *
- * @author Hank Liu <hankliu@coolbitx.com>
+ * @author Hank Liu (hankliu@coolbitx.com)
  */
 public class ScriptArgumentComposer {
 
@@ -19,75 +21,66 @@ public class ScriptArgumentComposer {
         this.offset = 0;
     }
 
-    public ScriptBuffer getArgument(int length) {
-        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, length);
+    /**
+     * Get specified length argument data, and add the length to the offset of
+     * argument buffer.
+     *
+     * @param length The length of argument.
+     * @return Buffer data with fixed length.
+     */
+    public ScriptData getArgument(int length) {
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, length);
         this.offset += length;
         return db;
     }
 
-    public ScriptBuffer getArgumentRightJustified(int length) {
-        ScriptBuffer db = ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, -length);
+    /**
+     * Get specified length argument data, if the data length is not long
+     * enough, padding zero on the left-side to the specified length. Will add
+     * length to the offset of argument buffer.
+     *
+     * @param length The length of argument.
+     * @return Buffer data with zero padding to left-side of argument.
+     */
+    public ScriptData getArgumentRightJustified(int length) {
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, -length);
         this.offset += length;
         return db;
     }
 
-    public ScriptBuffer getArgumentUnion(int offset, int length) {
-        return ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset + offset, length);
+    /**
+     * Get specified range long argument data, and won't change the offset of
+     * argument buffer.
+     *
+     * @param offset The offset diff from ScriptArgumentComposer offset now.
+     * @param length The length of argument data.
+     * @return Buffer data with fixed length.
+     */
+    public ScriptData getArgumentUnion(int offset, int length) {
+        return ScriptData.getBufer(Buffer.ARGUMENT, this.offset + offset, length);
     }
-    
-    public ScriptBuffer getArgumentVariableLength(int length) {
-        ScriptBuffer db =  ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.bufInt);
+
+    /**
+     * Get specified length argument data, but the actual usage length defined
+     * in BufferInt. Will add length to the offset of argument buffer.
+     *
+     * @param length The max length of argument.
+     * @return Buffer data with zero padding to left-side of argument.
+     */
+    public ScriptData getArgumentVariableLength(int length) {
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, ScriptData.bufInt);
         this.offset += length;
         return db;
     }
 
-    public ScriptBuffer getArgumentAll() {
-        ScriptBuffer db =  ScriptBuffer.getBufer(BufferType.ARGUMENT, this.offset, ScriptBuffer.max);
+    /**
+     * Get all the rest argument buffer.
+     *
+     * @return Buffer data with the rest argument length.
+     */
+    public ScriptData getArgumentAll() {
+        ScriptData db = ScriptData.getBufer(Buffer.ARGUMENT, this.offset, ScriptData.max);
         this.offset += 9999;
         return db;
     }
-
-//    private static int getDataOffset(String data) {
-//        String range = data.substring(8, data.length());
-//
-//        String s = range.substring(1, 4);
-//        int ret;
-//        switch (s) {
-//            case "buf":
-//                ret = 1000;
-//                break;
-//            case "max":
-//                ret = 2000;
-//                break;
-//            default:
-//                ret = Integer.parseInt(s);
-//                break;
-//        }
-//
-//        return ret;
-//    }
-//
-//    private static int getDataLength(String data) {
-//        String range = data.substring(8, data.length());
-//
-//        String s = range.substring(5, 8);
-//        int ret;
-//        switch (s) {
-//            case "buf":
-//                ret = 1000;
-//                break;
-//            case "max":
-//                ret = 2000;
-//                break;
-//            default:
-//                ret = Integer.parseInt(s);
-//                break;
-//        }
-//
-//        if (data.charAt(4) == '~') {
-//            ret -= getDataOffset(data);
-//        }
-//
-//        return ret;
-//    }
 }

@@ -1,8 +1,6 @@
 package com.coolbitx.wallet.signing.main;
 
-import org.spongycastle.util.encoders.Hex;
 import com.coolbitx.wallet.signing.utils.*;
-import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
 
 public class main {
 
@@ -10,13 +8,13 @@ public class main {
 
         // Step 1. Define Arguments.
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptBuffer argTo = sac.getArgument(20);
-        ScriptBuffer argValue = sac.getArgumentRightJustified(10);
-        ScriptBuffer argDecimal = sac.getArgument(1);
+        ScriptData argTo = sac.getArgument(20);
+        ScriptData argValue = sac.getArgumentRightJustified(10);
+        ScriptData argDecimal = sac.getArgument(1);
 
         // Step 2. Set up Script Header.
         // length | version | hash | sign
-        String header =  "03040601";
+        String header = "03040601";
         // length: 03
         // version: 04
         // hash: choose one in ScriptAssembler

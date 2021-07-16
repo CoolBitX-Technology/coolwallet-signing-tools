@@ -5,14 +5,17 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-import com.coolbitx.wallet.signing.utils.ScriptBuffer.BufferType;
+import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
+ * This ScriptAssembler class provide all the function to generator single
+ * script, you can concatenate all the script to become a signing script for
+ * CoolWallet Pro that can sign any cryptocurrency with any supported algorithm.
  *
- * @author Hank Liu <hankliu@coolbitx.com>
+ * @author Hank Liu (hankliu@coolbitx.com)
  */
 public class ScriptAssembler {
-    
+
     public static final String binaryCharset = "binaryCharset";
     public static final String hexadecimalCharset = "hexadecimalCharset";
     public static final String bcdCharset = "bcdCharset";
@@ -47,7 +50,7 @@ public class ScriptAssembler {
 
     private static int argumentOffset = 0;
 
-    public static String compose(String command, ScriptBuffer dataBuf, BufferType destBuf, int arg0, int arg1) {
+    private static String compose(String command, ScriptData dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
         if (dataBuf == null) {
             firstParameter += "0";
@@ -137,30 +140,75 @@ public class ScriptAssembler {
         }
     }
 
+    /**
+     * Set coin type, should use in the begin of script.
+     *
+     * @param coinType
+     * @return
+     */
     public static String setCoinType(int coinType) {
         String hexCoinType = HexUtil.toHexString(coinType, 4);
         return compose("C7", null, null, 0, 0) + hexCoinType;
     }
 
-    public static String copyArgument(ScriptBuffer data) {
-        return copyArgument(data, BufferType.TRANSACTION);
+    /**
+     * Copy argument to transaction buffer.
+     *
+     * @param data
+     * @return
+     */
+    public static String copyArgument(ScriptData data) {
+        return copyArgument(data, Buffer.TRANSACTION);
     }
 
-    public static String copyArgument(ScriptBuffer data, BufferType dest) {
-        return compose("CA", data, dest, 0, 0);
+    /**
+     * Copy argument to destination buffer.
+     *
+     * @param data
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String copyArgument(ScriptData data, Buffer destinationBuf) {
+        return compose("CA", data, destinationBuf, 0, 0);
     }
 
+    /**
+     * Copy string to transaction buffer.
+     *
+     * @param data
+     * @return
+     */
     public static String copyString(String data) {
-        return copyString(data, BufferType.TRANSACTION);
+        return copyString(data, Buffer.TRANSACTION);
     }
 
-    public static String copyString(String data, BufferType dest) {
-        return compose("CC", null, dest, data.length() / 2, 0) + data;
+    /**
+     * Copy string to destination buffer.
+     *
+     * @param data
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String copyString(String data, Buffer destinationBuf) {
+        return compose("CC", null, destinationBuf, data.length() / 2, 0) + data;
     }
 
-    public static String switchString(ScriptBuffer conditionData, BufferType dest, String str) {
-        String[] strList = str.split(",");
-        String ret = compose("C1", conditionData, dest, strList.length, 0);
+    /**
+     * Copy string to destination buffer with switch condition.
+     *
+     * @param conditionData One byte condition data, number only(
+     * "00","01","02"...). For example, if the condition data is "01", will copy
+     * the second(start from zero) string in the stringArray to destination
+     * buffer. If conditionData is greater the the size of stringArray or less
+     * zero will throw 0x6A0D error.
+     * @param destinationBuf The destination buffer.
+     * @param stringArray The string array concatenate with comma(ex.
+     * "A,B,C,D").
+     * @return
+     */
+    public static String switchString(ScriptData conditionData, Buffer destinationBuf, String stringArray) {
+        String[] strList = stringArray.split(",");
+        String ret = compose("C1", conditionData, destinationBuf, strList.length, 0);
 
         for (int i = 0; i < strList.length; i++) {
             if (strList[i].equals("[]")) {
@@ -173,70 +221,136 @@ public class ScriptAssembler {
         return ret;
     }
 
-    public static String btcScript(ScriptBuffer scriptTypeData, int supportType, String content) {
+    /**
+     * Compose BTC-like coin redeem script.
+     *
+     * @param scriptTypeData
+     * @param supportType
+     * @param content
+     * @return
+     */
+    @Deprecated
+    public static String btcScript(ScriptData scriptTypeData, int supportType, String content) {
         switch (supportType) {
             case 2:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "1976A914,17A914")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914")
                         + content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87");
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
             case 3:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "1976A914,17A914,160014")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014")
                         + content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87,[]");
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[]");
             case 4:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "1976A914,17A914,160014,220020")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014,220020")
                         + // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
                         content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87,[],[]") // switch redeemScript end
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]") // switch redeemScript end
                         ;
             case 79:
-                return switchString(scriptTypeData, BufferType.TRANSACTION, "3F76A914,3DA914")
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "3F76A914,3DA914")
                         + content
-                        + switchString(scriptTypeData, BufferType.TRANSACTION, "88AC,87");
+                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
             default:
                 return "XX";
         }
     }
 
-    public static String rlpString(ScriptBuffer data) {
-        return rlpString(data, BufferType.TRANSACTION);
+    /**
+     * rlp encode string and put the output to transaction buffer.
+     *
+     * @param data
+     * @return
+     */
+    public static String rlpString(ScriptData data) {
+        return rlpString(data, Buffer.TRANSACTION);
     }
 
-    public static String rlpString(ScriptBuffer data, BufferType dest) {
-        return compose("C2", data, dest, 0, 0);
+    /**
+     * rlp encode string and put the output to destination buffer.
+     *
+     * @param data
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String rlpString(ScriptData data, Buffer destinationBuf) {
+        return compose("C2", data, destinationBuf, 0, 0);
     }
 
+    /**
+     * rlp list encode and put the output to transaction buffer.
+     *
+     * @param preserveLength
+     * @return
+     */
+    @Deprecated
     public static String rlpList(int preserveLength) {
-        return rlpList(preserveLength, BufferType.TRANSACTION);
+        return rlpList(preserveLength, Buffer.TRANSACTION);
     }
 
-    public static String rlpList(int preserveLength, BufferType dest) {
-        return compose("C3", ScriptBuffer.getDataBufferAll(dest), dest, preserveLength, 0);
+    /**
+     * rlp list encode and put the output to destination buffer.
+     *
+     * @param preserveLength
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    @Deprecated
+    public static String rlpList(int preserveLength, Buffer destinationBuf) {
+        return compose("C3", ScriptData.getDataBufferAll(destinationBuf), destinationBuf, preserveLength, 0);
     }
 
-    public static String checkRegularString(ScriptBuffer data) {
+    /**
+     * Check whether the data is in range of asc-ii code encode (0x20~0x7e,
+     * except 0x23(")) or not.
+     *
+     * @param data
+     * @return
+     */
+    public static String checkRegularString(ScriptData data) {
         return compose("29", data, null, 0, 0);
     }
 
-    public static String copyRegularString(ScriptBuffer data) {
-        return copyRegularString(data, BufferType.TRANSACTION);
-    }
-
-    public static String copyRegularString(ScriptBuffer data, BufferType dest) {
-        return checkRegularString(data)
-                + copyArgument(data, dest);
-    }
-    
     /**
-     * 
+     * Copy buffer data and put the output to transaction buffer. At the same
+     * time will check whether the data is in range of asc-ii code encode
+     * (0x20~0x7e, except 0x23(")) or not.
+     *
      * @param data
-     * @param dest
-     * @param outputLimit
-     * @param charset
-     * @param baseConvertArg
      * @return
      */
-    public static String baseConvert(ScriptBuffer data, BufferType dest, int outputLimit, String charset, int baseConvertArg) {
+    public static String copyRegularString(ScriptData data) {
+        return copyRegularString(data, Buffer.TRANSACTION);
+    }
+
+    /**
+     * Copy buffer data and put the output to destination buffer. At the same
+     * time will check whether the data is in range of asc-ii code encode
+     * (0x20~0x7e, except 0x23(")) or not.
+     *
+     * @param data
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String copyRegularString(ScriptData data, Buffer destinationBuf) {
+        return checkRegularString(data)
+                + copyArgument(data, destinationBuf);
+    }
+
+    /**
+     * Convert the data encode and put the output to destination buffer.
+     *
+     * @param data The data should to encode.
+     * @param destinationBuf The destination of the encoded data.
+     * @param outputLimit The limit length of encoded result.
+     * @param charset The name of the charset requested: "binaryCharset",
+     * "hexadecimalCharset", "bcdCharset", "decimalCharset", "binary32Charset",
+     * "base32BitcoinCashCharset", "base58Charset", "extentetCharset".
+     * @param baseConvertArg The number of the base-enoding requested:
+     * leftJustify = 0x01, littleEndian = 0x02, zeroInherit = 0x04,
+     * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
+     * @return
+     */
+    public static String baseConvert(ScriptData data, Buffer destinationBuf, int outputLimit, String charset, int baseConvertArg) {
         if (outputLimit == 0) {
             outputLimit = 64;
         }
@@ -261,58 +375,124 @@ public class ScriptAssembler {
         } else {
             return "XX";
         }
-        return compose("BA", data, dest, outputLimit, HexUtil.toInt(charsetIndex)) + HexUtil.toHexString(baseConvertArg, 1);
+        return compose("BA", data, destinationBuf, outputLimit, HexUtil.toInt(charsetIndex)) + HexUtil.toHexString(baseConvertArg, 1);
     }
 
     /**
-     * 
-     * @param data
-     * @param dest
-     * @param hashType
+     * Bech32 hash data and put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @param hashType SHA1 = 0x01, SHA256 = 0x02, SHA512 = 0x03, SHA3256 =
+     * 0x04, SHA3512 = 0x05, Keccak256 = 0x06, Keccak512 = 0x07, RipeMD160 =
+     * 0x08, SHA256RipeMD160 = 0x09, DoubleSHA256 = 0x0D, CRC16 = 0x0A,
+     * Blake2b512 = 0x0F;
      * @return
      */
-    public static String hash(ScriptBuffer data, BufferType dest, int hashType) {
-        return compose("5A", data, dest, hashType, 0);
+    public static String hash(ScriptData data, Buffer destinationBuf, int hashType) {
+        return compose("5A", data, destinationBuf, hashType, 0);
     }
 
-    public static String derivePublicKey(ScriptBuffer pathData, BufferType dest) {
-        return compose("6C", pathData, dest, 0, 0);
+    /**
+     * Derive public key by derive path and put the output to destination
+     * buffer.
+     *
+     * @param pathData Derive path.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String derivePublicKey(ScriptData pathData, Buffer destinationBuf) {
+        return compose("6C", pathData, destinationBuf, 0, 0);
     }
 
-    public static String bech32Polymod(ScriptBuffer data, BufferType dest) {
-        return compose("5A", data, dest, 0xB, 0);
+    /**
+     * Compute Bech32 ploymod checksum and put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String bech32Polymod(ScriptData data, Buffer destinationBuf) {
+        return compose("5A", data, destinationBuf, 0xB, 0);
     }
 
-    public static String bchPolymod(ScriptBuffer data, BufferType dest) {
-        return compose("5A", data, dest, 0xC, 0);
+    /**
+     * Compute BCH ploymod checksum and put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String bchPolymod(ScriptData data, Buffer destinationBuf) {
+        return compose("5A", data, destinationBuf, 0xC, 0);
     }
 
-    public static String setBufferInt(ScriptBuffer data, int min, int max) {
+    /**
+     * Set bufferInt from data length and check range.
+     *
+     * @param data
+     * @param min
+     * @param max
+     * @return
+     */
+    public static String setBufferInt(ScriptData data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         return ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError) + setB;
     }
 
-    public static String setBufferIntToDataLength(ScriptBuffer data) {
+    /**
+     * Set bufferInt from buffer length.
+     *
+     * @param data
+     * @return
+     */
+    public static String setBufferIntFromDataLength(ScriptData data) {
         return compose("B1", data, null, 0, 0);
     }
 
-    public static String putBufferInt(BufferType dest) {
-        return compose("B9", null, dest, 0, 0);
+    /**
+     * Put bufferInt into destination buffer(cast short to 2 bytes).
+     *
+     * @param destinationBuf
+     * @return
+     */
+    public static String putBufferInt(Buffer destinationBuf) {
+        return compose("B9", null, destinationBuf, 0, 0);
     }
 
-    public static String paddingZero(BufferType dest, int base) {
-        return compose("C6", null, dest, base, 0);
+    /**
+     * Padding zero to the destination buffer.
+     *
+     * @param destinationBuf Destination buffer.
+     * @param base The number of padding zero is the base minus the remainder of
+     * bufferInt divided by base(base - (bufferInt % base)).
+     * @return
+     */
+    public static String paddingZero(Buffer destinationBuf, int base) {
+        return compose("C6", null, destinationBuf, base, 0);
     }
 
-//    public static String paddingZero(String data, String dest, int base) {
-//        return setBufferIntToDataLength(data) + ScriptCommand.compose("C6", null, dest, base, 0);
-//    }
-
-    public static String skip(String skipee) {
-        return compose("15", null, null, skipee.length() / 2, 0);
+    /**
+     * Skip part script
+     *
+     * @param script The script want to skip.
+     * @return
+     */
+    public static String skip(String script) {
+        return compose("15", null, null, script.length() / 2, 0);
     }
 
-    public static String ifEqual(ScriptBuffer argData, String expect, String trueStatement, String falseStatement) {
+    /**
+     * If argData equals to expect, the the card execute the trueStatement,
+     * otherwise execute the falseStatement.
+     *
+     * @param argData Requirement.
+     * @param expect Analyzing conditions.
+     * @param trueStatement The script wanna execute when the status is true.
+     * @param falseStatement The script wanna execute when the status is false.
+     * @return
+     */
+    public static String ifEqual(ScriptData argData, String expect, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -321,7 +501,18 @@ public class ScriptAssembler {
                 + trueStatement + falseStatement;
     }
 
-    public static String ifRange(ScriptBuffer argData, String min, String max, String trueStatement, String falseStatement) {
+    /**
+     * If the value of argData lies between min and max(min ≤ argData ≤ max)
+     * then run trueStatement; if not, please run falseStatement.
+     *
+     * @param argData Requirement.
+     * @param min The min value of the range.
+     * @param max The min value of the range.
+     * @param trueStatement The script wanna execute when the status is true.
+     * @param falseStatement The script wanna execute when the status is false.
+     * @return
+     */
+    public static String ifRange(ScriptData argData, String min, String max, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -331,7 +522,19 @@ public class ScriptAssembler {
                 + trueStatement + falseStatement;
     }
 
-    public static String ifSigned(ScriptBuffer argData, ScriptBuffer signData, String trueStatement, String falseStatement) {
+    /**
+     * Use CoolBitX public key to verify that the signature is valid or not. If
+     * the result is true, the the card execute the trueStatement, otherwise
+     * execute the falseStatement.
+     *
+     * @param argData Requirement.
+     * @param signData The encoded ECDSA(CBKey) signature. Signing:
+     * SHA256(argData).
+     * @param trueStatement The script wanna execute when the status is true.
+     * @param falseStatement The script wanna execute when the status is false.
+     * @return
+     */
+    public static String ifSigned(ScriptData argData, ScriptData signData, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -339,66 +542,150 @@ public class ScriptAssembler {
                 + trueStatement + falseStatement;
     }
 
-    public static String resetDest(BufferType dest) {
-        return compose("25", null, dest, 0, 0);
+    /**
+     * Reset the destination buffer.
+     *
+     * @param destinationBuf Target buffer.
+     * @return
+     */
+    public static String clearBuffer(Buffer destinationBuf) {
+        return compose("25", null, destinationBuf, 0, 0);
     }
 
+    /**
+     * Show word on card.
+     *
+     * @param data The word would show on card.
+     * @return
+     */
     public static String showMessage(String data) {
         return compose("DC", null, null, data.length(), 0) + HexUtil.toHexString(data);
     }
 
-    public static String showMessage(ScriptBuffer data) {
+    /**
+     * Show word on card from data.
+     *
+     * @param data The word wanted to show on card.
+     * @return
+     */
+    public static String showMessage(ScriptData data) {
         return compose("DE", data, null, 0, 0);
     }
 
+    /**
+     * Show word on card with two line.
+     *
+     * @param data0 The word in line one.
+     * @param data1 The word in line two.
+     * @return
+     */
     public static String showWrap(String data0, String data1) {
-        /*if(isDataBuf(data)){
-            clearParameter();
-            addDataParameter(data);
-            ret+="0";
-            return "DE"+ret+secondParameter;
-        } else {*/
         return compose("D2", null, null, data0.length(), data1.length()) + HexUtil.toHexString(data0) + HexUtil.toHexString(data1);
         //}
     }
 
-    public static String showAddress(ScriptBuffer data) {
+    /**
+     * Show transaction address on card.
+     *
+     * @param data The transaction address data.
+     * @return
+     */
+    public static String showAddress(ScriptData data) {
         return compose("DD", data, null, 0, 0);
     }
 
-    public static String showAmount(ScriptBuffer data, int decimal) {
+    /**
+     * Show transaction amount on card.
+     *
+     * @param data The transaction amount data.
+     * @param decimal The decimal in this transaction.
+     * @return
+     */
+    public static String showAmount(ScriptData data, int decimal) {
         return compose("DA", data, null, decimal, 0);
     }
 
+    /**
+     * Show "PRESS BOTTON" on card.
+     *
+     * @return
+     */
     public static String showPressButton() {
         return showWrap("PRESS", "BUTToN");
     }
 
-    public static String protobuf(ScriptBuffer data, int wireType) {
-        return protobuf(data, BufferType.TRANSACTION, wireType);
+    /**
+     * Protobuf decode data put the output to transaction buffer.
+     *
+     * @param data The input data.
+     * @param wireType
+     * @return
+     */
+    public static String protobuf(ScriptData data, int wireType) {
+        return protobuf(data, Buffer.TRANSACTION, wireType);
     }
 
-    public static String protobuf(ScriptBuffer data, BufferType dest, int wireType) {
-        return compose("BF", data, dest, wireType, 0);
+    /**
+     * Protobuf decode data put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @param wireType
+     * @return
+     */
+    public static String protobuf(ScriptData data, Buffer destinationBuf, int wireType) {
+        return compose("BF", data, destinationBuf, wireType, 0);
     }
 
+    /**
+     * Point the array start position.
+     *
+     * @return
+     */
     public static String arrayPointer() {
         return compose("A0", null, null, 0, 0);
     }
 
+    /**
+     * Encode data from the last position point in arrayPointer function with
+     * protobuf encoding.
+     *
+     * @return
+     */
     public static String arrayEnd() {
         return arrayEnd(0);
     }
 
+    /**
+     * Encode data from the last position point in arrayPointer function with
+     * specified encoding.
+     *
+     * @param type 0: protobuf, 1: rlp
+     * @return
+     */
     public static String arrayEnd(int type) {
         return compose("BE", null, null, type, 0);
     }
 
-    public static String scaleEncode(ScriptBuffer data, BufferType dest) {
-        return compose("A2", data, dest, 0, 0);
+    /**
+     * Scale decode data and put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String scaleEncode(ScriptData data, Buffer destinationBuf) {
+        return compose("A2", data, destinationBuf, 0, 0);
     }
 
-    public static String scaleDecode(ScriptBuffer data, BufferType dest) {
-        return compose("A3", data, dest, 0, 0);
+    /**
+     * Scale encode data and put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public static String scaleDecode(ScriptData data, Buffer destinationBuf) {
+        return compose("A3", data, destinationBuf, 0, 0);
     }
 }

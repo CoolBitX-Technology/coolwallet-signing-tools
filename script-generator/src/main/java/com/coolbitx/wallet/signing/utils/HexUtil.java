@@ -6,7 +6,6 @@
 package com.coolbitx.wallet.signing.utils;
 
 import java.math.BigInteger;
-import org.spongycastle.util.encoders.Hex;
 
 /**
  *
@@ -14,10 +13,9 @@ import org.spongycastle.util.encoders.Hex;
  */
 public class HexUtil {
 
-    public static String getOriginalStringFromHexString(String str) {
-        return new String(Hex.decode(str));
-    }
-
+//    public static String getOriginalStringFromHexString(String str) {
+//        return new String(Hex.decode(str));
+//    }
     public static String toHexString(String stringData) {
         return toHexString(stringData.getBytes(), stringData.length());
     }
@@ -31,14 +29,14 @@ public class HexUtil {
     }
 
     public static String toHexString(byte[] data) {
-        return Hex.toHexString(data);
+        return Hex.encode(data);
     }
 
     public static String toHexString(byte[] data, int byteLength) {
         if (byteLength == -1) {
-            return Hex.toHexString(data);
+            return Hex.encode(data);
         } else {
-            return rightJustify(Hex.toHexString(data), byteLength);
+            return rightJustify(Hex.encode(data), byteLength);
         }
     }
 
