@@ -10,14 +10,15 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
-/**
- *
- * @author derek
- */
-public class ScriptLibrary {
+
+public class BtcFamilyScript {
 
     public static void listAll() {
-        System.out.println("BTC : " + getBTCOutputScript(Coin.BTC, false));
+        System.out.println("Btc: \n" + getBTCOutputScript(Coin.BTC, false) + "\n");
+        System.out.println("Ltc: \n" + getBTCOutputScript(Coin.LTC, false) + "\n");
+        System.out.println("Zen: \n" + getBTCOutputScript(Coin.ZEN, false) + "\n");
+        System.out.println("Bch: \n" + getBTCOutputScript(Coin.BCH, false) + "\n");
+        System.out.println("Usdt: \n" + getBTCOutputScript(Coin.USDT, false) + "\n");
     }
 
     /*
