@@ -1,6 +1,6 @@
-# Coolwallet Scriptable Signing SDK
+# Script Generator 
 
-Scriptable Signing SDK 為 Coolbitx 的一個開源的工具，你可藉由此工具所支援的演算法以及提供的指令，產生 Coolwallet Pro 簽章所需要的 script ，經由 Coolwallet Pro 組成 transaction payload 並簽署，最後產生出交易簽張。
+Script Generator 為 CoolbitX 的一個開源的工具，你可藉由此工具所支援的演算法以及提供的指令，產生 Coolwallet 簽章所需要的 script ，經由 Coolwallet 組成 transaction payload 並簽署，最後產生出交易簽章。
 
 目前支援 Coolwallet Pro SE 最低版本為 `v308`
 ## Introduction
