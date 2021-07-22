@@ -1,7 +1,6 @@
 # Coolwallet Signing Tools
 
 ## 什麼是 Coolwallet Signing
----
 <br>
 
 Coolwallet Signing 由 Coolwallet Team 開發團隊定義，唯一與 Coolwallet 溝通的格式。
@@ -12,8 +11,8 @@ Coolwallet Signing 由 Coolwallet Team 開發團隊定義，唯一與 Coolwallet
 
 <br>
 
-## 如何整合新幣種 
 ---
+## 如何整合新幣種 
 
 Coolwallet signing tools 提供了 script-generator 以及 script-tester 讓開發者開發及測試 script，測試完成可以接著 script-sdk-template （暫定）來開發 Coolwallet sdk ，讓開發的新幣在 Coolwallet 上運行。
 
@@ -23,12 +22,14 @@ Coolwallet signing tools 提供了 script-generator 以及 script-tester 讓開�
 
 
 ## Reference
----
+
 Contact CoolBitX Product Team for further exploration
 product-team-cw@coolbitx.com
 
-## Licence
+
 ---
+## Licence
+
 
 （待補）
 
