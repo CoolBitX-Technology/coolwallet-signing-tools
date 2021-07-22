@@ -21,7 +21,7 @@ Script Generator 提供 React 頁面，將 script 及所需 argument 填入對�
 
 直接輸入 script 及 input & output argument 即可產生出簽章。
 
-註：UTXO input 有機會有多個，這個測試目前只提供一個 input 做測試。
+註：UTXO input 有機會有多個，這個測試目前只提供輸入一個 input 做測試。
 
 ## Install and Run
 
