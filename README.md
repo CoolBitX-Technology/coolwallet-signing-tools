@@ -1,15 +1,11 @@
 # Coolwallet Signing Tools
 
 ### What is Coolwallet Signing
-<br>
-
 Coolwallet Signing 由 Coolwallet Team 開發團隊定義，唯一與 Coolwallet 溝通的格式。
 將核心的簽章邏輯與運算留在 Coolwallet 內，其他部分移轉到開放、可擴容的運算裝置。
 藉由 script 定義組成交易邏輯以及使用的演算法，並在 Coolwallet 內完成交易簽章。
 
 開發者可藉由 Coolwallet Signing Tools 提供的工具，將各種虛擬貨幣整合到 Coolwallet 中運行。
-
-<br>
 
 ### How to use this tools
 
