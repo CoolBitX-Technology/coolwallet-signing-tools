@@ -1,6 +1,6 @@
 # Script Tester
 
-![](/../images/signing-tester-01.png)
+![tester-page](../images/signing-tester-01.png)
 
 Script Generator 提供 React 頁面，
 
