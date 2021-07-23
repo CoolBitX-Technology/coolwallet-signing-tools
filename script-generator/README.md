@@ -135,7 +135,7 @@ public class main {
 
 ```
 
-### How to prepare argument
+### Ｐrepare argument
 
 #### Account model: ETH
 
@@ -148,7 +148,7 @@ ScriptData argGasLimit = sac.getArgumentRightJustified(10);
 ScriptData argNonce = sac.getArgumentRightJustified(8);
 ```
 
-argument: [toAddress(20B)] [amount(10B)] [gasPrice(10B)] [gasLimit(10B)] [nonce(8B)] [chainId(2B)]
+**argument**: [toAddress(20B)] [amount(10B)] [gasPrice(10B)] [gasLimit(10B)] [nonce(8B)] [chainId(2B)]
 - toAddress: 對象的地址扣掉 "0x"
 - amount: 最小單位 wei (1ETH = 10^18 wei)
 - chainId: v r s的v。
@@ -176,17 +176,21 @@ ${coinType}
 ${addressIdxHex}
 ```
 
-Full Argument:
+**Full Argument:**
 ```
 15328000002c8000003c800000000000000000000000a3255ecfe3f6727a62d938f4c29b2f73c361b26c00000000000000989680000000000009c74afe1f00000000000000005208000000000000002a0003
 ```
+
+<br>
+
 
 #### UTXO: BTC
 
 在 Coolwallet signing 設計中，開發者只需要設計 output script，
 不過 argument 則需要提供 input & output argument。
 
-##### input(utxo) argument:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
+**input(utxo) argument**:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
+
 - outPoint:這個input的來源block的hash以及當時的output編號
 - inputScriptType:P2PKH & P2WPKH = 00，P2SH & P2WSH = 01
 - inputAmount: value
@@ -199,7 +203,7 @@ Full Argument:
 "027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d"; // input P2PKH 0x4E20sat pubkeyHash:0x027d3f....ac0d
 ```
 
-btc intput path
+**btc intput path**
 ```
 15
 32
@@ -210,13 +214,14 @@ btc intput path
 00000000 // address index hex
 ```
 
-Full Argument (path + input(utxo) argument):
+**Full Argument** (path + input(utxo) argument):
 ```
 15328000002C8000000080000000000000000000000088fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000000000000000004E20027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d
 ```
 
 
-##### output argument: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
+**output argument**: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
+
 - outputScriptType: output 的 scriptType，由對方地址決定。
 
 開頭 | 解析 | type | outputScriptType
@@ -238,12 +243,12 @@ bc1 | 32B | P2WSH | 03
 "03bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08"; // hashSequence
 ```
 
-btc output path (btc output 不需要簽章，所以不需要 path，但需要帶入 path length)
+**btc output path** (btc output 不需要簽章，所以不需要 path，但需要帶入 path length)
 ```
 00
 ```
 
-Full Argument (path length + output argument):
+**Full Argument** (path length + output argument):
 ```
 0000000000000000271000000000000000000000000039af5ea4dd0b3b9771945596fa3d4ed3ff76170501000000000000002710328000002C80000000800000000000000000000005a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c522203bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08
 ```
