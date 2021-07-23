@@ -137,25 +137,37 @@ public class main {
 
 ### How to prepare argument
 
+#### Account model: ETH
 
 ```java
-// Step 1. Define Arguments.
 ScriptArgumentComposer sac = new ScriptArgumentComposer();
-ScriptBuffer argTo = sac.getArgument(20);
-ScriptBuffer argValue = sac.getArgumentRightJustified(10);
-ScriptBuffer argDecimal = sac.getArgument(1);
+ScriptData argTo = sac.getArgument(20);
+ScriptData argValue = sac.getArgumentRightJustified(10);
+ScriptData argGasPrice = sac.getArgumentRightJustified(10);
+ScriptData argGasLimit = sac.getArgumentRightJustified(10);
+ScriptData argNonce = sac.getArgumentRightJustified(8);
 ```
 
-```java
-"86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0" // to address 
-"000000004563918244f4" // value 
-"12" // decimal
+argument: [toAddress(20B)] [amount(10B)] [gasPrice(10B)] [gasLimit(10B)] [nonce(8B)] [chainId(2B)]
+- toAddress: 對象的地址扣掉 "0x"
+- amount: 最小單位 wei (1ETH = 10^18 wei)
+- chainId: v r s的v。
+
+
+```text
+"a3255ecfe3f6727a62d938f4c29b2f73c361b26c" // to
+"00000000000000989680" // amount
+"000000000009c74afe1f" // gasPrice
+"00000000000000005208" // gasLimit
+"000000000000002a" // nonce
+"0003"; // chainId v
+
 ```
 
 每個 argument 前面都需要再加上該幣種的 path，path 規則如下：
 
 ```
-15	length（Hexadecimal）
+15	path length（Hexadecimal）
 32	bip32
 8000002C
 ${coinType}
@@ -166,15 +178,13 @@ ${addressIdxHex}
 
 Full Argument:
 ```
-15328000002c8000003c80000000000000000000000086fa049857e0209aa7d9e616f7eb3b3b78ecfdb0000000004563918244f412
+15328000002c8000003c800000000000000000000000a3255ecfe3f6727a62d938f4c29b2f73c361b26c00000000000000989680000000000009c74afe1f00000000000000005208000000000000002a0003
 ```
 
-#### UTXO
+#### UTXO: BTC
 
-在 Coolwallet signing 設計中，開發者只需要設計 output script ，
+在 Coolwallet signing 設計中，開發者只需要設計 output script，
 不過 argument 則需要提供 input & output argument。
-
-**example: btc**
 
 input(utxo) argument:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
 - outPoint:這個input的來源block的hash以及當時的output編號
@@ -189,7 +199,7 @@ input(utxo) argument:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [
 "027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d"; // input P2PKH 0x4E20sat pubkeyHash:0x027d3f....ac0d
 ```
 
-btc path
+btc intput path
 ```
 15
 32
@@ -207,9 +217,25 @@ Full Argument (path + input(utxo) argument):
 
 
 output argument: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
+- outputScriptType: output 的 scriptType，由對方地址決定。
+開頭 | 解析 | type | outputScriptType
+---|---|---|---
+1 | - | P2PKH | 00
+3 | - | P2SH | 01
+bc1 | 20B | P2WPKH | 02
+bc1 | 32B | P2WSH | 03
+
 
 ```
-
+"00"
+"0000000000002710"
+"000000000000000000000000"+"39af5ea4dd0b3b9771945596fa3d4ed3ff761705"+ //output P2PKH 0x2710sat dest:39af...1705 (0x00*12 is for padding)
+"01"+// have change
+"00"
+"0000000000002710"
+"32"+"8000002C"+"80000000"+"80000000"+"00000000"+"00000005"+ // change P2PKH 0x1888sat dest:BIP32 m/44'/0'/0'/0/5 (purpose/cointype/account/change/index)
+"a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c5222"+ // hashPrevouts
+"03bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08"; // hashSequence
 ```
 
 
