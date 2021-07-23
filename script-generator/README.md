@@ -199,7 +199,7 @@ ${addressIdxHex}
 在 Coolwallet signing 設計中，開發者只需要設計 output script，
 不過 argument 則需要提供 input & output argument。
 
-**input(utxo) argument**
+- **Input(utxo) Argument**
 [outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
 
 
@@ -210,7 +210,7 @@ ${addressIdxHex}
 "027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d"; // input P2PKH 0x4E20sat pubkeyHash:0x027d3f....ac0d
 ```
 
-**btc intput path**
+- **Btc Intput Path**
 ```
 15
 32
@@ -221,13 +221,13 @@ ${addressIdxHex}
 00000000 // address index hex
 ```
 
-**Full Argument** (path + input(utxo) argument):
+- **Full Argument** (path + input(utxo) argument):
 ```
 15328000002C8000000080000000000000000000000088fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000000000000000004E20027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d
 ```
 
 
-**output argument**
+- **Output Argument**
 [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
 
 ```
@@ -242,12 +242,12 @@ ${addressIdxHex}
 "03bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08"; // hashSequence
 ```
 
-**btc output path** (btc output 不需要簽章，所以不需要 path，但需要帶入 path length)
+- **Btc Output Path** (btc output 不需要簽章，所以不需要 path，但需要帶入 path length)
 ```
 00
 ```
 
-**Full Argument** (path length + output argument):
+- **Full Argument** (path length + output argument):
 ```
 0000000000000000271000000000000000000000000039af5ea4dd0b3b9771945596fa3d4ed3ff76170501000000000000002710328000002C80000000800000000000000000000005a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c522203bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08
 ```
