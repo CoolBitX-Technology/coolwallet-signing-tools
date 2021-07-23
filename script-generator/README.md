@@ -137,6 +137,7 @@ public class main {
 
 ### How to prepare argument
 
+
 ```java
 // Step 1. Define Arguments.
 ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -154,7 +155,7 @@ ScriptBuffer argDecimal = sac.getArgument(1);
 每個 argument 前面都需要再加上該幣種的 path，path 規則如下：
 
 ```
-15	length（16進位
+15	length（Hexadecimal）
 32	bip32
 8000002C
 ${coinType}
@@ -166,6 +167,49 @@ ${addressIdxHex}
 Full Argument:
 ```
 15328000002c8000003c80000000000000000000000086fa049857e0209aa7d9e616f7eb3b3b78ecfdb0000000004563918244f412
+```
+
+#### UTXO
+
+在 Coolwallet signing 設計中，開發者只需要設計 output script ，
+不過 argument 則需要提供 input & output argument。
+
+**example: btc**
+
+input(utxo) argument:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
+- outPoint:這個input的來源block的hash以及當時的output編號
+- inputScriptType:P2PKH & P2WPKH = 00，P2SH & P2WSH = 01
+- inputAmount: value
+- inputHash: input hash
+
+```
+"88fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000"+ // outPoint
+"00"
+"0000000000004E20"
+"027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d"; // input P2PKH 0x4E20sat pubkeyHash:0x027d3f....ac0d
+```
+
+btc path
+```
+15
+32
+8000002C
+80000000 // coinType
+80000000
+00000000
+00000000 // address index hex
+```
+
+Full Argument (path + input(utxo) argument):
+```
+15328000002C8000000080000000000000000000000088fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000000000000000004E20027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d
+```
+
+
+output argument: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
+
+```
+
 ```
 
 
