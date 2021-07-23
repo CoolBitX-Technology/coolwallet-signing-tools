@@ -186,7 +186,7 @@ Full Argument:
 在 Coolwallet signing 設計中，開發者只需要設計 output script，
 不過 argument 則需要提供 input & output argument。
 
-input(utxo) argument:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
+##### input(utxo) argument:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
 - outPoint:這個input的來源block的hash以及當時的output編號
 - inputScriptType:P2PKH & P2WPKH = 00，P2SH & P2WSH = 01
 - inputAmount: value
@@ -216,7 +216,7 @@ Full Argument (path + input(utxo) argument):
 ```
 
 
-output argument: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
+##### output argument: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
 - outputScriptType: output 的 scriptType，由對方地址決定。
 
 開頭 | 解析 | type | outputScriptType
