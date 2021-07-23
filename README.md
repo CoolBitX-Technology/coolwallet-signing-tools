@@ -9,16 +9,16 @@ Coolwallet Signing 由 Coolwallet Team 開發團隊定義，唯一與 Coolwallet
 
 ## How to use this tools
 
-Coolwallet signing tools 提供了 script-generator 以及 script-tester 讓開發者開發及測試 script，測試完成可以接著 script-sdk-template （暫定）來開發 Coolwallet sdk ，讓開發的新幣在 Coolwallet 上運行。
+Coolwallet signing tools 提供了 script-generator 以及 script-tester 讓開發者開發及測試 script。
 
 - script-generator: script 生產工具，根據欲整合幣種地址及交易格式，撰寫對應的 script 以及 argument，產生相對應的 script。
 - script-tester: script 測試工具，依據產出 script 以及所需參數的 argument。
-- script-sdk-template: sdk 模板，協助開發者依照模板開發 Coolwallet sdk。
 
 
 ## Reference
 
 Contact CoolBitX Product Team for further exploration
+
 product-team-cw@coolbitx.com
 
 
