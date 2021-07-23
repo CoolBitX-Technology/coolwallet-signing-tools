@@ -148,10 +148,8 @@ ScriptData argGasLimit = sac.getArgumentRightJustified(10);
 ScriptData argNonce = sac.getArgumentRightJustified(8);
 ```
 
-**argument**: [toAddress(20B)] [amount(10B)] [gasPrice(10B)] [gasLimit(10B)] [nonce(8B)] [chainId(2B)]
-- toAddress: 對象的地址扣掉 "0x"
-- amount: 最小單位 wei (1ETH = 10^18 wei)
-- chainId: v r s的v。
+**argument**
+[toAddress(20B)] [amount(10B)] [gasPrice(10B)] [gasLimit(10B)] [nonce(8B)] [chainId(2B)]
 
 
 ```text
@@ -189,12 +187,9 @@ ${addressIdxHex}
 在 Coolwallet signing 設計中，開發者只需要設計 output script，
 不過 argument 則需要提供 input & output argument。
 
-**input(utxo) argument**:[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
+**input(utxo) argument**
+[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
 
-- outPoint:這個input的來源block的hash以及當時的output編號
-- inputScriptType:P2PKH & P2WPKH = 00，P2SH & P2WSH = 01
-- inputAmount: value
-- inputHash: input hash
 
 ```
 "88fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000"+ // outPoint
@@ -220,16 +215,8 @@ ${addressIdxHex}
 ```
 
 
-**output argument**: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
-
-- outputScriptType: output 的 scriptType，由對方地址決定。
-
-開頭 | 解析 | type | outputScriptType
----|---|---|---
-1 | - | P2PKH | 00
-3 | - | P2SH | 01
-bc1 | 20B | P2WPKH | 02
-bc1 | 32B | P2WSH | 03
+**output argument**
+[outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
 
 ```
 "00"
