@@ -65,6 +65,8 @@ When the header length is 04, it means that the remainDataType is needed for 80A
 
 ## Usage
 
+### Get script
+
 - 修改檔案 src/main/java/com/coolbitx/wallet/signing/main/main.java
 - 依照交易的 payload 決定傳入卡片所需要的 Argument
 - 決定 header 格式
@@ -132,4 +134,38 @@ public class main {
 }
 
 ```
+
+### How to prepare argument
+
+```java
+// Step 1. Define Arguments.
+ScriptArgumentComposer sac = new ScriptArgumentComposer();
+ScriptBuffer argTo = sac.getArgument(20);
+ScriptBuffer argValue = sac.getArgumentRightJustified(10);
+ScriptBuffer argDecimal = sac.getArgument(1);
+```
+
+```java
+"86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0" // to address 
+"000000004563918244f4" // value 
+"12" // decimal
+```
+
+每個 argument 前面都需要再加上該幣種的 path，path 規則如下：
+
+```
+15	length（16進位
+32	bip32
+8000002C
+${coinType}
+80000000
+00000000
+${addressIdxHex}
+```
+
+Full Argument:
+```
+15328000002c8000003c80000000000000000000000086fa049857e0209aa7d9e616f7eb3b3b78ecfdb0000000004563918244f412
+```
+
 
