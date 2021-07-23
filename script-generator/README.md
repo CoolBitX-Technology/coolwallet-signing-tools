@@ -218,6 +218,7 @@ Full Argument (path + input(utxo) argument):
 
 output argument: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
 - outputScriptType: output 的 scriptType，由對方地址決定。
+
 開頭 | 解析 | type | outputScriptType
 ---|---|---|---
 1 | - | P2PKH | 00
