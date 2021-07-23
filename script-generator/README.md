@@ -164,7 +164,7 @@ argument: [toAddress(20B)] [amount(10B)] [gasPrice(10B)] [gasLimit(10B)] [nonce(
 
 ```
 
-每個 argument 前面都需要再加上該幣種的 path，path 規則如下：
+每個需要簽章的交易， argument 前面都需要再加上該幣種的 path，path 規則如下：
 
 ```
 15	path length（Hexadecimal）
@@ -226,7 +226,6 @@ output argument: [outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] 
 bc1 | 20B | P2WPKH | 02
 bc1 | 32B | P2WSH | 03
 
-
 ```
 "00"
 "0000000000002710"
@@ -239,4 +238,12 @@ bc1 | 32B | P2WSH | 03
 "03bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08"; // hashSequence
 ```
 
+btc output path (btc output 不需要簽章，所以不需要 path，但需要帶入 path length)
+```
+00
+```
 
+Full Argument (path length + output argument):
+```
+0000000000000000271000000000000000000000000039af5ea4dd0b3b9771945596fa3d4ed3ff76170501000000000000002710328000002C80000000800000000000000000000005a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c522203bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08
+```
