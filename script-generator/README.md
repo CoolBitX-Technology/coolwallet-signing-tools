@@ -1,8 +1,10 @@
 # Script Generator 
 
-Script Generator 為 CoolbitX 的一個開源的工具，你可藉由此工具所支援的演算法以及提供的指令，產生 Coolwallet 簽章所需要的 script ，經由 Coolwallet 組成 transaction payload 並簽署，最後產生出交易簽章。
+Script Generator is an open source tool of CoolbitX, You can use the algorithms and command provided by this tool 
+to generate the script required for the Coolwallet signature.
+Coolwallet will compose and sign the transaction payload to generate a transaction signature.
 
-目前支援 Coolwallet Pro SE 最低版本為 `v308`
+The minimum version of Coolwallet Pro SE currently supported  is `v308`
 ## Introduction
 
 Use the command (Script) to copy/code the data between the buffers... etc. to compose the signature data and display the transaction content correctly
@@ -42,7 +44,8 @@ detail | Transaction summary displayed on the card (symbol/amount/address) | 100
 
   [Header][setCoinType Command][Payload Command]...[Display Command]...
 
-script 組成由 header、coin type、payload、display detail 四個部分組成，payload 以及 display detail 為多個指令組成
+The script composition consists of four parts: header, coin type, payload, and display detail.
+The payload and display detail are composed of multiple commands.
 
 The Header is followed by a sequence of commands that run in order.
 
@@ -61,19 +64,19 @@ When the header length is 04, it means that the remainDataType is needed for 80A
 - BTC script header: 0400000010
 ### Other command
 
-你可以到 [command page](https://special-carnival-8b270ec3.pages.github.io/) 查看詳細的函式庫用法。
+You can go to [command page](https://special-carnival-8b270ec3.pages.github.io/) for detailed library usage.
 
 ## Usage
 
 ### Get script
 
-- 修改檔案 src/main/java/com/coolbitx/wallet/signing/main/main.java
-- 依照交易的 payload 決定傳入卡片所需要的 Argument
-- 決定 header 格式
-- 寫入 coin type
-- 組合 payload string
-- 組合 display string
-- 執行程式: `mvn compile -q`
+- Modify file: src/main/java/com/coolbitx/wallet/signing/main/main.java
+- Determine the Argument required to enter the card according to the transaction payload.
+- Decide the header format
+- Enter coin type
+- Make up all payload string
+- Make up all display string
+- Run the program: `mvn compile -q`
 
 ```java class:"lineNo"
 public class main {
@@ -162,7 +165,8 @@ ScriptData argNonce = sac.getArgumentRightJustified(8);
 
 ```
 
-每個需要簽章的交易， argument 前面都需要再加上該幣種的 path，path 規則如下：
+you need to add the path of the currency before the argument in each transaction that needs to be signed. 
+The path rules are as follows:
 
 ```
 15	path length（Hexadecimal）
@@ -196,8 +200,8 @@ ${addressIdxHex}
 
 #### UTXO: BTC
 
-在 Coolwallet signing 設計中，開發者只需要設計 output script，
-不過 argument 則需要提供 input & output argument。
+In the Coolwallet signing design, developers only need to design the output script.
+But the argument needs to provide input & output argument.
 
 **Input(utxo) Argument**
 [outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
@@ -242,7 +246,7 @@ ${addressIdxHex}
 "03bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08"; // hashSequence
 ```
 
-**Btc Output Path** (btc output 不需要簽章，所以不需要 path，但需要帶入 path length)
+**Btc Output Path** (Btc output doesn't need a signature, so the argument doesn't require path, but need path length.)
 ```
 00
 ```

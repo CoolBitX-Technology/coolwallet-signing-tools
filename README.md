@@ -1,18 +1,19 @@
 # Coolwallet Signing Tools
 
 ## What is Coolwallet Signing
-Coolwallet Signing 由 Coolwallet Team 開發團隊定義，唯一與 Coolwallet 溝通的格式。
-將核心的簽章邏輯與運算留在 Coolwallet 內，其他部分移轉到開放、可擴容的運算裝置。
-藉由 script 定義組成交易邏輯以及使用的演算法，並在 Coolwallet 內完成交易簽章。
+Coolwallet Signing is defined by the Coolwallet development team, the only format to communicate with Coolwallet.
+The core sign logic and operation remain in Coolwallet, the other parts are transferred to open and expandable computing devices.
+The script defines the transaction logic and the used algorithm, and completes the transaction signature in Coolwallet.
 
-開發者可藉由 Coolwallet Signing Tools 提供的工具，將各種虛擬貨幣整合到 Coolwallet 中運行。
+Developers can use the tools provided by Coolwallet Signing Tools to integrate various virtual currencies into Coolwallet.
 
 ## How to use this tools
 
-Coolwallet signing tools 提供了 script-generator 以及 script-tester 讓開發者開發及測試 script。
+Coolwallet signing tools provide script-generator and script-tester for developers to develop and test scripts.
 
-- script-generator: script 生產工具，根據欲整合幣種地址及交易格式，撰寫對應的 script 以及 argument，產生相對應的 script。
-- script-tester: script 測試工具，依據產出 script 以及所需參數的 argument。
+- script-generator: Script generation tool. According to the currency address and transaction format to be integrated, write the corresponding script and argument to generate the corresponding script.
+
+- script-tester: Script test tool. According to the output script and the argument of the required parameters.
 
 
 ## Reference
@@ -21,11 +22,9 @@ Contact CoolBitX Product Team for further exploration
 
 product-team-cw@coolbitx.com
 
+* [NOTICE](./NOTICE)
+* [License](./LICENSE)
 
-## Licence
-
-
-（待補）
 
 
 

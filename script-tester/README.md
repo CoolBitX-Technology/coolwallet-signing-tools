@@ -2,26 +2,26 @@
 
 ![tester-page](../images/signing-tester-01.png)
 
-Script Generator 提供 React 頁面，將 script 及所需 argument 填入對應欄位，即產生出簽張。
+Script Generator provides a React test console, just fill script and argument into the corresponding fields, it will produce the signature.
 
 ## How to use this page
 
 ### Create wallet
 
-1. 點擊 Connect，配對 Signing 專用的 Coolwallet 
-2. 輸入種子建立錢包（請用測試用的種子）
+1. Click Connect and pair the signing dedicated Coolwallet. 
+2. Enter the seed to create a wallet.(Please use the test seed.)
 
 ### Get signature
 
 #### Account model
 
-直接輸入 script 及 argument 即可產生出簽章。
+Enter script and argument directly to generate a signature.
 
 #### UTXO
 
-直接輸入 script 及 input & output argument 即可產生出簽章。
+Enter script, input and output argument directly to generate a signature.
 
-註：UTXO input 有機會有多個，這個測試目前只提供輸入一個 input 做測試。
+Hint: There will be multiple UTXO inputs, but this test currently only provides one input for testingㄡ
 
 ## Install and Run
 
