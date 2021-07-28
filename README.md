@@ -1,15 +1,15 @@
-# Coolwallet Signing Tools
+# CoolWallet Signing Tools
 
-## What is Coolwallet Signing
-Coolwallet Signing is defined by the Coolwallet development team, the only format to communicate with Coolwallet.
-The core sign logic and operation remain in Coolwallet, the other parts are transferred to open and expandable computing devices.
-The script defines the transaction logic and the used algorithm, and completes the transaction signature in Coolwallet.
+## What is CoolWallet Signing
+CoolWallet Signing is defined by the CoolWallet development team, the only format to communicate with CoolWallet.
+The core sign logic and operation remain in CoolWallet, the other parts are transferred to open and expandable computing devices.
+The script defines the transaction logic and the used algorithm, and completes the transaction signature in CoolWallet.
 
-Developers can use the tools provided by Coolwallet Signing Tools to integrate various virtual currencies into Coolwallet.
+Developers can use the tools provided by CoolWallet Signing Tools to integrate various virtual currencies into CoolWallet.
 
 ## How to use this tools
 
-Coolwallet signing tools provide script-generator and script-tester for developers to develop and test scripts.
+CoolWallet signing tools provide script-generator and script-tester for developers to develop and test scripts.
 
 - script-generator: Script generation tool. According to the currency address and transaction format to be integrated, write the corresponding script and argument to generate the corresponding script.
 

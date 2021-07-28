@@ -2,7 +2,7 @@
 
 ![tester-page](../images/signing-tester-01.png)
 
-Script Generator provides a React test console, just fill script and argument into the corresponding fields, it will produce the signature.
+Script tester provides a React test console, just copy & paste the script and fill argument into the corresponding fields, and it will produce the signature.
 
 ## How to use this page
 
