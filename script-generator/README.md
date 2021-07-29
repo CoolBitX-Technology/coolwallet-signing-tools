@@ -1,8 +1,10 @@
-# Coolwallet Scriptable Signing SDK
+# Script Generator 
 
-Scriptable Signing SDK 為 Coolbitx 的一個開源的工具，你可藉由此工具所支援的演算法以及提供的指令，產生 Coolwallet Pro 簽章所需要的 script ，經由 Coolwallet Pro 組成 transaction payload 並簽署，最後產生出交易簽張。
+Script Generator is an open source tool of CoolbitX, You can use the algorithms and command provided by this tool 
+to generate the script required for the CoolWallet signature.
+CoolWallet will compose and sign the transaction payload to generate a transaction signature.
 
-目前支援 Coolwallet Pro SE 最低版本為 `v308`
+The minimum version of CoolWallet Pro SE currently supported  is `v308`
 ## Introduction
 
 Use the command (Script) to copy/code the data between the buffers... etc. to compose the signature data and display the transaction content correctly
@@ -42,7 +44,8 @@ detail | Transaction summary displayed on the card (symbol/amount/address) | 100
 
   [Header][setCoinType Command][Payload Command]...[Display Command]...
 
-script 組成由 header、coin type、payload、display detail 四個部分組成，payload 以及 display detail 為多個指令組成
+The script composition consists of four parts: header, coin type, payload, and display detail.
+The payload and display detail are composed of multiple commands.
 
 The Header is followed by a sequence of commands that run in order.
 
@@ -61,17 +64,19 @@ When the header length is 04, it means that the remainDataType is needed for 80A
 - BTC script header: 0400000010
 ### Other command
 
-你可以到 XXX 查看詳細的函式庫用法。
+You can go to [command page](https://special-carnival-8b270ec3.pages.github.io/) for detailed library usage.
 
 ## Usage
 
-- 修改檔案 src/main/java/com/coolbitx/wallet/signing/main/main.java
-- 依照交易的 payload 決定傳入卡片所需要的 Argument
-- 決定 header 格式
-- 寫入 coin type
-- 組合 payload string
-- 組合 display string
-- 執行程式: `mvn compile -q`
+### Generate script
+
+- Modify file: src/main/java/com/coolbitx/wallet/signing/main/main.java
+- Determine the Argument required to enter the card according to the transaction payload.
+- Decide the header format
+- Enter coin type
+- Make up all payload string
+- Make up all display string
+- Run the program: `mvn compile -q`
 
 ```java class:"lineNo"
 public class main {
@@ -133,3 +138,120 @@ public class main {
 
 ```
 
+### Ｐrepare argument
+
+#### Account model: ETH
+
+```java
+ScriptArgumentComposer sac = new ScriptArgumentComposer();
+ScriptData argTo = sac.getArgument(20);
+ScriptData argValue = sac.getArgumentRightJustified(10);
+ScriptData argGasPrice = sac.getArgumentRightJustified(10);
+ScriptData argGasLimit = sac.getArgumentRightJustified(10);
+ScriptData argNonce = sac.getArgumentRightJustified(8);
+```
+
+**argument**
+[toAddress(20B)] [amount(10B)] [gasPrice(10B)] [gasLimit(10B)] [nonce(8B)] [chainId(2B)]
+
+
+```text
+"a3255ecfe3f6727a62d938f4c29b2f73c361b26c" // to
+"00000000000000989680" // amount
+"000000000009c74afe1f" // gasPrice
+"00000000000000005208" // gasLimit
+"000000000000002a" // nonce
+"0003"; // chainId v
+
+```
+
+you need to add the path of the currency before the argument in each transaction that needs to be signed. 
+The path rules are as follows:
+
+```
+15	path length（Hexadecimal）
+32	bip32
+8000002C
+${coinType}
+80000000
+00000000
+${addressIdxHex}
+```
+
+
+**eth path**
+```
+15	
+32	
+8000002c
+8000003c
+80000000
+00000000
+00000000
+```
+
+**Full Argument:**
+```
+15328000002c8000003c800000000000000000000000a3255ecfe3f6727a62d938f4c29b2f73c361b26c00000000000000989680000000000009c74afe1f00000000000000005208000000000000002a0003
+```
+
+<br>
+
+
+#### UTXO: BTC
+
+In the CoolWallet signing design, developers only need to design the output script.
+But the argument needs to provide input & output argument.
+
+**Input(utxo) Argument**
+[outPoint(32+4B)] [inputScriptType(1B)] [inputAmount(8B)] [inputHash(20B)]
+
+
+```
+"88fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000"+ // outPoint
+"00"
+"0000000000004E20"
+"027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d"; // input P2PKH 0x4E20sat pubkeyHash:0x027d3f....ac0d
+```
+
+**Btc Intput Path**
+```
+15
+32
+8000002C
+80000000 // coinType
+80000000
+00000000
+00000000 // address index hex
+```
+
+**Full Argument** (path + input(utxo) argument):
+```
+15328000002C8000000080000000000000000000000088fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000000000000000004E20027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d
+```
+
+
+**Output Argument**
+[outputScriptType(1B)] [outputAmount(8B)] [outputHash(12+20B)] [haveChange(1B)] [changeScriptType(1B)] [changeAmount(8B)] [changePath(21B)] [hashPrevouts(32B] [hashSequence(32B)]
+
+```
+"00"
+"0000000000002710"
+"000000000000000000000000"+"39af5ea4dd0b3b9771945596fa3d4ed3ff761705"+ //output P2PKH 0x2710sat dest:39af...1705 (0x00*12 is for padding)
+"01"+// have change
+"00"
+"0000000000002710"
+"32"+"8000002C"+"80000000"+"80000000"+"00000000"+"00000005"+ // change P2PKH 0x1888sat dest:BIP32 m/44'/0'/0'/0/5 (purpose/cointype/account/change/index)
+"a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c5222"+ // hashPrevouts
+"03bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08"; // hashSequence
+```
+
+**Btc Output Path** (Btc output doesn't need a signature, so the argument doesn't require path, but need path length.)
+```
+00
+```
+
+**Full Argument** (path length + output argument):
+```
+0000000000000000271000000000000000000000000039af5ea4dd0b3b9771945596fa3d4ed3ff76170501000000000000002710328000002C80000000800000000000000000000005a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c522203bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08
+```
