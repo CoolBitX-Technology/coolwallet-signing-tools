@@ -4,12 +4,16 @@
 
 Script tester provides a React test console, just copy & paste the script and fill argument into the corresponding fields, and it will produce the signature.
 
-## How to use this page
+## Install and Run this page
+
+To install test tool, run `npm install`. Then you could execute `npm start` to launch the test tool.
+## How to use script tester
 
 ### Create wallet
 
-1. Click Connect and pair the signing dedicated Coolwallet. 
-2. Enter the seed to create a wallet.(Please use the test seed.)
+0. The script tester can only be used with CoolWallet Pro testing card, not commercial one. Please reach out to CoolBitx if you're interested to develop the script.
+1. Click Connect and pair the signing dedicated CoolWallet. 
+2. Enter the seed and click Send to create the wallet. (CAUTION! Please create the testing purpose seed and use it)
 
 ### Get signature
 
@@ -21,29 +25,39 @@ Enter script and argument directly to generate a signature.
 
 Enter script, input and output argument directly to generate a signature.
 
-Hint: There will be multiple UTXO inputs, but this test currently only provides one input for testingㄡ
-
-## Install and Run
-
-```
-npm install
-```
-
-```
-npm start
-```
+Hint: The real case would involve multiple UTXO inputs, but the script tester currently provides one input to simplify the testing.
 
 ## Example
 
 ### Polkadot 
 
-script
+transfer script
 ```
 03020E01C7070000000162CAA0C70002CC071000CAAC570002A2ACD70022FFF6CAACD7002CFFFBA2ACD70031FFFBA2ACD70036FFFBCAACC7003B04CAACC7003F04CAAC570043CAAC570063DC07C003444f54CC0FC00753533538505245CC0F1000CAAC5F00025AF09FC00FBAFCCE6C07230804DDE09700DAACD7C022FFF60AD207CC05065052455353425554546f4e
 ```
 
 argument
 ```
+15 // path length
+32 // bip32
+8000002C 
+80000162
+80000000
+00000000
+00000000
+0500 // call index(pallet + name)
+8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48 // dest address
+0000000000BEEBCF0800 // value : 13f6ffffffffff3f01
+0000009999 // mortalEra
+0000000000 // nonce
+0000000000 // tip 
+9a020000 // spec ver
+4d010000 // tx ver
+91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3 // genesis hash
+5c697847b25d385178aa150d29e5ce212339c5624183f74bdf45f4912c89749a // block hash
+
+---
+
 15328000002C8000016280000000000000000000000005008eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a480000000000BEEBCF08000000009999000000000000000000009a0200004d01000091b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c35c697847b25d385178aa150d29e5ce212339c5624183f74bdf45f4912c89749a
 ```
 
@@ -56,10 +70,33 @@ script
 
 input argument
 ```
+15
+32
+8000002C
+80000000
+80000000
+00000000
+00000000
+88fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000
+00
+0000000000004E20
+027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d
+
+---
 15328000002C8000000080000000000000000000000088fd8402286041ab66d230bd23592b75493e5be21f8694c6491440aad7117bfc00000000000000000000004E20027d3f3c7c3cfa357d97fbe7d80d70f4ab1cac0d
 ```
 
-output argument
+output argument (no path required)
 ```
+
+00 // path length
+00 0000000000002710 000000000000000000000000 39af5ea4dd0b3b9771945596fa3d4ed3ff761705 //output P2PKH 0x2710sat dest:39af...1705 (0x00*12 is for padding)
+01 // have change
+00 0000000000002710 32 8000002C 80000000 80000000 00000000 00000005 // change P2PKH 0x1888sat dest:BIP32 m/44'/0'/0'/0/5 (purpose/cointype/account/change/index)
+a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c5222 // hashPrevouts
+03bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08 // hashSequence
+
+---
+
 0000000000000000271000000000000000000000000039af5ea4dd0b3b9771945596fa3d4ed3ff76170501000000000000002710328000002C80000000800000000000000000000005a2c0d9aa66bc2a92bfdd22f6f05e3eda486f80015079a5144d732f157b5c522203bae88710f05ebf15c1c34f7ea4c1ad55ee8c5d7d6ee2b6f9ecd26cf663ca08
 ```

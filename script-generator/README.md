@@ -1,10 +1,10 @@
 # Script Generator 
 
 Script Generator is an open source tool of CoolbitX, You can use the algorithms and command provided by this tool 
-to generate the script required for the Coolwallet signature.
-Coolwallet will compose and sign the transaction payload to generate a transaction signature.
+to generate the script required for the CoolWallet signature.
+CoolWallet will compose and sign the transaction payload to generate a transaction signature.
 
-The minimum version of Coolwallet Pro SE currently supported  is `v308`
+The minimum version of CoolWallet Pro SE currently supported  is `v308`
 ## Introduction
 
 Use the command (Script) to copy/code the data between the buffers... etc. to compose the signature data and display the transaction content correctly
@@ -68,7 +68,7 @@ You can go to [command page](https://special-carnival-8b270ec3.pages.github.io/)
 
 ## Usage
 
-### Get script
+### Generate script
 
 - Modify file: src/main/java/com/coolbitx/wallet/signing/main/main.java
 - Determine the Argument required to enter the card according to the transaction payload.
@@ -200,7 +200,7 @@ ${addressIdxHex}
 
 #### UTXO: BTC
 
-In the Coolwallet signing design, developers only need to design the output script.
+In the CoolWallet signing design, developers only need to design the output script.
 But the argument needs to provide input & output argument.
 
 **Input(utxo) Argument**

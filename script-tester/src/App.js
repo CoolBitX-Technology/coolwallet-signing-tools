@@ -71,7 +71,7 @@ class App extends React.Component {
         <Router>
           <Container>
             <Row className='title'>
-              <p>CoolWallet Signing Tester</p>
+              <p>CoolWallet Script Tester</p>
             </Row>
             {this.state.transport
               ? this.makeConnectComponent('Disconnect', this.disconnect)

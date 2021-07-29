@@ -1,19 +1,19 @@
 # CoolWallet Signing Tools
 
 ## What is CoolWallet Signing
-CoolWallet Signing is defined by the CoolWallet development team, the only format to communicate with CoolWallet.
-The core sign logic and operation remain in CoolWallet, the other parts are transferred to open and expandable computing devices.
-The script defines the transaction logic and the used algorithm, and completes the transaction signature in CoolWallet.
+The core firmware of CoolWallet Pro is re-deisgned to ease the integration of new blockchain signing capability. The firmware works as a virtual machine which accepts a signing script and input arguments, and then returns the signature which could be included in the blockchain transaction message.
 
-Developers can use the tools provided by CoolWallet Signing Tools to integrate various virtual currencies into CoolWallet.
+The firmware comes with a set of built-in commands and crypto algorithms so that developers could use them in the script. The firmware could be updated to add support of more commands and algorithms.
+
+This repository provides tools to facilitate script generation and testing. The generated scripts could be integrated back into CoolWallet SDK to add more crypto currency support.
 
 ## How to use this tools
 
 CoolWallet signing tools provide script-generator and script-tester for developers to develop and test scripts.
 
-- script-generator: Script generation tool. According to the currency address and transaction format to be integrated, write the corresponding script and argument to generate the corresponding script.
+- script-generator: The Script generation tool allows the developers to create their own CoolWallet Signing Script given the arguments describing the format of the transaction and the currency address.
 
-- script-tester: Script test tool. According to the output script and the argument of the required parameters.
+- script-tester: The script tester allows the developers to test the CoolWallet Signing Script generated with the script generator.
 
 
 ## Reference
