@@ -79,7 +79,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argToAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -160,7 +160,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argTo, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -219,7 +219,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -273,7 +273,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -324,7 +324,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -372,7 +372,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -424,7 +424,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argVoteAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -468,7 +468,7 @@ public class TrxScript {
                             + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))

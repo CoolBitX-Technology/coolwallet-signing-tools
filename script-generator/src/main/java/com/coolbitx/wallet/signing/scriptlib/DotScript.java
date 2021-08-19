@@ -71,7 +71,7 @@ public class DotScript {
                             + ScriptAssembler.copyArgument(argToAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 7, 35),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -123,7 +123,7 @@ public class DotScript {
                             + ScriptAssembler.copyArgument(argControllerAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 7, 35),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -373,7 +373,7 @@ public class DotScript {
                             + ScriptAssembler.copyArgument(argToAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 7, 35),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
@@ -425,7 +425,7 @@ public class DotScript {
                             + ScriptAssembler.copyArgument(argControllerAddr, Buffer.FREE)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 7, 35),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
                                             Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))

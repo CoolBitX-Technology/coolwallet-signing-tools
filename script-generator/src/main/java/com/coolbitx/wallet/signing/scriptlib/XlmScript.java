@@ -90,7 +90,7 @@ public class XlmScript {
                             + ScriptAssembler.clearBuffer(Buffer.EXTENDED)
                             + ScriptAssembler.copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
                                             Buffer.EXTENDED)
-                            + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 35),
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 35),
                                             Buffer.FREE, 56, ScriptAssembler.extendedCharset,
                                             ScriptAssembler.bitLeftJustify8to5)
                             + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE, 35))

@@ -48,7 +48,7 @@ public class XrpScript {
                                 + ScriptAssembler.copyString(HexUtil.toHexString(
                                                 "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
                                                 Buffer.EXTENDED)
-                                + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, 25), Buffer.FREE, 45,
+                                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25), Buffer.FREE, 45,
                                                 ScriptAssembler.extendedCharset, ScriptAssembler.zeroInherit)
                                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE, 53))
                                 + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showPressButton();

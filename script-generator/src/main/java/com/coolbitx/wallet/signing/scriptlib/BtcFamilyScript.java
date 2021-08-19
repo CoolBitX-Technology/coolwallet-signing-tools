@@ -169,7 +169,7 @@ ffffffff //sequence = const
                                 ))
                                 + ScriptAssembler.copyArgument(argOutputDest20, Buffer.FREE)
                                 + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE, ScriptAssembler.DoubleSHA256)
-                                + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.FREE, 0, coin != Coin.ZEN ? 25 : 26), Buffer.EXTENDED, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, coin != Coin.ZEN ? 25 : 26), Buffer.EXTENDED, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
                                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED)), // else P2WPKH/P2WSH , bech32 address
                                 (supportSegwit
                                         ? ScriptAssembler.copyString(hrpExpand + "00", Buffer.FREE)
@@ -197,8 +197,8 @@ ffffffff //sequence = const
                         + ScriptAssembler.copyString("0000000000000000", Buffer.FREE)
                         + ScriptAssembler.bchPolymod(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED)
                         + ScriptAssembler.clearBuffer(Buffer.FREE)
-                        + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.EXTENDED, 0, 21), Buffer.FREE, 34, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
-                        + ScriptAssembler.baseConvert(ScriptData.getBufer(Buffer.EXTENDED, 21, 5), Buffer.FREE, 8, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                        + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.EXTENDED, 0, 21), Buffer.FREE, 34, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                        + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.EXTENDED, 21, 5), Buffer.FREE, 8, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
                         + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE)))
                 + ScriptAssembler.showAmount(!isUSDT ? argOutputAmount : argUsdtAmount, 8)
                 + ScriptAssembler.showPressButton()

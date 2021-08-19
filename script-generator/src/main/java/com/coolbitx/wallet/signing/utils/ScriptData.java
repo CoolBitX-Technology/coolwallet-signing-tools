@@ -36,7 +36,7 @@ public class ScriptData {
     public static final int bufInt = 1000;
     public static final int max = 2000;
 
-    public static ScriptData getBufer(Buffer bufferType, int offset, int length) {
+    public static ScriptData getBuffer(Buffer bufferType, int offset, int length) {
         return new ScriptData(bufferType, offset, length);
     }
 
