@@ -332,6 +332,41 @@ public class DotScript {
                             + ScriptAssembler.showMessage("Withdr") + ScriptAssembler.showWrap("PRESS", "BUTToN");
     }
 
+    public static String getDOTChillScript() {
+            ScriptArgumentComposer sac = new ScriptArgumentComposer();
+            ScriptData argCallIndex = sac.getArgument(2);
+            ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+            ScriptData argNonce = sac.getArgumentRightJustified(5);
+            ScriptData argTip = sac.getArgumentRightJustified(5);
+            ScriptData argSpecVer = sac.getArgument(4);
+            ScriptData argTxVer = sac.getArgument(4);
+            ScriptData argGenesisHash = sac.getArgument(32);
+            ScriptData argBlockHash = sac.getArgument(32);
+            // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
+            return "03020E01"
+                            // set coinType to 0162
+                            + ScriptAssembler.setCoinType(0x0162)
+                            // call index
+                            + ScriptAssembler.copyArgument(argCallIndex)
+                            // MortalEra
+                            + ScriptAssembler.copyArgument(argMortalEra)
+                            // nonce
+                            + ScriptAssembler.scaleEncode(argNonce, Buffer.TRANSACTION)
+                            // tip
+                            + ScriptAssembler.scaleEncode(argTip, Buffer.TRANSACTION)
+                            // spec ver
+                            + ScriptAssembler.copyArgument(argSpecVer)
+                            // tx ver
+                            + ScriptAssembler.copyArgument(argTxVer)
+                            // genesis hash
+                            + ScriptAssembler.copyArgument(argGenesisHash)
+                            // block hash
+                            + ScriptAssembler.copyArgument(argBlockHash) 
+                            + ScriptAssembler.showMessage("DOT")
+                            + ScriptAssembler.showMessage("Chill")
+                            + ScriptAssembler.showWrap("PRESS", "BUTToN");
+    }
+
     public static String getKSMScript() {
             ScriptArgumentComposer sac = new ScriptArgumentComposer();
             ScriptData argCallIndex = sac.getArgument(2);
