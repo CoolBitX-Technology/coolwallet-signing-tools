@@ -23,7 +23,7 @@ public class ScriptAssembler {
     public static final String binary32Charset = "binary32Charset";
     public static final String base32BitcoinCashCharset = "base32BitcoinCashCharset";
     public static final String base58Charset = "base58Charset";
-    public static final String extendedCharset = "extentetCharset";
+    public static final String extendedCharset = "extendedCharset";
 
     public static final int leftJustify = 0x01;
     public static final int littleEndian = 0x02;
@@ -345,7 +345,7 @@ public class ScriptAssembler {
      * @param charset The name of the charset requested: "binaryCharset",
      * "hexadecimalCharset", "bcdCharset", "decimalCharset", "binary32Charset",
      * "base32BitcoinCashCharset", "base58Charset", "extentetCharset".
-     * @param baseConvertArg The number of the base-enoding requested:
+     * @param baseConvertArg The number of the base-cenoding requested:
      * leftJustify = 0x01, littleEndian = 0x02, zeroInherit = 0x04,
      * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return

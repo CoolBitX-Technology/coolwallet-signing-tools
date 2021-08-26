@@ -62,11 +62,12 @@ public class AdaScript {
                 + ScriptAssembler.copyString("82583900")
                 + ScriptAssembler.copyArgument(receiverAddress)
                 + ScriptAssembler.copyArgument(receiveAmountPrefix)
-                + ScriptAssembler.copyArgument(receiveAmount, Buffer.EXTENDED)
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.EXTENDED, 7)), "")
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.EXTENDED, 6)), "")
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.EXTENDED, 4)), "")
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.EXTENDED)), "")
+                + ScriptAssembler.copyArgument(receiveAmount, Buffer.FREE)
+                + ScriptAssembler.ifEqual(receiveAmountPrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 7)), "")
+                + ScriptAssembler.ifEqual(receiveAmountPrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 6)), "")
+                + ScriptAssembler.ifEqual(receiveAmountPrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 4)), "")
+                + ScriptAssembler.ifEqual(receiveAmountPrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE)), "")
+                + ScriptAssembler.clearBuffer(Buffer.FREE)
                 // --- output receive end ---
                 // --- fee start ---
                 + ScriptAssembler.copyString("02")
@@ -92,18 +93,28 @@ public class AdaScript {
                 // -- payload end --
                 + ScriptAssembler.showMessage("ADA")
                 // -- show address start --
-                + ScriptAssembler.copyString("00000001", Buffer.FREE)  // address header
-                + ScriptAssembler.copyArgument(receiverAddress, Buffer.FREE) // address header
-                + ScriptAssembler.baseConvert(receiverAddress, Buffer.FREE, 0, ScriptAssembler.binary32Charset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                // + ScriptAssembler.copyString("01", Buffer.FREE)  // address mainnet
+                // + ScriptAssembler.copyArgument(receiverAddress, Buffer.FREE)
+                // + ScriptAssembler.copyString(HexUtil.toHexString("addr1".getBytes()), Buffer.EXTENDED)
+                // + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 57), Buffer.EXTENDED, 92, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                // + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.EXTENDED)
+                + ScriptAssembler.copyString("01", Buffer.FREE)  // address mainnet
+                + ScriptAssembler.copyArgument(receiverAddress, Buffer.FREE)
+                + ScriptAssembler.copyString(HexUtil.toHexString("addr1".getBytes()), Buffer.EXTENDED)
+                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 57), Buffer.EXTENDED, 92, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE)
+                
+                + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
                 + ScriptAssembler.clearBuffer(Buffer.FREE)
+                + ScriptAssembler.clearBuffer(Buffer.EXTENDED)
                 // -- show address end --
                 // -- show amount start --
-                + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAmount(ScriptData.getDataBufferAll(Buffer.FREE), 6) 
+                + ScriptAssembler.showAmount(receiveAmount, 6) 
                 // -- show amount end --
                 + ScriptAssembler.showPressButton();
+
+                // 01a74ecc
     }
 
 }
-
