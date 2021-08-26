@@ -20,6 +20,7 @@ public class DotScript {
             System.out.println("Dot Nominate Single Hash: \n" + getDOTNominateSingleHashScript() + "\n");
             System.out.println("Dot Nominate Double Hash: \n" + getDOTNominateDoubleHashScript() + "\n");
             System.out.println("Dot Withdraw: \n" + getDOTWithdrawScript() + "\n");
+            System.out.println("Dot Chill: \n" + getDOTChillScript() + "\n");
 
             System.out.println("Ksm: \n" + getKSMScript() + "\n");
             System.out.println("Ksm Bond: \n" + getKSMBondScript() + "\n");
