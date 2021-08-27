@@ -2,7 +2,6 @@ package com.coolbitx.wallet.signing.main;
 
 import com.coolbitx.wallet.signing.scriptlib.*;
 
-
 public class AllScript {
 
     public static void main(String[] args) throws Exception {
@@ -18,6 +17,5 @@ public class AllScript {
         // XrpScript.listAll();
         AdaScript.listAll();
     }
-
 
 }

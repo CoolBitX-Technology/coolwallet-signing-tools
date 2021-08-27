@@ -32,7 +32,6 @@ public class AdaScript {
         ScriptData fee = sac.getArgument(8);
         ScriptData invalidHereafterPrefix = sac.getArgument(1);
         ScriptData invalidHereafter = sac.getArgument(8);
-        
 
         // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=02=EDDSA
         return "03020E02"
@@ -93,28 +92,29 @@ public class AdaScript {
                 // -- payload end --
                 + ScriptAssembler.showMessage("ADA")
                 // -- show address start --
-                // + ScriptAssembler.copyString("01", Buffer.FREE)  // address mainnet
-                // + ScriptAssembler.copyArgument(receiverAddress, Buffer.FREE)
-                // + ScriptAssembler.copyString(HexUtil.toHexString("addr1".getBytes()), Buffer.EXTENDED)
-                // + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 57), Buffer.EXTENDED, 92, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
-                // + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.EXTENDED)
-                + ScriptAssembler.copyString("01", Buffer.FREE)  // address mainnet
-                + ScriptAssembler.copyArgument(receiverAddress, Buffer.FREE)
-                + ScriptAssembler.copyString(HexUtil.toHexString("addr1".getBytes()), Buffer.EXTENDED)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 57), Buffer.EXTENDED, 92, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
-                + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE)
-                
-                + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                + ScriptAssembler.copyString("030303030001040412", Buffer.FREE)
+                + ScriptAssembler.copyString("01", Buffer.EXTENDED)
+                + ScriptAssembler.copyArgument(receiverAddress, Buffer.EXTENDED)
+                + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE, 92, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
+                + ScriptAssembler.copyString("000000000000", Buffer.FREE)
+                + ScriptAssembler.clearBuffer(Buffer.EXTENDED)
+                + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED)
+                + ScriptAssembler.clearBuffer(Buffer.FREE)
+                + ScriptAssembler.copyString(HexUtil.toHexString("addr1"), Buffer.FREE)
+                + ScriptAssembler.copyString("01", Buffer.EXTENDED)
+                + ScriptAssembler.copyArgument(receiverAddress, Buffer.EXTENDED) // EXTENDED : [Polymod(4B)][01(1B)][receiverAddress(56B)]
+                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.EXTENDED, 4, 57), Buffer.FREE, 92, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.EXTENDED, 0, 4), Buffer.FREE, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
                 + ScriptAssembler.clearBuffer(Buffer.FREE)
                 + ScriptAssembler.clearBuffer(Buffer.EXTENDED)
                 // -- show address end --
                 // -- show amount start --
-                + ScriptAssembler.showAmount(receiveAmount, 6) 
+                + ScriptAssembler.showAmount(receiveAmount, 6)
                 // -- show amount end --
                 + ScriptAssembler.showPressButton();
 
-                // 01a74ecc
+        // 01a74ecc
     }
 
 }
