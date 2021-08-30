@@ -48,16 +48,21 @@ public class AdaScript {
                 + ScriptAssembler.copyArgument(inputList)
                 // --- intput end ---
                 // --- output change start ---
-                + ScriptAssembler.copyString("0182")
-                + ScriptAssembler.copyString("82583901")
-                + ScriptAssembler.copyArgument(changeAddress)
-                + ScriptAssembler.copyArgument(changeAmountPrefix)
-                + ScriptAssembler.copyArgument(changeAmount, Buffer.FREE)
-                + ScriptAssembler.ifEqual(changeAmountPrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 7)), "")
-                + ScriptAssembler.ifEqual(changeAmountPrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 6)), "")
-                + ScriptAssembler.ifEqual(changeAmountPrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 4)), "")
-                + ScriptAssembler.ifEqual(changeAmountPrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE)), "")
-                + ScriptAssembler.clearBuffer(Buffer.FREE)
+                + ScriptAssembler.ifEqual(changeAmount, "0000000000000000", 
+                        // ---- output count start ----
+                        ScriptAssembler.copyString("0181"), 
+                        ScriptAssembler.copyString("0182")
+                        // ---- output count end ----
+                        + ScriptAssembler.copyString("82583901")
+                        + ScriptAssembler.copyArgument(changeAddress)
+                        + ScriptAssembler.copyArgument(changeAmountPrefix)
+                        + ScriptAssembler.copyArgument(changeAmount, Buffer.FREE)
+                        + ScriptAssembler.ifEqual(changeAmountPrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 7)), "")
+                        + ScriptAssembler.ifEqual(changeAmountPrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 6)), "")
+                        + ScriptAssembler.ifEqual(changeAmountPrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE, 4)), "")
+                        + ScriptAssembler.ifEqual(changeAmountPrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE)), "")
+                        + ScriptAssembler.clearBuffer(Buffer.FREE)
+                )
                 // --- output change end ---
                 // --- output receive start ---
                 + ScriptAssembler.copyString("82583900")
