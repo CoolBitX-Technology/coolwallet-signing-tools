@@ -185,7 +185,7 @@ ffffffff //sequence = const
                                                 ScriptAssembler.baseConvert(argOutputDest20, Buffer.FREE, 32, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5),
                                                 ScriptAssembler.baseConvert(argOutputDest32, Buffer.FREE, 52, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
                                         )
-                                        + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE, 6, ScriptAssembler.binary32Charset, ScriptAssembler.leftJustify)
+                                        + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
                                         + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
                                         : ScriptAssembler.throwSEError)
                         )
