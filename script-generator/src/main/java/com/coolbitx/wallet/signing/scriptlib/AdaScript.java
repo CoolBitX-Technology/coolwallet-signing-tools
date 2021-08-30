@@ -19,9 +19,8 @@ public class AdaScript {
 
     public static String getADATransactionScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData intputCount = sac.getArgument(1);
-        ScriptData txId = sac.getArgument(32);
-        ScriptData txIdIndex = sac.getArgument(1);
+        // ScriptData txId = sac.getArgument(32);
+        // ScriptData txIdIndex = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgument(56);
         ScriptData changeAmountPrefix = sac.getArgument(1);
         ScriptData changeAmount = sac.getArgument(8);
@@ -32,6 +31,8 @@ public class AdaScript {
         ScriptData fee = sac.getArgument(8);
         ScriptData invalidHereafterPrefix = sac.getArgument(1);
         ScriptData invalidHereafter = sac.getArgument(8);
+        ScriptData intputCount = sac.getArgument(1);
+        ScriptData inputList = sac.getArgumentAll();
 
         // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=02=EDDSA
         return "03020E02"
@@ -41,9 +42,10 @@ public class AdaScript {
                 + ScriptAssembler.copyString("00")
                 + ScriptAssembler.copyArgument(intputCount)
                 // --- intput start (need for loop) ---
-                + ScriptAssembler.copyString("825820")
-                + ScriptAssembler.copyArgument(txId)
-                + ScriptAssembler.copyArgument(txIdIndex)
+                // + ScriptAssembler.copyString("825820")
+                // + ScriptAssembler.copyArgument(txId)
+                // + ScriptAssembler.copyArgument(txIdIndex)
+                + ScriptAssembler.copyArgument(inputList)
                 // --- intput end ---
                 // --- output change start ---
                 + ScriptAssembler.copyString("0182")
