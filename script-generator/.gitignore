@@ -6,5 +6,10 @@
 **/nbbuild/
 **/nbdist/
 **/.nb-gradle/
-**/node_modules/
 /bin/
+.settings/
+<<<<<<< HEAD
+=======
+.classpath
+.project
+>>>>>>> dev
