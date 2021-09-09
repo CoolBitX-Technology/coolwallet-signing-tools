@@ -64,7 +64,7 @@ When the header length is 04, it means that the remainDataType is needed for 80A
 - BTC script header: 0400000010
 ### Other command
 
-You can go to [command page](https://special-carnival-8b270ec3.pages.github.io/) for detailed library usage.
+You can go to [command page](https://coolbitx-technology.github.io/coolwallet-signing-tools/) for detailed library usage.
 
 ## Usage
 
