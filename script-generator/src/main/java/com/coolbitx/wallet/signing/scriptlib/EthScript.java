@@ -336,8 +336,8 @@ b844 a9059cbb
                 + //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
                 ScriptAssembler.setCoinType(0x3C)
                 + // set coinType to 3C
-                ScriptAssembler.copyString("19457468657265756D205369676E6564204D6573736167653A0A3332")
-                + ScriptAssembler.hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
+                ScriptAssembler.copyString("19457468657265756D205369676E6564204D6573736167653A0A")
+                + ScriptAssembler.copyArgument(argMessage)
                 + ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.showWrap("MESSAGE", "")
                 + ScriptAssembler.showPressButton();
