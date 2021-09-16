@@ -72,9 +72,9 @@ accessList :       c0
                 + ScriptAssembler.copyString("C0")
                 + ScriptAssembler.arrayEnd(1)
                 + ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
     }
@@ -133,15 +133,15 @@ accessList :       c0
                 + ScriptAssembler.arrayEnd(1)
                 + ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.FREE)
+                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
                 )
                 + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                + ScriptAssembler.copyArgument(argName, Buffer.FREE)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.FREE))
-                + ScriptAssembler.clearBuffer(Buffer.FREE)
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
+                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
@@ -213,14 +213,14 @@ accessList :       c0
                 + ScriptAssembler.copyString("80")
                 // chainId v
                 // + ScriptAssembler.rlpString(argChainId)
-                + ScriptAssembler.copyString("01", Buffer.EXTENDED)
-                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                + ScriptAssembler.copyString("01", Buffer.CACHE1)
+                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(1) + ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset,
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
     }
     /*
@@ -268,22 +268,22 @@ b844 a9059cbb
                 + ScriptAssembler.copyArgument(argValue)
                 // chainId v
                 // + ScriptAssembler.rlpString(argChainId)
-                + ScriptAssembler.copyString("01", Buffer.EXTENDED)
-                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                + ScriptAssembler.copyString("01", Buffer.CACHE1)
+                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 + ScriptAssembler.copyString("8080")
                 + ScriptAssembler.rlpList(2)
                 + ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.FREE)
+                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
                 )
                 + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                + ScriptAssembler.copyArgument(argName, Buffer.FREE)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.FREE))
-                + ScriptAssembler.clearBuffer(Buffer.FREE)
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
+                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
@@ -319,8 +319,8 @@ b844 a9059cbb
                 + ScriptAssembler.rlpString(argData)
                 // chainId v
                 // + ScriptAssembler.rlpString(argChainId)
-                + ScriptAssembler.copyString("01", Buffer.EXTENDED)
-                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                + ScriptAssembler.copyString("01", Buffer.CACHE1)
+                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.copyString("8080")
                 + ScriptAssembler.rlpList(2)
                 + ScriptAssembler.showMessage("ETH")

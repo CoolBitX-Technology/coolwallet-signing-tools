@@ -34,14 +34,14 @@ public class IcxScript {
                 + ScriptAssembler.baseConvert(argNetworkId, Buffer.TRANSACTION, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.copyString(HexUtil.toHexString(".stepLimit.0x186a0.timestamp.0x"))
                 + ScriptAssembler.baseConvert(argTime, Buffer.TRANSACTION, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString(".to.hx"), Buffer.FREE)
-                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyString(HexUtil.toHexString(".to.hx"), Buffer.CACHE2)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.copyString(HexUtil.toHexString(".value.0x"))
                 + ScriptAssembler.baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.copyString(HexUtil.toHexString(".version.0x3"))
                 + ScriptAssembler.showMessage("ICX")
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE, 4))
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 4))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
     }

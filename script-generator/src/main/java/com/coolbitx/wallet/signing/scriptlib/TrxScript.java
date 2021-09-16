@@ -76,13 +76,13 @@ public class TrxScript {
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
                             + ScriptAssembler.showMessage("TRX")
-                            + ScriptAssembler.copyArgument(argToAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyArgument(argToAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showWrap("PRESS", "BUTToN");
     }
 
@@ -124,22 +124,22 @@ public class TrxScript {
                             // value object
                             + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
                             // owner address
-                            + ScriptAssembler.copyString("0a") + ScriptAssembler.copyString("41", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.FREE)
-                            + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.FREE), typeString)
+                            + ScriptAssembler.copyString("0a") + ScriptAssembler.copyString("41", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
+                            + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
                             // contract address
-                            + ScriptAssembler.copyString("12") + ScriptAssembler.clearBuffer(Buffer.FREE)
-                            + ScriptAssembler.copyString("41", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argContractAddr, Buffer.FREE)
-                            + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.FREE), typeString)
+                            + ScriptAssembler.copyString("12") + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                            + ScriptAssembler.copyString("41", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argContractAddr, Buffer.CACHE2)
+                            + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
                             // data
-                            + ScriptAssembler.copyString("22") + ScriptAssembler.clearBuffer(Buffer.FREE)
-                            + ScriptAssembler.copyString("a9059cbb", Buffer.FREE)
-                            + ScriptAssembler.copyString("000000000000000000000000", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argTo, Buffer.FREE)
-                            + ScriptAssembler.copyString("0000000000000000000000000000000000000000", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argValue, Buffer.FREE)
-                            + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.FREE), typeString)
+                            + ScriptAssembler.copyString("22") + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                            + ScriptAssembler.copyString("a9059cbb", Buffer.CACHE2)
+                            + ScriptAssembler.copyString("000000000000000000000000", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argTo, Buffer.CACHE2)
+                            + ScriptAssembler.copyString("0000000000000000000000000000000000000000", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argValue, Buffer.CACHE2)
+                            + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
                             + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
@@ -148,22 +148,22 @@ public class TrxScript {
                             // display chain
                             + ScriptAssembler.showMessage("TRX")
                             // display token
-                            + ScriptAssembler.clearBuffer(Buffer.FREE)
+                            + ScriptAssembler.clearBuffer(Buffer.CACHE2)
                             + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                                            ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.FREE))
+                                            ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2))
                             + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                            + ScriptAssembler.copyArgument(argName, Buffer.FREE)
-                            + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.FREE))
+                            + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
+                            + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                             // display to address
-                            + ScriptAssembler.clearBuffer(Buffer.FREE)
-                            + ScriptAssembler.copyString("41", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argTo, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                            + ScriptAssembler.copyString("41", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argTo, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             // display amount
                             + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                             + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
@@ -216,13 +216,13 @@ public class TrxScript {
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
                             + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Freeze")
-                            + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
     }
 
@@ -270,13 +270,13 @@ public class TrxScript {
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
                             + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Freeze")
-                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
     }
 
@@ -321,13 +321,13 @@ public class TrxScript {
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
                             + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Unfrz")
-                            + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showPressButton();
     }
 
@@ -369,13 +369,13 @@ public class TrxScript {
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
                             + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Unfrz")
-                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showPressButton();
     }
 
@@ -421,13 +421,13 @@ public class TrxScript {
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
                             + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Vote")
-                            + ScriptAssembler.copyArgument(argVoteAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyArgument(argVoteAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argVoteCount, 0) + ScriptAssembler.showPressButton();
     }
 
@@ -465,13 +465,13 @@ public class TrxScript {
                             // timestamp
                             + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
                             + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Reward")
-                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.DoubleSHA256)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showPressButton();
     }
 

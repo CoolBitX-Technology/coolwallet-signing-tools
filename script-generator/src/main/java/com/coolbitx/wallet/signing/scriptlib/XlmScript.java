@@ -80,20 +80,20 @@ public class XlmScript {
                             + ScriptAssembler.copyArgument(argAmount) + ScriptAssembler.copyString("00000000")
                             + (!isTestnet ? ScriptAssembler.showMessage(symbol[type])
                                             : ScriptAssembler.showWrap(symbol[type], "TESTNET"))
-                            + ScriptAssembler.copyString("30", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argDestAccountId, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED,
+                            + ScriptAssembler.copyString("30", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argDestAccountId, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1,
                                             ScriptAssembler.CRC16)
-                            + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.EXTENDED),
-                                            Buffer.FREE, 2, ScriptAssembler.binaryCharset,
+                            + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1),
+                                            Buffer.CACHE2, 2, ScriptAssembler.binaryCharset,
                                             ScriptAssembler.littleEndian)
-                            + ScriptAssembler.clearBuffer(Buffer.EXTENDED)
+                            + ScriptAssembler.clearBuffer(Buffer.CACHE1)
                             + ScriptAssembler.copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
-                                            Buffer.EXTENDED)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 35),
-                                            Buffer.FREE, 56, ScriptAssembler.extendedCharset,
+                                            Buffer.CACHE1)
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 35),
+                                            Buffer.CACHE2, 56, ScriptAssembler.extendedCharset,
                                             ScriptAssembler.bitLeftJustify8to5)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE, 35))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
                             + ScriptAssembler.showAmount(argAmount, 7) + ScriptAssembler.showPressButton();
     }
 

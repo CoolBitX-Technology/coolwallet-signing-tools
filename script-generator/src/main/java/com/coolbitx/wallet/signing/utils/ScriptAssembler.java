@@ -62,10 +62,10 @@ public class ScriptAssembler {
                 case TRANSACTION:
                     firstParameter += "7";
                     break;
-                case EXTENDED:
+                case CACHE1:
                     firstParameter += "E";
                     break;
-                case FREE:
+                case CACHE2:
                     firstParameter += "F";
                     break;
                 default:
@@ -81,10 +81,10 @@ public class ScriptAssembler {
                 case TRANSACTION:
                     firstParameter += "7";
                     break;
-                case EXTENDED:
+                case CACHE1:
                     firstParameter += "E";
                     break;
-                case FREE:
+                case CACHE2:
                     firstParameter += "F";
                     break;
                 default:

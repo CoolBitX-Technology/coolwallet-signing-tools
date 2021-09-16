@@ -41,16 +41,16 @@ public class XrpScript {
                                 + ScriptAssembler.copyString("7321") + ScriptAssembler.copyArgument(argPublicKey)
                                 + ScriptAssembler.copyString("8114") + ScriptAssembler.copyArgument(argAccount)
                                 + ScriptAssembler.copyString("8314") + ScriptAssembler.copyArgument(argDest)
-                                + ScriptAssembler.showMessage("XRP") + ScriptAssembler.copyString("00", Buffer.FREE)
-                                + ScriptAssembler.copyArgument(argDest, Buffer.FREE)
-                                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                                + ScriptAssembler.showMessage("XRP") + ScriptAssembler.copyString("00", Buffer.CACHE2)
+                                + ScriptAssembler.copyArgument(argDest, Buffer.CACHE2)
+                                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                                 ScriptAssembler.DoubleSHA256)
                                 + ScriptAssembler.copyString(HexUtil.toHexString(
                                                 "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
-                                                Buffer.EXTENDED)
-                                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, 25), Buffer.FREE, 45,
+                                                Buffer.CACHE1)
+                                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45,
                                                 ScriptAssembler.extendedCharset, ScriptAssembler.zeroInherit)
-                                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE, 53))
+                                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
                                 + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showPressButton();
         }
 

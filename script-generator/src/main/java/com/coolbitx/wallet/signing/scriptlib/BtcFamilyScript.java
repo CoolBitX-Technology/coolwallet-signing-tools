@@ -122,18 +122,18 @@ ffffffff //sequence = const
                 + ScriptAssembler.ifEqual(argHaveChange, "01", // if haveChange
                         ScriptAssembler.baseConvert(argChangeAmount, Buffer.TRANSACTION, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
                         + ScriptAssembler.btcScript(argChangeScriptType, supportSegwit ? 3 : (coin == Coin.ZEN ? 79 : 2),
-                                ScriptAssembler.derivePublicKey(argChangePath, Buffer.FREE)
+                                ScriptAssembler.derivePublicKey(argChangePath, Buffer.CACHE2)
                                 + ScriptAssembler.ifEqual(argChangeScriptType, "00", // if P2PKH
-                                        ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160),
+                                        ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160),
                                         "")
                                 + ScriptAssembler.ifEqual(argChangeScriptType, "01", // if P2WPKH in P2SH
-                                        ScriptAssembler.copyString("0014", Buffer.EXTENDED)
-                                        + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED, ScriptAssembler.SHA256RipeMD160)
-                                        + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160),
+                                        ScriptAssembler.copyString("0014", Buffer.CACHE1)
+                                        + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, ScriptAssembler.SHA256RipeMD160)
+                                        + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160),
                                         "")
                                 + (supportSegwit
                                         ? ScriptAssembler.ifEqual(argChangeScriptType, "02", // if P2WPKH
-                                                ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160),
+                                                ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160),
                                                 "")
                                         : "")
                         )
@@ -151,59 +151,59 @@ ffffffff //sequence = const
                 + (!isTestnet
                         ? ScriptAssembler.showMessage(coin.getName())
                         : ScriptAssembler.showWrap(coin.getName(), "TESTNET"))
-                + ScriptAssembler.clearBuffer(Buffer.EXTENDED)
-                + ScriptAssembler.clearBuffer(Buffer.FREE)
+                + ScriptAssembler.clearBuffer(Buffer.CACHE1)
+                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
                 + (coin != Coin.BCH
                         ? // if isnot BCH
                         ScriptAssembler.ifRange(argOutputScriptType, "00", "01", // if P2PKH/P2SH , base58 address
                                 (coin.getCoinType() == Coin.BTC.getCoinType()
-                                ? ScriptAssembler.switchString(argOutputScriptType, Buffer.FREE, !isTestnet ? "00,05" : "6F,C4") // 1,3:mn,2
+                                ? ScriptAssembler.switchString(argOutputScriptType, Buffer.CACHE2, !isTestnet ? "00,05" : "6F,C4") // 1,3:mn,2
                                 : (coin == Coin.LTC
                                         ? ScriptAssembler.ifEqual(argOutputScriptType, "00",
-                                                ScriptAssembler.copyString(!isTestnet ? "30" : "6F", Buffer.FREE) // L:mn
+                                                ScriptAssembler.copyString(!isTestnet ? "30" : "6F", Buffer.CACHE2) // L:mn
                                                 ,
-                                                 ScriptAssembler.switchString(argLtcNewAddress, Buffer.FREE, !isTestnet ? "05,32" : "C4,3A") // 3,M:2,Q
+                                                 ScriptAssembler.switchString(argLtcNewAddress, Buffer.CACHE2, !isTestnet ? "05,32" : "C4,3A") // 3,M:2,Q
                                         )
                                         : // type==ZEN
-                                        ScriptAssembler.switchString(argOutputScriptType, Buffer.FREE, "2089,2096") // zn,zs
+ScriptAssembler.switchString(argOutputScriptType, Buffer.CACHE2, "2089,2096") // zn,zs
                                 ))
-                                + ScriptAssembler.copyArgument(argOutputDest20, Buffer.FREE)
-                                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE, ScriptAssembler.DoubleSHA256)
-                                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 0, coin != Coin.ZEN ? 25 : 26), Buffer.EXTENDED, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
-                                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED)), // else P2WPKH/P2WSH , bech32 address
+                                + ScriptAssembler.copyArgument(argOutputDest20, Buffer.CACHE2)
+                                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.DoubleSHA256)
+                                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, coin != Coin.ZEN ? 25 : 26), Buffer.CACHE1, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1)), // else P2WPKH/P2WSH , bech32 address
                                 (supportSegwit
-                                        ? ScriptAssembler.copyString(hrpExpand + "00", Buffer.FREE)
+                                        ? ScriptAssembler.copyString(hrpExpand + "00", Buffer.CACHE2)
                                         + ScriptAssembler.ifEqual(argOutputScriptType, "02",
-                                                ScriptAssembler.baseConvert(argOutputDest20, Buffer.FREE, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5),
-                                                ScriptAssembler.baseConvert(argOutputDest32, Buffer.FREE, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
+                                                ScriptAssembler.baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5),
+                                                ScriptAssembler.baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
                                         )
-                                        + ScriptAssembler.copyString("000000000000", Buffer.FREE)
-                                        + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED)
-                                        + ScriptAssembler.clearBuffer(Buffer.FREE)
-                                        + ScriptAssembler.copyString(HexUtil.toHexString(hrp + "1q"), Buffer.FREE)
+                                        + ScriptAssembler.copyString("000000000000", Buffer.CACHE2)
+                                        + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
+                                        + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                                        + ScriptAssembler.copyString(HexUtil.toHexString(hrp + "1q"), Buffer.CACHE2)
                                         + ScriptAssembler.ifEqual(argOutputScriptType, "02",
-                                                ScriptAssembler.baseConvert(argOutputDest20, Buffer.FREE, 32, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5),
-                                                ScriptAssembler.baseConvert(argOutputDest32, Buffer.FREE, 52, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                                                ScriptAssembler.baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5),
+                                                ScriptAssembler.baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
                                         )
-                                        + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
-                                        + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                                        + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
+                                        + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                                         : ScriptAssembler.throwSEError)
                         )
                         : // else BCH CashAddress
-                        ScriptAssembler.copyString(!isTestnet ? "020914030F090E0301130800" : "0203081405131400", Buffer.FREE)
-                        + ScriptAssembler.switchString(argOutputScriptType, Buffer.EXTENDED, "00,08")
-                        + ScriptAssembler.copyArgument(argOutputDest20, Buffer.EXTENDED)
-                        + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.EXTENDED), Buffer.FREE, 34, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
-                        + ScriptAssembler.copyString("0000000000000000", Buffer.FREE)
-                        + ScriptAssembler.bchPolymod(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.EXTENDED)
-                        + ScriptAssembler.clearBuffer(Buffer.FREE)
-                        + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.EXTENDED, 0, 21), Buffer.FREE, 34, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
-                        + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.EXTENDED, 21, 5), Buffer.FREE, 8, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
-                        + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE)))
+                        ScriptAssembler.copyString(!isTestnet ? "020914030F090E0301130800" : "0203081405131400", Buffer.CACHE2)
+                        + ScriptAssembler.switchString(argOutputScriptType, Buffer.CACHE1, "00,08")
+                        + ScriptAssembler.copyArgument(argOutputDest20, Buffer.CACHE1)
+                        + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 34, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
+                        + ScriptAssembler.copyString("0000000000000000", Buffer.CACHE2)
+                        + ScriptAssembler.bchPolymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
+                        + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                        + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 0, 21), Buffer.CACHE2, 34, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                        + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 21, 5), Buffer.CACHE2, 8, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                        + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2)))
                 + ScriptAssembler.showAmount(!isUSDT ? argOutputAmount : argUsdtAmount, 8)
                 + ScriptAssembler.showPressButton()
-                + ScriptAssembler.clearBuffer(Buffer.EXTENDED)
-                + ScriptAssembler.copyArgument(argHashPrevoutSequence, Buffer.EXTENDED);
+                + ScriptAssembler.clearBuffer(Buffer.CACHE1)
+                + ScriptAssembler.copyArgument(argHashPrevoutSequence, Buffer.CACHE1);
     }
 
 }

@@ -112,25 +112,25 @@ public class BnbScript {
                 + ScriptAssembler.copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
                 + ScriptAssembler.baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.copyString(HexUtil.toHexString(",\"denom\":\""))
-                + ScriptAssembler.copyRegularString(argTokenName, Buffer.FREE)
-                + ScriptAssembler.copyString(HexUtil.toHexString("-"), Buffer.FREE)
-                + ScriptAssembler.copyRegularString(argTokenCheck, Buffer.FREE)
-                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyRegularString(argTokenName, Buffer.CACHE2)
+                + ScriptAssembler.copyString(HexUtil.toHexString("-"), Buffer.CACHE2)
+                + ScriptAssembler.copyRegularString(argTokenCheck, Buffer.CACHE2)
+                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.copyString(HexUtil.toHexString("\"}]}],\"outputs\":[{\"address\":\""))
                 + ScriptAssembler.copyRegularString(argTo)
                 + ScriptAssembler.copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
                 + ScriptAssembler.baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.copyString(HexUtil.toHexString(",\"denom\":\""))
-                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.copyString(HexUtil.toHexString("\"}]}]}],\"sequence\":\""))
                 + ScriptAssembler.baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.copyString(HexUtil.toHexString("\",\"source\":\""))
                 + ScriptAssembler.baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
                 + ScriptAssembler.copyString(HexUtil.toHexString("\"}"))
-                + ScriptAssembler.clearBuffer(Buffer.FREE)
+                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
                 + ScriptAssembler.showMessage("BNB")
-                + ScriptAssembler.copyRegularString(argTokenName, Buffer.FREE)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyRegularString(argTokenName, Buffer.CACHE2)
+                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + (!isTestnet ? ""
                         : ScriptAssembler.showWrap("BEP2", "TESTNET"))
                 + ScriptAssembler.showAddress(argTo)
@@ -311,15 +311,15 @@ public class BnbScript {
                             // data
                             + ScriptAssembler.copyString("80")
                             // chainId v = 56
-                            + ScriptAssembler.copyString("38", Buffer.EXTENDED)
-                            + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.copyString("38", Buffer.CACHE1)
+                            + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             // r,s
                             + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(1)
                             + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showMessage("BNB")
-                            + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                            + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset,
+                            + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                            + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
                                             ScriptAssembler.leftJustify)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                             + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
     }
 
@@ -354,20 +354,20 @@ public class BnbScript {
                             + ScriptAssembler.copyString("0000000000000000000000000000000000000000")
                             + ScriptAssembler.copyArgument(argValue)
                             // chainId v = 56
-                            + ScriptAssembler.copyString("38", Buffer.EXTENDED)
-                            + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.copyString("38", Buffer.CACHE1)
+                            + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(2)
                             + ScriptAssembler.showMessage("BSC")
                             + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                                            ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.FREE))
+                                            ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2))
                             + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                            + ScriptAssembler.copyArgument(argName, Buffer.FREE)
-                            + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.FREE))
-                            + ScriptAssembler.clearBuffer(Buffer.FREE)
-                            + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                            + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset,
+                            + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
+                            + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                            + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                            + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                            + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
                                             ScriptAssembler.leftJustify)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                             + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                             + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
     }
@@ -390,8 +390,8 @@ public class BnbScript {
                             ScriptAssembler.rlpString(argValue) + // value
                             ScriptAssembler.rlpString(argData)
                             // chainId v = 56
-                            + ScriptAssembler.copyString("38", Buffer.EXTENDED)
-                            + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.copyString("38", Buffer.CACHE1)
+                            + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
 
                             + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(2)
                             + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("SMART", "")

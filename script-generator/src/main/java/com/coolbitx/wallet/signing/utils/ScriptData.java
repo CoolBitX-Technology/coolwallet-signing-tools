@@ -24,8 +24,8 @@ public class ScriptData {
     public static enum Buffer {
         ARGUMENT,
         TRANSACTION,
-        EXTENDED,
-        FREE;
+        CACHE1,
+        CACHE2;
     }
 
     @Override

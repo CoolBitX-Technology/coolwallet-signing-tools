@@ -52,9 +52,9 @@ public class ETHEIP1559Script {
                 + ScriptAssembler.arrayEnd(1);
 
         String display = ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
 
@@ -104,15 +104,15 @@ public class ETHEIP1559Script {
 
         String display = ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.FREE)
+                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
                 )
                 + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                + ScriptAssembler.copyArgument(argName, Buffer.FREE)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.FREE))
-                + ScriptAssembler.clearBuffer(Buffer.FREE)
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.FREE)
-                + ScriptAssembler.baseConvert(argTo, Buffer.FREE, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.FREE))
+                + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
+                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
