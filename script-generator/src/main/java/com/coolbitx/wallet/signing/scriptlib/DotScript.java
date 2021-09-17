@@ -67,15 +67,15 @@ public class DotScript {
                             + ScriptAssembler.copyArgument(argGenesisHash)
                             // block hash
                             + ScriptAssembler.copyArgument(argBlockHash) + ScriptAssembler.showMessage("DOT")
-                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.FREE)
-                            + ScriptAssembler.copyString("00", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argToAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
+                            + ScriptAssembler.copyString("00", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argToAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argAmount, 10) + ScriptAssembler.showWrap("PRESS", "BUTToN");
     }
 
@@ -119,15 +119,15 @@ public class DotScript {
                             // block hash
                             + ScriptAssembler.copyArgument(argBlockHash) + ScriptAssembler.showMessage("DOT")
                             + ScriptAssembler.showMessage("Bond")
-                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.FREE)
-                            + ScriptAssembler.copyString("00", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argControllerAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
+                            + ScriptAssembler.copyString("00", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argControllerAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argAmount, 10) + ScriptAssembler.showWrap("PRESS", "BUTToN");
     }
 
@@ -285,9 +285,9 @@ public class DotScript {
                             // block hash
                             + ScriptAssembler.copyArgument(argBlockHash)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.TRANSACTION),
-                                            Buffer.FREE, ScriptAssembler.Blake2b256)
+                                            Buffer.CACHE2, ScriptAssembler.Blake2b256)
                             + ScriptAssembler.clearBuffer(Buffer.TRANSACTION)
-                            + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE),
+                            + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2),
                                             Buffer.TRANSACTION)
                             + ScriptAssembler.showMessage("DOT") + ScriptAssembler.showMessage("Nomint")
                             + ScriptAssembler.showWrap("PRESS", "BUTToN");
@@ -404,15 +404,15 @@ public class DotScript {
                             + ScriptAssembler.copyArgument(argGenesisHash)
                             // block hash
                             + ScriptAssembler.copyArgument(argBlockHash) + ScriptAssembler.showMessage("KSM")
-                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.FREE)
-                            + ScriptAssembler.copyString("02", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argToAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
+                            + ScriptAssembler.copyString("02", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argToAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argAmount, 12) + ScriptAssembler.showWrap("PRESS", "BUTToN");
     }
 
@@ -456,15 +456,15 @@ public class DotScript {
                             // block hash
                             + ScriptAssembler.copyArgument(argBlockHash) + ScriptAssembler.showMessage("KSM")
                             + ScriptAssembler.showMessage("Bond")
-                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.FREE)
-                            + ScriptAssembler.copyString("02", Buffer.FREE)
-                            + ScriptAssembler.copyArgument(argControllerAddr, Buffer.FREE)
-                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.FREE), Buffer.FREE,
+                            + ScriptAssembler.copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
+                            + ScriptAssembler.copyString("02", Buffer.CACHE2)
+                            + ScriptAssembler.copyArgument(argControllerAddr, Buffer.CACHE2)
+                            + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                                             ScriptAssembler.Blake2b512)
-                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.FREE, 7, 35),
-                                            Buffer.EXTENDED, 0, ScriptAssembler.base58Charset,
+                            + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35),
+                                            Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                                             ScriptAssembler.zeroInherit)
-                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.EXTENDED))
+                            + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                             + ScriptAssembler.showAmount(argAmount, 12) + ScriptAssembler.showWrap("PRESS", "BUTToN");
     }
 
@@ -620,9 +620,9 @@ public class DotScript {
                             // block hash
                             + ScriptAssembler.copyArgument(argBlockHash)
                             + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.TRANSACTION),
-                                            Buffer.FREE, ScriptAssembler.Blake2b256)
+                                            Buffer.CACHE2, ScriptAssembler.Blake2b256)
                             + ScriptAssembler.clearBuffer(Buffer.TRANSACTION)
-                            + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.FREE),
+                            + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2),
                                             Buffer.TRANSACTION)
                             + ScriptAssembler.showMessage("KSM") + ScriptAssembler.showMessage("Nomint")
                             + ScriptAssembler.showWrap("PRESS", "BUTToN");
