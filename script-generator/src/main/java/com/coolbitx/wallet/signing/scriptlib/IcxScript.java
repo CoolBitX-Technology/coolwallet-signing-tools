@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.coolbitx.wallet.signing.scriptlib;
+
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
@@ -11,9 +12,9 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class IcxScript {
-    
+
     public static void listAll() {
-        System.out.println("Icx: \n" + getICXScript() +"\n");
+        System.out.println("Icx: \n" + getICXScript() + "\n");
     }
 
     public static String getICXScript() {
@@ -45,6 +46,5 @@ public class IcxScript {
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
     }
-
 
 }
