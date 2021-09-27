@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.coolbitx.wallet.signing.scriptlib;
+
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
@@ -11,7 +12,7 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class EthScript {
-    
+
     public static void listAll() {
         System.out.println("Eth eip1559: \n" + getETHEIP1559Script() + "\n");
         System.out.println("Eth eip1559 erc20: \n" + getETHEIP1559ERC20Script() + "\n");
@@ -183,8 +184,16 @@ accessList :       c0
     }
 
     /*
-     * E7 2A 85 09C74AFE1F 82 5208 94 A3255ECFE3F6727A62D938F4C29B2F73C361B26C 83
-     * 989680 80 03 80 80
+    E7
+    2A
+    85 09C74AFE1F
+    82 5208
+    94 A3255ECFE3F6727A62D938F4C29B2F73C361B26C
+    83 989680
+    80
+    03
+    80
+    80
      */
     public static String getETHScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -223,6 +232,7 @@ accessList :       c0
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
     }
+
     /*
 f86a
 1e

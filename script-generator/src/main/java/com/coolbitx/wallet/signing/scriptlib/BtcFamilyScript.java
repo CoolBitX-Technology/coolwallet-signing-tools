@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 package com.coolbitx.wallet.signing.scriptlib;
+
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
-
 
 public class BtcFamilyScript {
 
@@ -165,7 +165,7 @@ ffffffff //sequence = const
                                                  ScriptAssembler.switchString(argLtcNewAddress, Buffer.CACHE2, !isTestnet ? "05,32" : "C4,3A") // 3,M:2,Q
                                         )
                                         : // type==ZEN
-ScriptAssembler.switchString(argOutputScriptType, Buffer.CACHE2, "2089,2096") // zn,zs
+                                        ScriptAssembler.switchString(argOutputScriptType, Buffer.CACHE2, "2089,2096") // zn,zs
                                 ))
                                 + ScriptAssembler.copyArgument(argOutputDest20, Buffer.CACHE2)
                                 + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.DoubleSHA256)

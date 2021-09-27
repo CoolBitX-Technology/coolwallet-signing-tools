@@ -48,9 +48,9 @@ public class AdaScript {
                 + ScriptAssembler.copyArgument(inputList)
                 // --- intput end ---
                 // --- output change start ---
-                + ScriptAssembler.ifEqual(changeAmount, "0000000000000000", 
+                + ScriptAssembler.ifEqual(changeAmount, "0000000000000000",
                         // ---- output count start ----
-                        ScriptAssembler.copyString("0181"), 
+                        ScriptAssembler.copyString("0181"),
                         ScriptAssembler.copyString("0182")
                         // ---- output count end ----
                         + ScriptAssembler.copyString("82583901")
