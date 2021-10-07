@@ -74,7 +74,7 @@ accessList :       c0
                 + ScriptAssembler.arrayEnd(1)
                 + ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
@@ -141,7 +141,7 @@ accessList :       c0
                 + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.clearBuffer(Buffer.CACHE2)
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
@@ -228,7 +228,7 @@ accessList :       c0
                 + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(1) + ScriptAssembler.showMessage("ETH")
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
-                        ScriptAssembler.leftJustify)
+                        ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
     }
@@ -292,7 +292,7 @@ b844 a9059cbb
                 + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.clearBuffer(Buffer.CACHE2)
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
+                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
