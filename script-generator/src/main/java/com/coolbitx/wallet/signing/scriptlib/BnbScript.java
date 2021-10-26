@@ -319,7 +319,7 @@ public class BnbScript {
                 + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showMessage("BNB")
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
-                        ScriptAssembler.leftJustify)
+                        ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
     }
@@ -370,7 +370,7 @@ public class BnbScript {
                 + ScriptAssembler.clearBuffer(Buffer.CACHE2)
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
-                        ScriptAssembler.leftJustify)
+                        ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
