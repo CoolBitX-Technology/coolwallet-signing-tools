@@ -34,8 +34,8 @@ public class AdaScript {
         ScriptData intputCount = sac.getArgument(1);
         ScriptData inputList = sac.getArgumentAll();
 
-        // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=02=EDDSA
-        return "03020E02"
+        // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+        return "03020E03"
                 + ScriptAssembler.setCoinType(0x0717)
                 // -- payload start --
                 + ScriptAssembler.copyString("83a4")
