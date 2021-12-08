@@ -366,7 +366,7 @@ b844 a9059cbb
                 + ScriptAssembler.copyArgument(argDomainSeparator)
                 + ScriptAssembler.hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
                 + ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.showWrap("TYPED", "DATA")
+                + ScriptAssembler.showWrap("EIP712", "")
                 + ScriptAssembler.showPressButton();
     }
 
