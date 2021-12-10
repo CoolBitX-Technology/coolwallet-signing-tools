@@ -1,18 +1,25 @@
 {
   "name": "test-web-view",
   "version": "0.1.0",
-  "main": "./src/index.js",
+  "main": "./src/index.tsx",
   "homepage": "./",
   "private": true,
   "dependencies": {
     "@coolwallet/core": "^1.0.3",
     "@coolwallet/transport-web-ble": "^1.0.0",
+    "@craco/craco": "^6.4.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/tailwindcss": "^2.2.4",
+    "axios": "^0.24.0",
     "bip32": "^2.0.6",
     "bootstrap": "^5.0.1",
+    "clsx": "^1.1.1",
     "gh-pages": "^3.1.0",
+    "jose": "^4.3.7",
+    "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.0",
     "react-dom": "^17.0.2",
@@ -22,16 +29,10 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -44,5 +45,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.178",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "autoprefixer": "^9.8.8",
+    "craco-alias": "^3.0.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.27.1",
+    "postcss": "^7.0.39",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
+    "typescript": "^4.5.2"
   }
 }
