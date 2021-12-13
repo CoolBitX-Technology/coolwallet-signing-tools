@@ -1,15 +1,13 @@
 import { useRef, useState, ReactElement } from 'react';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
-import WebBleTransport from '@coolwallet/transport-web-ble';
 import clsx from 'clsx';
-import * as core from '@coolwallet/core';
-import { getAppKeysOrGenerate, getAppIdOrNull } from '@/utils/keypairUtil';
+import WebBleTransport from '@coolwallet/transport-web-ble';
+import { transport as Transport, config } from '@coolwallet/core';
+import { getAppKeysOrGenerate, getAppIdOrNull } from '@/utils/keypair';
 import Context from '@/store';
 import Button from '@/components/Button';
 import { CardInfo, Register, Wallet, Signing, OTAUpdate } from '@/pages';
-
-import type { transport as Transport } from '@coolwallet/core';
 
 const app = clsx(
   'bg-background',
@@ -35,17 +33,17 @@ const App = (): ReactElement => {
 
   const connect = () => {
     WebBleTransport.listen(async (error, device) => {
-      console.log(device);
+      console.debug(device);
       if (device) {
         const cardName = device.name;
         const webBleTransport = await WebBleTransport.connect(device);
-        const SEPublicKey = await core.config.getSEPublicKey(webBleTransport);
+        const SEPublicKey = await config.getSEPublicKey(webBleTransport);
         transport.current = webBleTransport;
         setCardName(cardName);
         setConnected(true);
         localStorage.setItem('cardName', cardName);
         localStorage.setItem('SEPublicKey', SEPublicKey);
-        console.log(`SEPublicKey: ${SEPublicKey}`);
+        console.debug(`SEPublicKey: ${SEPublicKey}`);
       } else {
         console.log(error);
       }

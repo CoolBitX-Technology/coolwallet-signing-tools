@@ -34,9 +34,11 @@ const Signing = (props: Props): ReactElement => {
     if (isNil(props.transport)) return;
     setIsLocked(true);
     try {
-      const fullSctipt = script;
+      const fullScript = script + SIGNATURE;
 
-      await apdu.tx.sendScript(props.transport, fullSctipt);
+      console.log('fullScript: ', fullScript);
+
+      await apdu.tx.sendScript(props.transport, fullScript);
 
       const encryptedSignature = await executeScript(props.transport, argument);
 
@@ -64,11 +66,11 @@ const Signing = (props: Props): ReactElement => {
       console.log('utxoIntputArgument: ', utxoInputArgument);
       console.log('utxoOutputArgument: ', utxoOutputArgument);
 
-      const fullSctipt = utxoScript + SIGNATURE;
+      const fullScript = utxoScript + SIGNATURE;
 
-      console.log('fullSctipt: ', fullSctipt);
+      console.log('fullScript: ', fullScript);
 
-      await apdu.tx.sendScript(props.transport, fullSctipt);
+      await apdu.tx.sendScript(props.transport, fullScript);
 
       await executeScript(props.transport, utxoOutputArgument);
 
