@@ -79,7 +79,9 @@ accessList :       c0
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
     }
+    
 
+    public static String ETHEIP1559ScriptSignature = "3046022100F3CA891D06B8284C01B9E51CD478E7BBA14CD99F137383F2EAD642747222E2F9022100A121B0DE524F00D063DAB9E51E86B4CAF1B1874F79570AEE1AA437DFAD750C1C";
     /*
 txType(EIP-2718) : 02
 rlpLength :        f86a
@@ -147,6 +149,8 @@ accessList :       c0
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
     }
+    
+    public static String ETHEIP1559ERC20ScriptSignature = "00304502207A63FB17CEA7E123C1BF12CBE3687614FCD677DE13171CC0B275E9659421762A022100ED2A5EC6AB2736C1D9087033CB48181784859A10C8A9674ADEFE34A84D520646";
 
     public static String getETHEIP1559SmartScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -182,6 +186,8 @@ accessList :       c0
                 + ScriptAssembler.showWrap("SMART", "")
                 + ScriptAssembler.showPressButton();
     }
+    
+    public static String ETHEIP1559SmartScriptSignature = "003045022100D28537F886B9330A61BB88B7ED436A4E66C50A03EDB883FCB78279FE2C704BD402205C2E473AA2302133B659D7BD95FD8D7D80B7BF5C1B65FCC4519E7B189600BA89";
 
     /*
     E7
@@ -232,6 +238,8 @@ accessList :       c0
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
     }
+    
+    public static String ETHScriptSignature = "0030450220201C3ADEEF531C6CD6E8F082477FF048E45F39B85086C2F40BE96840CA4840F6022100C8A36252C7606D9F2D9E6F58538F967C7F6DEFEE52B536439512CB8CD9993DB0";
 
     /*
 f86a
@@ -298,6 +306,8 @@ b844 a9059cbb
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
     }
+    
+    public static String ERC20ScriptSignature = "30460221009A706915A2EE0AE663ACF90D9DD59BBEEC111EB12B099E4751219DDC993A01E7022100BA25635AB68F4EF7711D8D880A0BB1A81CA899C78884ECC4183B715F8F047D69";
 
     public static String getEtherContractBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -337,6 +347,8 @@ b844 a9059cbb
                 + ScriptAssembler.showWrap("SMART", "")
                 + ScriptAssembler.showPressButton();
     }
+    
+    public static String EtherContractBlindScriptSignature = "3046022100EC9BC856CEC733451CF4063C60DE27F9E920F7423122CCA19DC47B82E694799C0221008F754911B9C966EF430ED8919A58333D9800E8EBF4FB98B06C797E991DA03697";
 
     public static String getEtherMessageBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
