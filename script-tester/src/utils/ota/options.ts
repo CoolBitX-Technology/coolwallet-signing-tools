@@ -12,6 +12,7 @@ interface APIOptions {
   headers: {
     Accept: string;
     'Content-Type': string;
+    'auth-id': string;
   };
 }
 
@@ -59,11 +60,15 @@ const getAPIOption = async (secret: string, cardId: string, challengeData = ''):
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'auth-id': cardId,
     },
   };
 };
 
-const formatAPIResponse = async (transport: Transport.default, result: any): ReturnType<typeof apdu.execute.executeCommand> => {
+const formatAPIResponse = async (
+  transport: Transport.default,
+  result: any
+): ReturnType<typeof apdu.execute.executeCommand> => {
   const obj = jwt_decode(result.cryptogram);
   console.debug(`Server Auth Response : ${JSON.stringify(obj)}`);
   const { CLA, INS, P1, P2, packets } = obj as CommandType;
