@@ -10,7 +10,6 @@ import Button from '@/components/Button';
 import { CardInfo, Register, Wallet, Signing, OTAUpdate } from '@/pages';
 
 const app = clsx(
-  'bg-background',
   'h-screen',
   'flex',
   'flex-col',
