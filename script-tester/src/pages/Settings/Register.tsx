@@ -1,4 +1,4 @@
-import { useState, ReactElement, useContext } from 'react';
+import { useState, useContext, FC } from 'react';
 import { Container } from 'react-bootstrap';
 import isNil from 'lodash/isNil';
 import { apdu, transport as Transport } from '@coolwallet/core';
@@ -11,7 +11,7 @@ interface Props {
   setAppId(value: string): void;
 }
 
-const Register = (props: Props): ReactElement => {
+const Register: FC<Props> = (props: Props) => {
   const { connected, isLocked } = useContext(Context);
   const [isResetting, setIsResetting] = useState('');
   const [isRegistering, setIsRegistering] = useState('');

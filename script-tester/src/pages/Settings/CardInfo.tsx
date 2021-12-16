@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactElement, useContext } from 'react';
+import { useState, useEffect, FC, useContext } from 'react';
 import { Container } from 'react-bootstrap';
 import isNil from 'lodash/isNil';
 import { apdu, transport as Transport } from '@coolwallet/core';
@@ -9,7 +9,7 @@ interface Props {
   transport: Transport.default | null;
 }
 
-const CardInfo = (props: Props): ReactElement => {
+const CardInfo: FC<Props> = (props: Props) => {
   const { connected, isLocked, setIsLocked } = useContext(Context);
   const [isAppletExist, setIsAppletExist] = useState('');
   const [cardInfo, setCardInfo] = useState('');

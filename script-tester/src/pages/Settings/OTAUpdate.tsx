@@ -1,4 +1,5 @@
-import { useState, ReactElement, useContext } from 'react';
+import { useState, useContext, FC } from 'react';
+import { AxiosError } from 'axios';
 import { Container } from 'react-bootstrap';
 import isNil from 'lodash/isNil';
 import { apdu, transport as Transport } from '@coolwallet/core';
@@ -12,7 +13,7 @@ interface Props {
   cardName: string;
 }
 
-const OTAUpdate = (props: Props): ReactElement => {
+const OTAUpdate: FC<Props> = (props: Props) => {
   const { connected, isLocked, setIsLocked } = useContext(Context);
   const [secret, setSecret] = useState('');
   const [progress, setProgress] = useState(0);
@@ -25,8 +26,10 @@ const OTAUpdate = (props: Props): ReactElement => {
       const cardId = props.cardName.split(' ')[1];
       await apdu.mcu.display.showUpdate(props.transport);
       await otaUpdate(props.transport, secret, cardId, setProgress);
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      const error = e as AxiosError;
+      const message = error.response?.data.error.message ?? "Error!";
+      alert(message);
     } finally {
       setProgress(100);
       setIsLocked(false);

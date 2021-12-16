@@ -1,4 +1,4 @@
-import { ReactElement, memo } from 'react';
+import { memo, FC } from 'react';
 import clsx from 'clsx';
 import { Row, Col, ButtonGroup, Button as BootStrapButton, Form } from 'react-bootstrap';
 
@@ -29,7 +29,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const ButtonInputs = (props: Props): ReactElement => {
+const ButtonInputs: FC<Props> = (props: Props) => {
   return (
     <Row className={row}>
       <Col xs={2}>{props.title}</Col>

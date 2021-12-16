@@ -1,4 +1,4 @@
-import { useState, useContext, ReactElement } from 'react';
+import { useState, useContext, FC } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
@@ -18,7 +18,7 @@ interface Props {
   appPrivateKey: string;
 }
 
-const Signing = (props: Props): ReactElement => {
+const Signing: FC<Props> = (props: Props) => {
   const { connected, isLocked, setIsLocked } = useContext(Context);
 
   const [argument, setArgument] = useState('');

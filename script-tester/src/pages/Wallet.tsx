@@ -1,4 +1,4 @@
-import { useState, useContext, ReactElement } from 'react';
+import { useState, useContext, FC } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
@@ -15,7 +15,7 @@ interface Props {
   appPrivateKey: string;
 }
 
-const Wallet = (props: Props): ReactElement => {
+const Wallet: FC<Props> = (props: Props) => {
   const { connected, setIsLocked, isLocked } = useContext(Context);
   const [mnemonic, setMnemonic] = useState('');
   const [recoverStatus, setRecoverStatus] = useState('');

@@ -1,4 +1,4 @@
-import { useRef, useState, ReactElement } from 'react';
+import { useRef, useState, FC } from 'react';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
@@ -23,7 +23,7 @@ const app = clsx(
 
 const { appPublicKey, appPrivateKey } = getAppKeysOrGenerate();
 
-const App = (): ReactElement => {
+const App: FC = () => {
   const transport = useRef<Transport.default | null>(null);
   const [cardName, setCardName] = useState('');
   const [isLocked, setIsLocked] = useState(false);
