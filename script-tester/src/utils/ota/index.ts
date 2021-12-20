@@ -4,8 +4,8 @@ import * as TEST from '@/configs/scripts/test';
 import { getAPIOption, formatAPIResponse } from './options';
 import { insertScript, insertDeleteScript, insertLoadScript } from './scripts';
 
-const CHALLENGE_URL = 'https://dev-ota.cbx.io/sdk/challenge';
-const CRYPTOGRAM_URL = 'https://dev-ota.cbx.io/sdk/cryptogram';
+const CHALLENGE_URL = 'https://ota.cbx.io/sdk/challenge';
+const CRYPTOGRAM_URL = 'https://ota.cbx.io/sdk/cryptogram';
 const CARDMANAGER_AID = 'A000000151000000';
 const SSD_AID = 'A000000151535041';
 
