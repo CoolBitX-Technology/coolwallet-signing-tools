@@ -98,5 +98,7 @@ public class XlmScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
                 + ScriptAssembler.showAmount(argAmount, 7) + ScriptAssembler.showPressButton();
     }
+    
+    public static String StellarScriptSignature = "0030450221008832DD699A98B4EAFA26994C18EBFEFD234914F25492B03BFE36D3DDEFF7C3B30220364A691A115CAD6D283D618813F485BDBF4F5FCCAAD76FCA69D8F165E5DA0173";
 
 }
