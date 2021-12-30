@@ -40,7 +40,7 @@ const Signing: FC<Props> = (props: Props) => {
 
       await apdu.tx.sendScript(props.transport, fullScript);
 
-      const encryptedSignature = await executeScript(props.transport, argument);
+      const encryptedSignature = await executeScript(props.transport, props.appId ?? '', props.appPrivateKey, argument);
 
       // finish prepare
       await apdu.tx.finishPrepare(props.transport);
@@ -72,7 +72,7 @@ const Signing: FC<Props> = (props: Props) => {
 
       await apdu.tx.sendScript(props.transport, fullScript);
 
-      await executeScript(props.transport, utxoOutputArgument);
+      await executeScript(props.transport, props.appId ?? '', props.appPrivateKey, utxoOutputArgument);
 
       const encryptedSignatureArray = await executeUtxoScript(props.transport, utxoInputArgument);
 

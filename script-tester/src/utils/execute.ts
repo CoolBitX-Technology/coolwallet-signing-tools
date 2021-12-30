@@ -1,16 +1,15 @@
 import { apdu, transport as Transport } from '@coolwallet/core';
 import { commands } from '@/configs/command';
 
-const executeScript = async (transport: Transport.default, argument: string): Promise<string> => {
-  const {
-    outputData: encryptedSignature,
-    statusCode,
-    msg,
-  } = await apdu.execute.executeCommand(transport, commands.EXECUTE_SCRIPT, 'SE', argument, undefined, undefined);
+const executeScript = async (
+  transport: Transport.default,
+  appId: string,
+  appPrivKey: string,
+  argument: string
+): Promise<string> => {
+  const encryptedSignature = await apdu.tx.executeScript(transport, appId, appPrivKey, argument);
   console.log('encryptedSignature: ', encryptedSignature);
-  console.log('statusCode: ', statusCode);
-  console.log('msg: ', msg);
-  return encryptedSignature;
+  return encryptedSignature ?? '';
 };
 
 /**
