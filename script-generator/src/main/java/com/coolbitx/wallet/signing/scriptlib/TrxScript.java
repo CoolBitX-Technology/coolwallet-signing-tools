@@ -86,6 +86,8 @@ public class TrxScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showWrap("PRESS", "BUTToN");
     }
+    
+    public static String TRXScriptSignature = "000030440220753082AA5C31111BC1A081601E46F79219A77D49A0EBC4D70C1F66792FD858400220483BFC13CAB301E4E54F6716251E58410A6F50D117C49A891069F18D56391CBD";
 
     public static String getTRC20Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -170,6 +172,8 @@ public class TrxScript {
                 + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
     }
 
+    public static String TRC20ScriptSignature = "0000304402202D928B902A6D63BFD40FCDB4A5BC24977049081248F256D779D869D5A1925688022015E6630A34B4161E342EE855F698F7272AC83B781F273E726DC77DA40C75F86C";
+
     public static String getTRXFreezeScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argBlockBytes = sac.getArgument(2);
@@ -227,6 +231,8 @@ public class TrxScript {
                 + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
     }
 
+    public static String TRXFreezeScriptSignature = "0030450220480BB8323075EB39062305E3EAB8E126F4A80477EA254468BDEA0D4948619AEA022100976633A4A2C5F09727CEB41751CFD0F8FE037BBE0E18436AB7507124A71426C6";
+
     public static String getTRXFreezeScriptNoReceiver() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argBlockBytes = sac.getArgument(2);
@@ -281,6 +287,8 @@ public class TrxScript {
                 + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
     }
 
+    public static String TRXFreezeScriptNoReceiverSignature = "000030440220555A9F776A0FE0147C800E677539962B59247496BCAF834371502C6B85EFCF340220545E0D0C7E2EA3294F6EB7E24644F9FFC9BDBFB5BA1A9CDEEF533B8BB190C94F";
+
     public static String getTRXUnfreezeScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argBlockBytes = sac.getArgument(2);
@@ -332,6 +340,8 @@ public class TrxScript {
                 + ScriptAssembler.showPressButton();
     }
 
+    public static String TRXUnfreezeScriptSignature = "003045022100BE36FCF8E1FDE17689E2DBB8677A562788DB606FF537CDC5010C87BF40E3E22802207D16265C1F51011DBE73EEBA4F6959F0F7FCD56C9B1C1562F2BAFEF53496735D";
+
     public static String getTRXUnfreezeScriptNoReceiver() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argBlockBytes = sac.getArgument(2);
@@ -379,6 +389,8 @@ public class TrxScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showPressButton();
     }
+    
+    public static String TRXUnfreezeScriptNoReceiverSignature = "3046022100ACEEAFD1797FBF203209DBF988BCEA19C0991E22FAA177615C64C30CB68046E10221008A2B58546CDDF91C0C865E82339C607FE22C4099F4EACA31CCD40DC85A69E357";
 
     public static String getTRXVoteWitnessScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -431,6 +443,8 @@ public class TrxScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showAmount(argVoteCount, 0) + ScriptAssembler.showPressButton();
     }
+    
+    public static String TRXVoteWitnessScriptSignature = "00304502201944C100D05CD8BC50D530778B78AF53EB5E7551AADCF0A21946B01CE266ED17022100983CC86BDCE4A4A8DD403B3BB53861879E970A8344B57F9862C88C783CDEEC85";
 
     public static String getTRXWithdrawScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -475,5 +489,7 @@ public class TrxScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showPressButton();
     }
+    
+    public static String TRXWithdrawScriptSignature = "3046022100AABEE6C90E63CF3752F426A93E1758A8E77CCFF39569F4778DAD28BD03297F48022100AF717A307446DE373740DEA06781564AFE4D5060462DA386DC2F167BA280B585";
 
 }

@@ -85,6 +85,9 @@ public class BnbScript {
                 + ScriptAssembler.showPressButton();
     }
 
+    public static String BNBScriptSignature = "FA0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+    public static String BNBTestScriptSignature = "0000304402204568AC219BC19BCA3579FF35C5D513BC0EF221373162615D6329B6F1D112F1FB02203720E18E0EB27A44C52B647F91EC6FF5CCC263373A28039392CDCF05F00B462B";
+
     public static String getBEP2Script(boolean isTestnet) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argFrom = sac.getArgumentRightJustified(64);
@@ -139,6 +142,8 @@ public class BnbScript {
                 + ScriptAssembler.showPressButton();
     }
 
+    public static String getBEP2ScriptSignature = "0000304402203183C36E6E4E20A2AAED4E1E3518EBDE01FA0382B680168F80636B4128C6ECA3022064D214390B1F572C1392FCC8230D0336CAB06DEF6EECB8C8F4115841DD93CDF2";
+
     /*
 {\"account_number\":\"37132\"
 ,\"chain_id\":\"Binance-Chain-Tigris\"
@@ -173,6 +178,7 @@ public class BnbScript {
 ,\"sequence\":\"4\"
 ,\"source\":\"1\"}
      */
+
     public static String getBNBPlaceOrderScript(boolean isTestnet) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argOrderAddress = sac.getArgument(40);
@@ -234,6 +240,9 @@ public class BnbScript {
                 + ScriptAssembler.showPressButton();
     }
 
+    public static String BNBPlaceOrderScriptSignature = "00003044022073A02061F441CE9EA379D31A2303C78F4F3770CBBAAD4C3158DC7C829D74B13C022003B9D4CC8722883B732EDD2E163D2B9E830A202BB23ED73F092944BFB6E6BF58";
+    public static String BNBPlaceOrderTestScriptSignature = "304502203624FE6786C375BDC19EC72F73EE0A37C5675572C22995D3455F498F3C4EE6CE022100FA880FA0B2306F85CC3FE34F56CAC62B9AB37EDEB16600225823297E5A8205B8";
+
     /*
 {\"account_number\":\"37132\"
 ,\"chain_id\":\"Binance-Chain-Tigris\"
@@ -285,6 +294,8 @@ public class BnbScript {
                 + ScriptAssembler.showWrap("CANCEL", "BNB?");
     }
 
+    public static String BNBCancelOrderScriptSignature = "003045022029B49D1404F5CE4988AC9753E00683D2C7E1B106F4A80F6BCA9F9DB1546BE2F0022100A20805E8EA152437303335E82AF48DF6462BFAE3B738AA0ED39E2ECC39AFD809";
+
     public static String getBSCScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -323,6 +334,8 @@ public class BnbScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
     }
+
+    public static String BSCScriptSignature = "00304502206A9D1E267D9AC65B28FFB49286F73041D3FF3834F68C5CAB1A700607C57DB052022100BB46FD3AB7A402AF163FA90EB0348A3AE14CF51E4CA4364931104CD1996F99E6";
 
     /*
      * f86a 1e 85 01718c7e00 83 030d40 94 86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0
@@ -376,6 +389,8 @@ public class BnbScript {
                 + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
     }
 
+    public static String BEP20ScriptSignature = "00304502202B33814A04EE43EFC342DD3345652DAF34606EAD6599EF1A3C45F78727CC7283022100E20E6E30C3D5B8E04B5DD5C90FBFE064077CA9FCBF2689DDD2020FF51A1D69EE";
+
     public static String getBSCSmartContractBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -408,6 +423,8 @@ public class BnbScript {
                 + ScriptAssembler.showPressButton();
     }
 
+    public static String BSCSmartContractBlindScriptSignature = "000030440220429DF67EB2A0D1ED5681F912FCCE313C457829D7A76123B59F427E94A2FD8B0A02204FCC18E46AB820323D2CA5ED52FCEAA5DFFF70A3BF2DC4D060E30CFDCAE08D99";
+
     public static String getBSCMessageBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argMessage = sac.getArgumentAll();
@@ -416,11 +433,13 @@ public class BnbScript {
                 + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
                 ScriptAssembler.setCoinType(0x3C)
                 + // set coinType to 3C
-                ScriptAssembler.copyString("19457468657265756D205369676E6564204D6573736167653A0A3332")
-                + ScriptAssembler.hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
+                ScriptAssembler.copyString("19457468657265756D205369676E6564204D6573736167653A0A")
+                + ScriptAssembler.copyArgument(argMessage)
                 + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("MESSAGE", "")
                 + ScriptAssembler.showPressButton();
     }
+
+    public static String BSCMessageBlindScriptSignature = "3046022100E04A601B491F3A5751E4D4D214B0B650D59F71343B91CAECD20819F9DDF8CD74022100FFE0E5909B033E8608856975307336903BC0E66674BE0AA1046C16024F71AA8F";
 
     public static String getBSCTypedDataBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -436,5 +455,7 @@ public class BnbScript {
                 + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("TYPED", "DATA")
                 + ScriptAssembler.showPressButton();
     }
+
+    public static String BSCTypedDataBlindScriptSignature = "003045022008935AF6BA11B9F720E59BE61AFF6F62A7A48FF2A39863AFD8B3920F355A1265022100E81EA86AC2FA3864CBC8773B10AF550B91F6A0E1FB68512DF32D8D35BC9FF3C8";
 
 }
