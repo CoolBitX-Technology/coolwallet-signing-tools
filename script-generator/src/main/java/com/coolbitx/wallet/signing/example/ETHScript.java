@@ -6,6 +6,8 @@
 package com.coolbitx.wallet.signing.example;
 
 import com.coolbitx.wallet.signing.utils.*;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 /**
@@ -28,8 +30,7 @@ public class ETHScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         ScriptData argChainId = sac.getArgumentRightJustified(2);
-        //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        String header = "03000601";
+        
         // set coinType to 3C
         String coinType = ScriptAssembler.setCoinType(0x3C);
         // temp byte for rlpList
@@ -58,6 +59,10 @@ public class ETHScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
+        // length=03 version=00 are auto-generated based on the composition of the payload
+        // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
+        // header =  "03000601"
+        String header = ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA);
         return header + coinType + payload + display;
     }
 
@@ -76,8 +81,7 @@ public class ETHScript {
         ScriptData argContractAddress = sac.getArgument(20);
         ScriptData argSign = sac.getArgument(72);
 
-        return "03000601"
-                + //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x3C)
                 + // set coinType to 3C
                 ScriptAssembler.copyString("F800")
@@ -108,6 +112,9 @@ public class ETHScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
-                + ScriptAssembler.showPressButton();
+                + ScriptAssembler.showPressButton(); 
+                
+        //version=00 ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
+        return ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA) + script; 
     }
 }

@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class BnbScript {
@@ -54,8 +56,7 @@ public class BnbScript {
         ScriptData argSource = sac.getArgument(8);
         ScriptData argMemo = sac.getArgumentAll();
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x02CA)
                 + // set coinType to 02CA
                 ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
@@ -83,6 +84,9 @@ public class BnbScript {
                 + ScriptAssembler.showAddress(argTo)
                 + ScriptAssembler.showAmount(argValue, 8)
                 + ScriptAssembler.showPressButton();
+
+        //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String BNBScriptSignature = "FA0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
@@ -101,8 +105,7 @@ public class BnbScript {
         ScriptData argTokenSignature = sac.getArgument(72);
         ScriptData argMemo = sac.getArgumentAll();
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x02CA)
                 + // set coinType to 02CA
                 ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
@@ -140,6 +143,9 @@ public class BnbScript {
                 + ScriptAssembler.showAddress(argTo)
                 + ScriptAssembler.showAmount(argValue, 8)
                 + ScriptAssembler.showPressButton();
+
+        //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String getBEP2ScriptSignature = "0000304402203183C36E6E4E20A2AAED4E1E3518EBDE01FA0382B680168F80636B4128C6ECA3022064D214390B1F572C1392FCC8230D0336CAB06DEF6EECB8C8F4115841DD93CDF2";
@@ -194,8 +200,7 @@ public class BnbScript {
         ScriptData argSequence = sac.getArgument(8);
         ScriptData argSource = sac.getArgument(8);
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x02CA)
                 + // set coinType to 02CA
                 ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
@@ -238,6 +243,9 @@ public class BnbScript {
                 + ScriptAssembler.showMessage(argBaseToken)
                 + ScriptAssembler.showAmount(argPrice, 8)
                 + ScriptAssembler.showPressButton();
+
+        //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String BNBPlaceOrderScriptSignature = "00003044022073A02061F441CE9EA379D31A2303C78F4F3770CBBAAD4C3158DC7C829D74B13C022003B9D4CC8722883B732EDD2E163D2B9E830A202BB23ED73F092944BFB6E6BF58";
@@ -266,8 +274,7 @@ public class BnbScript {
         ScriptData argSequence = sac.getArgument(8);
         ScriptData argSource = sac.getArgument(8);
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x02CA)
                 + // set coinType to 02CA
                 ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
@@ -292,6 +299,9 @@ public class BnbScript {
                 + (!isTestnet ? ""
                         : ScriptAssembler.showWrap("BNB", "TESTNET"))
                 + ScriptAssembler.showWrap("CANCEL", "BNB?");
+
+        //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String BNBCancelOrderScriptSignature = "003045022029B49D1404F5CE4988AC9753E00683D2C7E1B106F4A80F6BCA9F9DB1546BE2F0022100A20805E8EA152437303335E82AF48DF6462BFAE3B738AA0ED39E2ECC39AFD809";
@@ -304,10 +314,10 @@ public class BnbScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         // ScriptData argChainId = sac.getArgumentRightJustified(2);
-        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        return "03000601"
+        
+        String script = 
                 // set coinType to 3C
-                + ScriptAssembler.setCoinType(0x3C)
+                ScriptAssembler.setCoinType(0x3C)
                 // temp byte for rlpList
                 + ScriptAssembler.copyString("C0")
                 // nonce
@@ -333,6 +343,9 @@ public class BnbScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
+
+        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA) + script;
     }
 
     public static String BSCScriptSignature = "00304502206A9D1E267D9AC65B28FFB49286F73041D3FF3834F68C5CAB1A700607C57DB052022100BB46FD3AB7A402AF163FA90EB0348A3AE14CF51E4CA4364931104CD1996F99E6";
@@ -357,8 +370,7 @@ public class BnbScript {
         ScriptData argContractAddress = sac.getArgument(20);
         ScriptData argSign = sac.getArgument(72);
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x3C)
                 + // set coinType to 3C
                 ScriptAssembler.copyString("F800") + ScriptAssembler.rlpString(argNonce)
@@ -387,6 +399,9 @@ public class BnbScript {
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
+
+        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA) + script;
     }
 
     public static String BEP20ScriptSignature = "00304502202B33814A04EE43EFC342DD3345652DAF34606EAD6599EF1A3C45F78727CC7283022100E20E6E30C3D5B8E04B5DD5C90FBFE064077CA9FCBF2689DDD2020FF51A1D69EE";
@@ -400,8 +415,7 @@ public class BnbScript {
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         ScriptData argData = sac.getArgumentAll();
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x3C)
                 + // set coinType to 3C
                 ScriptAssembler.copyString("F800") + ScriptAssembler.rlpString(argNonce)
@@ -421,6 +435,9 @@ public class BnbScript {
                 + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(2)
                 + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("SMART", "")
                 + ScriptAssembler.showPressButton();
+                
+        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA) + script;
     }
 
     public static String BSCSmartContractBlindScriptSignature = "000030440220429DF67EB2A0D1ED5681F912FCCE313C457829D7A76123B59F427E94A2FD8B0A02204FCC18E46AB820323D2CA5ED52FCEAA5DFFF70A3BF2DC4D060E30CFDCAE08D99";
@@ -429,14 +446,16 @@ public class BnbScript {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argMessage = sac.getArgumentAll();
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x3C)
                 + // set coinType to 3C
                 ScriptAssembler.copyString("19457468657265756D205369676E6564204D6573736167653A0A")
                 + ScriptAssembler.copyArgument(argMessage)
                 + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("MESSAGE", "")
                 + ScriptAssembler.showPressButton();
+
+        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA) + script;
     }
 
     public static String BSCMessageBlindScriptSignature = "3046022100E04A601B491F3A5751E4D4D214B0B650D59F71343B91CAECD20819F9DDF8CD74022100FFE0E5909B033E8608856975307336903BC0E66674BE0AA1046C16024F71AA8F";
@@ -446,14 +465,16 @@ public class BnbScript {
         ScriptData argDomainSeparator = sac.getArgument(32);
         ScriptData argMessage = sac.getArgumentAll();
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        String script = 
                 ScriptAssembler.setCoinType(0x3C)
                 + // set coinType to 3C
                 ScriptAssembler.copyString("1901") + ScriptAssembler.copyArgument(argDomainSeparator)
                 + ScriptAssembler.hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
                 + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("TYPED", "DATA")
                 + ScriptAssembler.showPressButton();
+
+        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA) + script;
     }
 
     public static String BSCTypedDataBlindScriptSignature = "003045022008935AF6BA11B9F720E59BE61AFF6F62A7A48FF2A39863AFD8B3920F355A1265022100E81EA86AC2FA3864CBC8773B10AF550B91F6A0E1FB68512DF32D8D35BC9FF3C8";

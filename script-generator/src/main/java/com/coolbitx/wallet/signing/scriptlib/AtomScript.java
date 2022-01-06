@@ -8,6 +8,8 @@ package com.coolbitx.wallet.signing.scriptlib;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class AtomScript {
@@ -56,9 +58,8 @@ public class AtomScript {
             url = "0a372f636f736d6f732e646973747269627574696f6e2e763162657461312e4d7367576974686472617744656c656761746f72526577617264";
         }
 
-        String script = "03030201"
-                // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
-                + ScriptAssembler.setCoinType(0x76)
+        String script =
+                ScriptAssembler.setCoinType(0x76)
                 // tx_body
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.arrayPointer()
                 // message
@@ -146,8 +147,9 @@ public class AtomScript {
         }
 
         script += ScriptAssembler.showPressButton();
-
-        return script;
+        
+        // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
     public static String CosmosScriptSignature = "00304502202591B0C6EF53FC5FDF4EC653EA516C59E5C4198E3A4ABD07BD59C1E591F58F89022100FFF19AFBF03C2FE5F789DC27013460AC2839E282ADD5EC7350DDC7062D527F82";
     public static String CosmosDelegateScriptSignature = "00304502207468FBB76F93B56D2EDED7DFD66B36E8BC0A8C144396B63C72090020F150E806022100F0AC223412E0928789C487CC07BADADCBCD4669F8676CE2F0DAD09A9918133C3";

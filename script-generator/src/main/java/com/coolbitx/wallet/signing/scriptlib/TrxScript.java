@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class TrxScript {
@@ -47,9 +49,9 @@ public class TrxScript {
         ScriptData argAmount = sac.getArgumentRightJustified(10);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
 
-        return "03030201"
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -85,6 +87,9 @@ public class TrxScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showWrap("PRESS", "BUTToN");
+
+        //version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
     
     public static String TRXScriptSignature = "000030440220753082AA5C31111BC1A081601E46F79219A77D49A0EBC4D70C1F66792FD858400220483BFC13CAB301E4E54F6716251E58410A6F50D117C49A891069F18D56391CBD";
@@ -105,10 +110,10 @@ public class TrxScript {
         ScriptData argValue = sac.getArgument(12);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
         ScriptData argFeeLimit = sac.getArgumentRightJustified(10);
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return "03030201"
+        
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -170,6 +175,9 @@ public class TrxScript {
                 // display amount
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
+
+        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String TRC20ScriptSignature = "0000304402202D928B902A6D63BFD40FCDB4A5BC24977049081248F256D779D869D5A1925688022015E6630A34B4161E342EE855F698F7272AC83B781F273E726DC77DA40C75F86C";
@@ -185,10 +193,10 @@ public class TrxScript {
         ScriptData argResource = sac.getArgument(1);
         ScriptData argReceiverAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return "03030201"
+
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -229,6 +237,9 @@ public class TrxScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
+
+        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String TRXFreezeScriptSignature = "0030450220480BB8323075EB39062305E3EAB8E126F4A80477EA254468BDEA0D4948619AEA022100976633A4A2C5F09727CEB41751CFD0F8FE037BBE0E18436AB7507124A71426C6";
@@ -243,10 +254,10 @@ public class TrxScript {
         ScriptData argFrozenDuration = sac.getArgumentRightJustified(10);
         ScriptData argResource = sac.getArgument(1);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return "03030201"
+        
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -285,6 +296,9 @@ public class TrxScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
+
+        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String TRXFreezeScriptNoReceiverSignature = "000030440220555A9F776A0FE0147C800E677539962B59247496BCAF834371502C6B85EFCF340220545E0D0C7E2EA3294F6EB7E24644F9FFC9BDBFB5BA1A9CDEEF533B8BB190C94F";
@@ -298,10 +312,10 @@ public class TrxScript {
         ScriptData argResource = sac.getArgument(1);
         ScriptData argReceiverAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return "03030201"
+        
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -338,6 +352,9 @@ public class TrxScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showPressButton();
+
+        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
 
     public static String TRXUnfreezeScriptSignature = "003045022100BE36FCF8E1FDE17689E2DBB8677A562788DB606FF537CDC5010C87BF40E3E22802207D16265C1F51011DBE73EEBA4F6959F0F7FCD56C9B1C1562F2BAFEF53496735D";
@@ -350,10 +367,10 @@ public class TrxScript {
         ScriptData argOwnerAddr = sac.getArgument(21);
         ScriptData argResource = sac.getArgument(1);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return "03030201"
+        
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -388,6 +405,9 @@ public class TrxScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showPressButton();
+
+        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
     
     public static String TRXUnfreezeScriptNoReceiverSignature = "3046022100ACEEAFD1797FBF203209DBF988BCEA19C0991E22FAA177615C64C30CB68046E10221008A2B58546CDDF91C0C865E82339C607FE22C4099F4EACA31CCD40DC85A69E357";
@@ -401,10 +421,10 @@ public class TrxScript {
         ScriptData argVoteAddr = sac.getArgument(21);
         ScriptData argVoteCount = sac.getArgumentRightJustified(10);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return "03030201"
+        
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -442,6 +462,9 @@ public class TrxScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showAmount(argVoteCount, 0) + ScriptAssembler.showPressButton();
+
+        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
     
     public static String TRXVoteWitnessScriptSignature = "00304502201944C100D05CD8BC50D530778B78AF53EB5E7551AADCF0A21946B01CE266ED17022100983CC86BDCE4A4A8DD403B3BB53861879E970A8344B57F9862C88C783CDEEC85";
@@ -453,10 +476,10 @@ public class TrxScript {
         ScriptData argExpiration = sac.getArgumentRightJustified(10);
         ScriptData argOwnerAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return "03030201"
+        
+        String script = 
                 // set coinType to C3
-                + ScriptAssembler.setCoinType(0xC3)
+                ScriptAssembler.setCoinType(0xC3)
                 // ref_block_bytes
                 + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
                 // ref_block_hash
@@ -488,6 +511,9 @@ public class TrxScript {
                         ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 + ScriptAssembler.showPressButton();
+
+        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
     }
     
     public static String TRXWithdrawScriptSignature = "3046022100AABEE6C90E63CF3752F426A93E1758A8E77CCFF39569F4778DAD28BD03297F48022100AF717A307446DE373740DEA06781564AFE4D5060462DA386DC2F167BA280B585";

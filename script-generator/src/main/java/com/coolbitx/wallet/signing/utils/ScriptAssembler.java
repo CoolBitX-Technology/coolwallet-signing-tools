@@ -49,6 +49,77 @@ public class ScriptAssembler {
     public static final String throwSEError = "FF00";
 
     private static int argumentOffset = 0;
+    private static versionType version;
+    
+    public enum HashType{
+        SHA1("01"), 
+        SHA256("02"), 
+        SHA512("03"), 
+        SHA3256("04"),
+        SHA3512("05"),
+        Keccak256("06"), 
+        Keccak512("07"), 
+        RipeMD160("08"),
+        SHA256RipeMD160("09"), 
+        DoubleSHA256("0D"), 
+        CRC16("0A"), 
+        Blake2b256("0E"), 
+        Blake2b512("0F");
+        private final String hashLabel;
+
+        private HashType(String hashLabel){
+            this.hashLabel = hashLabel;
+        }
+
+        public String toString(){
+            return hashLabel;
+        }
+    }
+
+    public static enum SignType{
+        ECDSA("01"),
+        EDDSA("02"),
+        BIP32EDDSA("03");
+        private final String signLabel;
+
+        private SignType(String signLabel){
+            this.signLabel = signLabel;
+        }
+
+        public String toString(){
+            return signLabel;
+        }
+    }
+
+    public static enum versionType{
+        version00(0, "00"),
+        version02(2, "02"),
+        version03(3, "03"),
+        version04(4, "04");
+        private final int versionNum;
+        private final String versionLabel;
+
+        private versionType(int versionNum, String versionLabel){
+            this.versionNum = versionNum;
+            this.versionLabel = versionLabel;
+        }
+
+        public int getVersionNum(){
+            return versionNum;
+        }
+
+        public String toString(){
+            return versionLabel;
+        }
+    }
+
+    private static void resetVersionHeader(){
+        version = versionType.version00;
+    }
+
+    public static String setHeader(HashType hash, SignType sign){
+        return "03" + version.versionLabel + hash + sign;
+    }
 
     private static String compose(String command, ScriptData dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
@@ -147,6 +218,7 @@ public class ScriptAssembler {
      * @return
      */
     public static String setCoinType(int coinType) {
+        resetVersionHeader();
         String hexCoinType = HexUtil.toHexString(coinType, 4);
         return compose("C7", null, null, 0, 0) + hexCoinType;
     }
@@ -413,6 +485,9 @@ public class ScriptAssembler {
      * @return
      */
     public static String bech32Polymod(ScriptData data, Buffer destinationBuf) {
+        if(version.getVersionNum() < 4){
+            version = versionType.version04;
+        }
         return compose("5A", data, destinationBuf, 0xB, 0);
     }
 
@@ -634,6 +709,9 @@ public class ScriptAssembler {
      * @return
      */
     public static String protobuf(ScriptData data, Buffer destinationBuf, int wireType) {
+        if(version.getVersionNum() < 3){
+            version = versionType.version03;
+        }
         return compose("BF", data, destinationBuf, wireType, 0);
     }
 
@@ -664,6 +742,9 @@ public class ScriptAssembler {
      * @return
      */
     public static String arrayEnd(int type) {
+        if(version.getVersionNum() < 3){
+            version = versionType.version04;
+        }
         return compose("BE", null, null, type, 0);
     }
 
@@ -675,6 +756,9 @@ public class ScriptAssembler {
      * @return
      */
     public static String scaleEncode(ScriptData data, Buffer destinationBuf) {
+        if(version.getVersionNum() < 2){
+            version = versionType.version02;
+        }
         return compose("A2", data, destinationBuf, 0, 0);
     }
 

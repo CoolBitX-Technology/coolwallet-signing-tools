@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class XlmScript {
@@ -52,7 +54,8 @@ public class XlmScript {
 
         final String[] symbol = {"XLM", "KAU", "KAG"};
 
-        return "03000202" + ScriptAssembler.setCoinType(0x94)
+        String script = 
+                ScriptAssembler.setCoinType(0x94)
                 + ScriptAssembler.copyString(header[type * 2 + (isTestnet ? 1 : 0)] + "0000000200000000")
                 + // header[32]
                 // +
@@ -97,6 +100,9 @@ public class XlmScript {
                         ScriptAssembler.bitLeftJustify8to5)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
                 + ScriptAssembler.showAmount(argAmount, 7) + ScriptAssembler.showPressButton();
+
+        // version=00 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=02=EDDSA
+        return ScriptAssembler.setHeader(HashType.SHA256, SignType.EDDSA) + script;
     }
     
     public static String StellarScriptSignature = "0030450221008832DD699A98B4EAFA26994C18EBFEFD234914F25492B03BFE36D3DDEFF7C3B30220364A691A115CAD6D283D618813F485BDBF4F5FCCAAD76FCA69D8F165E5DA0173";

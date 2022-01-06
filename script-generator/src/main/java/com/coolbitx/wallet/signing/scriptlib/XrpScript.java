@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class XrpScript {
@@ -31,7 +33,8 @@ public class XrpScript {
         ScriptData argTag = sac.getArgument(4);
         ScriptData argFlags = sac.getArgument(4);
 
-        return "03000301" + ScriptAssembler.setCoinType(0x90) + ScriptAssembler.copyString("5354580012000022")
+        String script =
+                ScriptAssembler.setCoinType(0x90) + ScriptAssembler.copyString("5354580012000022")
                 + ScriptAssembler.copyArgument(argFlags) + ScriptAssembler.copyString("24")
                 + ScriptAssembler.copyArgument(argSequence) + ScriptAssembler.copyString("2E")
                 + ScriptAssembler.copyArgument(argTag) + ScriptAssembler.copyString("201B")
@@ -52,6 +55,9 @@ public class XrpScript {
                         ScriptAssembler.extendedCharset, ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
                 + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showPressButton();
+        
+        // version=00 ScriptAssembler.hash=03=ScriptAssembler.SHA512 sign=01=ECDSA
+        return ScriptAssembler.setHeader(HashType.SHA512, SignType.ECDSA) + script;
     }
     
     public static String XRPScriptSignature = "0000304402206B2A707864EB98033BF83A80E8FDD7FCF903CC059ABC0E4FBB317040B6E9AD1D02203DCD2BDC4480B88DB0D9DC74948BAF6BD62203E90AE39990978999ABEAEABA63";

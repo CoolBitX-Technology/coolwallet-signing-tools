@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class AdaScript {
@@ -34,9 +36,8 @@ public class AdaScript {
         ScriptData intputCount = sac.getArgument(1);
         ScriptData inputList = sac.getArgumentAll();
 
-        // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
-        return "03040E03"
-                + ScriptAssembler.setCoinType(0x0717)
+        String script =
+                ScriptAssembler.setCoinType(0x0717)
                 // -- payload start --
                 + ScriptAssembler.copyString("83a4")
                 + ScriptAssembler.copyString("00")
@@ -120,6 +121,9 @@ public class AdaScript {
                 + ScriptAssembler.showAmount(receiveAmount, 6)
                 // -- show amount end --
                 + ScriptAssembler.showPressButton();
+                
+        // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+        return ScriptAssembler.setHeader(HashType.Blake2b256, SignType.BIP32EDDSA) + script;
 
         // 01a74ecc
     }

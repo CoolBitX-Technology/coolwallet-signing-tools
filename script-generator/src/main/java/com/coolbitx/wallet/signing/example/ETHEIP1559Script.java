@@ -1,6 +1,8 @@
 package com.coolbitx.wallet.signing.example;
 
 import com.coolbitx.wallet.signing.utils.*;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class ETHEIP1559Script {
@@ -21,13 +23,10 @@ public class ETHEIP1559Script {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
 
-        // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        String header =  "03040601";
-
-                // set coinType to 3C
+        // set coinType to 3C
         String coinType = ScriptAssembler.setCoinType(0x3C);
 
-                // txType (EIP-2718)
+        // txType (EIP-2718)
         String payload = ScriptAssembler.copyString("02")
                 + ScriptAssembler.arrayPointer()
                 // chainId
@@ -58,6 +57,10 @@ public class ETHEIP1559Script {
                 + ScriptAssembler.showAmount(argValue, 18)
                 + ScriptAssembler.showPressButton();
 
+        // length=03 version=04 are auto-generated based on the composition of the payload
+        // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
+        // header =  "03040601"
+        String header = ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA);
         return header + coinType + payload + display;
     }
     
@@ -76,13 +79,10 @@ public class ETHEIP1559Script {
         ScriptData argContractAddress = sac.getArgument(20);
         ScriptData argSign = sac.getArgument(72);
 
-        // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        String header =  "03040601";
-
-                // set coinType to 3C
+        // set coinType to 3C
         String coinType = ScriptAssembler.setCoinType(0x3C);
 
-                // txType (EIP-2718)
+        // txType (EIP-2718)
         String payload = ScriptAssembler.copyString("02")
                 + ScriptAssembler.arrayPointer()
                 // chainId
@@ -116,7 +116,11 @@ public class ETHEIP1559Script {
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
                 + ScriptAssembler.showAmount(argValue, 1000)
                 + ScriptAssembler.showPressButton();
-
+        
+        // length=03 version=04 are auto-generated based on the composition of the payload
+        // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
+        // header =  "03040601"
+        String header = ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA);
         return header + coinType + payload + display;
     }
 
@@ -130,13 +134,10 @@ public class ETHEIP1559Script {
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         ScriptData argData = sac.getArgumentAll();
 
-        // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        String header =  "03040601";
-
-                // set coinType to 3C
+        // set coinType to 3C
         String coinType = ScriptAssembler.setCoinType(0x3C);
 
-                // txType (EIP-2718)
+        // txType (EIP-2718)
         String payload = ScriptAssembler.copyString("02")
                 + ScriptAssembler.arrayPointer()
                 // chainId
@@ -157,6 +158,10 @@ public class ETHEIP1559Script {
                 + ScriptAssembler.showWrap("SMART", "")
                 + ScriptAssembler.showPressButton();
 
+        // length=03 version=04 are auto-generated based on the composition of the payload
+        // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
+        // header =  "03040601"
+        String header = ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA);
         return header + coinType + payload + display;
     }
 }
