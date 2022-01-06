@@ -1,4 +1,4 @@
-import { useState, useContext, FC } from 'react';
+import { useState, useContext, FC, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
@@ -7,6 +7,11 @@ import { apdu, transport as Transport } from '@coolwallet/core';
 import { ButtonInputs } from '@/components';
 import { executeScript, executeUtxoScript } from '@/utils/execute';
 import Context from '@/store';
+import * as txUtil from '@coolwallet/core/lib/transaction/txUtil';
+//additional
+import cwsETH from '@coolwallet/eth';
+import * as ethUtil from '@coolwallet/eth/lib/utils/ethUtils';
+import { signTx, Transaction } from '@coolwallet/eth/lib/config/types';
 
 const SIGNATURE = padEnd('FA', 144, '0');
 
@@ -48,8 +53,14 @@ const Signing: FC<Props> = (props: Props) => {
       // get tx detail
       await apdu.tx.getTxDetail(props.transport);
 
+      const signatureKey = await apdu.tx.getSignatureKey(props.transport);
+      console.log('signature key:', signatureKey);
+
       await apdu.tx.clearTransaction(props.transport);
-      await apdu.mcu.control.powerOff(props.transport);
+      // await apdu.mcu.control.powerOff(props.transport);
+
+      const decryptedSignature = await txUtil.decryptSignatureFromSE(encryptedSignature, signatureKey, false, true);
+      console.log('decryptedSignature: ', decryptedSignature);
 
       setSignature(encryptedSignature);
     } catch (error) {
@@ -94,6 +105,48 @@ const Signing: FC<Props> = (props: Props) => {
       setIsLocked(false);
     }
   };
+  const main = async (): Promise<void> => {
+    // if (props.transport && props.appPrivateKey && props.appId) {
+    //   const ecdsaCoin = new ECDSACoin('8000003c');
+    //   const publicKey = await ecdsaCoin.getPublicKey(
+    //     props.transport || null,
+    //     props.appPrivateKey,
+    //     props.appId,
+    //     0o00000000
+    //   );
+    //   console.log(publicKey);
+    // }
+    if (isNil(props.transport) || isNil(props.appId)) return;
+    const eth = new cwsETH();
+    // const address = await eth.getAddress(
+    //   props.transport as Transport.default,
+    //   props.appPrivateKey,
+    //   props.appId as string,
+    //   0o00000000
+    // );
+    const transaction = {
+      nonce: '0x0e3',
+      gasPrice: '0x59682f00',
+      gasLimit: '0x5208',
+      to: '0x81bb32e4A7e4d0500d11A52F3a5F60c9A6Ef126C',
+      value: '0x5af3107a4000',
+      data: '0x00',
+      chainId: 1,
+    };
+    const signTxData = {
+      transport: props.transport as Transport.default,
+      appPrivateKey: props.appPrivateKey,
+      appId: props.appId as string,
+      transaction,
+      addressIndex: 0o00000000,
+    };
+
+    const signedTx = await eth.signTransaction(signTxData as signTx);
+    console.log(signedTx);
+  };
+  useEffect(() => {
+    main();
+  }, [props]);
 
   const disabled = !connected || isLocked;
   // (title, content, onClick, disabled, input, setInput, placeholder, input2, setInput2, placeholder2)
