@@ -300,6 +300,26 @@ public class ScriptAssembler {
     }
 
     /**
+     * Send rlp data place holder length to transaction buffer.
+     *
+     * @param length
+     * @return
+     */
+    public static String rlpDataPlaceholder(ScriptData data) {
+        return compose("C4", data, Buffer.TRANSACTION, 0, 0);
+    }
+
+    /**
+     * Send rlp data place holder length.
+     *
+     * @param length
+     * @return
+     */
+    public static String rlpDataPlaceholder(ScriptData data, Buffer destinationBuf) {
+        return compose("C4", data, destinationBuf, 0, 0);
+    }
+
+    /**
      * Check whether the data is in range of asc-ii code encode (0x20~0x7e,
      * except 0x23(")) or not.
      *
