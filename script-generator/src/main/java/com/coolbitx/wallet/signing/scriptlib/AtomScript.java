@@ -8,6 +8,8 @@ package com.coolbitx.wallet.signing.scriptlib;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class AtomScript {
@@ -56,97 +58,103 @@ public class AtomScript {
             url = "0a372f636f736d6f732e646973747269627574696f6e2e763162657461312e4d7367576974686472617744656c656761746f72526577617264";
         }
 
-        String script = "03030201"
-                // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
-                + ScriptAssembler.setCoinType(0x76)
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb
+                .setCoinType(0x76)
                 // tx_body
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.arrayPointer()
+                .copyString("0a").arrayPointer()
                 // message
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.arrayPointer()
+                .copyString("0a").arrayPointer()
                 // message.url
-                + ScriptAssembler.copyString(url)
+                .copyString(url)
                 // message.value
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // from_or_delegator_address
-                + ScriptAssembler.copyString("0a")
-                + ScriptAssembler.protobuf(argFromOrDelegator, typeString)
+                .copyString("0a").protobuf(argFromOrDelegator, typeString)
                 // to_or_validator_address
-                + ScriptAssembler.copyString("12")
-                + ScriptAssembler.protobuf(argToOrValidator, typeString);
+                .copyString("12")
+                .protobuf(argToOrValidator, typeString)
+                .getScript();
 
         if (type != CosmosTxType.WITHDRAW) {
-            script = script
-                    // amount<Coin>
-                    + ScriptAssembler.copyString("1a") + ScriptAssembler.arrayPointer()
-                    // coin.denom - uatom
-                    + ScriptAssembler.copyString("0a057561746f6d")
-                    // coin.amount
-                    + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
-                    + ScriptAssembler.baseConvert(argAmount, Buffer.TRANSACTION, 0,
-                            ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                    + ScriptAssembler.arrayEnd() // coin.amount end
-                    + ScriptAssembler.arrayEnd(); // amount<coin> end
+            script = scriptAsb
+                // amount<Coin>
+                .copyString("1a").arrayPointer()
+                // coin.denom - uatom
+                .copyString("0a057561746f6d")
+                // coin.amount
+                .copyString("12").arrayPointer()
+                .baseConvert(argAmount, Buffer.TRANSACTION, 0,
+                        ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .arrayEnd() // coin.amount end
+                .arrayEnd() // amount<coin> end
+                .getScript();
         }
 
-        script = script + ScriptAssembler.arrayEnd() // message.value end
-                + ScriptAssembler.arrayEnd() // message end
+        script = scriptAsb
+                .arrayEnd() // message.value end
+                .arrayEnd() // message end
                 // memo
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
-                + ScriptAssembler.copyRegularString(argMemo) + ScriptAssembler.arrayEnd() // memo end
-                + ScriptAssembler.arrayEnd() // tx_body end
+                .copyString("12")
+                .arrayPointer()
+                .copyRegularString(argMemo)
+                .arrayEnd() // memo end
+                .arrayEnd() // tx_body end
 
                 // auth_info
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // signer_info
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.arrayPointer()
+                .copyString("0a").arrayPointer()
                 // pubkey
-                + ScriptAssembler.copyString(
+                .copyString(
                         "0a460a1f2f636f736d6f732e63727970746f2e736563703235366b312e5075624b657912230a21")
-                + ScriptAssembler.copyArgument(argPublicKey)
+                .copyArgument(argPublicKey)
                 // mode_info
-                + ScriptAssembler.copyString("12040a020801")
+                .copyString("12040a020801")
                 // sequence
-                + ScriptAssembler.copyString("18") + ScriptAssembler.protobuf(argSequence, typeInt)
-                + ScriptAssembler.arrayEnd() // signer_info end
+                .copyString("18") 
+                .protobuf(argSequence, typeInt)
+                .arrayEnd() // signer_info end
                 // fee
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // amount<Coin>
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.arrayPointer()
+                .copyString("0a").arrayPointer()
                 // coin.denom - uatom
-                + ScriptAssembler.copyString("0a057561746f6d")
+                .copyString("0a057561746f6d")
                 // coin.amount
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
-                + ScriptAssembler.baseConvert(argFeeAmount, Buffer.TRANSACTION, 0,
+                .copyString("12").arrayPointer()
+                .baseConvert(argFeeAmount, Buffer.TRANSACTION, 0,
                         ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.arrayEnd() // coin.amount end
-                + ScriptAssembler.arrayEnd() // amount<coin> end
+                .arrayEnd() // coin.amount end
+                .arrayEnd() // amount<coin> end
                 // gas_limit
-                + ScriptAssembler.copyString("10") + ScriptAssembler.protobuf(argGas, typeInt)
-                + ScriptAssembler.arrayEnd() // fee end
-                + ScriptAssembler.arrayEnd() // auth_info end
+                .copyString("10") 
+                .protobuf(argGas, typeInt)
+                .arrayEnd() // fee end
+                .arrayEnd() // auth_info end
                 // chain_id
-                + ScriptAssembler.copyString("1a0b636f736d6f736875622d34")
+                .copyString("1a0b636f736d6f736875622d34")
                 // account_number
-                + ScriptAssembler.copyString("20") + ScriptAssembler.protobuf(argAccountNumber, typeInt)
+                .copyString("20") 
+                .protobuf(argAccountNumber, typeInt)
                 // display
-                + ScriptAssembler.showMessage("ATOM");
-
+                .showMessage("ATOM")
+                .getScript();
         if (type == CosmosTxType.DELEGATE) {
-            script += ScriptAssembler.showMessage("Delgt");
+            script = scriptAsb.showMessage("Delgt").getScript();
         } else if (type == CosmosTxType.UNDELEGATE) {
-            script += ScriptAssembler.showMessage("UnDel");
+            script = scriptAsb.showMessage("UnDel").getScript();
         } else if (type == CosmosTxType.WITHDRAW) {
-            script += ScriptAssembler.showMessage("Reward");
+            script = scriptAsb.showMessage("Reward").getScript();
         }
-
-        script += ScriptAssembler.showAddress(argToOrValidator);
-
+        script += scriptAsb.showAddress(argToOrValidator);
         if (type != CosmosTxType.WITHDRAW) {
-            script += ScriptAssembler.showAmount(argAmount, 6);
+            script = scriptAsb.showAmount(argAmount, 6).getScript();
         }
-
-        script += ScriptAssembler.showPressButton();
-
+        script = scriptAsb.showPressButton()
+            // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+            .setHeader(HashType.SHA256, SignType.ECDSA)
+            .getScript();
         return script;
     }
     public static String CosmosScriptSignature = "00304502202591B0C6EF53FC5FDF4EC653EA516C59E5C4198E3A4ABD07BD59C1E591F58F89022100FFF19AFBF03C2FE5F789DC27013460AC2839E282ADD5EC7350DDC7062D527F82";

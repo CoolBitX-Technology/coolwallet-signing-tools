@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class XlmScript {
@@ -17,7 +19,6 @@ public class XlmScript {
         System.out.println("Xlm: \n" + getStellarScript(XLM, false) + "\n");
         System.out.println("Kau: \n" + getStellarScript(KAU, false) + "\n");
         System.out.println("Kug: \n" + getStellarScript(KAG, false) + "\n");
-
     }
 
     public static final int XLM = 0;
@@ -52,51 +53,57 @@ public class XlmScript {
 
         final String[] symbol = {"XLM", "KAU", "KAG"};
 
-        return "03000202" + ScriptAssembler.setCoinType(0x94)
-                + ScriptAssembler.copyString(header[type * 2 + (isTestnet ? 1 : 0)] + "0000000200000000")
-                + // header[32]
-                // +
-                // envelopType[4]
-                // +
-                // sourceAccountIdType[4]
-                ScriptAssembler.copyArgument(argSourceAccountId)
-                + ScriptAssembler.copyArgument(type == XLM ? argFee4 : argFee8)
-                + ScriptAssembler.copyArgument(argSequence) // TODO
-                + ScriptAssembler.copyString("00000001") + ScriptAssembler.copyArgument(argTimeBounds)
-                + ScriptAssembler.copyString("000000") + ScriptAssembler.copyArgument(argMemoType)
-                + ScriptAssembler.ifRange(argMemoType, "00", "04", "", ScriptAssembler.throwSEError)
-                + ScriptAssembler.ifEqual(argMemoType, "01",
-                        ScriptAssembler.setBufferIntFromDataLength(argMemoRJ)
-                        + ScriptAssembler.copyString("0000")
-                        + ScriptAssembler.putBufferInt(Buffer.TRANSACTION)
-                        + ScriptAssembler.copyArgument(argMemoRJ)
-                        + ScriptAssembler.paddingZero(Buffer.TRANSACTION, 4),
-                        "")
-                + ScriptAssembler.ifEqual(argMemoType, "02", ScriptAssembler.copyArgument(argMemo8), "")
-                + ScriptAssembler.ifRange(argMemoType, "03", "04", ScriptAssembler.copyArgument(argMemo32),
-                        "")
-                + ScriptAssembler.copyString("0000000100000000000000")
-                + ScriptAssembler.switchString(argIsCreate, Buffer.TRANSACTION, "01,00")
-                + ScriptAssembler.copyString("00000000") + ScriptAssembler.copyArgument(argDestAccountId)
-                + ScriptAssembler.ifEqual(argIsCreate, "00", ScriptAssembler.copyString("00000000"), "")
-                + ScriptAssembler.copyArgument(argAmount) + ScriptAssembler.copyString("00000000")
-                + (!isTestnet ? ScriptAssembler.showMessage(symbol[type])
-                        : ScriptAssembler.showWrap(symbol[type], "TESTNET"))
-                + ScriptAssembler.copyString("30", Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(argDestAccountId, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1,
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb
+                .setCoinType(0x94)
+                .copyString(header[type * 2 + (isTestnet ? 1 : 0)] + "0000000200000000")
+                .copyArgument(argSourceAccountId)
+                .copyArgument(type == XLM ? argFee4 : argFee8)
+                .copyArgument(argSequence) // TODO
+                .copyString("00000001")
+                .copyArgument(argTimeBounds)
+                .copyString("000000")
+                .copyArgument(argMemoType)
+                .ifRange(argMemoType, "00", "04", "", ScriptAssembler.throwSEError)
+                .ifEqual(argMemoType, "01", 
+                        new ScriptAssembler().setBufferIntFromDataLength(argMemoRJ)
+                                .copyString("0000")
+                                .putBufferInt(Buffer.TRANSACTION)
+                                .copyArgument(argMemoRJ)
+                                .paddingZero(Buffer.TRANSACTION, 4)
+                                .getScript()
+                        , "")
+                .ifEqual(argMemoType, "02", new ScriptAssembler().copyArgument(argMemo8).getScript(), "")
+                .ifRange(argMemoType, "03", "04", new ScriptAssembler().copyArgument(argMemo32).getScript(), "")
+                .copyString("0000000100000000000000")
+                .switchString(argIsCreate, Buffer.TRANSACTION, "01,00")
+                .copyString("00000000")
+                .copyArgument(argDestAccountId)
+                .ifEqual(argIsCreate, "00", new ScriptAssembler().copyString("00000000").getScript(), "")
+                .copyArgument(argAmount)
+                .copyString("00000000")
+                .getScript();
+        script = (!isTestnet ? scriptAsb.showMessage(symbol[type])
+                        : scriptAsb.showWrap(symbol[type], "TESTNET"))
+                .copyString("30", Buffer.CACHE2)
+                .copyArgument(argDestAccountId, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1,
                         ScriptAssembler.CRC16)
-                + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1),
+                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1),
                         Buffer.CACHE2, 2, ScriptAssembler.binaryCharset,
                         ScriptAssembler.littleEndian)
-                + ScriptAssembler.clearBuffer(Buffer.CACHE1)
-                + ScriptAssembler.copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
+                .clearBuffer(Buffer.CACHE1)
+                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
                         Buffer.CACHE1)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 35),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 35),
                         Buffer.CACHE2, 56, ScriptAssembler.extendedCharset,
                         ScriptAssembler.bitLeftJustify8to5)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
-                + ScriptAssembler.showAmount(argAmount, 7) + ScriptAssembler.showPressButton();
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
+                .showAmount(argAmount, 7)
+                .showPressButton()
+                .setHeader(HashType.SHA256, SignType.EDDSA)
+                .getScript();
+        return script;
     }
     
     public static String StellarScriptSignature = "0030450221008832DD699A98B4EAFA26994C18EBFEFD234914F25492B03BFE36D3DDEFF7C3B30220364A691A115CAD6D283D618813F485BDBF4F5FCCAAD76FCA69D8F165E5DA0173";

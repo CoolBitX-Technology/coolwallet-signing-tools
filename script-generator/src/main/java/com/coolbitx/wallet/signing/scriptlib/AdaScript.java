@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class AdaScript {
@@ -34,93 +36,95 @@ public class AdaScript {
         ScriptData intputCount = sac.getArgument(1);
         ScriptData inputList = sac.getArgumentAll();
 
-        // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
-        return "03040E03"
-                + ScriptAssembler.setCoinType(0x0717)
+        String script = new ScriptAssembler()
+                .setCoinType(0x0717)
                 // -- payload start --
-                + ScriptAssembler.copyString("83a4")
-                + ScriptAssembler.copyString("00")
-                + ScriptAssembler.copyArgument(intputCount)
+                .copyString("83a4")
+                .copyString("00")
+                .copyArgument(intputCount)
                 // --- intput start (need for loop) ---
                 // + ScriptAssembler.copyString("825820")
                 // + ScriptAssembler.copyArgument(txId)
                 // + ScriptAssembler.copyArgument(txIdIndex)
-                + ScriptAssembler.copyArgument(inputList)
+                .copyArgument(inputList)
                 // --- intput end ---
                 // --- output change start ---
-                + ScriptAssembler.ifEqual(changeAmount, "0000000000000000",
+                .ifEqual(changeAmount, "0000000000000000",
                         // ---- output count start ----
-                        ScriptAssembler.copyString("0181"),
-                        ScriptAssembler.copyString("0182")
+                        new ScriptAssembler().copyString("0181").getScript(),
+                        new ScriptAssembler().copyString("0182")
                         // ---- output count end ----
-                        + ScriptAssembler.copyString("82583901")
-                        + ScriptAssembler.copyArgument(changeAddress)
-                        + ScriptAssembler.copyArgument(changeAmountPrefix)
-                        + ScriptAssembler.copyArgument(changeAmount, Buffer.CACHE2)
-                        + ScriptAssembler.ifEqual(changeAmountPrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)), "")
-                        + ScriptAssembler.ifEqual(changeAmountPrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)), "")
-                        + ScriptAssembler.ifEqual(changeAmountPrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)), "")
-                        + ScriptAssembler.ifEqual(changeAmountPrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)), "")
-                        + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                        .copyString("82583901")
+                        .copyArgument(changeAddress)
+                        .copyArgument(changeAmountPrefix)
+                        .copyArgument(changeAmount, Buffer.CACHE2)
+                        .ifEqual(changeAmountPrefix, "18", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)).getScript(), "")
+                        .ifEqual(changeAmountPrefix, "19", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)).getScript(), "")
+                        .ifEqual(changeAmountPrefix, "1a", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)).getScript(), "")
+                        .ifEqual(changeAmountPrefix, "1b", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)).getScript(), "")
+                        .clearBuffer(Buffer.CACHE2).getScript()
                 )
                 // --- output change end ---
                 // --- output receive start ---
-                + ScriptAssembler.copyString("82583900")
-                + ScriptAssembler.copyArgument(receiverAddress)
-                + ScriptAssembler.copyArgument(receiveAmountPrefix)
-                + ScriptAssembler.copyArgument(receiveAmount, Buffer.CACHE2)
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)), "")
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)), "")
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)), "")
-                + ScriptAssembler.ifEqual(receiveAmountPrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)), "")
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                .copyString("82583900")
+                .copyArgument(receiverAddress)
+                .copyArgument(receiveAmountPrefix)
+                .copyArgument(receiveAmount, Buffer.CACHE2)
+                .ifEqual(receiveAmountPrefix, "18", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)).getScript(), "")
+                .ifEqual(receiveAmountPrefix, "19", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)).getScript(), "")
+                .ifEqual(receiveAmountPrefix, "1a", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)).getScript(), "")
+                .ifEqual(receiveAmountPrefix, "1b", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)).getScript(), "")
+                .clearBuffer(Buffer.CACHE2)
                 // --- output receive end ---
                 // --- fee start ---
-                + ScriptAssembler.copyString("02")
-                + ScriptAssembler.copyArgument(feePrefix)
-                + ScriptAssembler.copyArgument(fee, Buffer.CACHE2)
-                + ScriptAssembler.ifEqual(feePrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)), "")
-                + ScriptAssembler.ifEqual(feePrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)), "")
-                + ScriptAssembler.ifEqual(feePrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)), "")
-                + ScriptAssembler.ifEqual(feePrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)), "")
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                .copyString("02")
+                .copyArgument(feePrefix)
+                .copyArgument(fee, Buffer.CACHE2)
+                .ifEqual(feePrefix, "18", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)).getScript(), "")
+                .ifEqual(feePrefix, "19", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)).getScript(), "")
+                .ifEqual(feePrefix, "1a", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)).getScript(), "")
+                .ifEqual(feePrefix, "1b", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)).getScript(), "")
+                .clearBuffer(Buffer.CACHE2)
                 // --- fee end ---
                 // --- invalid hereafter start ---
-                + ScriptAssembler.copyString("03")
-                + ScriptAssembler.copyArgument(invalidHereafterPrefix)
-                + ScriptAssembler.copyArgument(invalidHereafter, Buffer.CACHE2)
-                + ScriptAssembler.ifEqual(invalidHereafterPrefix, "18", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)), "")
-                + ScriptAssembler.ifEqual(invalidHereafterPrefix, "19", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)), "")
-                + ScriptAssembler.ifEqual(invalidHereafterPrefix, "1a", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)), "")
-                + ScriptAssembler.ifEqual(invalidHereafterPrefix, "1b", ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)), "")
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
+                .copyString("03")
+                .copyArgument(invalidHereafterPrefix)
+                .copyArgument(invalidHereafter, Buffer.CACHE2)
+                .ifEqual(invalidHereafterPrefix, "18", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 7)).getScript(), "")
+                .ifEqual(invalidHereafterPrefix, "19", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 6)).getScript(), "")
+                .ifEqual(invalidHereafterPrefix, "1a", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2, 4)).getScript(), "")
+                .ifEqual(invalidHereafterPrefix, "1b", new ScriptAssembler().copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2)).getScript(), "")
+                .clearBuffer(Buffer.CACHE2)
                 // --- invalid hereafter end ---
-                + ScriptAssembler.copyString("9ffff6")
+                .copyString("9ffff6")
                 // -- payload end --
-                + ScriptAssembler.showMessage("ADA")
+                .showMessage("ADA")
                 // -- show address start --
-                + ScriptAssembler.copyString("030303030001040412", Buffer.CACHE2)
-                + ScriptAssembler.copyString("01", Buffer.CACHE1)
-                + ScriptAssembler.copyArgument(receiverAddress, Buffer.CACHE1)
-                + ScriptAssembler.baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 92, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
-                + ScriptAssembler.copyString("000000000000", Buffer.CACHE2)
-                + ScriptAssembler.clearBuffer(Buffer.CACHE1)
-                + ScriptAssembler.bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.copyString(HexUtil.toHexString("addr1"), Buffer.CACHE2)
-                + ScriptAssembler.copyString("01", Buffer.CACHE1)
-                + ScriptAssembler.copyArgument(receiverAddress, Buffer.CACHE1) // EXTENDED : [Polymod(4B)][01(1B)][receiverAddress(56B)]
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 4, 57), Buffer.CACHE2, 92, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), Buffer.CACHE2, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.clearBuffer(Buffer.CACHE1)
+                .copyString("030303030001040412", Buffer.CACHE2)
+                .copyString("01", Buffer.CACHE1)
+                .copyArgument(receiverAddress, Buffer.CACHE1)
+                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 92, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
+                .copyString("000000000000", Buffer.CACHE2)
+                .clearBuffer(Buffer.CACHE1)
+                .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
+                .clearBuffer(Buffer.CACHE2)
+                .copyString(HexUtil.toHexString("addr1"), Buffer.CACHE2)
+                .copyString("01", Buffer.CACHE1)
+                .copyArgument(receiverAddress, Buffer.CACHE1) // EXTENDED : [Polymod(4B)][01(1B)][receiverAddress(56B)]
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 4, 57), Buffer.CACHE2, 92, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), Buffer.CACHE2, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                .clearBuffer(Buffer.CACHE1)
                 // -- show address end --
                 // -- show amount start --
-                + ScriptAssembler.showAmount(receiveAmount, 6)
+                .showAmount(receiveAmount, 6)
                 // -- show amount end --
-                + ScriptAssembler.showPressButton();
-
+                .showPressButton()
+                // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+                .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
+                .getScript();
+        return script;
         // 01a74ecc
     }
     
