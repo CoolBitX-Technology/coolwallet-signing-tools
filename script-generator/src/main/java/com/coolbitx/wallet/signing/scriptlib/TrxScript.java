@@ -49,47 +49,49 @@ public class TrxScript {
         ScriptData argAmount = sac.getArgumentRightJustified(10);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
 
-        String script = 
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a").protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22").protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40").protobuf(argExpiration, typeInt)
                 // contract object
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a")
+                .arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("0801")
+                .copyString("0801")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a2d") + ScriptAssembler.copyString(
+                .copyString("0a2d")
+                .copyString(
                 HexUtil.toHexString("type.googleapis.com/protocol.TransferContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // owner address
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argOwnerAddr, typeString)
+                .copyString("0a").protobuf(argOwnerAddr, typeString)
                 // to address
-                + ScriptAssembler.copyString("12") + ScriptAssembler.protobuf(argToAddr, typeString)
+                .copyString("12").protobuf(argToAddr, typeString)
                 // amount
-                + ScriptAssembler.copyString("18") + ScriptAssembler.protobuf(argAmount, typeInt)
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
+                .copyString("18").protobuf(argAmount, typeInt)
+                .arrayEnd().arrayEnd().arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
-                + ScriptAssembler.showMessage("TRX")
-                + ScriptAssembler.copyArgument(argToAddr, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .copyString("70").protobuf(argTimestamp, typeInt).showMessage("TRX")
+                .copyArgument(argToAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showWrap("PRESS", "BUTToN");
-
-        //version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showAmount(argAmount, 6)
+                .showWrap("PRESS", "BUTToN")
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
     
     public static String TRXScriptSignature = "000030440220753082AA5C31111BC1A081601E46F79219A77D49A0EBC4D70C1F66792FD858400220483BFC13CAB301E4E54F6716251E58410A6F50D117C49A891069F18D56391CBD";
@@ -111,73 +113,78 @@ public class TrxScript {
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
         ScriptData argFeeLimit = sac.getArgumentRightJustified(10);
         
-        String script = 
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a").protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22") .protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40").protobuf(argExpiration, typeInt)
                 // contract object
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a").arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("081f")
+                .copyString("081f")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a31") + ScriptAssembler.copyString(HexUtil.toHexString(
+                .copyString("0a31")
+                .copyString(HexUtil.toHexString(
                 "type.googleapis.com/protocol.TriggerSmartContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // owner address
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.copyString("41", Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
-                + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+                .copyString("0a")
+                .copyString("41", Buffer.CACHE2)
+                .copyArgument(argOwnerAddr, Buffer.CACHE2)
+                .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
                 // contract address
-                + ScriptAssembler.copyString("12") + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.copyString("41", Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(argContractAddr, Buffer.CACHE2)
-                + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+                .copyString("12").clearBuffer(Buffer.CACHE2).copyString("41", Buffer.CACHE2)
+                .copyArgument(argContractAddr, Buffer.CACHE2)
+                .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
                 // data
-                + ScriptAssembler.copyString("22") + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.copyString("a9059cbb", Buffer.CACHE2)
-                + ScriptAssembler.copyString("000000000000000000000000", Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(argTo, Buffer.CACHE2)
-                + ScriptAssembler.copyString("0000000000000000000000000000000000000000", Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(argValue, Buffer.CACHE2)
-                + ScriptAssembler.protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
+                .copyString("22")
+                .clearBuffer(Buffer.CACHE2)
+                .copyString("a9059cbb", Buffer.CACHE2)
+                .copyString("000000000000000000000000", Buffer.CACHE2)
+                .copyArgument(argTo, Buffer.CACHE2)
+                .copyString("0000000000000000000000000000000000000000", Buffer.CACHE2)
+                .copyArgument(argValue, Buffer.CACHE2)
+                .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+                .arrayEnd().arrayEnd().arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
+                .copyString("70").protobuf(argTimestamp, typeInt)
                 // fee limit
-                + ScriptAssembler.copyString("9001") + ScriptAssembler.protobuf(argFeeLimit, typeInt)
+                .copyString("9001").protobuf(argFeeLimit, typeInt)
                 // display chain
-                + ScriptAssembler.showMessage("TRX")
+                .showMessage("TRX")
                 // display token
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2))
-                + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                .ifSigned(argTokenInfo, argSign, "",
+                        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
+                .setBufferInt(argNameLength, 1, 7)
+
+                .copyArgument(argName, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 // display to address
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.copyString("41", Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(argTo, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .clearBuffer(Buffer.CACHE2)
+                .copyString("41", Buffer.CACHE2)
+                .copyArgument(argTo, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // display amount
-                + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
-                + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
-
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .setBufferInt(argDecimal, 0, 20)
+                .showAmount(argValue, 1000)
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String TRC20ScriptSignature = "0000304402202D928B902A6D63BFD40FCDB4A5BC24977049081248F256D779D869D5A1925688022015E6630A34B4161E342EE855F698F7272AC83B781F273E726DC77DA40C75F86C";
@@ -194,52 +201,58 @@ public class TrxScript {
         ScriptData argReceiverAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
 
-        String script = 
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a").protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22").protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40").protobuf(argExpiration, typeInt)
                 // contracts array
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a").arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("080b")
+                .copyString("080b")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a32") + ScriptAssembler.copyString(HexUtil.toHexString(
+                .copyString("0a32")
+                .copyString(HexUtil.toHexString(
                 "type.googleapis.com/protocol.FreezeBalanceContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12").arrayPointer()
                 // ownerAddr
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argOwnerAddr, typeString)
+                .copyString("0a").protobuf(argOwnerAddr, typeString)
                 // frozenBalance
-                + ScriptAssembler.copyString("10") + ScriptAssembler.protobuf(argFrozenBalance, typeInt)
+                .copyString("10").protobuf(argFrozenBalance, typeInt)
                 // frozenDuration
-                + ScriptAssembler.copyString("18") + ScriptAssembler.protobuf(argFrozenDuration, typeInt)
+                .copyString("18").protobuf(argFrozenDuration, typeInt)
                 // resource
-                + ScriptAssembler.ifEqual(argResource, "01", ScriptAssembler.copyString("5001"), "")
-                + ScriptAssembler.ifEqual(argResource, "02", ScriptAssembler.copyString("5002"), "")
+                .ifEqual(argResource, "01", new ScriptAssembler().copyString("5001").getScript(), "")
+                .ifEqual(argResource, "02", new ScriptAssembler().copyString("5002").getScript(), "")
                 // receiverAddr
-                + ScriptAssembler.copyString("7a") + ScriptAssembler.protobuf(argReceiverAddr, typeString)
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
+                .copyString("7a")
+                .protobuf(argReceiverAddr, typeString)
+                .arrayEnd().arrayEnd().arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
-                + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Freeze")
-                + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .copyString("70")
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX")
+                .showMessage("Freeze")
+                .copyArgument(argReceiverAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
-
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showAmount(argFrozenBalance, 6)
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String TRXFreezeScriptSignature = "0030450220480BB8323075EB39062305E3EAB8E126F4A80477EA254468BDEA0D4948619AEA022100976633A4A2C5F09727CEB41751CFD0F8FE037BBE0E18436AB7507124A71426C6";
@@ -254,51 +267,67 @@ public class TrxScript {
         ScriptData argFrozenDuration = sac.getArgumentRightJustified(10);
         ScriptData argResource = sac.getArgument(1);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        
-        String script = 
+
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a")
+                .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22") 
+                .protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40") 
+                .protobuf(argExpiration, typeInt)
                 // contracts array
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a") 
+                .arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("080b")
+                .copyString("080b")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a32") + ScriptAssembler.copyString(HexUtil.toHexString(
+                .copyString("0a32") 
+                .copyString(HexUtil.toHexString(
                 "type.googleapis.com/protocol.FreezeBalanceContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // ownerAddr
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argOwnerAddr, typeString)
+                .copyString("0a") 
+                .protobuf(argOwnerAddr, typeString)
                 // frozenBalance
-                + ScriptAssembler.copyString("10") + ScriptAssembler.protobuf(argFrozenBalance, typeInt)
+                .copyString("10") 
+                .protobuf(argFrozenBalance, typeInt)
                 // frozenDuration
-                + ScriptAssembler.copyString("18") + ScriptAssembler.protobuf(argFrozenDuration, typeInt)
+                .copyString("18") 
+                .protobuf(argFrozenDuration, typeInt)
                 // resource
-                + ScriptAssembler.ifEqual(argResource, "01", ScriptAssembler.copyString("5001"), "")
-                + ScriptAssembler.ifEqual(argResource, "02", ScriptAssembler.copyString("5002"), "")
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
+                .ifEqual(argResource, "01", new ScriptAssembler().copyString("5001").getScript(), "")
+                .ifEqual(argResource, "02", new ScriptAssembler().copyString("5002").getScript(), "")
+                .arrayEnd()
+                .arrayEnd()
+                .arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
-                + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Freeze")
-                + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .copyString("70")
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX")
+                .showMessage("Freeze")
+                .copyArgument(argOwnerAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.showAmount(argFrozenBalance, 6) + ScriptAssembler.showPressButton();
-
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showAmount(argFrozenBalance, 6)
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String TRXFreezeScriptNoReceiverSignature = "000030440220555A9F776A0FE0147C800E677539962B59247496BCAF834371502C6B85EFCF340220545E0D0C7E2EA3294F6EB7E24644F9FFC9BDBFB5BA1A9CDEEF533B8BB190C94F";
@@ -313,48 +342,62 @@ public class TrxScript {
         ScriptData argReceiverAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
         
-        String script = 
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a") 
+                .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22") 
+                .protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40") 
+                .protobuf(argExpiration, typeInt)
                 // contracts array
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a") 
+                .arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("080c")
+                .copyString("080c")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a34") + ScriptAssembler.copyString(HexUtil.toHexString(
+                .copyString("0a34") 
+                .copyString(HexUtil.toHexString(
                 "type.googleapis.com/protocol.UnfreezeBalanceContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // ownerAddr
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argOwnerAddr, typeString)
+                .copyString("0a") 
+                .protobuf(argOwnerAddr, typeString)
                 // resource
-                + ScriptAssembler.ifEqual(argResource, "01", ScriptAssembler.copyString("5001"), "")
-                + ScriptAssembler.ifEqual(argResource, "02", ScriptAssembler.copyString("5002"), "")
+                .ifEqual(argResource, "01", new ScriptAssembler().copyString("5001").getScript(), "")
+                .ifEqual(argResource, "02", new ScriptAssembler().copyString("5002").getScript(), "")
                 // receiverAddr
-                + ScriptAssembler.copyString("7a") + ScriptAssembler.protobuf(argReceiverAddr, typeString)
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
+                .copyString("7a") 
+                .protobuf(argReceiverAddr, typeString)
+                .arrayEnd() 
+                .arrayEnd() 
+                .arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
-                + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Unfrz")
-                + ScriptAssembler.copyArgument(argReceiverAddr, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .copyString("70") 
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX") 
+                .showMessage("Unfrz")
+                .copyArgument(argReceiverAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.showPressButton();
-
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String TRXUnfreezeScriptSignature = "003045022100BE36FCF8E1FDE17689E2DBB8677A562788DB606FF537CDC5010C87BF40E3E22802207D16265C1F51011DBE73EEBA4F6959F0F7FCD56C9B1C1562F2BAFEF53496735D";
@@ -367,47 +410,60 @@ public class TrxScript {
         ScriptData argOwnerAddr = sac.getArgument(21);
         ScriptData argResource = sac.getArgument(1);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        
-        String script = 
+    
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a") 
+                .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22") 
+                .protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40") 
+                .protobuf(argExpiration, typeInt)
                 // contracts array
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a") 
+                .arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("080c")
+                .copyString("080c")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a34") + ScriptAssembler.copyString(HexUtil.toHexString(
+                .copyString("0a34") 
+                .copyString(HexUtil.toHexString(
                 "type.googleapis.com/protocol.UnfreezeBalanceContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // ownerAddr
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argOwnerAddr, typeString)
+                .copyString("0a") 
+                .protobuf(argOwnerAddr, typeString)
                 // resource
-                + ScriptAssembler.ifEqual(argResource, "01", ScriptAssembler.copyString("5001"), "")
-                + ScriptAssembler.ifEqual(argResource, "02", ScriptAssembler.copyString("5002"), "")
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
+                .ifEqual(argResource, "01", new ScriptAssembler().copyString("5001").getScript(), "")
+                .ifEqual(argResource, "02", new ScriptAssembler().copyString("5002").getScript(), "")
+                .arrayEnd() 
+                .arrayEnd() 
+                .arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
-                + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Unfrz")
-                + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .copyString("70") 
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX") 
+                .showMessage("Unfrz")
+                .copyArgument(argOwnerAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.showPressButton();
-
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
     
     public static String TRXUnfreezeScriptNoReceiverSignature = "3046022100ACEEAFD1797FBF203209DBF988BCEA19C0991E22FAA177615C64C30CB68046E10221008A2B58546CDDF91C0C865E82339C607FE22C4099F4EACA31CCD40DC85A69E357";
@@ -422,49 +478,66 @@ public class TrxScript {
         ScriptData argVoteCount = sac.getArgumentRightJustified(10);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
         
-        String script = 
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a") 
+                .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22") 
+                .protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40") 
+                .protobuf(argExpiration, typeInt)
                 // contracts array
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a") 
+                .arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("0804")
+                .copyString("0804")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a30") + ScriptAssembler.copyString(HexUtil.toHexString("type.googleapis.com/protocol.VoteWitnessContract".getBytes()))
+                .copyString("0a30") 
+                .copyString(HexUtil.toHexString("type.googleapis.com/protocol.VoteWitnessContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // ownerAddr
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argOwnerAddr, typeString)
+                .copyString("0a") 
+                .protobuf(argOwnerAddr, typeString)
                 // votes array
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // vote address
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argVoteAddr, typeString)
+                .copyString("0a") 
+                .protobuf(argVoteAddr, typeString)
                 // vote count
-                + ScriptAssembler.copyString("10") + ScriptAssembler.protobuf(argVoteCount, typeInt)
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
-                + ScriptAssembler.arrayEnd()
+                .copyString("10") 
+                .protobuf(argVoteCount, typeInt)
+                .arrayEnd() 
+                .arrayEnd() 
+                .arrayEnd()
+                .arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
-                + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Vote")
-                + ScriptAssembler.copyArgument(argVoteAddr, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .copyString("70") 
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX") 
+                .showMessage("Vote")
+                .copyArgument(argVoteAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.showAmount(argVoteCount, 0) + ScriptAssembler.showPressButton();
-
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showAmount(argVoteCount, 0) 
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
     
     public static String TRXVoteWitnessScriptSignature = "00304502201944C100D05CD8BC50D530778B78AF53EB5E7551AADCF0A21946B01CE266ED17022100983CC86BDCE4A4A8DD403B3BB53861879E970A8344B57F9862C88C783CDEEC85";
@@ -477,43 +550,56 @@ public class TrxScript {
         ScriptData argOwnerAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
         
-        String script = 
+        String script = new ScriptAssembler()
                 // set coinType to C3
-                ScriptAssembler.setCoinType(0xC3)
+                .setCoinType(0xC3)
                 // ref_block_bytes
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argBlockBytes, typeString)
+                .copyString("0a") 
+                .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                + ScriptAssembler.copyString("22") + ScriptAssembler.protobuf(argBlockHash, typeString)
+                .copyString("22") 
+                .protobuf(argBlockHash, typeString)
                 // expiration
-                + ScriptAssembler.copyString("40") + ScriptAssembler.protobuf(argExpiration, typeInt)
+                .copyString("40") 
+                .protobuf(argExpiration, typeInt)
                 // contracts array
-                + ScriptAssembler.copyString("5a") + ScriptAssembler.arrayPointer()
+                .copyString("5a") 
+                .arrayPointer()
                 // contract type
-                + ScriptAssembler.copyString("080d")
+                .copyString("080d")
                 // parameter object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // type url
-                + ScriptAssembler.copyString("0a34") + ScriptAssembler.copyString(HexUtil.toHexString(
+                .copyString("0a34") 
+                .copyString(HexUtil.toHexString(
                 "type.googleapis.com/protocol.WithdrawBalanceContract".getBytes()))
                 // value object
-                + ScriptAssembler.copyString("12") + ScriptAssembler.arrayPointer()
+                .copyString("12") 
+                .arrayPointer()
                 // ownerAddr
-                + ScriptAssembler.copyString("0a") + ScriptAssembler.protobuf(argOwnerAddr, typeString)
-                + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd() + ScriptAssembler.arrayEnd()
+                .copyString("0a") 
+                .protobuf(argOwnerAddr, typeString)
+                .arrayEnd() 
+                .arrayEnd() 
+                .arrayEnd()
                 // timestamp
-                + ScriptAssembler.copyString("70") + ScriptAssembler.protobuf(argTimestamp, typeInt)
-                + ScriptAssembler.showMessage("TRX") + ScriptAssembler.showMessage("Reward")
-                + ScriptAssembler.copyArgument(argOwnerAddr, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                .copyString("70") 
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX") 
+                .showMessage("Reward")
+                .copyArgument(argOwnerAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
                         ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.showPressButton();
-
-        // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
-        return ScriptAssembler.setHeader(HashType.SHA256, SignType.ECDSA) + script;
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
     
     public static String TRXWithdrawScriptSignature = "3046022100AABEE6C90E63CF3752F426A93E1758A8E77CCFF39569F4778DAD28BD03297F48022100AF717A307446DE373740DEA06781564AFE4D5060462DA386DC2F167BA280B585";

@@ -24,44 +24,50 @@ public class ETHEIP1559Script {
         ScriptData argNonce = sac.getArgumentRightJustified(8);
 
         // set coinType to 3C
-        String coinType = ScriptAssembler.setCoinType(0x3C);
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String coinType = scriptAsb.setCoinType(0x3C).getScript();
 
         // txType (EIP-2718)
-        String payload = ScriptAssembler.copyString("02")
-                + ScriptAssembler.arrayPointer()
+        String payload = scriptAsb
+                .copyString("02")
+                .arrayPointer()
                 // chainId
-                + ScriptAssembler.copyString("01")
+                .copyString("01")
                 // nonce
-                + ScriptAssembler.rlpString(argNonce)
+                .rlpString(argNonce)
                 // gasTipCap (maxPriorityFeePerGas)
-                + ScriptAssembler.rlpString(argGasTipCap)
+                .rlpString(argGasTipCap)
                 // gasFeeCap (maxFeePerGas)
-                + ScriptAssembler.rlpString(argGasFeeCap)
+                .rlpString(argGasFeeCap)
                 // gasLimit
-                + ScriptAssembler.rlpString(argGasLimit)
+                .rlpString(argGasLimit)
                 // toAddress
-                + ScriptAssembler.copyString("94")
-                + ScriptAssembler.copyArgument(argTo)
+                .copyString("94")
+                .copyArgument(argTo)
                 // value
-                + ScriptAssembler.rlpString(argValue)
+                .rlpString(argValue)
                 // data
-                + ScriptAssembler.copyString("80")
+                .copyString("80")
                 // accessList
-                + ScriptAssembler.copyString("C0")
-                + ScriptAssembler.arrayEnd(1);
+                .copyString("C0")
+                .arrayEnd(1)
+                .getScript();
 
-        String display = ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.showAmount(argValue, 18)
-                + ScriptAssembler.showPressButton();
+        String display = scriptAsb
+                .showMessage("ETH")
+                .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .showAmount(argValue, 18)
+                .showPressButton()
+                .getScript();
 
         // length=03 version=04 are auto-generated based on the composition of the payload
         // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
         // header =  "03040601"
-        String header = ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA);
-        return header + coinType + payload + display;
+        String header = scriptAsb.setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
+        //script = header + coinType + payload + display
+        return scriptAsb.getScript();
     }
     
     public static String getERC20Script() {
@@ -80,48 +86,53 @@ public class ETHEIP1559Script {
         ScriptData argSign = sac.getArgument(72);
 
         // set coinType to 3C
-        String coinType = ScriptAssembler.setCoinType(0x3C);
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String coinType = scriptAsb.setCoinType(0x3C).getScript();
 
         // txType (EIP-2718)
-        String payload = ScriptAssembler.copyString("02")
-                + ScriptAssembler.arrayPointer()
+        String payload = scriptAsb
+                .copyString("02")
+                .arrayPointer()
                 // chainId
-                + ScriptAssembler.copyString("01")
-                + ScriptAssembler.rlpString(argNonce)
-                + ScriptAssembler.rlpString(argGasTipCap)
-                + ScriptAssembler.rlpString(argGasFeeCap)
-                + ScriptAssembler.rlpString(argGasLimit)
-                + ScriptAssembler.copyString("94")
-                + ScriptAssembler.copyArgument(argContractAddress)
+                .copyString("01")
+                .rlpString(argNonce)
+                .rlpString(argGasTipCap)
+                .rlpString(argGasFeeCap)
+                .rlpString(argGasLimit)
+                .copyString("94")
+                .copyArgument(argContractAddress)
                 // data, Length = 68
-                + ScriptAssembler.copyString("80B844a9059cbb000000000000000000000000")
-                + ScriptAssembler.copyArgument(argTo)
-                + ScriptAssembler.copyString("0000000000000000000000000000000000000000")
-                + ScriptAssembler.copyArgument(argValue)
+                .copyString("80B844a9059cbb000000000000000000000000")
+                .copyArgument(argTo)
+                .copyString("0000000000000000000000000000000000000000")
+                .copyArgument(argValue)
                 // accessList
-                + ScriptAssembler.copyString("C0")
-                + ScriptAssembler.arrayEnd(1);
+                .copyString("C0")
+                .arrayEnd(1)
+                .getScript();
 
-        String display = ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
+        String display = scriptAsb.showMessage("ETH")
+                .ifSigned(argTokenInfo, argSign, "",
+                        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
                 )
-                + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
-                + ScriptAssembler.showAmount(argValue, 1000)
-                + ScriptAssembler.showPressButton();
+                .setBufferInt(argNameLength, 1, 7)
+                .copyArgument(argName, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .setBufferInt(argDecimal, 0, 20)
+                .showAmount(argValue, 1000)
+                .showPressButton()
+                .getScript();
         
         // length=03 version=04 are auto-generated based on the composition of the payload
         // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
         // header =  "03040601"
-        String header = ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA);
-        return header + coinType + payload + display;
+        String header = scriptAsb.setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
+        //script = header + coinType + payload + display
+        return scriptAsb.getScript();
     }
 
     public static String getSmartContractScript() {
@@ -132,36 +143,42 @@ public class ETHEIP1559Script {
         ScriptData argGasFeeCap = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
-        ScriptData argData = sac.getArgumentAll();
+        ScriptData argData = sac.getArgument(4);
 
         // set coinType to 3C
-        String coinType = ScriptAssembler.setCoinType(0x3C);
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String coinType = scriptAsb.setCoinType(0x3C).getScript();
 
         // txType (EIP-2718)
-        String payload = ScriptAssembler.copyString("02")
-                + ScriptAssembler.arrayPointer()
+        String payload = scriptAsb
+                .copyString("02")
+                .arrayPointer()
                 // chainId
-                + ScriptAssembler.copyString("01")
-                + ScriptAssembler.rlpString(argNonce)
-                + ScriptAssembler.rlpString(argGasTipCap)
-                + ScriptAssembler.rlpString(argGasFeeCap)
-                + ScriptAssembler.rlpString(argGasLimit)
-                + ScriptAssembler.copyString("94")
-                + ScriptAssembler.copyArgument(argTo)
-                + ScriptAssembler.rlpString(argValue)
-                + ScriptAssembler.rlpString(argData)
+                .copyString("01")
+                .rlpString(argNonce)
+                .rlpString(argGasTipCap)
+                .rlpString(argGasFeeCap)
+                .rlpString(argGasLimit)
+                .copyString("94")
+                .copyArgument(argTo)
+                .rlpString(argValue)
+                .rlpDataPlaceholder(argData)
                 // accessList
-                + ScriptAssembler.copyString("C0")
-                + ScriptAssembler.arrayEnd(1);
+                .copyString("C0")
+                .arrayEnd(1)
+                .getScript();
 
-        String display = ScriptAssembler.showMessage("ETH")
-                + ScriptAssembler.showWrap("SMART", "")
-                + ScriptAssembler.showPressButton();
+        String display = scriptAsb
+                .showMessage("ETH")
+                .showWrap("SMART", "")
+                .showPressButton()
+                .getScript();
 
         // length=03 version=04 are auto-generated based on the composition of the payload
         // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
         // header =  "03040601"
-        String header = ScriptAssembler.setHeader(HashType.Keccak256, SignType.ECDSA);
-        return header + coinType + payload + display;
+        String header = scriptAsb.setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
+        //script = header + coinType + payload + display
+        return scriptAsb.getScript();
     }
 }
