@@ -27,11 +27,11 @@ public class ETHScript {
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
-        ScriptData argChainId = sac.getArgumentRightJustified(2);
+        ScriptData argChainId = sac.getArgumentRightJustified(3);
         //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
         String header = "03000601";
         // set coinType to 3C
-        String coinType = ScriptAssembler.setCoinType(0x3C);
+        String coinType = ScriptAssembler.setCoinType(0x03C6);
         // temp byte for rlpList
         String payload = ScriptAssembler.copyString("C0")
                 // nonce
@@ -52,7 +52,7 @@ public class ETHScript {
                 // r,s
                 + ScriptAssembler.copyString("8080")
                 + ScriptAssembler.rlpList(1);
-        String display = ScriptAssembler.showMessage("ETH")
+        String display = ScriptAssembler.showMessage("MATIC")
                 + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
