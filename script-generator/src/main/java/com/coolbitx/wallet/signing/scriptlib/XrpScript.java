@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class XrpScript {
@@ -31,27 +33,38 @@ public class XrpScript {
         ScriptData argTag = sac.getArgument(4);
         ScriptData argFlags = sac.getArgument(4);
 
-        return "03000301" + ScriptAssembler.setCoinType(0x90) + ScriptAssembler.copyString("5354580012000022")
-                + ScriptAssembler.copyArgument(argFlags) + ScriptAssembler.copyString("24")
-                + ScriptAssembler.copyArgument(argSequence) + ScriptAssembler.copyString("2E")
-                + ScriptAssembler.copyArgument(argTag) + ScriptAssembler.copyString("201B")
-                + ScriptAssembler.copyArgument(argLastLedgerSequence)
-                + ScriptAssembler.copyString("6140") + ScriptAssembler.copyArgument(argAmount)
-                + ScriptAssembler.copyString("6840") + ScriptAssembler.copyArgument(argFee)
-                + ScriptAssembler.copyString("7321") + ScriptAssembler.copyArgument(argPublicKey)
-                + ScriptAssembler.copyString("8114") + ScriptAssembler.copyArgument(argAccount)
-                + ScriptAssembler.copyString("8314") + ScriptAssembler.copyArgument(argDest)
-                + ScriptAssembler.showMessage("XRP") + ScriptAssembler.copyString("00", Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(argDest, Buffer.CACHE2)
-                + ScriptAssembler.hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
-                + ScriptAssembler.copyString(HexUtil.toHexString(
-                        "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
-                        Buffer.CACHE1)
-                + ScriptAssembler.baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45,
-                        ScriptAssembler.extendedCharset, ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
-                + ScriptAssembler.showAmount(argAmount, 6) + ScriptAssembler.showPressButton();
+        String script = new ScriptAssembler()
+                .setCoinType(0x90)
+                .copyString("5354580012000022")
+                .copyArgument(argFlags)
+                .copyString("24")
+                .copyArgument(argSequence)
+                .copyString("2E")
+                .copyArgument(argTag)
+                .copyString("201B")
+                .copyArgument(argLastLedgerSequence)
+                .copyString("6140")
+                .copyArgument(argAmount)
+                .copyString("6840")
+                .copyArgument(argFee)
+                .copyString("7321")
+                .copyArgument(argPublicKey)
+                .copyString("8114")
+                .copyArgument(argAccount)
+                .copyString("8314")
+                .copyArgument(argDest)
+                .showMessage("XRP")
+                .copyString("00", Buffer.CACHE2)
+                .copyArgument(argDest, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.DoubleSHA256)
+                .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"), Buffer.CACHE1)
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.extendedCharset, ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
+                .showAmount(argAmount, 6)
+                .showPressButton()
+                .setHeader(HashType.SHA512, SignType.ECDSA)
+                .getScript();
+        return script;
     }
     
     public static String XRPScriptSignature = "0000304402206B2A707864EB98033BF83A80E8FDD7FCF903CC059ABC0E4FBB317040B6E9AD1D02203DCD2BDC4480B88DB0D9DC74948BAF6BD62203E90AE39990978999ABEAEABA63";

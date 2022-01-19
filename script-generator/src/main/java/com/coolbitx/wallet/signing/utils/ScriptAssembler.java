@@ -50,6 +50,86 @@ public class ScriptAssembler {
 
     private static int argumentOffset = 0;
 
+    private versionType version;
+    private String script;
+
+    public ScriptAssembler(){
+        this.version = versionType.version00;
+        this.script = "";
+    }
+
+    public String getScript(){
+        return script;
+    }
+
+    public enum HashType{
+        SHA1("01"), 
+        SHA256("02"), 
+        SHA512("03"), 
+        SHA3256("04"),
+        SHA3512("05"),
+        Keccak256("06"), 
+        Keccak512("07"), 
+        RipeMD160("08"),
+        SHA256RipeMD160("09"), 
+        DoubleSHA256("0D"), 
+        CRC16("0A"), 
+        Blake2b256("0E"), 
+        Blake2b512("0F");
+        private final String hashLabel;
+
+        private HashType(String hashLabel){
+            this.hashLabel = hashLabel;
+        }
+
+        public String toString(){
+            return hashLabel;
+        }
+    }
+
+    public static enum SignType{
+        ECDSA("01"),
+        EDDSA("02"),
+        BIP32EDDSA("03");
+        private final String signLabel;
+
+        private SignType(String signLabel){
+            this.signLabel = signLabel;
+        }
+
+        public String toString(){
+            return signLabel;
+        }
+    }
+
+    public static enum versionType{
+        version00(0, "00"),
+        version02(2, "02"),
+        version03(3, "03"),
+        version04(4, "04"),
+        version05(5, "05");
+        private final int versionNum;
+        private final String versionLabel;
+
+        private versionType(int versionNum, String versionLabel){
+            this.versionNum = versionNum;
+            this.versionLabel = versionLabel;
+        }
+
+        public int getVersionNum(){
+            return versionNum;
+        }
+
+        public String toString(){
+            return versionLabel;
+        }
+    }
+
+    public ScriptAssembler setHeader(HashType hash, SignType sign){
+        script = "03" + version.versionLabel + hash + sign + script;
+        return this;
+    }
+
     private static String compose(String command, ScriptData dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
         if (dataBuf == null) {
@@ -146,9 +226,10 @@ public class ScriptAssembler {
      * @param coinType
      * @return
      */
-    public static String setCoinType(int coinType) {
+    public ScriptAssembler setCoinType(int coinType){
         String hexCoinType = HexUtil.toHexString(coinType, 4);
-        return compose("C7", null, null, 0, 0) + hexCoinType;
+        script += compose("C7", null, null, 0, 0) + hexCoinType;
+        return this;
     }
 
     /**
@@ -157,7 +238,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String copyArgument(ScriptData data) {
+    public ScriptAssembler copyArgument(ScriptData data) {
         return copyArgument(data, Buffer.TRANSACTION);
     }
 
@@ -168,8 +249,9 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyArgument(ScriptData data, Buffer destinationBuf) {
-        return compose("CA", data, destinationBuf, 0, 0);
+    public ScriptAssembler copyArgument(ScriptData data, Buffer destinationBuf) {
+        script += compose("CA", data, destinationBuf, 0, 0);
+        return this;
     }
 
     /**
@@ -178,7 +260,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String copyString(String data) {
+    public ScriptAssembler copyString(String data){
         return copyString(data, Buffer.TRANSACTION);
     }
 
@@ -189,8 +271,9 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyString(String data, Buffer destinationBuf) {
-        return compose("CC", null, destinationBuf, data.length() / 2, 0) + data;
+    public ScriptAssembler copyString(String data, Buffer destinationBuf) {
+        script += compose("CC", null, destinationBuf, data.length() / 2, 0) + data;
+        return this;
     }
 
     /**
@@ -206,19 +289,19 @@ public class ScriptAssembler {
      * "A,B,C,D").
      * @return
      */
-    public static String switchString(ScriptData conditionData, Buffer destinationBuf, String stringArray) {
+    public ScriptAssembler switchString(ScriptData conditionData, Buffer destinationBuf, String stringArray) {
         String[] strList = stringArray.split(",");
-        String ret = compose("C1", conditionData, destinationBuf, strList.length, 0);
+        script += compose("C1", conditionData, destinationBuf, strList.length, 0);
 
         for (int i = 0; i < strList.length; i++) {
             if (strList[i].equals("[]")) {
-                ret += "00";
+                script += "00";
             } else {
-                ret += HexUtil.toHexString(strList[i].length() / 2, 1);
-                ret += strList[i];
+                script += HexUtil.toHexString(strList[i].length() / 2, 1);
+                script += strList[i];
             }
         }
-        return ret;
+        return this;
     }
 
     /**
@@ -229,29 +312,28 @@ public class ScriptAssembler {
      * @param content
      * @return
      */
-    @Deprecated
-    public static String btcScript(ScriptData scriptTypeData, int supportType, String content) {
+    //@Deprecated
+    public ScriptAssembler btcScript(ScriptData scriptTypeData, int supportType, String content) {
         switch (supportType) {
             case 2:
                 return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914")
-                        + content
-                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
+                        .insertString(content)
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
             case 3:
                 return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014")
-                        + content
-                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[]");
+                        .insertString(content)
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[]");
             case 4:
                 return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014,220020")
-                        + // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
-                        content
-                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]") // switch redeemScript end
-                        ;
+                        // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
+                        .insertString(content)
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]"); // switch redeemScript end
             case 79:
                 return switchString(scriptTypeData, Buffer.TRANSACTION, "3F76A914,3DA914")
-                        + content
-                        + switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
+                        .insertString(content)
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
             default:
-                return "XX";
+                return insertString("XX");
         }
     }
 
@@ -261,7 +343,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String rlpString(ScriptData data) {
+    public ScriptAssembler rlpString(ScriptData data) {
         return rlpString(data, Buffer.TRANSACTION);
     }
 
@@ -272,8 +354,9 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String rlpString(ScriptData data, Buffer destinationBuf) {
-        return compose("C2", data, destinationBuf, 0, 0);
+    public ScriptAssembler rlpString(ScriptData data, Buffer destinationBuf) {
+        script += compose("C2", data, destinationBuf, 0, 0);
+        return this;
     }
 
     /**
@@ -283,7 +366,7 @@ public class ScriptAssembler {
      * @return
      */
     @Deprecated
-    public static String rlpList(int preserveLength) {
+    public ScriptAssembler rlpList(int preserveLength) {
         return rlpList(preserveLength, Buffer.TRANSACTION);
     }
 
@@ -295,8 +378,37 @@ public class ScriptAssembler {
      * @return
      */
     @Deprecated
-    public static String rlpList(int preserveLength, Buffer destinationBuf) {
-        return compose("C3", ScriptData.getDataBufferAll(destinationBuf), destinationBuf, preserveLength, 0);
+    public ScriptAssembler rlpList(int preserveLength, Buffer destinationBuf) {
+        script += compose("C3", ScriptData.getDataBufferAll(destinationBuf), destinationBuf, preserveLength, 0);
+        return this;
+    }
+
+    /**
+     * Send rlp data place holder length to transaction buffer.
+     *
+     * @param length
+     * @return
+     */
+    public ScriptAssembler rlpDataPlaceholder(ScriptData data) {
+        if(version.getVersionNum() < 5){
+            version = versionType.version05;
+        }
+        script += compose("C4", data, Buffer.TRANSACTION, 0, 0);
+        return this;
+    }
+
+    /**
+     * Send rlp data place holder length.
+     *
+     * @param length
+     * @return
+     */
+    public ScriptAssembler rlpDataPlaceholder(ScriptData data, Buffer destinationBuf) {
+        if(version.getVersionNum() < 5){
+            version = versionType.version05;
+        }
+        script += compose("C4", data, destinationBuf, 0, 0);
+        return this;
     }
 
     /**
@@ -306,8 +418,9 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String checkRegularString(ScriptData data) {
-        return compose("29", data, null, 0, 0);
+    public ScriptAssembler checkRegularString(ScriptData data) {
+        script += compose("29", data, null, 0, 0);
+        return this;
     }
 
     /**
@@ -318,7 +431,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String copyRegularString(ScriptData data) {
+    public ScriptAssembler copyRegularString(ScriptData data) {
         return copyRegularString(data, Buffer.TRANSACTION);
     }
 
@@ -331,9 +444,8 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String copyRegularString(ScriptData data, Buffer destinationBuf) {
-        return checkRegularString(data)
-                + copyArgument(data, destinationBuf);
+    public ScriptAssembler copyRegularString(ScriptData data, Buffer destinationBuf) {
+        return checkRegularString(data).copyArgument(data, destinationBuf);
     }
 
     /**
@@ -350,7 +462,7 @@ public class ScriptAssembler {
      * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return
      */
-    public static String baseConvert(ScriptData data, Buffer destinationBuf, int outputLimit, String charset, int baseConvertArg) {
+    public ScriptAssembler baseConvert(ScriptData data, Buffer destinationBuf, int outputLimit, String charset, int baseConvertArg) {
         if (outputLimit == 0) {
             outputLimit = 64;
         }
@@ -373,9 +485,11 @@ public class ScriptAssembler {
         } else if (charset.equals(extendedCharset)) {
             charsetIndex = "1";
         } else {
-            return "XX";
+            script += "XX";
+            return this;
         }
-        return compose("BA", data, destinationBuf, outputLimit, HexUtil.toInt(charsetIndex)) + HexUtil.toHexString(baseConvertArg, 1);
+        script += compose("BA", data, destinationBuf, outputLimit, HexUtil.toInt(charsetIndex)) + HexUtil.toHexString(baseConvertArg, 1);
+        return this;
     }
 
     /**
@@ -389,8 +503,9 @@ public class ScriptAssembler {
      * Blake2b512 = 0x0F;
      * @return
      */
-    public static String hash(ScriptData data, Buffer destinationBuf, int hashType) {
-        return compose("5A", data, destinationBuf, hashType, 0);
+    public ScriptAssembler hash(ScriptData data, Buffer destinationBuf, int hashType) {
+        script += compose("5A", data, destinationBuf, hashType, 0);
+        return this;
     }
 
     /**
@@ -401,8 +516,9 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String derivePublicKey(ScriptData pathData, Buffer destinationBuf) {
-        return compose("6C", pathData, destinationBuf, 0, 0);
+    public ScriptAssembler derivePublicKey(ScriptData pathData, Buffer destinationBuf) {
+        script += compose("6C", pathData, destinationBuf, 0, 0);
+        return this;
     }
 
     /**
@@ -412,8 +528,12 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String bech32Polymod(ScriptData data, Buffer destinationBuf) {
-        return compose("5A", data, destinationBuf, 0xB, 0);
+    public ScriptAssembler bech32Polymod(ScriptData data, Buffer destinationBuf) {
+        if(version.getVersionNum() < 4){
+            version = versionType.version04;
+        }
+        script += compose("5A", data, destinationBuf, 0xB, 0);
+        return this;
     }
 
     /**
@@ -423,8 +543,9 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String bchPolymod(ScriptData data, Buffer destinationBuf) {
-        return compose("5A", data, destinationBuf, 0xC, 0);
+    public ScriptAssembler bchPolymod(ScriptData data, Buffer destinationBuf) {
+        script += compose("5A", data, destinationBuf, 0xC, 0);
+        return this;
     }
 
     /**
@@ -435,9 +556,10 @@ public class ScriptAssembler {
      * @param max
      * @return
      */
-    public static String setBufferInt(ScriptData data, int min, int max) {
+    public ScriptAssembler setBufferInt(ScriptData data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
-        return ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError) + setB;
+        script += new ScriptAssembler().ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError).getScript() + setB;
+        return this;
     }
 
     /**
@@ -446,8 +568,9 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public static String setBufferIntFromDataLength(ScriptData data) {
-        return compose("B1", data, null, 0, 0);
+    public ScriptAssembler setBufferIntFromDataLength(ScriptData data) {
+        script += compose("B1", data, null, 0, 0);
+        return this;
     }
 
     /**
@@ -456,8 +579,9 @@ public class ScriptAssembler {
      * @param destinationBuf
      * @return
      */
-    public static String putBufferInt(Buffer destinationBuf) {
-        return compose("B9", null, destinationBuf, 0, 0);
+    public ScriptAssembler putBufferInt(Buffer destinationBuf) {
+        script += compose("B9", null, destinationBuf, 0, 0);
+        return this;
     }
 
     /**
@@ -468,8 +592,9 @@ public class ScriptAssembler {
      * bufferInt divided by base(base - (bufferInt % base)).
      * @return
      */
-    public static String paddingZero(Buffer destinationBuf, int base) {
-        return compose("C6", null, destinationBuf, base, 0);
+    public ScriptAssembler paddingZero(Buffer destinationBuf, int base) {
+        script += compose("C6", null, destinationBuf, base, 0);
+        return this;
     }
 
     /**
@@ -492,13 +617,14 @@ public class ScriptAssembler {
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
-    public static String ifEqual(ScriptData argData, String expect, String trueStatement, String falseStatement) {
+    public ScriptAssembler ifEqual(ScriptData argData, String expect, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        return compose("1A", argData, null, trueStatement.length() / 2, 0)
+        script += compose("1A", argData, null, trueStatement.length() / 2, 0)
                 + HexUtil.rightJustify(expect, argData.length)
                 + trueStatement + falseStatement;
+        return this;
     }
 
     /**
@@ -512,14 +638,15 @@ public class ScriptAssembler {
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
-    public static String ifRange(ScriptData argData, String min, String max, String trueStatement, String falseStatement) {
+    public ScriptAssembler ifRange(ScriptData argData, String min, String max, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        return compose("12", argData, null, trueStatement.length() / 2, 0)
+        script += compose("12", argData, null, trueStatement.length() / 2, 0)
                 + HexUtil.rightJustify(min, argData.length)
                 + HexUtil.rightJustify(max, argData.length)
                 + trueStatement + falseStatement;
+        return this;
     }
 
     /**
@@ -534,12 +661,13 @@ public class ScriptAssembler {
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
-    public static String ifSigned(ScriptData argData, ScriptData signData, String trueStatement, String falseStatement) {
+    public ScriptAssembler ifSigned(ScriptData argData, ScriptData signData, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        return compose("11", argData, null, trueStatement.length() / 2, signData.offset)
+        script += compose("11", argData, null, trueStatement.length() / 2, signData.offset)
                 + trueStatement + falseStatement;
+        return this;
     }
 
     /**
@@ -548,8 +676,9 @@ public class ScriptAssembler {
      * @param destinationBuf Target buffer.
      * @return
      */
-    public static String clearBuffer(Buffer destinationBuf) {
-        return compose("25", null, destinationBuf, 0, 0);
+    public ScriptAssembler clearBuffer(Buffer destinationBuf) {
+        script += compose("25", null, destinationBuf, 0, 0);
+        return this;
     }
 
     /**
@@ -558,8 +687,9 @@ public class ScriptAssembler {
      * @param data The word would show on card.
      * @return
      */
-    public static String showMessage(String data) {
-        return compose("DC", null, null, data.length(), 0) + HexUtil.toHexString(data);
+    public ScriptAssembler showMessage(String data) {
+        script += compose("DC", null, null, data.length(), 0) + HexUtil.toHexString(data);
+        return this;
     }
 
     /**
@@ -568,8 +698,9 @@ public class ScriptAssembler {
      * @param data The word wanted to show on card.
      * @return
      */
-    public static String showMessage(ScriptData data) {
-        return compose("DE", data, null, 0, 0);
+    public ScriptAssembler showMessage(ScriptData data) {
+        script += compose("DE", data, null, 0, 0);
+        return this;
     }
 
     /**
@@ -579,8 +710,9 @@ public class ScriptAssembler {
      * @param data1 The word in line two.
      * @return
      */
-    public static String showWrap(String data0, String data1) {
-        return compose("D2", null, null, data0.length(), data1.length()) + HexUtil.toHexString(data0) + HexUtil.toHexString(data1);
+    public ScriptAssembler showWrap(String data0, String data1) {
+        script += compose("D2", null, null, data0.length(), data1.length()) + HexUtil.toHexString(data0) + HexUtil.toHexString(data1);
+        return this;
         //}
     }
 
@@ -590,8 +722,9 @@ public class ScriptAssembler {
      * @param data The transaction address data.
      * @return
      */
-    public static String showAddress(ScriptData data) {
-        return compose("DD", data, null, 0, 0);
+    public ScriptAssembler showAddress(ScriptData data) {
+        script += compose("DD", data, null, 0, 0);
+        return this;
     }
 
     /**
@@ -601,8 +734,9 @@ public class ScriptAssembler {
      * @param decimal The decimal in this transaction.
      * @return
      */
-    public static String showAmount(ScriptData data, int decimal) {
-        return compose("DA", data, null, decimal, 0);
+    public ScriptAssembler showAmount(ScriptData data, int decimal) {
+        script += compose("DA", data, null, decimal, 0);
+        return this;
     }
 
     /**
@@ -610,7 +744,7 @@ public class ScriptAssembler {
      *
      * @return
      */
-    public static String showPressButton() {
+    public ScriptAssembler showPressButton() {
         return showWrap("PRESS", "BUTToN");
     }
 
@@ -621,7 +755,7 @@ public class ScriptAssembler {
      * @param wireType
      * @return
      */
-    public static String protobuf(ScriptData data, int wireType) {
+    public ScriptAssembler protobuf(ScriptData data, int wireType) {
         return protobuf(data, Buffer.TRANSACTION, wireType);
     }
 
@@ -633,8 +767,12 @@ public class ScriptAssembler {
      * @param wireType
      * @return
      */
-    public static String protobuf(ScriptData data, Buffer destinationBuf, int wireType) {
-        return compose("BF", data, destinationBuf, wireType, 0);
+    public ScriptAssembler protobuf(ScriptData data, Buffer destinationBuf, int wireType) {
+        if(version.getVersionNum() < 3){
+            version = versionType.version03;
+        }
+        script += compose("BF", data, destinationBuf, wireType, 0);
+        return this;
     }
 
     /**
@@ -642,8 +780,9 @@ public class ScriptAssembler {
      *
      * @return
      */
-    public static String arrayPointer() {
-        return compose("A0", null, null, 0, 0);
+    public ScriptAssembler arrayPointer() {
+        script += compose("A0", null, null, 0, 0);
+        return this;
     }
 
     /**
@@ -652,7 +791,7 @@ public class ScriptAssembler {
      *
      * @return
      */
-    public static String arrayEnd() {
+    public ScriptAssembler arrayEnd() {
         return arrayEnd(0);
     }
 
@@ -663,8 +802,12 @@ public class ScriptAssembler {
      * @param type 0: protobuf, 1: rlp
      * @return
      */
-    public static String arrayEnd(int type) {
-        return compose("BE", null, null, type, 0);
+    public ScriptAssembler arrayEnd(int type) {
+        if(version.getVersionNum() < 3){
+            version = versionType.version04;
+        }
+        script += compose("BE", null, null, type, 0);
+        return this;
     }
 
     /**
@@ -674,8 +817,12 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String scaleEncode(ScriptData data, Buffer destinationBuf) {
-        return compose("A2", data, destinationBuf, 0, 0);
+    public ScriptAssembler scaleEncode(ScriptData data, Buffer destinationBuf) {
+        if(version.getVersionNum() < 2){
+            version = versionType.version02;
+        }
+        script += compose("A2", data, destinationBuf, 0, 0);
+        return this;
     }
 
     /**
@@ -685,7 +832,13 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public static String scaleDecode(ScriptData data, Buffer destinationBuf) {
-        return compose("A3", data, destinationBuf, 0, 0);
+    public ScriptAssembler scaleDecode(ScriptData data, Buffer destinationBuf) {
+        script += compose("A3", data, destinationBuf, 0, 0);
+        return this;
+    }
+
+    public ScriptAssembler insertString(String data){
+        script += data;
+        return this;
     }
 }

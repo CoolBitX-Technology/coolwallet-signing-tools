@@ -1,6 +1,8 @@
 package com.coolbitx.wallet.signing.main;
 
 import com.coolbitx.wallet.signing.utils.*;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 
 public class main {
 
@@ -12,31 +14,33 @@ public class main {
         ScriptData argValue = sac.getArgumentRightJustified(10);
         ScriptData argDecimal = sac.getArgument(1);
 
-        // Step 2. Set up Script Header.
+        // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path.
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String coinType = scriptAsb.setCoinType(0x3C).getScript();
+
+        // Step 3. Compose the raw transaction from arguments for signing.
+        String payload = scriptAsb.copyString("02")
+                .arrayPointer()
+                .copyString("94")
+                .copyArgument(argTo)
+                .rlpString(argValue)
+                .copyString("C0")
+                .arrayEnd(1)
+                .getScript();
+
+        // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
+        String display = scriptAsb.showMessage("TEMPLATE")
+                .setBufferInt(argDecimal, 0, 20)
+                .showAmount(argValue, 1000)
+                .showPressButton()
+                .getScript();
+
+        // Step 5. Set up Script Header.
         // length | version | hash | sign
-        String header = "03040601";
-        // length: 03
-        // version: 04
-        // hash: choose one in ScriptAssembler
-        // sign: 01 (ECDSA), 02 (EDDSA)
-
-        // Step 3. Set BIP-44/SLIP0010 CoinType for validation to the path.
-        String coinType = ScriptAssembler.setCoinType(0x3C);
-
-        // Step 4. Compose the raw transaction from arguments for signing.
-        String payload = ScriptAssembler.copyString("02")
-                + ScriptAssembler.arrayPointer()
-                + ScriptAssembler.copyString("94")
-                + ScriptAssembler.copyArgument(argTo)
-                + ScriptAssembler.rlpString(argValue)
-                + ScriptAssembler.copyString("C0")
-                + ScriptAssembler.arrayEnd(1);
-
-        // Step 5. Define which parts of the arguments shall be showed on the screen to be validated.
-        String display = ScriptAssembler.showMessage("TEMPLATE")
-                + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
-                + ScriptAssembler.showAmount(argValue, 1000)
-                + ScriptAssembler.showPressButton();
+        // length & version will be auto-generated based on the composition of the payload
+        // hash: choose one type in ScriptAssembler
+        // sign: choose one type in ScriptAssembler
+        String header = scriptAsb.setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
 
         // Step 6. Generate the script using maven
         //

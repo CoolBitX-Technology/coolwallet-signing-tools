@@ -9,6 +9,8 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
+import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class BnbScript {
@@ -54,35 +56,39 @@ public class BnbScript {
         ScriptData argSource = sac.getArgument(8);
         ScriptData argMemo = sac.getArgumentAll();
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x02CA)
-                + // set coinType to 02CA
-                ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
-                + ScriptAssembler.baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + (!isTestnet
-                        ? ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\""))
-                        : ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"")))
-                + ScriptAssembler.copyRegularString(argMemo)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"msgs\":[{\"inputs\":[{\"address\":\""))
-                + ScriptAssembler.copyRegularString(argFrom)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
-                + ScriptAssembler.baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString(",\"denom\":\"BNB\"}]}],\"outputs\":[{\"address\":\""))
-                + ScriptAssembler.copyRegularString(argTo)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
-                + ScriptAssembler.baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString(",\"denom\":\"BNB\"}]}]}],\"sequence\":\""))
-                + ScriptAssembler.baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"source\":\""))
-                + ScriptAssembler.baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\"}"))
-                + (!isTestnet
-                        ? ScriptAssembler.showMessage("BNB")
-                        : ScriptAssembler.showWrap("BNB", "TESTNET"))
-                + ScriptAssembler.showAddress(argTo)
-                + ScriptAssembler.showAmount(argValue, 8)
-                + ScriptAssembler.showPressButton();
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb
+                .setCoinType(0x02CA)
+                // set coinType to 02CA
+                .copyString(HexUtil.toHexString("{\"account_number\":\""))
+                .baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .getScript();
+        script = (!isTestnet ? scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\""))
+                        : scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"")))
+                .copyRegularString(argMemo)
+                .copyString(HexUtil.toHexString("\",\"msgs\":[{\"inputs\":[{\"address\":\""))
+                .copyRegularString(argFrom)
+                .copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
+                .baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString(",\"denom\":\"BNB\"}]}],\"outputs\":[{\"address\":\""))
+                .copyRegularString(argTo)
+                .copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
+                .baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString(",\"denom\":\"BNB\"}]}]}],\"sequence\":\""))
+                .baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\",\"source\":\""))
+                .baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\"}"))
+                .getScript();
+        script = (!isTestnet? scriptAsb.showMessage("BNB")
+                : scriptAsb.showWrap("BNB", "TESTNET"))
+                .showAddress(argTo)
+                .showAmount(argValue, 8)
+                .showPressButton()
+                //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BNBScriptSignature = "FA0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
@@ -101,45 +107,52 @@ public class BnbScript {
         ScriptData argTokenSignature = sac.getArgument(72);
         ScriptData argMemo = sac.getArgumentAll();
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x02CA)
-                + // set coinType to 02CA
-                ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
-                + ScriptAssembler.baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + (!isTestnet
-                        ? ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\""))
-                        : ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"")))
-                + ScriptAssembler.copyRegularString(argMemo)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"msgs\":[{\"inputs\":[{\"address\":\""))
-                + ScriptAssembler.copyRegularString(argFrom)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
-                + ScriptAssembler.baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString(",\"denom\":\""))
-                + ScriptAssembler.copyRegularString(argTokenName, Buffer.CACHE2)
-                + ScriptAssembler.copyString(HexUtil.toHexString("-"), Buffer.CACHE2)
-                + ScriptAssembler.copyRegularString(argTokenCheck, Buffer.CACHE2)
-                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.copyString(HexUtil.toHexString("\"}]}],\"outputs\":[{\"address\":\""))
-                + ScriptAssembler.copyRegularString(argTo)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
-                + ScriptAssembler.baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString(",\"denom\":\""))
-                + ScriptAssembler.copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.copyString(HexUtil.toHexString("\"}]}]}],\"sequence\":\""))
-                + ScriptAssembler.baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"source\":\""))
-                + ScriptAssembler.baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\"}"))
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.showMessage("BNB")
-                + ScriptAssembler.copyRegularString(argTokenName, Buffer.CACHE2)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + (!isTestnet ? ""
-                        : ScriptAssembler.showWrap("BEP2", "TESTNET"))
-                + ScriptAssembler.showAddress(argTo)
-                + ScriptAssembler.showAmount(argValue, 8)
-                + ScriptAssembler.showPressButton();
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb
+                .setCoinType(0x02CA)
+                // set coinType to 02CA
+                .copyString(HexUtil.toHexString("{\"account_number\":\""))
+                .baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .getScript();
+        script = (!isTestnet? scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\""))
+                        : scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"")))
+                .copyRegularString(argMemo)
+                .copyString(HexUtil.toHexString("\",\"msgs\":[{\"inputs\":[{\"address\":\""))
+                .copyRegularString(argFrom)
+                .copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
+                .baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString(",\"denom\":\""))
+                .copyRegularString(argTokenName, Buffer.CACHE2)
+                .copyString(HexUtil.toHexString("-"), Buffer.CACHE2)
+                .copyRegularString(argTokenCheck, Buffer.CACHE2)
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .copyString(HexUtil.toHexString("\"}]}],\"outputs\":[{\"address\":\""))
+                .copyRegularString(argTo)
+                .copyString(HexUtil.toHexString("\",\"coins\":[{\"amount\":"))
+                .baseConvert(argValue, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString(",\"denom\":\""))
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .copyString(HexUtil.toHexString("\"}]}]}],\"sequence\":\""))
+                .baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\",\"source\":\""))
+                .baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\"}"))
+                .clearBuffer(Buffer.CACHE2)
+                .showMessage("BNB")
+                .copyRegularString(argTokenName, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .getScript();
+        script = (!isTestnet
+                ? script += "" 
+                : scriptAsb.showWrap("BEP2", "TESTNET").getScript());
+        script = scriptAsb
+                .showAddress(argTo)
+                .showAmount(argValue, 8)
+                .showPressButton()
+                //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String getBEP2ScriptSignature = "0000304402203183C36E6E4E20A2AAED4E1E3518EBDE01FA0382B680168F80636B4128C6ECA3022064D214390B1F572C1392FCC8230D0336CAB06DEF6EECB8C8F4115841DD93CDF2";
@@ -194,50 +207,54 @@ public class BnbScript {
         ScriptData argSequence = sac.getArgument(8);
         ScriptData argSource = sac.getArgument(8);
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x02CA)
-                + // set coinType to 02CA
-                ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
-                + ScriptAssembler.baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + (!isTestnet
-                        ? ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"id\":\""))
-                        : ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"id\":\"")))
-                + ScriptAssembler.copyRegularString(argOrderAddress)
-                + ScriptAssembler.copyString(HexUtil.toHexString("-"))
-                + ScriptAssembler.baseConvert(argOrderSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"ordertype\":2,\"price\":"))
-                + ScriptAssembler.baseConvert(argPrice, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString(",\"quantity\":"))
-                + ScriptAssembler.baseConvert(argQuantity, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString(",\"sender\":\""))
-                + ScriptAssembler.copyRegularString(argSender)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"side\":"))
-                + ScriptAssembler.switchString(argSide, Buffer.TRANSACTION, HexUtil.toHexString("1") + "," + HexUtil.toHexString("2"))
-                + //0->"1" for buy, 1->"2" for sell
-                ScriptAssembler.copyString(HexUtil.toHexString(",\"symbol\":\""))
-                + ScriptAssembler.copyRegularString(argQuoteToken)
-                + ScriptAssembler.copyString(HexUtil.toHexString("_"))
-                + ScriptAssembler.copyRegularString(argBaseToken)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"timeinforce\":"))
-                + ScriptAssembler.switchString(argIsImmediate, Buffer.TRANSACTION, HexUtil.toHexString("1") + "," + HexUtil.toHexString("3"))
-                + //0->"1" for GoodTillExpire, 1->"3" for ImmediateOrCancel
-                ScriptAssembler.copyString(HexUtil.toHexString("}],\"sequence\":\""))
-                + ScriptAssembler.baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"source\":\""))
-                + ScriptAssembler.baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\"}"))
-                + (!isTestnet ? ""
-                        : ScriptAssembler.showWrap("BNB DEX", "TESTNET"))
-                + ScriptAssembler.ifEqual(argSide, "00",
-                        ScriptAssembler.showWrap("BNB DEX", "BUY"),
-                        ScriptAssembler.showWrap("BNB DEX", "SELL")
-                )
-                + ScriptAssembler.showMessage(argQuoteToken)
-                + ScriptAssembler.showAmount(argQuantity, 8)
-                + ScriptAssembler.showMessage(argBaseToken)
-                + ScriptAssembler.showAmount(argPrice, 8)
-                + ScriptAssembler.showPressButton();
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb
+                .setCoinType(0x02CA)
+                // set coinType to 02CA
+                .copyString(HexUtil.toHexString("{\"account_number\":\""))
+                .baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .getScript();
+        script = (!isTestnet
+                        ? scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"id\":\""))
+                        : scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"id\":\"")))
+                .copyRegularString(argOrderAddress)
+                .copyString(HexUtil.toHexString("-"))
+                .baseConvert(argOrderSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\",\"ordertype\":2,\"price\":"))
+                .baseConvert(argPrice, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString(",\"quantity\":"))
+                .baseConvert(argQuantity, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString(",\"sender\":\""))
+                .copyRegularString(argSender)
+                .copyString(HexUtil.toHexString("\",\"side\":"))
+                .switchString(argSide, Buffer.TRANSACTION, HexUtil.toHexString("1") + "," + HexUtil.toHexString("2"))
+                //0->"1" for buy, 1->"2" for sell
+                .copyString(HexUtil.toHexString(",\"symbol\":\""))
+                .copyRegularString(argQuoteToken)
+                .copyString(HexUtil.toHexString("_"))
+                .copyRegularString(argBaseToken)
+                .copyString(HexUtil.toHexString("\",\"timeinforce\":"))
+                .switchString(argIsImmediate, Buffer.TRANSACTION, HexUtil.toHexString("1") + "," + HexUtil.toHexString("3"))
+                //0->"1" for GoodTillExpire, 1->"3" for ImmediateOrCancel
+                .copyString(HexUtil.toHexString("}],\"sequence\":\""))
+                .baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\",\"source\":\""))
+                .baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\"}"))
+                .getScript();
+        script = !isTestnet? script + ""
+                : scriptAsb.showWrap("BNB DEX", "TESTNET").getScript();
+        script = scriptAsb
+                .ifEqual(argSide, "00", new ScriptAssembler().showWrap("BNB DEX", "BUY").getScript(), new ScriptAssembler().showWrap("BNB DEX", "SELL").getScript())
+                .showMessage(argQuoteToken)
+                .showAmount(argQuantity, 8)
+                .showMessage(argBaseToken)
+                .showAmount(argPrice, 8)
+                .showPressButton()
+                //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BNBPlaceOrderScriptSignature = "00003044022073A02061F441CE9EA379D31A2303C78F4F3770CBBAAD4C3158DC7C829D74B13C022003B9D4CC8722883B732EDD2E163D2B9E830A202BB23ED73F092944BFB6E6BF58";
@@ -266,32 +283,39 @@ public class BnbScript {
         ScriptData argSequence = sac.getArgument(8);
         ScriptData argSource = sac.getArgument(8);
 
-        return "03000201"
-                + //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x02CA)
-                + // set coinType to 02CA
-                ScriptAssembler.copyString(HexUtil.toHexString("{\"account_number\":\""))
-                + ScriptAssembler.baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + (!isTestnet
-                        ? ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"refid\":\""))
-                        : ScriptAssembler.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"refid\":\"")))
-                + ScriptAssembler.copyRegularString(argOrderAddress)
-                + ScriptAssembler.copyString(HexUtil.toHexString("-"))
-                + ScriptAssembler.baseConvert(argOrderSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"sender\":\""))
-                + ScriptAssembler.copyRegularString(argSender)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"symbol\":\""))
-                + ScriptAssembler.copyRegularString(argQuoteToken)
-                + ScriptAssembler.copyString(HexUtil.toHexString("_"))
-                + ScriptAssembler.copyRegularString(argBaseToken)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\"}],\"sequence\":\""))
-                + ScriptAssembler.baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\",\"source\":\""))
-                + ScriptAssembler.baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                + ScriptAssembler.copyString(HexUtil.toHexString("\"}"))
-                + (!isTestnet ? ""
-                        : ScriptAssembler.showWrap("BNB", "TESTNET"))
-                + ScriptAssembler.showWrap("CANCEL", "BNB?");
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb
+                .setCoinType(0x02CA)
+                // set coinType to 02CA
+                .copyString(HexUtil.toHexString("{\"account_number\":\""))
+                .baseConvert(argAccountNumber, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .getScript();
+        script = (!isTestnet
+                        ? scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Tigris\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"refid\":\""))
+                        : scriptAsb.copyString(HexUtil.toHexString("\",\"chain_id\":\"Binance-Chain-Nile\",\"data\":null,\"memo\":\"\",\"msgs\":[{\"refid\":\"")))
+                .copyRegularString(argOrderAddress)
+                .copyString(HexUtil.toHexString("-"))
+                .baseConvert(argOrderSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\",\"sender\":\""))
+                .copyRegularString(argSender)
+                .copyString(HexUtil.toHexString("\",\"symbol\":\""))
+                .copyRegularString(argQuoteToken)
+                .copyString(HexUtil.toHexString("_"))
+                .copyRegularString(argBaseToken)
+                .copyString(HexUtil.toHexString("\"}],\"sequence\":\""))
+                .baseConvert(argSequence, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\",\"source\":\""))
+                .baseConvert(argSource, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .copyString(HexUtil.toHexString("\"}"))
+                .getScript();
+        script = (!isTestnet? script += "" 
+                : scriptAsb.showWrap("BNB", "TESTNET").getScript());
+        script = scriptAsb
+                .showWrap("CANCEL", "BNB?")
+                //version=00 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BNBCancelOrderScriptSignature = "003045022029B49D1404F5CE4988AC9753E00683D2C7E1B106F4A80F6BCA9F9DB1546BE2F0022100A20805E8EA152437303335E82AF48DF6462BFAE3B738AA0ED39E2ECC39AFD809";
@@ -304,35 +328,42 @@ public class BnbScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         // ScriptData argChainId = sac.getArgumentRightJustified(2);
-        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-        return "03000601"
+        
+        String script = new ScriptAssembler()
                 // set coinType to 3C
-                + ScriptAssembler.setCoinType(0x3C)
+                .setCoinType(0x3C)
                 // temp byte for rlpList
-                + ScriptAssembler.copyString("C0")
+                .copyString("C0")
                 // nonce
-                + ScriptAssembler.rlpString(argNonce)
+                .rlpString(argNonce)
                 // gasPrice
-                + ScriptAssembler.rlpString(argGasPrice)
+                .rlpString(argGasPrice)
                 // gasLimit
-                + ScriptAssembler.rlpString(argGasLimit)
+                .rlpString(argGasLimit)
                 // toAddress
-                + ScriptAssembler.copyString("94") + ScriptAssembler.copyArgument(argTo)
+                .copyString("94").copyArgument(argTo)
                 // value
-                + ScriptAssembler.rlpString(argValue)
+                .rlpString(argValue)
                 // data
-                + ScriptAssembler.copyString("80")
+                .copyString("80")
                 // chainId v = 56
-                + ScriptAssembler.copyString("38", Buffer.CACHE1)
-                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .copyString("38", Buffer.CACHE1)
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
-                + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(1)
-                + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showMessage("BNB")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
+                .copyString("8080")
+                .rlpList(1)
+                .showMessage("BSC")
+                .showMessage("BNB")
+                .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.showAmount(argValue, 18) + ScriptAssembler.showPressButton();
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .showAmount(argValue, 18)
+                .showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(HashType.Keccak256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BSCScriptSignature = "00304502206A9D1E267D9AC65B28FFB49286F73041D3FF3834F68C5CAB1A700607C57DB052022100BB46FD3AB7A402AF163FA90EB0348A3AE14CF51E4CA4364931104CD1996F99E6";
@@ -357,36 +388,44 @@ public class BnbScript {
         ScriptData argContractAddress = sac.getArgument(20);
         ScriptData argSign = sac.getArgument(72);
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x3C)
-                + // set coinType to 3C
-                ScriptAssembler.copyString("F800") + ScriptAssembler.rlpString(argNonce)
-                + ScriptAssembler.rlpString(argGasPrice) + ScriptAssembler.rlpString(argGasLimit)
-                + ScriptAssembler.copyString("94") + ScriptAssembler.copyArgument(argContractAddress)
-                + ScriptAssembler.copyString("80B844a9059cbb000000000000000000000000")
-                + // value = 0 ,
+        String script = new ScriptAssembler()
+                .setCoinType(0x3C)
+                // set coinType to 3C
+                .copyString("F800") 
+                .rlpString(argNonce)
+                .rlpString(argGasPrice) 
+                .rlpString(argGasLimit)
+                .copyString("94") 
+                .copyArgument(argContractAddress)
+                .copyString("80B844a9059cbb000000000000000000000000")
+                // value = 0 ,
                 // dataLength = 68
-                ScriptAssembler.copyArgument(argTo)
-                + ScriptAssembler.copyString("0000000000000000000000000000000000000000")
-                + ScriptAssembler.copyArgument(argValue)
+                .copyArgument(argTo)
+                .copyString("0000000000000000000000000000000000000000")
+                .copyArgument(argValue)
                 // chainId v = 56
-                + ScriptAssembler.copyString("38", Buffer.CACHE1)
-                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(2)
-                + ScriptAssembler.showMessage("BSC")
-                + ScriptAssembler.ifSigned(argTokenInfo, argSign, "",
-                        ScriptAssembler.copyString(HexUtil.toHexString("@"), Buffer.CACHE2))
-                + ScriptAssembler.setBufferInt(argNameLength, 1, 7)
-                + ScriptAssembler.copyArgument(argName, Buffer.CACHE2)
-                + ScriptAssembler.showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.clearBuffer(Buffer.CACHE2)
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
+                .copyString("38", Buffer.CACHE1)
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .copyString("8080") 
+                .rlpList(2)
+                .showMessage("BSC")
+                .ifSigned(argTokenInfo, argSign, "",
+                        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
+                .setBufferInt(argNameLength, 1, 7)
+                .copyArgument(argName, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+                .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
-                + ScriptAssembler.showAmount(argValue, 1000) + ScriptAssembler.showPressButton();
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .setBufferInt(argDecimal, 0, 20)
+                .showAmount(argValue, 1000) 
+                .showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(HashType.Keccak256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BEP20ScriptSignature = "00304502202B33814A04EE43EFC342DD3345652DAF34606EAD6599EF1A3C45F78727CC7283022100E20E6E30C3D5B8E04B5DD5C90FBFE064077CA9FCBF2689DDD2020FF51A1D69EE";
@@ -400,27 +439,32 @@ public class BnbScript {
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         ScriptData argData = sac.getArgumentAll();
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x3C)
-                + // set coinType to 3C
-                ScriptAssembler.copyString("F800") + ScriptAssembler.rlpString(argNonce)
-                + // nonce
-                ScriptAssembler.rlpString(argGasPrice)
-                + // gasPrice
-                ScriptAssembler.rlpString(argGasLimit)
-                + // gasLimit
-                ScriptAssembler.copyString("94") + ScriptAssembler.copyArgument(argTo)
-                + // toAddress
-                ScriptAssembler.rlpString(argValue)
-                + // value
-                ScriptAssembler.rlpString(argData)
+        String script = new ScriptAssembler()
+                .setCoinType(0x3C)
+                // set coinType to 3C
+                .copyString("F800").rlpString(argNonce)
+                // nonce
+                .rlpString(argGasPrice)
+                // gasPrice
+                .rlpString(argGasLimit)
+                // gasLimit
+                .copyString("94").copyArgument(argTo)
+                // toAddress
+                .rlpString(argValue)
+                // value
+                .rlpString(argData)
                 // chainId v = 56
-                + ScriptAssembler.copyString("38", Buffer.CACHE1)
-                + ScriptAssembler.rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                + ScriptAssembler.copyString("8080") + ScriptAssembler.rlpList(2)
-                + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("SMART", "")
-                + ScriptAssembler.showPressButton();
+                .copyString("38", Buffer.CACHE1)
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .copyString("8080") 
+                .rlpList(2)
+                .showMessage("BSC") 
+                .showWrap("SMART", "")
+                .showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(HashType.Keccak256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BSCSmartContractBlindScriptSignature = "000030440220429DF67EB2A0D1ED5681F912FCCE313C457829D7A76123B59F427E94A2FD8B0A02204FCC18E46AB820323D2CA5ED52FCEAA5DFFF70A3BF2DC4D060E30CFDCAE08D99";
@@ -429,14 +473,18 @@ public class BnbScript {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argMessage = sac.getArgumentAll();
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x3C)
-                + // set coinType to 3C
-                ScriptAssembler.copyString("19457468657265756D205369676E6564204D6573736167653A0A")
-                + ScriptAssembler.copyArgument(argMessage)
-                + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("MESSAGE", "")
-                + ScriptAssembler.showPressButton();
+        String script = new ScriptAssembler()
+                .setCoinType(0x3C)
+                // set coinType to 3C
+                .copyString("19457468657265756D205369676E6564204D6573736167653A0A")
+                .copyArgument(argMessage)
+                .showMessage("BSC") 
+                .showWrap("MESSAGE", "")
+                .showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(HashType.Keccak256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BSCMessageBlindScriptSignature = "3046022100E04A601B491F3A5751E4D4D214B0B650D59F71343B91CAECD20819F9DDF8CD74022100FFE0E5909B033E8608856975307336903BC0E66674BE0AA1046C16024F71AA8F";
@@ -446,14 +494,19 @@ public class BnbScript {
         ScriptData argDomainSeparator = sac.getArgument(32);
         ScriptData argMessage = sac.getArgumentAll();
 
-        return "03000601"
-                + // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                ScriptAssembler.setCoinType(0x3C)
-                + // set coinType to 3C
-                ScriptAssembler.copyString("1901") + ScriptAssembler.copyArgument(argDomainSeparator)
-                + ScriptAssembler.hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
-                + ScriptAssembler.showMessage("BSC") + ScriptAssembler.showWrap("TYPED", "DATA")
-                + ScriptAssembler.showPressButton();
+        String script = new ScriptAssembler()
+                .setCoinType(0x3C)
+                // set coinType to 3C
+                .copyString("1901") 
+                .copyArgument(argDomainSeparator)
+                .hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
+                .showMessage("BSC") 
+                .showWrap("TYPED", "DATA")
+                .showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(HashType.Keccak256, SignType.ECDSA)
+                .getScript();
+        return script;
     }
 
     public static String BSCTypedDataBlindScriptSignature = "003045022008935AF6BA11B9F720E59BE61AFF6F62A7A48FF2A39863AFD8B3920F355A1265022100E81EA86AC2FA3864CBC8773B10AF550B91F6A0E1FB68512DF32D8D35BC9FF3C8";
