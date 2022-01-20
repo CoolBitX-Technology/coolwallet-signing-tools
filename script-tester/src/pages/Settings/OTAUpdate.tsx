@@ -28,7 +28,11 @@ const OTAUpdate: FC<Props> = (props: Props) => {
       await otaUpdate(props.transport, secret, cardId, setProgress);
     } catch (e) {
       const error = e as AxiosError;
+<<<<<<< HEAD
       const message = error.response?.data.error.message ?? 'Error!';
+=======
+      const message = error.response?.data?.error?.message ?? "Error!";
+>>>>>>> e79e6ddd531e3f3466f0877247e5d2701aa6b5d9
       alert(message);
     } finally {
       setProgress(100);

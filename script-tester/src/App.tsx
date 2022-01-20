@@ -30,25 +30,17 @@ const App: FC = () => {
   const [connected, setConnected] = useState(false);
   const [appId, setAppId] = useState(getAppIdOrNull());
 
-  const connect = () => {
-    WebBleTransport.listen()
-      .then((device) => {
-        console.debug(device);
-        if (!device) throw Error('cant connect');
-        const cardName = device.name || '';
-        const action = async () => {
-          const webBleTransport = await WebBleTransport.connect(device);
-          const SEPublicKey = await config.getSEPublicKey(webBleTransport);
-          transport.current = webBleTransport;
-          setCardName(cardName);
-          setConnected(true);
-          localStorage.setItem('cardName', cardName);
-          localStorage.setItem('SEPublicKey', SEPublicKey);
-          console.debug(`SEPublicKey: ${SEPublicKey}`);
-        };
-        action();
-      })
-      .catch((error) => console.log(error));
+  const connect = async () => {
+    const device = await WebBleTransport.listen();
+    const cardName = device.name ?? '';
+    const webBleTransport = await WebBleTransport.connect(device);
+    const SEPublicKey = await config.getSEPublicKey(webBleTransport);
+    transport.current = webBleTransport;
+    setCardName(cardName);
+    setConnected(true);
+    localStorage.setItem('cardName', cardName);
+    localStorage.setItem('SEPublicKey', SEPublicKey);
+    console.debug(`SEPublicKey: ${SEPublicKey}`);
   };
 
   const disconnect = () => {

@@ -3,8 +3,8 @@ import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
 import padEnd from 'lodash/padEnd';
-import { apdu, Transport } from '@coolwallet/core';
-import { ButtonInputs } from '@/components';
+import { apdu, Transport, tx } from '@coolwallet/core';
+import { Button, ButtonInputs } from '@/components';
 import { executeScript, executeUtxoScript } from '@/utils/execute';
 import Context from '@/store';
 import * as txUtil from '@coolwallet/core/lib/transaction/txUtil';
@@ -26,9 +26,16 @@ interface Props {
 const Signing: FC<Props> = (props: Props) => {
   const { connected, isLocked, setIsLocked } = useContext(Context);
 
+  const [transaction, setTransaction] = useState('');
+
   const [argument, setArgument] = useState('');
   const [script, setScript] = useState('');
   const [Signature, setSignature] = useState('');
+
+  const [segmentArgument, setSegmentArgument] = useState('');
+  const [segmentData, setSegmentData] = useState('');
+  const [segmentScript, setSegmentScript] = useState('');
+  const [segmentSignature, setSegmentSignature] = useState('');
 
   const [utxoInputArgument, setUtxoInputArgument] = useState('');
   const [utxoOutputArgument, setUtxoOutputArgument] = useState('');
@@ -45,7 +52,13 @@ const Signing: FC<Props> = (props: Props) => {
 
       await apdu.tx.sendScript(props.transport, fullScript);
 
-      const encryptedSignature = await executeScript(props.transport, props.appId ?? '', props.appPrivateKey, argument);
+      const encryptedSignature = await apdu.tx.executeScript(
+        props.transport,
+        props.appId ?? '',
+        props.appPrivateKey,
+        argument
+      );
+      console.log(encryptedSignature);
 
       // finish prepare
       await apdu.tx.finishPrepare(props.transport);
@@ -53,18 +66,55 @@ const Signing: FC<Props> = (props: Props) => {
       // get tx detail
       await apdu.tx.getTxDetail(props.transport);
 
-      const signatureKey = await apdu.tx.getSignatureKey(props.transport);
-      console.log('signature key:', signatureKey);
+      const decryptingKey = await apdu.tx.getSignatureKey(props.transport);
+      console.log(decryptingKey);
+
+      const sig = tx.util.decryptSignatureFromSE(encryptedSignature!, decryptingKey, false, false);
+
+      console.log(sig);
 
       await apdu.tx.clearTransaction(props.transport);
       // await apdu.mcu.control.powerOff(props.transport);
 
-      const decryptedSignature = await txUtil.decryptSignatureFromSE(encryptedSignature, signatureKey, false, true);
+      const decryptedSignature = await txUtil.decryptSignatureFromSE(encryptedSignature, decryptingKey, false, true);
       console.log('decryptedSignature: ', decryptedSignature);
 
-      setSignature(encryptedSignature);
+      setSignature(encryptedSignature ?? '');
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLocked(false);
+    }
+  };
+
+  const signSegmentData = async () => {
+    if (isNil(props.transport)) return;
+    setIsLocked(true);
+    try {
+      const fullScript = segmentScript + SIGNATURE;
+
+      await apdu.tx.sendScript(props.transport, fullScript);
+
+      const dataLengthHex = (segmentData.length / 2).toString(16).padStart(8, '0');
+
+      await executeScript(props.transport, props.appId ?? '', props.appPrivateKey, segmentArgument + dataLengthHex);
+
+      const encryptedSignatureArray = await apdu.tx.executeSegmentScript(
+        props.transport,
+        props.appId ?? '',
+        props.appPrivateKey,
+        segmentData
+      );
+
+      // finish prepare
+      await apdu.tx.finishPrepare(props.transport);
+
+      await apdu.tx.clearTransaction(props.transport);
+      await apdu.mcu.control.powerOff(props.transport);
+
+      setSegmentSignature(encryptedSignatureArray ?? 'Error!');
+    } catch (e) {
+      console.error(e);
     } finally {
       setIsLocked(false);
     }
@@ -148,6 +198,19 @@ const Signing: FC<Props> = (props: Props) => {
     // main();
   }, [props]);
 
+  const getTransaction = async () => {
+    if (isNil(props.transport)) return;
+    setIsLocked(true);
+    try {
+      const signed = await apdu.tx.getSignedHex(props.transport);
+      setTransaction(signed.signedTx);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLocked(false);
+    }
+  };
+
   const disabled = !connected || isLocked;
   // (title, content, onClick, disabled, input, setInput, placeholder, input2, setInput2, placeholder2)
   return (
@@ -169,6 +232,29 @@ const Signing: FC<Props> = (props: Props) => {
           {
             value: script,
             onChange: setScript,
+            placeholder: 'script',
+          },
+        ]}
+      />
+      <ButtonInputs
+        title="Segment Signature"
+        content={segmentSignature}
+        onClick={signSegmentData}
+        disabled={disabled}
+        inputs={[
+          {
+            value: segmentArgument,
+            onChange: setSegmentArgument,
+            placeholder: 'segment arg',
+          },
+          {
+            value: segmentData,
+            onChange: setSegmentData,
+            placeholder: 'data arg',
+          },
+          {
+            value: segmentScript,
+            onChange: setSegmentScript,
             placeholder: 'script',
           },
         ]}
@@ -196,6 +282,7 @@ const Signing: FC<Props> = (props: Props) => {
           },
         ]}
       />
+      <Button title="Transaction" content={transaction} disabled={disabled} onClick={getTransaction} />
     </Container>
   );
 };
