@@ -1,12 +1,12 @@
 import { useState, useEffect, FC, useContext } from 'react';
 import { Container } from 'react-bootstrap';
 import isNil from 'lodash/isNil';
-import { apdu, transport as Transport } from '@coolwallet/core';
+import { apdu, Transport } from '@coolwallet/core';
 import Button from '@/components/Button';
 import Context from '@/store';
 
 interface Props {
-  transport: Transport.default | null;
+  transport: Transport | null;
 }
 
 const CardInfo: FC<Props> = (props: Props) => {

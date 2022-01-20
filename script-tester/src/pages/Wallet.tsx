@@ -3,14 +3,14 @@ import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
 import { mnemonicToSeedSync } from 'bip39';
-import { apdu, transport as Transport } from '@coolwallet/core';
+import { apdu, Transport } from '@coolwallet/core';
 import { ButtonInputs } from '@/components';
 import Context from '@/store';
 
 const row = clsx('border-t-2', 'border-gray-400', 'mt-4', 'pt-4', 'text-center', 'text-2xl');
 
 interface Props {
-  transport: Transport.default | null;
+  transport: Transport | null;
   appId: string | null;
   appPrivateKey: string;
 }
