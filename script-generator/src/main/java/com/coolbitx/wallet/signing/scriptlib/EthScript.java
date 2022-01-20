@@ -14,7 +14,9 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class EthScript {
-
+    public static void main(String[] args) {
+        listAll();
+    }
     public static void listAll() {
         System.out.println("Eth eip1559: \n" + getETHEIP1559Script() + "\n");
         System.out.println("Eth eip1559 erc20: \n" + getETHEIP1559ERC20Script() + "\n");
@@ -305,8 +307,8 @@ b844 a9059cbb
                 .copyString("0000000000000000000000000000000000000000")
                 .copyArgument(argValue)
                 // chainId v
-                // + ScriptAssembler.rlpString(argChainId)
-                .copyString("01", Buffer.CACHE1)
+//                .rlpString(argChainId)
+                .copyString("013881", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
@@ -340,6 +342,7 @@ b844 a9059cbb
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
+//        ScriptData argChainId = sac.getArgumentRightJustified(2);
         ScriptData argData = sac.getArgument(4);
 
         String script = new ScriptAssembler()
@@ -360,6 +363,7 @@ b844 a9059cbb
                 // data
                 .rlpDataPlaceholder(argData)
                 // chainId v
+//                 .rlpString(argChainId)
                 .copyString("01", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
@@ -406,7 +410,7 @@ b844 a9059cbb
                 .copyString("1901")
                 .copyArgument(argDomainSeparator)
                 .hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
-                .showMessage("ETH")
+                .showMessage("Polygon")
                 .showWrap("EIP712", "")
                 .showPressButton()
                 //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA

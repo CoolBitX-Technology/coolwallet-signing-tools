@@ -29,7 +29,7 @@ public class ETHScript {
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
-        ScriptData argChainId = sac.getArgumentRightJustified(2);
+        ScriptData argChainId = sac.getArgumentRightJustified(5);
         
         // set coinType to 3C
         ScriptAssembler scriptAsb = new ScriptAssembler();
@@ -51,20 +51,9 @@ public class ETHScript {
                 .copyString("80")
                 // chainId v
                 //.rlpString(argChainId)
-                .copyString("01", Buffer.CACHE1)
+                .copyString("013881", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
-<<<<<<< HEAD
-                + ScriptAssembler.copyString("8080")
-                + ScriptAssembler.rlpList(1);
-        String display = ScriptAssembler.showMessage("MATIC")
-                + ScriptAssembler.copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-                + ScriptAssembler.baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
-                + ScriptAssembler.showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                + ScriptAssembler.showAmount(argValue, 18)
-                + ScriptAssembler.showPressButton();
-        return header + coinType + payload + display;
-=======
                 .copyString("8080")
                 .rlpList(1)
                 .getScript();
@@ -81,7 +70,6 @@ public class ETHScript {
         String header = scriptAsb.setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
         //script = header + coinType + payload + display
         return scriptAsb.getScript();
->>>>>>> 61d4d7097df70de188903ab2695a9cbda23a66c7
     }
 
     public static String getERC20Script() {

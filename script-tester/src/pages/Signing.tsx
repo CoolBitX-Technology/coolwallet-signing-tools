@@ -3,7 +3,7 @@ import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
 import padEnd from 'lodash/padEnd';
-import { apdu, transport as Transport } from '@coolwallet/core';
+import { apdu, Transport } from '@coolwallet/core';
 import { ButtonInputs } from '@/components';
 import { executeScript, executeUtxoScript } from '@/utils/execute';
 import Context from '@/store';
@@ -18,7 +18,7 @@ const SIGNATURE = padEnd('FA', 144, '0');
 const row = clsx('border-t-2', 'border-gray-400', 'mt-4', 'pt-4', 'text-center', 'text-2xl');
 
 interface Props {
-  transport: Transport.default | null;
+  transport: Transport | null;
   appId: string | null;
   appPrivateKey: string;
 }
@@ -134,7 +134,7 @@ const Signing: FC<Props> = (props: Props) => {
       chainId: 1,
     };
     const signTxData = {
-      transport: props.transport as Transport.default,
+      transport: props.transport as Transport,
       appPrivateKey: props.appPrivateKey,
       appId: props.appId as string,
       transaction,
@@ -145,7 +145,7 @@ const Signing: FC<Props> = (props: Props) => {
     console.log(signedTx);
   };
   useEffect(() => {
-    main();
+    // main();
   }, [props]);
 
   const disabled = !connected || isLocked;

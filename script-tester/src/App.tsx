@@ -3,7 +3,7 @@ import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import WebBleTransport from '@coolwallet/transport-web-ble';
-import { transport as Transport, config } from '@coolwallet/core';
+import { Transport, config } from '@coolwallet/core';
 import { getAppKeysOrGenerate, getAppIdOrNull } from '@/utils/keypair';
 import Context from '@/store';
 import Button from '@/components/Button';
@@ -24,33 +24,35 @@ const app = clsx(
 const { appPublicKey, appPrivateKey } = getAppKeysOrGenerate();
 
 const App: FC = () => {
-  const transport = useRef<Transport.default | null>(null);
+  const transport = useRef<Transport | null>(null);
   const [cardName, setCardName] = useState('');
   const [isLocked, setIsLocked] = useState(false);
   const [connected, setConnected] = useState(false);
   const [appId, setAppId] = useState(getAppIdOrNull());
 
   const connect = () => {
-    WebBleTransport.listen(async (error, device) => {
-      console.debug(device);
-      if (device) {
-        const cardName = device.name;
-        const webBleTransport = await WebBleTransport.connect(device);
-        const SEPublicKey = await config.getSEPublicKey(webBleTransport);
-        transport.current = webBleTransport;
-        setCardName(cardName);
-        setConnected(true);
-        localStorage.setItem('cardName', cardName);
-        localStorage.setItem('SEPublicKey', SEPublicKey);
-        console.debug(`SEPublicKey: ${SEPublicKey}`);
-      } else {
-        console.log(error);
-      }
-    });
+    WebBleTransport.listen()
+      .then((device) => {
+        console.debug(device);
+        if (!device) throw Error('cant connect');
+        const cardName = device.name || '';
+        const action = async () => {
+          const webBleTransport = await WebBleTransport.connect(device);
+          const SEPublicKey = await config.getSEPublicKey(webBleTransport);
+          transport.current = webBleTransport;
+          setCardName(cardName);
+          setConnected(true);
+          localStorage.setItem('cardName', cardName);
+          localStorage.setItem('SEPublicKey', SEPublicKey);
+          console.debug(`SEPublicKey: ${SEPublicKey}`);
+        };
+        action();
+      })
+      .catch((error) => console.log(error));
   };
 
   const disconnect = () => {
-    WebBleTransport.disconnect(transport.current?.device.id);
+    WebBleTransport.disconnect();
     transport.current = null;
     setCardName('');
     setConnected(false);

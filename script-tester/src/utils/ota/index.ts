@@ -1,5 +1,5 @@
 import axios, { Method } from 'axios';
-import { apdu, transport as Transport } from '@coolwallet/core';
+import { apdu, Transport } from '@coolwallet/core';
 import * as TEST from '@/configs/scripts/test';
 import { getAPIOption, formatAPIResponse } from './options';
 import { insertScript, insertDeleteScript, insertLoadScript } from './scripts';
@@ -10,7 +10,7 @@ const CARDMANAGER_AID = 'A000000151000000';
 const SSD_AID = 'A000000151535041';
 
 const otaUpdate = async (
-  transport: Transport.default,
+  transport: Transport,
   secret: string,
   cardId: string,
   progressCallback: (progress: number) => void

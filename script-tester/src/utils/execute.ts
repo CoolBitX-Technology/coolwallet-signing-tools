@@ -1,8 +1,8 @@
-import { apdu, transport as Transport } from '@coolwallet/core';
+import { apdu, Transport } from '@coolwallet/core';
 import { commands } from '@/configs/command';
 
 const executeScript = async (
-  transport: Transport.default,
+  transport: Transport,
   appId: string,
   appPrivKey: string,
   argument: string
@@ -18,7 +18,7 @@ const executeScript = async (
  * @param {*} argument
  * @param {*} redeemScriptType (redeemScriptType === ScriptType.P2PKH) ? "10" : "11"
  */
-const executeUtxoScript = async (transport: Transport.default, argument: string) => {
+const executeUtxoScript = async (transport: Transport, argument: string) => {
   const {
     outputData: encryptedSignature,
     statusCode,

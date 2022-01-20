@@ -1,7 +1,7 @@
 import { SignJWT } from 'jose';
 import jwt_decode from 'jwt-decode';
 import isEmpty from 'lodash/isEmpty';
-import { transport as Transport, apdu } from '@coolwallet/core';
+import { Transport, apdu } from '@coolwallet/core';
 
 interface APIOptions {
   body: {
@@ -65,10 +65,7 @@ const getAPIOption = async (secret: string, cardId: string, challengeData = ''):
   };
 };
 
-const formatAPIResponse = async (
-  transport: Transport.default,
-  result: any
-): ReturnType<typeof apdu.execute.executeCommand> => {
+const formatAPIResponse = async (transport: Transport, result: any): ReturnType<typeof apdu.execute.executeCommand> => {
   const obj = jwt_decode(result.cryptogram);
   console.debug(`Server Auth Response : ${JSON.stringify(obj)}`);
   const { CLA, INS, P1, P2, packets } = obj as CommandType;

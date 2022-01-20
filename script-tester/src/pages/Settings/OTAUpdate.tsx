@@ -2,13 +2,13 @@ import { useState, useContext, FC } from 'react';
 import { AxiosError } from 'axios';
 import { Container } from 'react-bootstrap';
 import isNil from 'lodash/isNil';
-import { apdu, transport as Transport } from '@coolwallet/core';
+import { apdu, Transport } from '@coolwallet/core';
 import { otaUpdate } from '@/utils/ota';
 import { ButtonInputs } from '@/components';
 import Context from '@/store';
 
 interface Props {
-  transport: Transport.default | null;
+  transport: Transport | null;
   appPublicKey: string;
   cardName: string;
 }
@@ -28,7 +28,7 @@ const OTAUpdate: FC<Props> = (props: Props) => {
       await otaUpdate(props.transport, secret, cardId, setProgress);
     } catch (e) {
       const error = e as AxiosError;
-      const message = error.response?.data.error.message ?? "Error!";
+      const message = error.response?.data.error.message ?? 'Error!';
       alert(message);
     } finally {
       setProgress(100);
