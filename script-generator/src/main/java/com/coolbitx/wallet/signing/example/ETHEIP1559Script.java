@@ -32,7 +32,7 @@ public class ETHEIP1559Script {
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("8189")
+                .copyString("01")
                 // nonce
                 .rlpString(argNonce)
                 // gasTipCap (maxPriorityFeePerGas)

@@ -8,24 +8,24 @@ package com.coolbitx.wallet.signing.scriptlib;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
-import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
-public class EthScript {
+public class PolyScript {
     public static void main(String[] args) {
         listAll();
     }
     public static void listAll() {
-        System.out.println("Eth eip1559: \n" + getETHEIP1559Script() + "\n");
-        System.out.println("Eth eip1559 erc20: \n" + getETHEIP1559ERC20Script() + "\n");
-        System.out.println("Eth eip1559 Smart Contract: \n" + getETHEIP1559SmartScript() + "\n");
-        System.out.println("Eth: \n" + getETHScript() + "\n");
-        System.out.println("Eth erc20: \n" + getERC20Script() + "\n");
-        System.out.println("Eth Smart Contract: \n" + getEtherContractBlindScript() + "\n");
-        System.out.println("Eth Message: \n" + getEtherMessageBlindScript() + "\n");
-        System.out.println("Eth TypedData: \n" + getEtherTypedDataBlindScript() + "\n");
+        System.out.println("Poly eip1559: \n" + getPolyEIP1559Script() + "\n");
+        System.out.println("Poly eip1559 erc20: \n" + getPolyEIP1559ERC20Script() + "\n");
+        System.out.println("Poly eip1559 Smart Contract: \n" + getPolyEIP1559SmartScript() + "\n");
+        System.out.println("Poly: \n" + getPolyScript() + "\n");
+        System.out.println("Poly erc20: \n" + getERC20Script() + "\n");
+        System.out.println("Poly Smart Contract: \n" + getPolyContractBlindScript() + "\n");
+        System.out.println("Poly Message: \n" + getPolyMessageBlindScript() + "\n");
+        System.out.println("Poly TypedData: \n" + getPolyTypedDataBlindScript() + "\n");
     }
 
     /*
@@ -41,7 +41,7 @@ value :            83 0186a0
 data :             80
 accessList :       c0
      */
-    public static String getETHEIP1559Script() {
+    public static String getPolyEIP1559Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -57,7 +57,7 @@ accessList :       c0
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("01")
+                .copyString("8189")
                 // nonce
                 .rlpString(argNonce)
                 // gasTipCap (maxPriorityFeePerGas)
@@ -76,7 +76,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
@@ -105,7 +105,7 @@ data :             b844 a9059cbb
                    0000000000000000000000000000000000000000000000004563918244f40000
 accessList :       c0
      */
-    public static String getETHEIP1559ERC20Script() {
+    public static String getPolyEIP1559ERC20Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgument(12);
@@ -127,7 +127,7 @@ accessList :       c0
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("01")
+                .copyString("8189")
                 .rlpString(argNonce)
                 .rlpString(argGasTipCap)
                 .rlpString(argGasFeeCap)
@@ -142,7 +142,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
                 )
@@ -164,7 +164,7 @@ accessList :       c0
 
     public static String ETHEIP1559ERC20ScriptSignature = "00304502207A63FB17CEA7E123C1BF12CBE3687614FCD677DE13171CC0B275E9659421762A022100ED2A5EC6AB2736C1D9087033CB48181784859A10C8A9674ADEFE34A84D520646";
 
-    public static String getETHEIP1559SmartScript() {
+    public static String getPolyEIP1559SmartScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -181,7 +181,7 @@ accessList :       c0
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("01")
+                .copyString("8189")
                 .rlpString(argNonce)
                 .rlpString(argGasTipCap)
                 .rlpString(argGasFeeCap)
@@ -193,7 +193,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -216,14 +216,15 @@ accessList :       c0
     80
     80
      */
-    public static String getETHScript() {
+    public static String getPolyScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
-        
+//        ScriptData argChainId = sac.getArgumentRightJustified(5);
+
         String script = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(0x3C)
@@ -243,12 +244,12 @@ accessList :       c0
                 .copyString("80")
                 // chainId v
                 // + ScriptAssembler.rlpString(argChainId)
-                .copyString("01", Buffer.CACHE1)
+                .copyString("89", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
                 .rlpList(1) 
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.zeroInherit)
@@ -308,12 +309,12 @@ b844 a9059cbb
                 .copyArgument(argValue)
                 // chainId v
 //                .rlpString(argChainId)
-                .copyString("013881", Buffer.CACHE1)
+                .copyString("89", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
                 .rlpList(2)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
                 )
@@ -335,7 +336,7 @@ b844 a9059cbb
 
     public static String ERC20ScriptSignature = "30460221009A706915A2EE0AE663ACF90D9DD59BBEEC111EB12B099E4751219DDC993A01E7022100BA25635AB68F4EF7711D8D880A0BB1A81CA899C78884ECC4183B715F8F047D69";
 
-    public static String getEtherContractBlindScript() {
+    public static String getPolyContractBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -368,7 +369,7 @@ b844 a9059cbb
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
                 .arrayEnd(1)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -379,7 +380,7 @@ b844 a9059cbb
 
     public static String EtherContractBlindScriptSignature = "003045022060FC29B9ACA3BDFA237ED377E410A9A9BB12FB88416C06298857AE17D688992D022100F87D2C80BBECDC7192FF64D13A28F7763D6E1610FC1B1254B3D6446822CBA414";
 
-    public static String getEtherMessageBlindScript() {
+    public static String getPolyMessageBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argMessage = sac.getArgumentAll();
 
@@ -388,7 +389,7 @@ b844 a9059cbb
                 .setCoinType(0x3C)
                 .copyString("19457468657265756D205369676E6564204D6573736167653A0A")
                 .copyArgument(argMessage)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .showWrap("MESSAGE", "")
                 .showPressButton()
                 //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -399,7 +400,7 @@ b844 a9059cbb
 
     public static String EtherMessageBlindScriptSignature = "0000304402200745C5665A9CE0FA0C2894E77629A33077D9AE76F23566DC804C64BF38D27FC0022076645BEEF5A522A02D272DA3D7065D1F092C5C03B024A3F1B3A19C144CF98970";
 
-    public static String getEtherTypedDataBlindScript() {
+    public static String getPolyTypedDataBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argDomainSeparator = sac.getArgument(32);
         ScriptData argMessage = sac.getArgumentAll();
@@ -410,7 +411,7 @@ b844 a9059cbb
                 .copyString("1901")
                 .copyArgument(argDomainSeparator)
                 .hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .showWrap("EIP712", "")
                 .showPressButton()
                 //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA

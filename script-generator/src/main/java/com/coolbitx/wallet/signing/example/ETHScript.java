@@ -51,7 +51,7 @@ public class ETHScript {
                 .copyString("80")
                 // chainId v
                 //.rlpString(argChainId)
-                .copyString("013881", Buffer.CACHE1)
+                .copyString("01", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
