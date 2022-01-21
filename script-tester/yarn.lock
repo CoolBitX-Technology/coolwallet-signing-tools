@@ -1086,7 +1086,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@coolwallet/core@^1.0.3":
+"@coolwallet/core@^1.0.14":
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/@coolwallet/core/-/core-1.0.14.tgz#7062cf541ba2289ba7a2410198a5d6cb14fc84c7"
   integrity sha512-KOyqhWBnsLYlpAclQHB/82xIwlve6nY2cTElhyyPY1f7EeIY18439XoQqva9TJTV9pYF+uYvZFtHGySJHrWtyw==
@@ -1123,7 +1123,7 @@
     rlp "^2.2.3"
     web3 "^1.2.6"
 
-"@coolwallet/transport-web-ble@^1.0.0":
+"@coolwallet/transport-web-ble@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@coolwallet/transport-web-ble/-/transport-web-ble-1.0.2.tgz#39c2e0cc12b69fffe5822a639b6a833e1e3d2075"
   integrity sha512-6GNyboFvHJV9cBcvsuTRnlOPm7Q/IrznkFFemLPZhSoLIdJ96LUTGebl88Dss/J8I3rFeOLv7CaCw2XEBHOpug==
@@ -3339,7 +3339,7 @@ bip32@^2.0.4, bip32@^2.0.6:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
-bip39@^3.0.2:
+bip39@^3.0.2, bip39@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/bip39/-/bip39-3.0.4.tgz#5b11fed966840b5e1b8539f0f54ab6392969b2a0"
   integrity sha512-YZKQlb752TrUWqHWj7XAwCSjYEgGAk+/Aas3V7NyjQeZYsztO8JnQUaCWhcnL4T+jL8nvB8typ2jRPzTlgugNw==

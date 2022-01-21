@@ -57,7 +57,7 @@ accessList :       c0
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("01")
+                .copyString("8189")
                 // nonce
                 .rlpString(argNonce)
                 // gasTipCap (maxPriorityFeePerGas)
@@ -76,7 +76,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
@@ -127,7 +127,7 @@ accessList :       c0
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("01")
+                .copyString("8189")
                 .rlpString(argNonce)
                 .rlpString(argGasTipCap)
                 .rlpString(argGasFeeCap)
@@ -142,7 +142,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
                 )
@@ -181,7 +181,7 @@ accessList :       c0
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("01")
+                .copyString("8189")
                 .rlpString(argNonce)
                 .rlpString(argGasTipCap)
                 .rlpString(argGasFeeCap)
@@ -193,7 +193,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("ETH")
+                .showMessage("POLYGON")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -364,7 +364,7 @@ b844 a9059cbb
                 .rlpDataPlaceholder(argData)
                 // chainId v
 //                 .rlpString(argChainId)
-                .copyString("01", Buffer.CACHE1)
+                .copyString("89", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
                 .arrayEnd(1)

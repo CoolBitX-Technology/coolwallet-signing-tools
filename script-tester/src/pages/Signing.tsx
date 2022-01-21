@@ -76,7 +76,7 @@ const Signing: FC<Props> = (props: Props) => {
       await apdu.tx.clearTransaction(props.transport);
       // await apdu.mcu.control.powerOff(props.transport);
 
-      const decryptedSignature = await txUtil.decryptSignatureFromSE(encryptedSignature, decryptingKey, false, true);
+      const decryptedSignature = await txUtil.decryptSignatureFromSE(encryptedSignature!, decryptingKey, false, true);
       console.log('decryptedSignature: ', decryptedSignature);
 
       setSignature(encryptedSignature ?? '');
