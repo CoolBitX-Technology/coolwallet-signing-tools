@@ -3,7 +3,7 @@
 // But we would like to send them sequentially rather than send them parallel.
 
 /* eslint-disable no-await-in-loop */
-import { transport as Transport, apdu, error } from '@coolwallet/core';
+import { Transport, apdu, error } from '@coolwallet/core';
 
 const parseOTAScript = (OTAScript: string) => {
   const allApplet = OTAScript.split(/\n/);
@@ -20,7 +20,7 @@ const parseOTAScript = (OTAScript: string) => {
   });
 };
 
-const insertScript = async (transport: Transport.default, scriptHex: string): Promise<void> => {
+const insertScript = async (transport: Transport, scriptHex: string): Promise<void> => {
   try {
     const scripts = parseOTAScript(scriptHex);
     for (const script of scripts) {
@@ -33,7 +33,7 @@ const insertScript = async (transport: Transport.default, scriptHex: string): Pr
 };
 
 const insertLoadScript = async (
-  transport: Transport.default,
+  transport: Transport,
   scriptHex: string,
   progressCallback: (progress: number) => void,
   floor: number,
@@ -54,7 +54,7 @@ const insertLoadScript = async (
   }
 };
 
-const insertDeleteScript = async (transport: Transport.default, scriptHex: string): Promise<void> => {
+const insertDeleteScript = async (transport: Transport, scriptHex: string): Promise<void> => {
   try {
     const scripts = parseOTAScript(scriptHex);
     for (const script of scripts) {
