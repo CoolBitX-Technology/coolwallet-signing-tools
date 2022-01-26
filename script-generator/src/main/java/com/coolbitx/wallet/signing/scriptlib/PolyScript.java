@@ -37,7 +37,7 @@ public class PolyScript {
   /*
 txType(EIP-2718) : 02
 rlpLength :        e5
-chainId :          01
+chainId :          89
 nonce :            80
 maxPriorityFee :   01
 maxFee :           81 ff
@@ -105,7 +105,7 @@ accessList :       c0
   /*
 txType(EIP-2718) : 02
 rlpLength :        f86a
-chainId :          01
+chainId :          89
 nonce :            80
 maxPriorityFee :   01
 maxFee :           81 ff
