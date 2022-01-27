@@ -66,12 +66,10 @@ const Signing: FC<Props> = (props: Props) => {
 
       const sig = tx.util.decryptSignatureFromSE(encryptedSignature!, decryptingKey, false, false);
 
-      console.log(sig);
-
       await apdu.tx.clearTransaction(props.transport);
       await apdu.mcu.control.powerOff(props.transport);
 
-      setSignature(encryptedSignature ?? '');
+      setSignature(Buffer.from(sig as Buffer).toString('hex') ?? '');
     } catch (error) {
       console.error(error);
     } finally {
@@ -91,20 +89,29 @@ const Signing: FC<Props> = (props: Props) => {
 
       await executeScript(props.transport, props.appId ?? '', props.appPrivateKey, segmentArgument + dataLengthHex);
 
-      const encryptedSignatureArray = await apdu.tx.executeSegmentScript(
+      const encryptedSignature = await apdu.tx.executeSegmentScript(
         props.transport,
         props.appId ?? '',
         props.appPrivateKey,
         segmentData
       );
+      console.log(encryptedSignature);
 
       // finish prepare
       await apdu.tx.finishPrepare(props.transport);
 
+      // get tx detail
+      await apdu.tx.getTxDetail(props.transport);
+
+      const decryptingKey = await apdu.tx.getSignatureKey(props.transport);
+      console.log(decryptingKey);
+
+      const sig = tx.util.decryptSignatureFromSE(encryptedSignature!, decryptingKey, false, false);
+
       await apdu.tx.clearTransaction(props.transport);
       await apdu.mcu.control.powerOff(props.transport);
 
-      setSegmentSignature(encryptedSignatureArray ?? 'Error!');
+      setSegmentSignature(Buffer.from(sig as Buffer).toString('hex') ?? '');
     } catch (e) {
       console.error(e);
     } finally {
@@ -137,10 +144,15 @@ const Signing: FC<Props> = (props: Props) => {
       // get tx detail
       await apdu.tx.getTxDetail(props.transport);
 
+      const decryptingKey = await apdu.tx.getSignatureKey(props.transport);
+      console.log(decryptingKey);
+
       await apdu.tx.clearTransaction(props.transport);
       await apdu.mcu.control.powerOff(props.transport);
 
-      setUtxoSignature(encryptedSignatureArray);
+      const sig = tx.util.decryptSignatureFromSE(encryptedSignatureArray, decryptingKey, false, false);
+
+      setUtxoSignature(Buffer.from(sig as Buffer).toString('hex'));
     } catch (error) {
       console.error(error);
     } finally {
