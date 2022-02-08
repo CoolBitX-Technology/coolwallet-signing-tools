@@ -16,7 +16,7 @@ import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 public class EtcScript {
 
     public static void listAll() {
-        System.out.println("Etc: \n" + getCROScript() + "\n");
+        System.out.println("Etc: \n" + getEtcScript() + "\n");
     }
 
     /*
@@ -31,7 +31,7 @@ public class EtcScript {
     80
     80
      */
-    public static String getCROScript() {
+    public static String getEtcScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
