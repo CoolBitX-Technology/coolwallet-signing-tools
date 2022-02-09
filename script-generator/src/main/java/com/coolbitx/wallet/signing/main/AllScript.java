@@ -16,6 +16,8 @@ public class AllScript {
         XlmScript.listAll();
         XrpScript.listAll();
         AdaScript.listAll();
+        CroScript.listAll();
+        CrcScript.listAll();
     }
 
 }
