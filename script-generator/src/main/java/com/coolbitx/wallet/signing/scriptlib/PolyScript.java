@@ -57,7 +57,8 @@ accessList :       c0
                 .copyString("02")
                 .arrayPointer()
                 // chainId
-                .copyString("8189")
+                .copyString("81")
+                .copyString("89")
                 // nonce
                 .rlpString(argNonce)
                 // gasTipCap (maxPriorityFeePerGas)
@@ -76,7 +77,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("POLYGON")
+                .showMessage("MATIC")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
@@ -142,7 +143,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("POLYGON")
+                .showMessage("MATIC")
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
                 )
@@ -193,7 +194,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
-                .showMessage("POLYGON")
+                .showMessage("MATIC")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -229,7 +230,8 @@ accessList :       c0
                 // set coinType to 3C
                 .setCoinType(0x3C)
                 // temp byte for rlpList
-                .copyString("C0")
+//                .copyString("C0")
+                .arrayPointer()
                 // nonce
                 .rlpString(argNonce)
                 // gasPrice
@@ -248,8 +250,9 @@ accessList :       c0
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
-                .rlpList(1) 
-                .showMessage("POLYGON")
+                .arrayEnd(1)
+//                .rlpList(1)
+                .showMessage("MATIC")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.zeroInherit)
@@ -292,11 +295,14 @@ b844 a9059cbb
         ScriptData argName = sac.getArgumentVariableLength(7);
         ScriptData argContractAddress = sac.getArgument(20);
         ScriptData argSign = sac.getArgument(72);
-        
+
+        System.out.println("argNonce: " + argNonce);
+
         String script = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(0x3C)
-                .copyString("F800")
+                .arrayPointer()
+//                .copyString("F800")
                 .rlpString(argNonce)
                 .rlpString(argGasPrice)
                 .rlpString(argGasLimit)
@@ -313,8 +319,9 @@ b844 a9059cbb
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
-                .rlpList(2)
-                .showMessage("POLYGON")
+//                .rlpList(2)
+                .arrayEnd(1)
+                .showMessage("MATIC")
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
                 )
@@ -369,7 +376,7 @@ b844 a9059cbb
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
                 .arrayEnd(1)
-                .showMessage("POLYGON")
+                .showMessage("MATIC")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -389,7 +396,7 @@ b844 a9059cbb
                 .setCoinType(0x3C)
                 .copyString("19457468657265756D205369676E6564204D6573736167653A0A")
                 .copyArgument(argMessage)
-                .showMessage("POLYGON")
+                .showMessage("MATIC")
                 .showWrap("MESSAGE", "")
                 .showPressButton()
                 //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -411,7 +418,7 @@ b844 a9059cbb
                 .copyString("1901")
                 .copyArgument(argDomainSeparator)
                 .hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
-                .showMessage("POLYGON")
+                .showMessage("MATIC")
                 .showWrap("EIP712", "")
                 .showPressButton()
                 //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
