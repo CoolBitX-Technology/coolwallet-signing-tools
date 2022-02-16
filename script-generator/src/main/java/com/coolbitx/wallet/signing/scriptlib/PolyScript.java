@@ -317,7 +317,6 @@ b844 a9059cbb
     ScriptData argGasPrice = sac.getArgumentRightJustified(10);
     ScriptData argGasLimit = sac.getArgumentRightJustified(10);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
-    ScriptData argChainId = sac.getArgumentRightJustified(2);
     ScriptData argTokenInfo = sac.getArgumentUnion(0, 29);
     ScriptData argDecimal = sac.getArgument(1);
     ScriptData argNameLength = sac.getArgument(1);
