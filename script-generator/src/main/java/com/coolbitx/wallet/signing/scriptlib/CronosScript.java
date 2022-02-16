@@ -17,7 +17,8 @@ public class CronosScript {
         public static void listAll() {
                 System.out.println("Cronos: \n" + getCRCScript() + "\n");
                 System.out.println("Cronos erc20: \n" + getCRC20Script() + "\n");
-                System.out.println("Cronos Smart Contract: \n " + getCROContractBlindScript() + "\n");
+                System.out.println(
+                                "Cronos Smart Contract: \n " + getCROContractBlindScript() + "\n");
                 System.out.println("Cronos Smart Contract Segment: \n "
                                 + getCROContractBlindSegmentScript() + "\n");
         }
@@ -95,10 +96,10 @@ public class CronosScript {
                 String script = new ScriptAssembler()
                                 // set coinType to 3C
                                 .setCoinType(0x3C)
-                                .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
-                                .arrayPointer()
-                                .rlpString(argNonce)
-                                .rlpString(argGasPrice).rlpString(argGasLimit)
+                                .ifSigned(argChainInfo, argChainSign, "",
+                                                ScriptAssembler.throwSEError)
+                                .arrayPointer().rlpString(argNonce).rlpString(argGasPrice)
+                                .rlpString(argGasLimit)
                                 // address
                                 .copyString("94").copyArgument(argContractAddress)
                                 // data, Length = 68
@@ -107,8 +108,7 @@ public class CronosScript {
                                 .copyString("0000000000000000000000000000000000000000")
                                 .copyArgument(argValue)
                                 // chainId v
-                                .setBufferInt(argChainIdLength, 1, 6)
-                                .rlpString(argChainId)
+                                .setBufferInt(argChainIdLength, 1, 6).rlpString(argChainId)
                                 // empty r,s
                                 .copyString("8080").arrayEnd(1)
                                 // Show symbol
@@ -136,7 +136,9 @@ public class CronosScript {
                 return script;
         }
 
-        public static String CRC20ScriptSignature = "FA0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+        public static String CRC20ScriptSignature = Strings.padStart(
+                        "3044022009285c34eee70211b248b9efeb4881e70ba57e1c261e3b8144bc145014a35b8c022046d03a39667ab4654769bc2e81e70c0b4ec4ed914717d00f6ef650c357281028",
+                        144, '0');
 
         public static String getCROContractBlindScript() {
                 ScriptArgumentComposer sac = new ScriptArgumentComposer();
