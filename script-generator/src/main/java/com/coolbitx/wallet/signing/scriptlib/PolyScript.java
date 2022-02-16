@@ -17,13 +17,21 @@ public class PolyScript {
 
   public static void listAll() {
     System.out.println("Poly eip1559: \n" + getPolyEIP1559Script() + "\n");
-    System.out.println("Poly eip1559 erc20: \n" + getPolyEIP1559ERC20Script() + "\n");
-    System.out.println("Poly eip1559 Smart Contract: \n" + getPolyEIP1559SmartScript() + "\n");
+    System.out.println(
+      "Poly eip1559 erc20: \n" + getPolyEIP1559ERC20Script() + "\n"
+    );
+    System.out.println(
+      "Poly eip1559 Smart Contract: \n" + getPolyEIP1559SmartScript() + "\n"
+    );
     System.out.println("Poly: \n" + getPolyScript() + "\n");
     System.out.println("Poly erc20: \n" + getERC20Script() + "\n");
-    System.out.println("Poly Smart Contract: \n" + getPolyContractBlindScript() + "\n");
+    System.out.println(
+      "Poly Smart Contract: \n" + getPolyContractBlindScript() + "\n"
+    );
     System.out.println("Poly Message: \n" + getPolyMessageBlindScript() + "\n");
-    System.out.println("Poly TypedData: \n" + getPolyTypedDataBlindScript() + "\n");
+    System.out.println(
+      "Poly TypedData: \n" + getPolyTypedDataBlindScript() + "\n"
+    );
   }
 
   /*
@@ -77,7 +85,13 @@ accessList :       c0
       .arrayEnd(1)
       .showMessage("MATIC")
       .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-      .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
+      .baseConvert(
+        argTo,
+        Buffer.CACHE2,
+        0,
+        ScriptAssembler.hexadecimalCharset,
+        ScriptAssembler.zeroInherit
+      )
       .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
       .showAmount(argValue, 18)
       .showPressButton()
@@ -142,15 +156,26 @@ accessList :       c0
       .copyString("C0")
       .arrayEnd(1)
       .showMessage("MATIC")
-      .ifSigned(argTokenInfo, argSign, "",
-        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
+      .ifSigned(
+        argTokenInfo,
+        argSign,
+        "",
+        new ScriptAssembler()
+          .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
+          .getScript()
       )
       .setBufferInt(argNameLength, 1, 7)
       .copyArgument(argName, Buffer.CACHE2)
       .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
       .clearBuffer(Buffer.CACHE2)
       .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-      .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
+      .baseConvert(
+        argTo,
+        Buffer.CACHE2,
+        0,
+        ScriptAssembler.hexadecimalCharset,
+        ScriptAssembler.zeroInherit
+      )
       .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
       .setBufferInt(argDecimal, 0, 20)
       .showAmount(argValue, 1000)
@@ -237,7 +262,8 @@ accessList :       c0
       // gasLimit
       .rlpString(argGasLimit)
       // toAddress
-      .copyString("94").copyArgument(argTo)
+      .copyString("94")
+      .copyArgument(argTo)
       // value
       .rlpString(argValue)
       // data
@@ -252,10 +278,15 @@ accessList :       c0
       // .rlpList(1)
       .showMessage("MATIC")
       .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-      .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
-          ScriptAssembler.zeroInherit)
+      .baseConvert(
+        argTo,
+        Buffer.CACHE2,
+        0,
+        ScriptAssembler.hexadecimalCharset,
+        ScriptAssembler.zeroInherit
+      )
       .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-      .showAmount(argValue, 18) 
+      .showAmount(argValue, 18)
       .showPressButton()
       // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
       .setHeader(HashType.Keccak256, SignType.ECDSA)
@@ -318,15 +349,26 @@ b844 a9059cbb
       // .rlpList(2)
       .arrayEnd(1)
       .showMessage("MATIC")
-      .ifSigned(argTokenInfo, argSign, "",
-        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript()
+      .ifSigned(
+        argTokenInfo,
+        argSign,
+        "",
+        new ScriptAssembler()
+          .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
+          .getScript()
       )
       .setBufferInt(argNameLength, 1, 7)
       .copyArgument(argName, Buffer.CACHE2)
       .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
       .clearBuffer(Buffer.CACHE2)
       .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-      .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
+      .baseConvert(
+        argTo,
+        Buffer.CACHE2,
+        0,
+        ScriptAssembler.hexadecimalCharset,
+        ScriptAssembler.zeroInherit
+      )
       .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
       .setBufferInt(argDecimal, 0, 20)
       .showAmount(argValue, 1000)
@@ -400,6 +442,7 @@ b844 a9059cbb
       .getScript();
     return script;
   }
+
   public static String PolyMessageBlindScriptSignature = "";
 
   public static String getPolyTypedDataBlindScript() {
@@ -408,7 +451,7 @@ b844 a9059cbb
     ScriptData argMessage = sac.getArgumentAll();
 
     String script = new ScriptAssembler()
-      // set coinType to 3C   
+      // set coinType to 3C
       .setCoinType(0x3C)
       .copyString("1901")
       .copyArgument(argDomainSeparator)
@@ -421,3 +464,4 @@ b844 a9059cbb
       .getScript();
     return script;
   }
+}
