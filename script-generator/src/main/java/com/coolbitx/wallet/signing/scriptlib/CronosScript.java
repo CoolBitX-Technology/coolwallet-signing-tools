@@ -13,7 +13,7 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
-public class CrcScript {
+public class CronosScript {
 
     public static void listAll() {
         System.out.println("Crc: \n" + getCRCScript() + "\n");
