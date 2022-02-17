@@ -132,7 +132,7 @@ public class CroScript {
                 .arrayEnd() // fee end
                 .arrayEnd() // auth_info end
                 // chain_id
-                .copyString("63727970746f2d6f72672d636861696e2d6d61696e6e65742d31")
+                .copyString("1a1A63727970746f2d6f72672d636861696e2d6d61696e6e65742d31")
                 // account_number
                 .copyString("20")
                 .protobuf(argAccountNumber, typeInt)
@@ -156,7 +156,7 @@ public class CroScript {
         }
         scriptAsb.showAddress(argToOrValidator);
         if (type != CroTxType.WITHDRAW) {
-            scriptAsb.showAmount(argAmount, 6).getScript();
+            scriptAsb.showAmount(argAmount, 8).getScript();
         }
         script = scriptAsb.showPressButton()
                 // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
