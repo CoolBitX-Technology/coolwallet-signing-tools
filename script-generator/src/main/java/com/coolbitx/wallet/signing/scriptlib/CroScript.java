@@ -6,6 +6,7 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
+import com.google.common.base.Strings;
 
 public class CroScript {
 
@@ -164,4 +165,17 @@ public class CroScript {
                 .getScript();
         return script;
     }
+
+    public static String CosmosScriptSignature = Strings.padStart(
+            "30460221009a19b237f82340285c275c40c6904f6d2586b983b1a9a2263b5e94216e860838022100e7976b42313ac17629386668c41213d811d65e90494ee47012d19a58290c0315",
+            144, '0');
+    public static String CosmosDelegateScriptSignature = Strings.padStart(
+            "00304502207468FBB76F93B56D2EDED7DFD66B36E8BC0A8C144396B63C72090020F150E806022100F0AC223412E0928789C487CC07BADADCBCD4669F8676CE2F0DAD09A9918133C3",
+            144, '0');
+    public static String CosmosUndelegateScriptSignature = Strings.padStart(
+            "0000304402206DA3C4C965D8AC20C19F09814BD910A5D7DAE4DA63A5BB1D7EDBA42EA13216C10220520DD56D0E89BC420402C6890CA617D3FFFC8543C4EA439D5FB854370310EB62",
+            144, '0');
+    public static String CosmosWithdrawScriptSignature = Strings.padStart(
+            "00304502201F7900CAFC564A09C770BBBC6C3CC80FDB9AB0A6DE3AFE071ADF6BF1DE3EF40A0221008026AC45EA5919AF4EF21C790EC9DE6AFA351D1FADB15B26BFCE821EF0DB02B6",
+            144, '0');
 }
