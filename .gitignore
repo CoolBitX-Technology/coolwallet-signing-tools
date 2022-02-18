@@ -8,3 +8,7 @@
 **/.nb-gradle/
 **/node_modules/
 /bin/
+/.idea
+script-generator/coolwallet-signing-sdk.iml
+script-generator/target
+script-generator/${project.build.directory}
