@@ -6,6 +6,7 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
+import com.google.common.base.Strings;
 
 public class CroScript {
 
@@ -164,4 +165,17 @@ public class CroScript {
                 .getScript();
         return script;
     }
+
+    public static String CroScriptSignature = Strings.padStart(
+            "304502205507429A2145100A4D5F3F29EE3EAC2257056390036B0F36AF76FFB1264D2E410221008487F937338FDA74CEE56C659D93C8BF69E3845F6EB116C7B056124C29A2A80E",
+            144, '0');
+    public static String CroDelegateScriptSignature = Strings.padStart(
+            "3045022100AC4C9109D4F1772F40C866220091F091E306C19EF80B886608F890CE3874112502207C5282B72D8ABA1EA6A1D8110ECE11376EB5BC242855D142057AA7C642FA9C7A",
+            144, '0');
+    public static String CroUndelegateScriptSignature = Strings.padStart(
+            "3045022100C69BB84850469C4884CD7C549C2A3E5D01647E0D2CE18C17CC2A29EE3426096102204CB8F05FBF30360D3AEDBCF7DB1D884AE6BD48F3D00F80EE213F33EDAF206BF6",
+            144, '0');
+    public static String CroWithdrawScriptSignature = Strings.padStart(
+            "3045022100B7EFF2B51BE50D9D7111F94938304D7B10EE3E4DCC021C18675A19F8814C6B9C02206DA3EB9D3639B0291C0AB3769BA65D0A6A10B92632F7C337BE481CCD1E18E3CC",
+            144, '0');
 }
