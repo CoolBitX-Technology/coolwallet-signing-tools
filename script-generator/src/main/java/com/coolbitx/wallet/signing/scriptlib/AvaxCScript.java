@@ -31,7 +31,7 @@ public class AvaxCScript {
                 // set coinType to 3C
                 .setCoinType(0x3C)
                 // temp byte for rlpList
-//                .copyString("C0")
+                // .copyString("C0")
                 .arrayPointer()
                 // nonce
                 .rlpString(argNonce)
@@ -51,7 +51,7 @@ public class AvaxCScript {
                 .rlpString(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
-//                .rlpList(1)
+                // .rlpList(1)
                 .arrayEnd(1)
                 .showMessage("AVAX")
                 .copyString(HexUtil.toHexString("0x"), ScriptData.Buffer.CACHE2)
