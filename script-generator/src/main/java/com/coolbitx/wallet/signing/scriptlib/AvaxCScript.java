@@ -139,6 +139,7 @@ public class AvaxCScript {
         String script = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(0x3C)
+                // .copyString("F800")
                 .arrayPointer()
                 // nonce
                 .rlpString(argNonce)
@@ -152,18 +153,20 @@ public class AvaxCScript {
                 // value
                 .rlpString(argValue)
                 // data
-                .rlpDataPlaceholder(argData)
+                .rlpString(argData)
                 // chainId v
+                // .rlpString(argChainId)
                 .copyString("A869", ScriptData.Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
+                // r, s
                 .copyString("8080")
+                // .rlpList(2)
                 .arrayEnd(1)
-                .showMessage("AVAX")
-                .showWrap("SMART", "")
-                .showPressButton()
-                // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                .setHeader(ScriptAssembler.HashType.Keccak256, ScriptAssembler.SignType.ECDSA)
-                .getScript();
+                // txDetail
+                .showMessage("AVAX").showWrap("SMART", "").showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
+                // sign=01=ECDSA
+                .setHeader(ScriptAssembler.HashType.Keccak256, ScriptAssembler.SignType.ECDSA).getScript();
         return script;
     }
 }
