@@ -15,6 +15,10 @@ public class SolScript {
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+    public static void main(String[] args) {
+        System.out.println("Sol transfer: "+getSolScript());
+    }
+
     public String script = "03000202C70700000001F5CAA01700CAA11700CAAC170002CAAC170003CAACC7000460CAACC7006410CAAC170074CAAC170075CAACC7007602CAAC170078DDFC970023DAACC7C0790C07D207CC05065052455353425554546F4E";
 
     public static void listAll() {
@@ -34,7 +38,8 @@ public class SolScript {
         ScriptData keyIndicesCount = sac.getArgument(1);
         ScriptData keyIndices = sac.getArgument(2);
         ScriptData dataLength = sac.getArgument(1);
-        ScriptData data = sac.getArgument(4);
+        ScriptData dataIndex = sac.getArgument(1);
+        ScriptData data = sac.getArgument(3);
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
         String script = scriptAsb
@@ -50,11 +55,12 @@ public class SolScript {
                 .copyArgument(keyIndicesCount)
                 .copyArgument(keyIndices)
                 .copyArgument(dataLength)
+                .copyArgument(dataIndex)
                 .copyArgument(data)
 
                 .showMessage("SOL")
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
-                .showAmount(data, 7)
+                .showAmount(data, 9)
                 .showPressButton()
                 .setHeader(HashType.SHA256, SignType.EDDSA)
                 .getScript();
