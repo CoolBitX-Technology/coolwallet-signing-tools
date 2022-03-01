@@ -63,6 +63,7 @@ public class ScriptAssembler {
     }
 
     public enum HashType{
+        NONE("00"),
         SHA1("01"), 
         SHA256("02"), 
         SHA512("03"), 
