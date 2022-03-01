@@ -63,9 +63,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b19e9be2-b16a-4652-a659-d8ff6f5e8b51" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/coolwallet-signing-sdk.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/EthScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/EthScript.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/SolScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/SolScript.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -92,7 +91,20 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
-  <component name="RunManager" selected="Application.SolScript">
+  <component name="RunManager" selected="Application.EthScript">
+    <configuration name="EthScript" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.coolbitx.wallet.signing.scriptlib.EthScript" />
+      <module name="coolwallet-signing-sdk" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.coolbitx.wallet.signing.scriptlib.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SolScript" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.coolbitx.wallet.signing.scriptlib.SolScript" />
       <module name="coolwallet-signing-sdk" />
@@ -124,9 +136,11 @@
     <list>
       <item itemvalue="Application.main" />
       <item itemvalue="Application.SolScript" />
+      <item itemvalue="Application.EthScript" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.EthScript" />
         <item itemvalue="Application.SolScript" />
         <item itemvalue="Application.main" />
       </list>
@@ -143,6 +157,9 @@
       <option name="presentableId" value="Default" />
       <updated>1645673832649</updated>
       <workItem from="1645673841829" duration="4536000" />
+      <workItem from="1645755921341" duration="5253000" />
+      <workItem from="1645776977931" duration="1557000" />
+      <workItem from="1646016429917" duration="1476000" />
     </task>
     <servers />
   </component>
@@ -159,6 +176,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="414" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1645677403113">
@@ -169,38 +187,38 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="689" y="314" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645677402459" />
-    <state width="1420" height="284" key="GridCell.Tab.0.bottom" timestamp="1645678060821">
+    <state width="1692" height="281" key="GridCell.Tab.0.bottom" timestamp="1646034339829">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="284" key="GridCell.Tab.0.bottom/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645678060821" />
-    <state width="1420" height="284" key="GridCell.Tab.0.center" timestamp="1645678060821">
+    <state width="1692" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1646034339829" />
+    <state width="1692" height="281" key="GridCell.Tab.0.center" timestamp="1646034339829">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="284" key="GridCell.Tab.0.center/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645678060821" />
-    <state width="1420" height="284" key="GridCell.Tab.0.left" timestamp="1645678060821">
+    <state width="1692" height="281" key="GridCell.Tab.0.center/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1646034339829" />
+    <state width="1692" height="281" key="GridCell.Tab.0.left" timestamp="1646034339828">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="284" key="GridCell.Tab.0.left/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645678060821" />
-    <state width="1420" height="284" key="GridCell.Tab.0.right" timestamp="1645678060821">
+    <state width="1692" height="281" key="GridCell.Tab.0.left/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1646034339828" />
+    <state width="1692" height="281" key="GridCell.Tab.0.right" timestamp="1646034339829">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="284" key="GridCell.Tab.0.right/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645678060821" />
-    <state width="1420" height="272" key="GridCell.Tab.1.bottom" timestamp="1645677476863">
+    <state width="1692" height="281" key="GridCell.Tab.0.right/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1646034339829" />
+    <state width="1420" height="272" key="GridCell.Tab.1.bottom" timestamp="1645702314198">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="272" key="GridCell.Tab.1.bottom/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645677476863" />
-    <state width="1420" height="272" key="GridCell.Tab.1.center" timestamp="1645677476863">
+    <state width="1420" height="272" key="GridCell.Tab.1.bottom/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645702314198" />
+    <state width="1420" height="272" key="GridCell.Tab.1.center" timestamp="1645702314197">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="272" key="GridCell.Tab.1.center/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645677476863" />
-    <state width="1420" height="272" key="GridCell.Tab.1.left" timestamp="1645677476863">
+    <state width="1420" height="272" key="GridCell.Tab.1.center/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645702314197" />
+    <state width="1420" height="272" key="GridCell.Tab.1.left" timestamp="1645702314197">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="272" key="GridCell.Tab.1.left/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645677476863" />
-    <state width="1420" height="272" key="GridCell.Tab.1.right" timestamp="1645677476863">
+    <state width="1420" height="272" key="GridCell.Tab.1.left/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645702314197" />
+    <state width="1420" height="272" key="GridCell.Tab.1.right" timestamp="1645702314197">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1420" height="272" key="GridCell.Tab.1.right/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645677476863" />
+    <state width="1420" height="272" key="GridCell.Tab.1.right/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1645702314197" />
     <state x="440" y="99" key="SettingsEditor" timestamp="1645673912746">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
