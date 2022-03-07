@@ -15,6 +15,8 @@ public class AvaxCScript {
         System.out.println("Avax: \n" + getAvaxCScript() + "\n");
         System.out.println("Avax ERC20: \n" + getERC20Script() + "\n");
         System.out.println("Avax Smart Contract: \n" + getAvaxContractBlindScript() + "\n");
+        System.out.println("Avax Message: \n" + getAvaxMessageBlindScript() + "\n");
+        System.out.println("Avax TypedData: \n" + getAvaxTypedDataBlindScript() + "\n");
     }
 
     // todo: change chainid to 43114
@@ -164,6 +166,44 @@ public class AvaxCScript {
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
                 .setHeader(ScriptAssembler.HashType.Keccak256, ScriptAssembler.SignType.ECDSA)
                 .getScript();
+        return script;
+    }
+
+    public static String getAvaxMessageBlindScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argMessage = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+                // set coinType to 3C
+                .setCoinType(0x3C)
+                .copyString("19457468657265756D205369676E6564204D6573736167653A0A")
+                .copyArgument(argMessage)
+                // txDetail
+                .showMessage("AVAX")
+                .showWrap("MESSAGE", "")
+                .showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(ScriptAssembler.HashType.Keccak256, ScriptAssembler.SignType.ECDSA).getScript();
+        return script;
+    }
+
+    public static String getAvaxTypedDataBlindScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argDomainSeparator = sac.getArgument(32);
+        ScriptData argMessage = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+                // set coinType to 3C
+                .setCoinType(0x3C)
+                .copyString("1901")
+                .copyArgument(argDomainSeparator)
+                .hash(argMessage, ScriptData.Buffer.TRANSACTION, ScriptAssembler.Keccak256)
+                // txDetail
+                .showMessage("AVAX")
+                .showWrap("EIP712", "")
+                .showPressButton()
+                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(ScriptAssembler.HashType.Keccak256, ScriptAssembler.SignType.ECDSA).getScript();
         return script;
     }
 }
