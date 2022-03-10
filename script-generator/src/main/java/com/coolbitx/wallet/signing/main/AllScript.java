@@ -19,6 +19,7 @@ public class AllScript {
         EtcScript.listAll();
         CronosScript.listAll();
         CroScript.listAll();
+        XtzScript.listAll();
         LunaScript.listAll();
     }
 
