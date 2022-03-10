@@ -154,7 +154,6 @@ public class XtzScript {
                 .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), Buffer.CACHE2)
                 .clearBuffer(Buffer.CACHE1)
                 .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // Show Amount
                 .showAmount(argAmount, 6)
