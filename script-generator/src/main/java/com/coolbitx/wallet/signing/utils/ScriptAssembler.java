@@ -63,6 +63,7 @@ public class ScriptAssembler {
     }
 
     public enum HashType{
+        NONE("00"),
         SHA1("01"), 
         SHA256("02"), 
         SHA512("03"), 
@@ -621,9 +622,13 @@ public class ScriptAssembler {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
+        if (argData.length == 1000) {
+          argData.length = expect.length() / 2;
+        }
         script += compose("1A", argData, null, trueStatement.length() / 2, 0)
                 + HexUtil.rightJustify(expect, argData.length)
                 + trueStatement + falseStatement;
+        argData.length = 1000;
         return this;
     }
 

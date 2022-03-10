@@ -17,9 +17,10 @@ public class AllScript {
         XrpScript.listAll();
         AdaScript.listAll();
         EtcScript.listAll();
-        CrcScript.listAll();
+        CronosScript.listAll();
         CroScript.listAll();
         XtzScript.listAll();
+        LunaScript.listAll();
     }
 
 }
