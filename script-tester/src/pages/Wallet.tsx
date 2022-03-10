@@ -2,8 +2,7 @@ import { useState, useContext, FC } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
-import { mnemonicToSeedSync } from 'bip39';
-import { apdu, Transport } from '@coolwallet/core';
+import { utils, Transport } from '@coolwallet/core';
 import { ButtonInputs } from '@/components';
 import Context from '@/store';
 
@@ -25,12 +24,11 @@ const Wallet: FC<Props> = (props: Props) => {
     setRecoverStatus('recovering');
     setIsLocked(true);
     try {
-      const seedHex = mnemonicToSeedSync(mnemonic).toString('hex');
-      console.log('seedHex: ' + seedHex);
+      
       const SEPublicKey = localStorage.getItem('SEPublicKey');
       if (isNil(SEPublicKey) || isNil(props.appId)) return;
       console.log(`SEPublicKey: ${SEPublicKey}`);
-      await apdu.wallet.setSeed(props.transport, props.appId, props.appPrivateKey, seedHex, SEPublicKey);
+      await utils.createWalletByMnemonic(props.transport, props.appId, props.appPrivateKey, mnemonic, SEPublicKey);
       setRecoverStatus('success');
     } catch (error) {
       console.error(error);

@@ -2,9 +2,9 @@ import { memo, FC } from 'react';
 import clsx from 'clsx';
 import { Row, Col, ButtonGroup, Button as BootStrapButton, Form } from 'react-bootstrap';
 
-const row = clsx('text-lg', 'mt-4');
+const row = clsx('text-lg', 'mt-4', 'flex-nowrap');
 
-const textArea = clsx('flex', 'items-center', 'rounded', 'font-sans', 'bg-gray-500');
+const textArea = clsx('flex', 'items-center', 'rounded', 'font-sans', 'bg-gray-500', 'break-all');
 
 const inputCol = clsx('p-0', 'mr-4');
 

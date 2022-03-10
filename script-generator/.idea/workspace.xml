@@ -63,9 +63,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b19e9be2-b16a-4652-a659-d8ff6f5e8b51" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/CronosScript.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/EtcScript.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coolwallet-signing-sdk.iml" beforeDir="false" afterPath="$PROJECT_DIR$/coolwallet-signing-sdk.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/main/AllScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/main/AllScript.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/AdaScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/AdaScript.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/BnbScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/BnbScript.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/CroScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/CroScript.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/EthScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/EthScript.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/SolScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/scriptlib/SolScript.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/utils/ScriptAssembler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/coolbitx/wallet/signing/utils/ScriptAssembler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../script-tester/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../script-tester/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../script-tester/src/components/ButtonInputs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../script-tester/src/components/ButtonInputs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../script-tester/src/configs/scripts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../script-tester/src/configs/scripts/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../script-tester/src/pages/Signing.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../script-tester/src/pages/Signing.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../script-tester/src/pages/Wallet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../script-tester/src/pages/Wallet.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,6 +173,7 @@
       <workItem from="1645755921341" duration="5253000" />
       <workItem from="1645776977931" duration="1557000" />
       <workItem from="1646016429917" duration="1476000" />
+      <workItem from="1646392327615" duration="617000" />
     </task>
     <servers />
   </component>

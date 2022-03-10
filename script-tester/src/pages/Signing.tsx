@@ -1,4 +1,4 @@
-import { useState, useContext, FC } from 'react';
+import { useState, useContext, FC, useRef, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import isNil from 'lodash/isNil';
@@ -20,6 +20,7 @@ interface Props {
 
 const Signing: FC<Props> = (props: Props) => {
   const { connected, isLocked, setIsLocked } = useContext(Context);
+  const isEDDSA = useRef(false);
 
   const [transaction, setTransaction] = useState('');
 
@@ -36,6 +37,14 @@ const Signing: FC<Props> = (props: Props) => {
   const [utxoOutputArgument, setUtxoOutputArgument] = useState('');
   const [utxoScript, setUtxoScript] = useState('');
   const [utxoSignature, setUtxoSignature] = useState('');
+
+  useEffect(() => {
+    if (script.length > 8) {
+      const signType = script.slice(6, 8);
+      if (signType === '02' || signType === '03') isEDDSA.current = true;
+      else isEDDSA.current = false;
+    }
+  }, [script]);
 
   const signTx = async () => {
     if (isNil(props.transport)) return;
@@ -64,14 +73,12 @@ const Signing: FC<Props> = (props: Props) => {
       const decryptingKey = await apdu.tx.getSignatureKey(props.transport);
       console.log(decryptingKey);
 
-      const sig = tx.util.decryptSignatureFromSE(encryptedSignature!, decryptingKey, false, false);
-
-      console.log(sig);
+      const sig = tx.util.decryptSignatureFromSE(encryptedSignature!, decryptingKey, isEDDSA.current, false);
 
       await apdu.tx.clearTransaction(props.transport);
       await apdu.mcu.control.powerOff(props.transport);
 
-      setSignature(encryptedSignature ?? '');
+      setSignature(Buffer.from(sig as Buffer).toString('hex') ?? '');
     } catch (error) {
       console.error(error);
     } finally {
@@ -91,20 +98,29 @@ const Signing: FC<Props> = (props: Props) => {
 
       await executeScript(props.transport, props.appId ?? '', props.appPrivateKey, segmentArgument + dataLengthHex);
 
-      const encryptedSignatureArray = await apdu.tx.executeSegmentScript(
+      const encryptedSignature = await apdu.tx.executeSegmentScript(
         props.transport,
         props.appId ?? '',
         props.appPrivateKey,
         segmentData
       );
+      console.log(encryptedSignature);
 
       // finish prepare
       await apdu.tx.finishPrepare(props.transport);
 
+      // get tx detail
+      await apdu.tx.getTxDetail(props.transport);
+
+      const decryptingKey = await apdu.tx.getSignatureKey(props.transport);
+      console.log(decryptingKey);
+
+      const sig = tx.util.decryptSignatureFromSE(encryptedSignature!, decryptingKey, isEDDSA.current, false);
+
       await apdu.tx.clearTransaction(props.transport);
       await apdu.mcu.control.powerOff(props.transport);
 
-      setSegmentSignature(encryptedSignatureArray ?? 'Error!');
+      setSegmentSignature(Buffer.from(sig as Buffer).toString('hex') ?? '');
     } catch (e) {
       console.error(e);
     } finally {
@@ -137,10 +153,15 @@ const Signing: FC<Props> = (props: Props) => {
       // get tx detail
       await apdu.tx.getTxDetail(props.transport);
 
+      const decryptingKey = await apdu.tx.getSignatureKey(props.transport);
+      console.log(decryptingKey);
+
       await apdu.tx.clearTransaction(props.transport);
       await apdu.mcu.control.powerOff(props.transport);
 
-      setUtxoSignature(encryptedSignatureArray);
+      const sig = tx.util.decryptSignatureFromSE(encryptedSignatureArray, decryptingKey, isEDDSA.current, false);
+
+      setUtxoSignature(Buffer.from(sig as Buffer).toString('hex'));
     } catch (error) {
       console.error(error);
     } finally {
