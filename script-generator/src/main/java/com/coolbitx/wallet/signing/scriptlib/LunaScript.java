@@ -12,6 +12,9 @@ public class LunaScript{
 
     public static void listAll(){
         System.out.println("Luna Send: \n" + getLunaScript(LunaTxType.SEND) + "\n");
+        System.out.println("Luna Delegate: \n" + getLunaScript(LunaTxType.DELEGATE) + "\n");
+        System.out.println("Luna Undelegate: \n" + getLunaScript(LunaTxType.UNDELEGATE) + "\n");
+        System.out.println("Luna Withdraw: \n" + getLunaScript(LunaTxType.WITHDRAW) + "\n");
     }
 
     public enum LunaTxType{
@@ -43,8 +46,20 @@ public class LunaScript{
                     // message.url - /cosmos.bank.v1beta1.MsgSend
                     url = "0a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64";
                     break;
+                case DELEGATE:
+                    // message.url - /cosmos.staking.v1beta1.MsgDelegate
+                    url = "0a232f636f736d6f732e7374616b696e672e763162657461312e4d736744656c6567617465";
+                    break;
+                case UNDELEGATE:
+                    // message.url - /cosmos.staking.v1beta1.MsgUndelegate
+                    url = "0a252f636f736d6f732e7374616b696e672e763162657461312e4d7367556e64656c6567617465";
+                    break;
+                case WITHDRAW:
+                    // message.url - /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
+                    url = "0a372f636f736d6f732e646973747269627574696f6e2e763162657461312e4d7367576974686472617744656c656761746f72526577617264";
+                    break;
                 default:
-                break;
+                    break;
             }
         }
 
@@ -153,5 +168,14 @@ public class LunaScript{
 
     public static String LunaScriptSignature = Strings.padStart(
         "30450221009834810F91ECBE5A8CAA8DEC50E6B92D8C812C8DACA2D4587C4E3E2AE33F59CB02205266A77E6DAD87D2CBECD6F0F8AAB6F5AE76492A8757EF8B5D5394B0C34BE681", 
+        144, '0');
+    public static String LunaDelegateScriptSignature = Strings.padStart(
+        "30440220202B429154DD883F01C542C0A9CDF96EDC3B58A29AB55A9C38A89D63A480BBE7022003894D7967A9EA991BF629D6865F548F6FA2349FB891902D002F780D0EDD9396", 
+        144, '0');
+    public static String LunaUndelegateScriptSignature = Strings.padStart(
+        "3045022100F23EC6B6A3AC9FEE817F8FA8384389DFD1EE79795F2F7D498F9C0CEB04BE46CD022078FBD3FA9F07CC161D9A295AE5AB0A68EBAEC66019C3C78C146D830EE6E9C346", 
+        144, '0');
+    public static String LunaWithdrawScriptSignature = Strings.padStart(
+        "3045022100D030134AC32A92779D7CD88144175CAECE74CC898EA3348CA10D58EBA3F3414B02204FF11662B86DF15F64F1FBAABD52249B0F702AF09FE17B0B6EDCCCF47628877A", 
         144, '0');
 }
