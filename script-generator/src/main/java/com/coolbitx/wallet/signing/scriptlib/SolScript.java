@@ -14,7 +14,7 @@ public class SolScript {
  * and open the template in the editor.
  */
     public static void main(String[] args) {
-        System.out.println("Sol transfer: "+getSolScript());
+        listAll();
     }
 
     public String script = "03000202C70700000001F5CAA01700CAA11700CAAC170002CAAC170003CAACC7000460CAACC7006410CAAC170074CAAC170075CAACC7007602CAAC170078DDFC970023DAACC7C0790C07D207CC05065052455353425554546F4E";
@@ -78,8 +78,8 @@ public class SolScript {
         ScriptData prefixHeader = sac.getArgument(1);
         ScriptData programIdIndex = sac.getArgument(1);
         ScriptData keyIndicesCount = sac.getArgument(1);
-        ScriptData keyIndices = sac.getArgument(2);
-        ScriptData dataLength = sac.getArgument(2);
+        ScriptData keyIndices = sac.getArgument(1);
+        ScriptData dataLength = sac.getArgument(1);
         ScriptData data = sac.getArgumentAll();
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
