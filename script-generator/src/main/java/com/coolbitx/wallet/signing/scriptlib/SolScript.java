@@ -28,21 +28,21 @@ public class SolScript {
 
     public static String getSolScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData numberRequireSignature = sac.getArgument(5);
-        ScriptData numberReadonlySignedAccount = sac.getArgument(5);
-        ScriptData numberReadonlyUnSignedAccount = sac.getArgument(5);
-        ScriptData keyCount = sac.getArgument(2); 
-        ScriptData keys = sac.getArgument(96);
-        ScriptData recentBlockHash = sac.getArgument(32);
+        ScriptData numberRequireSignature = sac.getArgument(1);
+        ScriptData numberReadonlySignedAccount = sac.getArgument(1);
+        ScriptData numberReadonlyUnSignedAccount = sac.getArgumentRightJustified(1);
+        ScriptData keyCount = sac.getArgumentRightJustified(1);
+        ScriptData keys = sac.getArgumentRightJustified(96);
+        ScriptData recentBlockHash = sac.getArgumentRightJustified(32);
         ScriptData prefixHeader = sac.getArgument(1);
         ScriptData programIdIndex = sac.getArgument(1);
         ScriptData keyIndicesCount = sac.getArgument(1);
         ScriptData keyIndices = sac.getArgument(2);
-        ScriptData dataLength = sac.getArgument(1);
-        ScriptData dataIndex = sac.getArgument(1);
-        ScriptData data = sac.getArgument(3);
+        ScriptData dataLength = sac.getArgument(2);
+        ScriptData data = sac.getArgumentAll();
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
+
         String script = scriptAsb
                 .setCoinType(0x01f5)
                 .copyArgument(numberRequireSignature)
@@ -56,32 +56,31 @@ public class SolScript {
                 .copyArgument(keyIndicesCount)
                 .copyArgument(keyIndices)
                 .copyArgument(dataLength)
-                .copyArgument(dataIndex)
                 .copyArgument(data)
 
                 .showMessage("SOL")
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
-                .showAmount(data, 9)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 8))
+                .showAmount(data, 12)
                 .showPressButton()
-                .setHeader(HashType.SHA256, SignType.EDDSA)
+                .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
         return script;
     }
 
     public static String getSolSmartScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData numberRequireSignature = sac.getArgument(5);
-        ScriptData numberReadonlySignedAccount = sac.getArgument(5);
-        ScriptData numberReadonlyUnSignedAccount = sac.getArgument(5);
-        ScriptData keyCount = sac.getArgument(2);
-        ScriptData keys = sac.getArgument(96);
-        ScriptData recentBlockHash = sac.getArgument(32);
+        ScriptData numberRequireSignature = sac.getArgument(1);
+        ScriptData numberReadonlySignedAccount = sac.getArgument(1);
+        ScriptData numberReadonlyUnSignedAccount = sac.getArgumentRightJustified(1);
+        ScriptData keyCount = sac.getArgumentRightJustified(1);
+        ScriptData keys = sac.getArgumentRightJustified(96);
+        ScriptData recentBlockHash = sac.getArgumentRightJustified(32);
         ScriptData prefixHeader = sac.getArgument(1);
         ScriptData programIdIndex = sac.getArgument(1);
         ScriptData keyIndicesCount = sac.getArgument(1);
         ScriptData keyIndices = sac.getArgument(2);
-        ScriptData dataLength = sac.getArgument(1);
-        ScriptData data = sac.getArgument(4);
+        ScriptData dataLength = sac.getArgument(2);
+        ScriptData data = sac.getArgumentAll();
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
         String script = scriptAsb
@@ -102,7 +101,7 @@ public class SolScript {
                 .showMessage("SOL")
                 .showWrap("SMART", "")
                 .showPressButton()
-                .setHeader(HashType.SHA256, SignType.EDDSA)
+                .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
         return script;
     }
