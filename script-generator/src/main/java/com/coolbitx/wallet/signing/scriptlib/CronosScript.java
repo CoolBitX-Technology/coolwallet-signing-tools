@@ -137,7 +137,7 @@ public class CronosScript {
         }
 
         public static String CRC20ScriptSignature = Strings.padStart(
-                        "3044022009285c34eee70211b248b9efeb4881e70ba57e1c261e3b8144bc145014a35b8c022046d03a39667ab4654769bc2e81e70c0b4ec4ed914717d00f6ef650c357281028",
+                        "3046022100A121463CD1D1D5263A737FDF0228D350A1C1FE77638A314A7F38FF58986EFEFA0221008E5533FC8AA33045049BF9B516AE8FA4E80627A62C085F249C81C0D777EC6F0F",
                         144, '0');
 
         public static String getCROContractBlindScript() {
