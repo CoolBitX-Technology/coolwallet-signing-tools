@@ -6,10 +6,9 @@
 **/nbbuild/
 **/nbdist/
 **/.nb-gradle/
+**/.idea/
 /bin/
 .settings/
-<<<<<<< HEAD
-=======
 .classpath
 .project
->>>>>>> dev
+*.iml
