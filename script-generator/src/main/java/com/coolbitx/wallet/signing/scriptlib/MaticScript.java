@@ -13,7 +13,7 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
-public class PolyScript {
+public class MaticScript {
 
   public static void listAll() {
     System.out.println("Poly eip1559: \n" + getPolyEIP1559Script() + "\n");
