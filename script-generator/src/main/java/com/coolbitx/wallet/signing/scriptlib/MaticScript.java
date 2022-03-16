@@ -190,7 +190,7 @@ accessList :       c0
         ScriptData argGasFeeCap = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
-        ScriptData argData = sac.getArgument(4);
+        ScriptData argData = sac.getArgumentAll();
 
         String script = new ScriptAssembler()
                 // set coinType to 3C
@@ -207,7 +207,7 @@ accessList :       c0
                 .copyString("94")
                 .copyArgument(argTo)
                 .rlpString(argValue)
-                .rlpDataPlaceholder(argData)
+                .rlpString(argData)
                 // accessList
                 .copyString("C0")
                 .arrayEnd(1)
