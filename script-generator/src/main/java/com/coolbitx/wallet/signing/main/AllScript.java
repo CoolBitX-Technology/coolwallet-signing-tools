@@ -21,6 +21,7 @@ public class AllScript {
         CroScript.listAll();
         XtzScript.listAll();
         LunaScript.listAll();
+        MaticScript.listAll();
     }
 
 }
