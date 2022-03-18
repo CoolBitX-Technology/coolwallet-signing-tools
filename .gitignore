@@ -12,3 +12,4 @@
 script-generator/coolwallet-signing-sdk.iml
 script-generator/target
 script-generator/${project.build.directory}
+script-generator/local-lib
