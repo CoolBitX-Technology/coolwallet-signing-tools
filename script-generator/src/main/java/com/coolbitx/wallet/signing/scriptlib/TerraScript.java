@@ -13,6 +13,7 @@ public class TerraScript{
 
     public static void listAll(){
         System.out.println("Terra Send: \n" + getTerraScript(TerraTxType.SEND) + "\n");
+        System.out.println("Terra Send Signature: \n" + TerraTestScriptSignature + "\n");
         System.out.println("Terra Delegate: \n" + getTerraScript(TerraTxType.DELEGATE) + "\n");
         System.out.println("Terra Undelegate: \n" + getTerraScript(TerraTxType.UNDELEGATE) + "\n");
         System.out.println("Terra Withdraw: \n" + getTerraScript(TerraTxType.WITHDRAW) + "\n");
@@ -93,8 +94,7 @@ public class TerraScript{
                     // amount<Coin>
                     .copyString("1a").arrayPointer()
                     // coin.denom - from argument
-                    .ifSigned(argDenomInfo, argDenomSign, "",
-                        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
+                    .ifSigned(argDenomInfo, argDenomSign, "", ScriptAssembler.throwSEError)
                     .copyArgument(argDenom)
                     // coin.amount
                     .copyString("12").arrayPointer()
@@ -132,8 +132,7 @@ public class TerraScript{
                 // amount<Coin>
                 .copyString("0a").arrayPointer()
                 // coin.denom - from argument
-                .ifSigned(argFeeDenomInfo, argFeeDenomSign, "",
-                    new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
+                .ifSigned(argFeeDenomInfo, argFeeDenomSign, "", ScriptAssembler.throwSEError)
                 .copyArgument(argFeeDenom)
                 // coin.amount
                 .copyString("12").arrayPointer()
@@ -184,7 +183,7 @@ public class TerraScript{
     }
 
     public static String TerraScriptSignature = Strings.padStart(
-        "3045022100B2AF39B0176CBF959E8EA5D2F76E2AC48D7AB3B0104CE8BFECD7706C836FF79002204DEF69431C5DBC5279C2D81D9ECC52C59A6AE2B668A42F1CFFAF03C3226FD41A", 
+        "30440220761A5381FF53A4A95C6476CF184F81556D5B9E6744FFD7FE4FFDE945ACF2715602203D0890277D5745AADF8B9B43C321EC61CEBAC2FD68CADB470E81245DCA573F70", 
         144, '0');
     public static String TerraDelegateScriptSignature = Strings.padStart(
         "30440220202B429154DD883F01C542C0A9CDF96EDC3B58A29AB55A9C38A89D63A480BBE7022003894D7967A9EA991BF629D6865F548F6FA2349FB891902D002F780D0EDD9396", 
@@ -197,6 +196,6 @@ public class TerraScript{
         144, '0');
 
     public static String TerraTestScriptSignature = Strings.padStart(
-        "30460221009CF91CFE0456B0F63B2039A9FCC778ECC564ABF4FEE29DA7112190E54708ABE6022100C14FE4E4E76B96E0BBB1BF61277AD29A100B05BD7EC28AEF72CF30D5C283B216", 
+        "30440220783521C66992D19A0FC7F117A4334E869761C47FFFF993DAEE13EC79D412C64302200EA5E9911E2E6ADDF00AB29FDC87D176FDB1159334797C7A04FD9BAFBAB7692C", 
         144, '0');
 }
