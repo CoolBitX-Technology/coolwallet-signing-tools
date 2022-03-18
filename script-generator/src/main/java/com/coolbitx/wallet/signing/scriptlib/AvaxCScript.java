@@ -7,10 +7,6 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 
 public class AvaxCScript {
 
-    public static void main(String[] args) {
-        listAll();
-    }
-
     public static void listAll() {
         System.out.println("Avax: \n" + getAvaxCScript() + "\n");
         System.out.println("Avax ERC20: \n" + getERC20Script() + "\n");
