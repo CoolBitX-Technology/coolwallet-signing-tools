@@ -19,7 +19,6 @@ public class AvaxCScript {
         System.out.println("Avax TypedData: \n" + getAvaxTypedDataBlindScript() + "\n");
     }
 
-    // todo: change chainid to 43114
     public static String getAvaxCScript() {
 
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -49,7 +48,7 @@ public class AvaxCScript {
                 .copyString("80")
                 // chainId v
                 // + ScriptAssembler.rlpString(argChainId)
-                .copyString("A869", ScriptData.Buffer.CACHE1)
+                .copyString("A86A", ScriptData.Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
@@ -68,7 +67,6 @@ public class AvaxCScript {
         return script;
     }
 
-    // todo: change chainid to 43114
     public static String getERC20Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -101,7 +99,7 @@ public class AvaxCScript {
                 .copyArgument(argValue)
                 // chainId v
                 // + ScriptAssembler.rlpString(argChainId)
-                .copyString("A869", ScriptData.Buffer.CACHE1)
+                .copyString("A86A", ScriptData.Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
@@ -127,7 +125,6 @@ public class AvaxCScript {
         return script;
     }
 
-    // todo: change chainid to 43114
     public static String getAvaxContractBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -158,7 +155,7 @@ public class AvaxCScript {
                 .rlpString(argData)
                 // chainId v
                 // .rlpString(argChainId)
-                .copyString("A869", ScriptData.Buffer.CACHE1)
+                .copyString("A86A", ScriptData.Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
                 // r, s
                 .copyString("8080")
