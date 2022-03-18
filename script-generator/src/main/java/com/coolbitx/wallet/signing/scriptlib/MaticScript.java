@@ -22,15 +22,34 @@ public class MaticScript {
 
     public static void listAll() {
         System.out.println("Poly eip1559: \n" + getEIP1559TransferScript() + "\n");
+        System.out.println("Signature: \n" + EIP1559TransferScriptSignature + "\n");
+
         System.out.println("Poly eip1559 erc20: \n" + getEIP1559ERC20Script() + "\n");
+        System.out.println("Signature: \n" + EIP1559ERC20ScriptSignature + "\n");
+
         System.out.println("Poly eip1559 Smart Contract: \n" + getEIP1559SmartContractScript() + "\n");
+        System.out.println("Signature: \n" + EIP1559SmartContractScriptSignature + "\n");
+
         System.out.println("Poly eip1559 Smart Contract Segment: \n" + getEIP1559SmartContractSegmentScript() + "\n");
+        System.out.println("Signature: \n" + EIP1559SmartContractSegmentScriptSignature + "\n");
+
         System.out.println("Poly: \n" + getTransferScript() + "\n");
+        System.out.println("Signature: \n" + TransferScriptSignature + "\n");
+
         System.out.println("Poly erc20: \n" + getERC20Script() + "\n");
+        System.out.println("Signature: \n" + ERC20ScriptSignature + "\n");
+
         System.out.println("Poly Smart Contract: \n" + getSmartContractScript() + "\n");
+        System.out.println("Signature: \n" + SmartContractScriptSignature + "\n");
+
         System.out.println("Poly Smart Contract Segment: \n" + getSmartContractSegmentScript() + "\n");
-        System.out.println("Poly Message: \n" + getMessageBlindScript() + "\n");
-        System.out.println("Poly TypedData: \n" + getTypedDataBlindScript() + "\n");
+        System.out.println("Signature: \n" + SmartContractSegmentScriptSignature + "\n");
+
+        System.out.println("Poly Message: \n" + getMessageScript() + "\n");
+        System.out.println("Signature: \n" + MessageScriptSignature + "\n");
+
+        System.out.println("Poly TypedData: \n" + getTypedDataScript() + "\n");
+        System.out.println("Signature: \n" + TypedDataScriptSignature + "\n");
     }
 
     /*
@@ -504,7 +523,7 @@ b844 a9059cbb
 
     public static String SmartContractSegmentScriptSignature = Strings.padStart("304402201834eef7c38f4e8c7fedb8c6d1f9b2726a7ef5035748875f3a9f150b40635ab002206bb088b39a220dfe4a62b80ec61d048e96ce7651ac1b8832ea837457e7304b69", 144, '0');
 
-    public static String getMessageBlindScript() {
+    public static String getMessageScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argMessage = sac.getArgumentAll();
 
@@ -522,9 +541,9 @@ b844 a9059cbb
         return script;
     }
 
-    public static String MessageBlindScriptSignature = Strings.padStart("3045022100a33765ca5929cfd400ab9471bbd92261e061a94e4d3eeca2b7421091655fd0fc02206fa50d324f2affd9d24d9b45c08a8b3f859c043d1158dd1a8dad00e7e193a24b", 144, '0');
+    public static String MessageScriptSignature = Strings.padStart("3045022100a33765ca5929cfd400ab9471bbd92261e061a94e4d3eeca2b7421091655fd0fc02206fa50d324f2affd9d24d9b45c08a8b3f859c043d1158dd1a8dad00e7e193a24b", 144, '0');
 
-    public static String getTypedDataBlindScript() {
+    public static String getTypedDataScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argDomainSeparator = sac.getArgument(32);
         ScriptData argMessage = sac.getArgumentAll();
@@ -544,5 +563,5 @@ b844 a9059cbb
         return script;
     }
 
-    public static String TypedDataBlindScriptSignature = Strings.padStart("3046022100c70e80e0668a137a4bac8d3ef3e8d83efda57a8e5f31c5ca7c0340d17d02d209022100e03bff92275d8b342b6c209ec8ab3055c1bcc3f48a677d43e92f1b6d9350ec4f", 144, '0');
+    public static String TypedDataScriptSignature = Strings.padStart("3046022100c70e80e0668a137a4bac8d3ef3e8d83efda57a8e5f31c5ca7c0340d17d02d209022100e03bff92275d8b342b6c209ec8ab3055c1bcc3f48a677d43e92f1b6d9350ec4f", 144, '0');
 }
