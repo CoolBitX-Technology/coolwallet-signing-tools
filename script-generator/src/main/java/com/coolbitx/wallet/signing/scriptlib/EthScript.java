@@ -18,13 +18,11 @@ public class EthScript {
         System.out.println("Eth eip1559: \n" + getETHEIP1559Script() + "\n");
         System.out.println("Eth eip1559 erc20: \n" + getETHEIP1559ERC20Script() + "\n");
         System.out.println("Eth eip1559 Smart Contract: \n" + getETHEIP1559SmartScript() + "\n");
-        System.out.println("Eth eip1559 Smart Contract Segment: \n"
-                + getETHEIP1559SmartSegmentScript() + "\n");
+        System.out.println("Eth eip1559 Smart Contract Segment: \n" + getETHEIP1559SmartSegmentScript() + "\n");
         System.out.println("Eth: \n" + getETHScript() + "\n");
         System.out.println("Eth erc20: \n" + getERC20Script() + "\n");
         System.out.println("Eth Smart Contract: \n" + getEtherContractBlindScript() + "\n");
-        System.out.println(
-                "Eth Smart Contract Segment: \n" + getEtherContractBlindSegmentScript() + "\n");
+        System.out.println("Eth Smart Contract Segment: \n" + getEtherContractBlindSegmentScript() + "\n");
         System.out.println("Eth Message: \n" + getEtherMessageBlindScript() + "\n");
         System.out.println("Eth TypedData: \n" + getEtherTypedDataBlindScript() + "\n");
     }
@@ -87,8 +85,8 @@ public class EthScript {
         return script;
     }
 
-    public static String ETHEIP1559ScriptSignature =
-            "3046022100F3CA891D06B8284C01B9E51CD478E7BBA14CD99F137383F2EAD642747222E2F9022100A121B0DE524F00D063DAB9E51E86B4CAF1B1874F79570AEE1AA437DFAD750C1C";
+    public static String ETHEIP1559ScriptSignature
+            = "3046022100F3CA891D06B8284C01B9E51CD478E7BBA14CD99F137383F2EAD642747222E2F9022100A121B0DE524F00D063DAB9E51E86B4CAF1B1874F79570AEE1AA437DFAD750C1C";
 
     /*
     txType(EIP-2718) : 02
@@ -155,8 +153,8 @@ public class EthScript {
         return script;
     }
 
-    public static String ETHEIP1559ERC20ScriptSignature =
-            "00304502207A63FB17CEA7E123C1BF12CBE3687614FCD677DE13171CC0B275E9659421762A022100ED2A5EC6AB2736C1D9087033CB48181784859A10C8A9674ADEFE34A84D520646";
+    public static String ETHEIP1559ERC20ScriptSignature
+            = "00304502207A63FB17CEA7E123C1BF12CBE3687614FCD677DE13171CC0B275E9659421762A022100ED2A5EC6AB2736C1D9087033CB48181784859A10C8A9674ADEFE34A84D520646";
 
     public static String getETHEIP1559SmartScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -168,39 +166,39 @@ public class EthScript {
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         ScriptData argData = sac.getArgumentAll();
 
-        String script =
-                // set coinType to 3C
+        String script
+                = // set coinType to 3C
                 new ScriptAssembler()
-                .setCoinType(0x3C)
-                // txType (EIP-2718)
-                .copyString("02")
-                .arrayPointer()
-                // chainId
-                .copyString("01")
-                .rlpString(argNonce)
-                .rlpString(argGasTipCap)
-                .rlpString(argGasFeeCap)
-                .rlpString(argGasLimit)
-                .copyString("94")
-                .copyArgument(argTo)
-                .rlpString(argValue)
-                .rlpString(argData)
-                // accessList
-                .copyString("C0")
-                .arrayEnd(1)
-                // txDetail
-                .showMessage("ETH")
-                .showWrap("SMART", "")
-                .showPressButton()
-                // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
+                        .setCoinType(0x3C)
+                        // txType (EIP-2718)
+                        .copyString("02")
+                        .arrayPointer()
+                        // chainId
+                        .copyString("01")
+                        .rlpString(argNonce)
+                        .rlpString(argGasTipCap)
+                        .rlpString(argGasFeeCap)
+                        .rlpString(argGasLimit)
+                        .copyString("94")
+                        .copyArgument(argTo)
+                        .rlpString(argValue)
+                        .rlpString(argData)
+                        // accessList
+                        .copyString("C0")
+                        .arrayEnd(1)
+                        // txDetail
+                        .showMessage("ETH")
+                        .showWrap("SMART", "")
+                        .showPressButton()
+                        // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                        .setHeader(HashType.Keccak256, SignType.ECDSA)
+                        .getScript();
 
         return script;
     }
 
-    public static String ETHEIP1559SmartScriptSignature =
-            "003045022100D28537F886B9330A61BB88B7ED436A4E66C50A03EDB883FCB78279FE2C704BD402205C2E473AA2302133B659D7BD95FD8D7D80B7BF5C1B65FCC4519E7B189600BA89";
+    public static String ETHEIP1559SmartScriptSignature
+            = "003045022100D28537F886B9330A61BB88B7ED436A4E66C50A03EDB883FCB78279FE2C704BD402205C2E473AA2302133B659D7BD95FD8D7D80B7BF5C1B65FCC4519E7B189600BA89";
 
     public static String getETHEIP1559SmartSegmentScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -236,8 +234,8 @@ public class EthScript {
         return script;
     }
 
-    public static String ETHEIP1559SmartSegmentScriptSignature =
-            "003045022100F994CBD35DA01724AE1189B299F80FB5DD6A304EB0C27E5DBA7B9AD6588C92E70220170BBE5ADFF78C30FDA82784ED4C647D6D855EBACC5F13D8C171C5E529E1AF39";
+    public static String ETHEIP1559SmartSegmentScriptSignature
+            = "003045022100F994CBD35DA01724AE1189B299F80FB5DD6A304EB0C27E5DBA7B9AD6588C92E70220170BBE5ADFF78C30FDA82784ED4C647D6D855EBACC5F13D8C171C5E529E1AF39";
 
     /*
     E7
@@ -296,8 +294,8 @@ public class EthScript {
         return script;
     }
 
-    public static String ETHScriptSignature =
-            "0030450220201C3ADEEF531C6CD6E8F082477FF048E45F39B85086C2F40BE96840CA4840F6022100C8A36252C7606D9F2D9E6F58538F967C7F6DEFEE52B536439512CB8CD9993DB0";
+    public static String ETHScriptSignature
+            = "0030450220201C3ADEEF531C6CD6E8F082477FF048E45F39B85086C2F40BE96840CA4840F6022100C8A36252C7606D9F2D9E6F58538F967C7F6DEFEE52B536439512CB8CD9993DB0";
 
     /*
      * f86a 1e 85 01718c7e00 83 030d40 94 86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0 80 b844 a9059cbb
@@ -359,8 +357,8 @@ public class EthScript {
         return script;
     }
 
-    public static String ERC20ScriptSignature =
-            "30460221009A706915A2EE0AE663ACF90D9DD59BBEEC111EB12B099E4751219DDC993A01E7022100BA25635AB68F4EF7711D8D880A0BB1A81CA899C78884ECC4183B715F8F047D69";
+    public static String ERC20ScriptSignature
+            = "30460221009A706915A2EE0AE663ACF90D9DD59BBEEC111EB12B099E4751219DDC993A01E7022100BA25635AB68F4EF7711D8D880A0BB1A81CA899C78884ECC4183B715F8F047D69";
 
     public static String getEtherContractBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -372,39 +370,39 @@ public class EthScript {
         ScriptData argChainId = sac.getArgumentRightJustified(2);
         ScriptData argData = sac.getArgumentAll();
 
-        String script =
-                // set coinType to 3C
+        String script
+                = // set coinType to 3C
                 new ScriptAssembler()
-                .setCoinType(0x3c)
-                .copyString("F800")
-                // nonce
-                .rlpString(argNonce)
-                // gasPrice
-                .rlpString(argGasPrice)
-                // gasLimit
-                .rlpString(argGasLimit)
-                // toAddress
-                .copyString("94").copyArgument(argTo)
-                // value
-                .rlpString(argValue)
-                // data
-                .rlpString(argData)
-                // chainId v
-                // .rlpString(argChainId)
-                .copyString("01", Buffer.CACHE1)
-                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                // r, s
-                .copyString("8080").rlpList(2)
-                // txDetail
-                .showMessage("ETH").showWrap("SMART", "").showPressButton()
-                // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
-                // sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
+                        .setCoinType(0x3c)
+                        .copyString("F800")
+                        // nonce
+                        .rlpString(argNonce)
+                        // gasPrice
+                        .rlpString(argGasPrice)
+                        // gasLimit
+                        .rlpString(argGasLimit)
+                        // toAddress
+                        .copyString("94").copyArgument(argTo)
+                        // value
+                        .rlpString(argValue)
+                        // data
+                        .rlpString(argData)
+                        // chainId v
+                        // .rlpString(argChainId)
+                        .copyString("01", Buffer.CACHE1)
+                        .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                        // r, s
+                        .copyString("8080").rlpList(2)
+                        // txDetail
+                        .showMessage("ETH").showWrap("SMART", "").showPressButton()
+                        // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
+                        // sign=01=ECDSA
+                        .setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
         return script;
     }
 
-    public static String EtherContractBlindScriptSignature =
-            "3046022100EC9BC856CEC733451CF4063C60DE27F9E920F7423122CCA19DC47B82E694799C0221008F754911B9C966EF430ED8919A58333D9800E8EBF4FB98B06C797E991DA03697";
+    public static String EtherContractBlindScriptSignature
+            = "3046022100EC9BC856CEC733451CF4063C60DE27F9E920F7423122CCA19DC47B82E694799C0221008F754911B9C966EF430ED8919A58333D9800E8EBF4FB98B06C797E991DA03697";
 
     public static String getEtherContractBlindSegmentScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -444,8 +442,8 @@ public class EthScript {
         return script;
     }
 
-    public static String EtherContractBlindSegmentScriptSignature =
-            "003045022060FC29B9ACA3BDFA237ED377E410A9A9BB12FB88416C06298857AE17D688992D022100F87D2C80BBECDC7192FF64D13A28F7763D6E1610FC1B1254B3D6446822CBA414";
+    public static String EtherContractBlindSegmentScriptSignature
+            = "003045022060FC29B9ACA3BDFA237ED377E410A9A9BB12FB88416C06298857AE17D688992D022100F87D2C80BBECDC7192FF64D13A28F7763D6E1610FC1B1254B3D6446822CBA414";
 
     public static String getEtherMessageBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -465,8 +463,8 @@ public class EthScript {
         return script;
     }
 
-    public static String EtherMessageBlindScriptSignature =
-            "0000304402200745C5665A9CE0FA0C2894E77629A33077D9AE76F23566DC804C64BF38D27FC0022076645BEEF5A522A02D272DA3D7065D1F092C5C03B024A3F1B3A19C144CF98970";
+    public static String EtherMessageBlindScriptSignature
+            = "0000304402200745C5665A9CE0FA0C2894E77629A33077D9AE76F23566DC804C64BF38D27FC0022076645BEEF5A522A02D272DA3D7065D1F092C5C03B024A3F1B3A19C144CF98970";
 
     public static String getEtherTypedDataBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
