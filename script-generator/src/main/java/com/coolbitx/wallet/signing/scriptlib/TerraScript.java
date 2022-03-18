@@ -1,5 +1,6 @@
 package com.coolbitx.wallet.signing.scriptlib;
 
+import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
@@ -8,35 +9,44 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
 
-public class LunaScript{
+public class TerraScript{
 
     public static void listAll(){
-        System.out.println("Luna Send: \n" + getLunaScript(LunaTxType.SEND) + "\n");
-        System.out.println("Luna Delegate: \n" + getLunaScript(LunaTxType.DELEGATE) + "\n");
-        System.out.println("Luna Undelegate: \n" + getLunaScript(LunaTxType.UNDELEGATE) + "\n");
-        System.out.println("Luna Withdraw: \n" + getLunaScript(LunaTxType.WITHDRAW) + "\n");
+        System.out.println("Terra Send: \n" + getTerraScript(TerraTxType.SEND) + "\n");
+        System.out.println("Terra Send Signature: \n" + TerraTestScriptSignature + "\n");
+        System.out.println("Terra Delegate: \n" + getTerraScript(TerraTxType.DELEGATE) + "\n");
+        System.out.println("Terra Undelegate: \n" + getTerraScript(TerraTxType.UNDELEGATE) + "\n");
+        System.out.println("Terra Withdraw: \n" + getTerraScript(TerraTxType.WITHDRAW) + "\n");
     }
 
-    public enum LunaTxType{
+    public enum TerraTxType{
         SEND, DELEGATE, UNDELEGATE, WITHDRAW
     }
 
     private static final int typeString = 2;
     private static final int typeInt = 0;
 
-    public static String getLunaScript(LunaTxType type){
+    public static String getTerraScript(TerraTxType type){
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argPublicKey = sac.getArgument(33);
         ScriptData argFromOrDelegator = sac.getArgumentRightJustified(64);
         ScriptData argToOrValidator = sac.getArgumentRightJustified(64);
         ScriptData argAmount = sac.getArgument(0);
-        if (type != LunaTxType.WITHDRAW) {
+        if (type != TerraTxType.WITHDRAW) {
             argAmount = sac.getArgument(8);
         }
         ScriptData argFeeAmount = sac.getArgument(8);
         ScriptData argGas = sac.getArgument(8);
         ScriptData argAccountNumber = sac.getArgument(8);
         ScriptData argSequence = sac.getArgument(8);
+        ScriptData argDenomInfo = sac.getArgumentUnion(0, 16);
+        ScriptData argDenomLabel = sac.getArgumentRightJustified(8);
+        ScriptData argDenom = sac.getArgumentRightJustified(8);
+        ScriptData argDenomSign = sac.getArgument(72);
+        ScriptData argFeeDenomInfo = sac.getArgumentUnion(0, 16);
+        ScriptData argFeeDenomLabel = sac.getArgumentRightJustified(8);
+        ScriptData argFeeDenom = sac.getArgumentRightJustified(8);
+        ScriptData argFeeDenomSign = sac.getArgument(72);
         ScriptData argMemo = sac.getArgumentAll();
 
         String url = "";
@@ -79,12 +89,13 @@ public class LunaScript{
             // to_or_validator_address
             .copyString("12").protobuf(argToOrValidator, typeString)
             .getScript();
-        if (type != LunaTxType.WITHDRAW){
+        if (type != TerraTxType.WITHDRAW){
             script = scriptAsb
                     // amount<Coin>
                     .copyString("1a").arrayPointer()
-                    // coin.denom - uluna
-                    .copyString("0a05756c756e61")
+                    // coin.denom - from argument
+                    .ifSigned(argDenomInfo, argDenomSign, "", ScriptAssembler.throwSEError)
+                    .copyArgument(argDenom)
                     // coin.amount
                     .copyString("12").arrayPointer()
                     .baseConvert(argAmount, Buffer.TRANSACTION, 0,
@@ -120,8 +131,9 @@ public class LunaScript{
                 .copyString("12").arrayPointer()
                 // amount<Coin>
                 .copyString("0a").arrayPointer()
-                // coin.denom - uluna
-                .copyString("0a05756c756e61")
+                // coin.denom - from argument
+                .ifSigned(argFeeDenomInfo, argFeeDenomSign, "", ScriptAssembler.throwSEError)
+                .copyArgument(argFeeDenom)
                 // coin.amount
                 .copyString("12").arrayPointer()
                 .baseConvert(argFeeAmount, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
@@ -132,13 +144,17 @@ public class LunaScript{
                 .protobuf(argGas, typeInt)
                 .arrayEnd() // fee end
                 .arrayEnd() // auth_info end
-                // chain_id - columbus-5
+                // chain_id - columbus-5 (main-net)
                 .copyString("1a0A636f6c756d6275732d35")
+                // chain_id - bombay-12 (test-net)
+                //.copyString("1a09626f6d6261792d3132")
                 // account_number
                 .copyString("20")
                 .protobuf(argAccountNumber, typeInt)
                 // display
-                .showMessage("LUNA")
+                .showMessage("TERRA")
+                // dispay - from argument
+                .showMessage(argDenomLabel)
                 .getScript();
         if (null != type) {
             switch (type) {
@@ -156,7 +172,7 @@ public class LunaScript{
             }
         }
         scriptAsb.showAddress(argToOrValidator);
-        if (type != LunaTxType.WITHDRAW) {
+        if (type != TerraTxType.WITHDRAW) {
             scriptAsb.showAmount(argAmount, 6).getScript();
         }
         script = scriptAsb.showPressButton()
@@ -166,16 +182,20 @@ public class LunaScript{
         return script;
     }
 
-    public static String LunaScriptSignature = Strings.padStart(
-        "30450221009834810F91ECBE5A8CAA8DEC50E6B92D8C812C8DACA2D4587C4E3E2AE33F59CB02205266A77E6DAD87D2CBECD6F0F8AAB6F5AE76492A8757EF8B5D5394B0C34BE681", 
+    public static String TerraScriptSignature = Strings.padStart(
+        "30440220761A5381FF53A4A95C6476CF184F81556D5B9E6744FFD7FE4FFDE945ACF2715602203D0890277D5745AADF8B9B43C321EC61CEBAC2FD68CADB470E81245DCA573F70", 
         144, '0');
-    public static String LunaDelegateScriptSignature = Strings.padStart(
+    public static String TerraDelegateScriptSignature = Strings.padStart(
         "30440220202B429154DD883F01C542C0A9CDF96EDC3B58A29AB55A9C38A89D63A480BBE7022003894D7967A9EA991BF629D6865F548F6FA2349FB891902D002F780D0EDD9396", 
         144, '0');
-    public static String LunaUndelegateScriptSignature = Strings.padStart(
+    public static String TerraUndelegateScriptSignature = Strings.padStart(
         "3045022100F23EC6B6A3AC9FEE817F8FA8384389DFD1EE79795F2F7D498F9C0CEB04BE46CD022078FBD3FA9F07CC161D9A295AE5AB0A68EBAEC66019C3C78C146D830EE6E9C346", 
         144, '0');
-    public static String LunaWithdrawScriptSignature = Strings.padStart(
+    public static String TerraWithdrawScriptSignature = Strings.padStart(
         "3045022100D030134AC32A92779D7CD88144175CAECE74CC898EA3348CA10D58EBA3F3414B02204FF11662B86DF15F64F1FBAABD52249B0F702AF09FE17B0B6EDCCCF47628877A", 
+        144, '0');
+
+    public static String TerraTestScriptSignature = Strings.padStart(
+        "30440220783521C66992D19A0FC7F117A4334E869761C47FFFF993DAEE13EC79D412C64302200EA5E9911E2E6ADDF00AB29FDC87D176FDB1159334797C7A04FD9BAFBAB7692C", 
         144, '0');
 }
