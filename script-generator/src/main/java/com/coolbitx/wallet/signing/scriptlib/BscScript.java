@@ -17,7 +17,7 @@ import com.google.common.base.Strings;
 public class BscScript {
 
     public static void main(String[] args) {
-        MaticScript.listAll();
+        BscScript.listAll();
     }
 
     public static void listAll() {
@@ -228,7 +228,7 @@ public class BscScript {
         return script;
     }
 
-    public static String SmartContractSegmentScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String SmartContractSegmentScriptSignature = Strings.padStart("3044022027a77af545abe0084cb55bafb2e295f361f76ef9636fc7879ff16358d113ffb3022067a27e1b08a24f67ce9f221181825fb7b9b04a163ec56acc286d32ebe3d01e01", 144, '0');
 
     public static String getMessageScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
