@@ -10,6 +10,7 @@ public class AllScript {
         BnbScript.listAll();
         BtcFamilyScript.listAll();
         DotScript.listAll();
+        EvmScript.listAll();
         EthScript.listAll();
         IcxScript.listAll();
         TrxScript.listAll();
