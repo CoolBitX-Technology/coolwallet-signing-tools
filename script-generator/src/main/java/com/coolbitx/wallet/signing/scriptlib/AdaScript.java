@@ -65,12 +65,8 @@ public class AdaScript {
                 .setBufferInt(receiverAddressLength, 29, 57)
                 .copyArgument(receiverAddress)
                 .copyArgument(receiverAmountPrefix)
-                .setBufferInt(receiverAmountLength, 1, 8)
-                .ifRange(receiverAmount, "00", "17", "",
-                    new ScriptAssembler()
-                    .copyArgument(receiverAmount)
-                    .getScript()
-                )
+                .setBufferInt(receiverAmountLength, 0, 8)
+                .copyArgument(receiverAmount)
                 // --- output receive end ---
                 .ifEqual(changeAmount, "0000000000000000", "",
                     // --- output change start ---
@@ -118,8 +114,15 @@ public class AdaScript {
                 .clearBuffer(Buffer.CACHE1)
                 // -- show address end --
                 // -- show amount start --
-                .setBufferInt(receiverAmountLength, 1, 8)
-                .showAmount(receiverAmount, 6)
+                .ifRange(receiverAmountPrefix, "00", "17",
+                    new ScriptAssembler()
+                      .showAmount(receiverAmountPrefix, 6)
+                      .getScript(),
+                    new ScriptAssembler()
+                      .setBufferInt(receiverAmountLength, 1, 8)
+                      .showAmount(receiverAmount, 6)
+                      .getScript()
+                )
                 // -- show amount end --
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
