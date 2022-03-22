@@ -65,8 +65,12 @@ public class AdaScript {
                 .setBufferInt(receiverAddressLength, 29, 57)
                 .copyArgument(receiverAddress)
                 .copyArgument(receiverAmountPrefix)
-                .setBufferInt(receiverAmountLength, 0, 8)
-                .copyArgument(receiverAmount)
+                .setBufferInt(receiverAmountLength, 1, 8)
+                .ifRange(receiverAmount, "00", "17", "",
+                    new ScriptAssembler()
+                    .copyArgument(receiverAmount)
+                    .getScript()
+                )
                 // --- output receive end ---
                 .ifEqual(changeAmount, "0000000000000000", "",
                     // --- output change start ---
