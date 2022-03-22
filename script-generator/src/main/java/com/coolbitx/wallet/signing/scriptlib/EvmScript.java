@@ -18,8 +18,7 @@ public class EvmScript {
     System.out.println("Evm: \n" + getTransferScript() + "\n");
     System.out.println("Evm erc20: \n" + getERC20Script() + "\n");
     System.out.println("Evm Smart Contract: \n" + getSmartContractScript() + "\n");
-    System.out.println(
-        "Evm Smart Contract Segment: \n" + getSmartContractSegmentScript() + "\n");
+    System.out.println("Evm Smart Contract Segment: \n" + getSmartContractSegmentScript() + "\n");
     System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript() + "\n");
     System.out.println("Evm EIP-712 Message: \n" + getMessageScript() + "\n");
     System.out.println("Evm EIP-1559: \n" + getEIP1559TransferScript() + "\n");
@@ -94,7 +93,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String TransferScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String TransferScriptSignature =
+      Strings.padStart(
+          "304502202952FF45A7A11B07B2C602576991B51F857D2F6850FBA409E0613CAF76A0FDF3022100DB01858EA4802CCC0367AF22F8E102FE91445C975E4E6A9C2C8089C65517A380",
+          144,
+          '0');
 
   public static String getERC20Script() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -176,7 +179,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String ERC20ScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String ERC20ScriptSignature =
+      Strings.padStart(
+          "304402200931D82BFBE67B7D3C952E37DD7F7BF4CB75DF4056BDBD59737B05BA76A2314D02207A111E627614014F1D8E0C89D4849A93F86F45B59BCF197B522626BC8F15CEFE",
+          144,
+          '0');
 
   public static String getSmartContractScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -233,7 +240,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String SmartContractScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String SmartContractScriptSignature =
+      Strings.padStart(
+          "304402204383F3A8224DAAD23DD338B79B8FA0E6343937F2439CAD65544CBA13329C7B0A022029B7382255BEDF63B138E2B865A56F608E893BE28AF8C7BDAE8D5AD1C8DFA712",
+          144,
+          '0');
 
   public static String getSmartContractSegmentScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -290,7 +301,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String SmartContractSegmentScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String SmartContractSegmentScriptSignature =
+      Strings.padStart(
+          "30450221009DB1CC0E1E93B95FD96DAB99DEA9565055F3CA017AB5B68C28DDE0C9ABCB46D6022020F478DE39018A6E6400BABB717AA31D6AC3FAA2C76C813F4C0C82651738A12E",
+          144,
+          '0');
 
   public static String getTypedDataScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -325,7 +340,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String TypedDataScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String TypedDataScriptSignature =
+      Strings.padStart(
+          "30440220143FB2C95A93D37E71C6D515BEC791F31CDB877A341309B25C1C758B56FABD95022077E827B37F2B60B1EC59D28017CF91929BDB3D5917FB25D7EC08C4A833B0C001",
+          144,
+          '0');
 
   public static String getMessageScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -358,7 +377,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String MessageScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String MessageScriptSignature =
+      Strings.padStart(
+          "304402206CA24A735298A41C0BE8A9D32A07C6FD3429A990AA5D5B6EE2A5A82F880E595802207E963B836CA60C2F86F16F828A9B03E0A1F6B2CCD6FD4ED6B882AFA0199BBFFA",
+          144,
+          '0');
 
   public static String getEIP1559TransferScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -426,7 +449,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String EIP1559TransferScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String EIP1559TransferScriptSignature =
+      Strings.padStart(
+          "30440220451A722ADDD92D6538871C2D6301B799B459F926DCD2A7EE2C6071216A4AF6370220466A5147E7BD4DB1C355632DCF80402CDDC2241DC1CD202791268C21C76043DA",
+          144,
+          '0');
 
   public static String getEIP1559ERC20Script() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -509,7 +536,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String EIP1559ERC20ScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String EIP1559ERC20ScriptSignature =
+      Strings.padStart(
+          "3046022100EFB91955D577EE30694E2FEF99294BAD01187A425AD1FC2433CB1CD57A15AC23022100D1F717CC823F1A36DA7D7BEF4CBCF0A2527FE2C01933A0B7E64116039C31284F",
+          144,
+          '0');
 
   public static String getEIP1559SmartContractScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -565,7 +596,11 @@ public class EvmScript {
     return script;
   }
 
-  public static String EIP1559SmartContractScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String EIP1559SmartContractScriptSignature =
+      Strings.padStart(
+          "304502206B7E463A70B5FA025C875836EF6A1F7A7B9DD746BC4A8A5ED086138BF14952290221009C7AC35D1B3F76ED297EA23C90E21B1E032B686C53CB56C9D62F4397252CAFAC",
+          144,
+          '0');
 
   public static String getEIP1559SmartContractSegmentScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -618,5 +653,9 @@ public class EvmScript {
     return script;
   }
 
-  public static String EIP1559SmartContractSegmentScriptSignature = Strings.padEnd("FA", 144, '0');
+  public static String EIP1559SmartContractSegmentScriptSignature =
+      Strings.padStart(
+          "304502207AAED9BC6478D38381FC915D15C7CBA8735608FDE319EA1444C132A4E956131D02210082601FF79A327FD6973EB9A0071EFC97FC5CAA649AC6F7010D0C6454C246319C",
+          144,
+          '0');
 }
