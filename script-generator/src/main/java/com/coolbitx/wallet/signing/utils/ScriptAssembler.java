@@ -642,7 +642,7 @@ public class ScriptAssembler {
      *
      * @param argData Requirement.
      * @param min The min value of the range.
-     * @param max The min value of the range.
+     * @param max The max value of the range.
      * @param trueStatement The script wanna execute when the status is true.
      * @param falseStatement The script wanna execute when the status is false.
      * @return
@@ -651,10 +651,18 @@ public class ScriptAssembler {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
+        boolean restoreToThousand = false;
+        if (argData.length == 1000) {
+          argData.length = min.length() / 2;
+          restoreToThousand = true;
+        }
         script += compose("12", argData, null, trueStatement.length() / 2, 0)
                 + HexUtil.rightJustify(min, argData.length)
                 + HexUtil.rightJustify(max, argData.length)
                 + trueStatement + falseStatement;
+        if (restoreToThousand) {
+            argData.length = 1000;
+        }
         return this;
     }
 
