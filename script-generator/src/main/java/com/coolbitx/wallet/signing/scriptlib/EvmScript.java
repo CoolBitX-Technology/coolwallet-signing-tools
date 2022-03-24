@@ -409,7 +409,7 @@ public class EvmScript {
             .arrayPointer()
             // chainId v
             .setBufferInt(argChainIdLength, 1, 6)
-            .copyArgument(argChainId)
+            .rlpString(argChainId)
             // nonce
             .rlpString(argNonce)
             // gasTipCap (maxPriorityFeePerGas)
@@ -451,7 +451,7 @@ public class EvmScript {
 
   public static String EIP1559TransferScriptSignature =
       Strings.padStart(
-          "30440220451A722ADDD92D6538871C2D6301B799B459F926DCD2A7EE2C6071216A4AF6370220466A5147E7BD4DB1C355632DCF80402CDDC2241DC1CD202791268C21C76043DA",
+          "3046022100E25FA7F60387C9F611FDAE2167D37B86CCB38D2A73D1827694212C26D3733EA2022100E7CF618651590869C18F72FEECC473B0D554D7C269EA4EB84A98AD23805EE4BA",
           144,
           '0');
 
@@ -488,7 +488,7 @@ public class EvmScript {
             .arrayPointer()
             // chainId
             .setBufferInt(argChainIdLength, 1, 6)
-            .copyArgument(argChainId)
+            .rlpString(argChainId)
             .rlpString(argNonce)
             .rlpString(argGasTipCap)
             .rlpString(argGasFeeCap)
@@ -538,7 +538,7 @@ public class EvmScript {
 
   public static String EIP1559ERC20ScriptSignature =
       Strings.padStart(
-          "3046022100EFB91955D577EE30694E2FEF99294BAD01187A425AD1FC2433CB1CD57A15AC23022100D1F717CC823F1A36DA7D7BEF4CBCF0A2527FE2C01933A0B7E64116039C31284F",
+          "3045022100BBC9E58E4EC05AB9EFE7B6DF2006AA845B2A37FFA1284ADA927FFCE873B5C733022050E00C708D69C94EB8A9B2B281B48CFAFC250891022AAE5E7BE1227DBF1A8F1F",
           144,
           '0');
 
@@ -570,7 +570,7 @@ public class EvmScript {
             .arrayPointer()
             // chainId
             .setBufferInt(argChainIdLength, 1, 6)
-            .copyArgument(argChainId)
+            .rlpString(argChainId)
             .rlpString(argNonce)
             .rlpString(argGasTipCap)
             .rlpString(argGasFeeCap)
@@ -598,7 +598,7 @@ public class EvmScript {
 
   public static String EIP1559SmartContractScriptSignature =
       Strings.padStart(
-          "304502206B7E463A70B5FA025C875836EF6A1F7A7B9DD746BC4A8A5ED086138BF14952290221009C7AC35D1B3F76ED297EA23C90E21B1E032B686C53CB56C9D62F4397252CAFAC",
+          "304402201AF7A6D845B936B146302915A8B185C3F596995E9E02D17CA900391E9B47BEF0022056F1ED2DC0FA5F1CE33BEDF697C364B6B0A0871AFD82F20B08CBC2B69165BCFD",
           144,
           '0');
 
@@ -629,7 +629,7 @@ public class EvmScript {
             .arrayPointer()
             // chainId
             .setBufferInt(argChainIdLength, 1, 6)
-            .copyArgument(argChainId)
+            .rlpString(argChainId)
             .rlpString(argNonce)
             .rlpString(argGasTipCap)
             .rlpString(argGasFeeCap)
@@ -655,7 +655,7 @@ public class EvmScript {
 
   public static String EIP1559SmartContractSegmentScriptSignature =
       Strings.padStart(
-          "304502207AAED9BC6478D38381FC915D15C7CBA8735608FDE319EA1444C132A4E956131D02210082601FF79A327FD6973EB9A0071EFC97FC5CAA649AC6F7010D0C6454C246319C",
+          "3045022100B9DBD9E6ECDC64B198F9CB37F82354CE283837ABB731D49620357C492248EA8702200EB6133B4CE43D65CD47249021A4EF85933292C452341F49F01CE7F2F0AD07D5",
           144,
           '0');
 }
