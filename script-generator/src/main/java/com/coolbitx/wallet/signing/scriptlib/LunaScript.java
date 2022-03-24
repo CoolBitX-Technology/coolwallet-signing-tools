@@ -211,13 +211,14 @@ public class LunaScript{
             .copyString("12").protobuf(argContract, typeString)
             // execute_msg
             .copyString("1a").protobuf(argExecuteMsg, typeString)
+            // identify if funds === undefined
             .ifEqual(argFundsDenom, Strings.padStart("", 16, '0'), 
                     "",
                     new ScriptAssembler()
                     // funds<Coin>
                     .copyString("2a").arrayPointer()
                     // coin.denom
-                    .copyString("0a").copyArgument(argFundsDenom)
+                    .copyString("0a").protobuf(argFundsDenom, typeString)
                     // coin.amount
                     .copyString("12").arrayPointer()
                     .baseConvert(argFundsAmount, Buffer.TRANSACTION, 0,
@@ -272,10 +273,20 @@ public class LunaScript{
             .showMessage("LUNA")
             .showWrap("SMART", "")
             .showAddress(argContract)
+            .ifEqual(argFundsDenom, Strings.padStart("", 16, '0'), 
+                    "",
+                    new ScriptAssembler()
+                    .showAmount(argFundsAmount, 6)
+                    .getScript()
+            )
             .showPressButton()
             // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
             .setHeader(HashType.SHA256, SignType.ECDSA)
             .getScript();
         return script;
     }
+
+    public static String LunaSmartScriptSignature = Strings.padStart(
+        "003045022100E641F3C06EBEBB2268E486DD397D3AA46709200281DCCB0821376FBCCA16F6530220340DE9C5629891A7F96BB6B3F9BB18789248DC1FD55DAD8B543305C49C27F8B3", 
+        144, '0');
 }
