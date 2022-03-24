@@ -114,8 +114,15 @@ public class AdaScript {
                 .clearBuffer(Buffer.CACHE1)
                 // -- show address end --
                 // -- show amount start --
-                .setBufferInt(receiverAmountLength, 1, 8)
-                .showAmount(receiverAmount, 6)
+                .ifRange(receiverAmountPrefix, "00", "17",
+                    new ScriptAssembler()
+                      .showAmount(receiverAmountPrefix, 6)
+                      .getScript(),
+                    new ScriptAssembler()
+                      .setBufferInt(receiverAmountLength, 1, 8)
+                      .showAmount(receiverAmount, 6)
+                      .getScript()
+                )
                 // -- show amount end --
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
