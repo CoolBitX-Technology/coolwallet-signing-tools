@@ -619,19 +619,20 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler ifEqual(ScriptData argData, String expect, String trueStatement, String falseStatement) {
-        boolean restoreToThousand = false;
+        int tempLength = argData.length;
+        boolean restore = false;
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        if (argData.length == 1000) {
+        if (argData.length == 1000 || argData.length < 0) {
           argData.length = expect.length() / 2;
-          restoreToThousand = true;
+          restore = true;
         }
         script += compose("1A", argData, null, trueStatement.length() / 2, 0)
-                + HexUtil.rightJustify(expect, argData.length)
+                + HexUtil.rightJustify(expect, Math.abs(argData.length))
                 + trueStatement + falseStatement;
-        if (restoreToThousand) {
-            argData.length = 1000;
+        if (restore) {
+            argData.length = tempLength;
         }
         return this;
     }
