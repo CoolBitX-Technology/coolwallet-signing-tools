@@ -27,5 +27,6 @@ public class AllScript {
         TerraScript.listAll();
         ThetaScript.listAll();
         NearScript.listAll();
+        IotxScript.listAll();
     }
 }
