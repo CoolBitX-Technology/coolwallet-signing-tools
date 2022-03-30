@@ -13,6 +13,13 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
+// Address Encode Types
+//
+// 0: Byron address
+// 1: Shelley address with payment and delegation parts
+// 2: Shelley address with payment part only
+// 3: Shelley address with "stake" prefix
+
 public class AdaScript {
 
     public static void listAll() {
@@ -28,9 +35,6 @@ public class AdaScript {
         ScriptData changeAmountPrefix = sac.getArgument(1);
         ScriptData changeAmount = sac.getArgumentVariableLength(8);
 
-        // 0: Byron address
-        // 1: Shelley address with payment and delegation parts
-        // 2: Shelley address with payment part only
         ScriptData receiverAddressEncodeType = sac.getArgument(1);
         ScriptData receiverAddressLength = sac.getArgument(1);
         ScriptData receiverAddress = sac.getArgumentVariableLength(90);
@@ -50,6 +54,8 @@ public class AdaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(0x0717)
+                // not support shelley stake address
+                .ifRange(receiverAddressEncodeType, "00", "02", "", ScriptAssembler.throwSEError)
                 // -- payload start --
                 .copyString("a4")
                 // --- intput start ---
