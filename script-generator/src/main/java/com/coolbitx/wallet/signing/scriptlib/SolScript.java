@@ -27,9 +27,6 @@ public class SolScript {
 
     public static void listAll() {
         System.out.println("Sol transfer: \n" + getTransferScript() + "\n");
-        System.out.println(
-          "Sol transfer self: \n" + getTransferSelfScript() + "\n"
-        );
         System.out.println("Sol Smart Contract: \n" + getSolSmartScript() + "\n");
         System.out.println(
           "Sol transfer spl token: \n" + getTransferSplTokenScript() + "\n"
@@ -38,6 +35,7 @@ public class SolScript {
 
     public static String getTransferScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData keysCount = sac.getArgument(1);
         ScriptData fromAccount = sac.getArgument(32);
         ScriptData toAccount = sac.getArgument(32);
         ScriptData programId = sac.getArgument(32);
@@ -52,21 +50,29 @@ public class SolScript {
                 .copyString("01")
                 .copyString("00")
                 .copyString("01")
-                .copyString("03")
+                .copyArgument(keysCount)
                 .copyArgument(fromAccount)
-                .copyArgument(toAccount)
+                .ifEqual(keysCount,"02","", new ScriptAssembler().copyArgument(toAccount).getScript())
                 .copyArgument(programId)
                 .copyArgument(recentBlockHash)
                 .copyString("01")
+                .ifEqual(keysCount,"02",new ScriptAssembler().copyString("01").getScript(), new ScriptAssembler().copyString("02").getScript())
                 .copyString("02")
-                .copyString("02")
-                .copyString("0001")
+                .ifEqual(keysCount,"02",new ScriptAssembler().copyString("0000").getScript(), new ScriptAssembler().copyString("0001").getScript())
                 .copyArgument(dataLength)
                 .copyArgument(programIdIndex)
                 .copyArgument(data)
                 .showMessage("SOL")
-                .baseConvert(toAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .ifEqual(keysCount,"02",
+                    new ScriptAssembler()
+                            .baseConvert(fromAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                            .getScript(),
+                    new ScriptAssembler()
+                            .baseConvert(toAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                            .getScript()
+                )
                 .clearBuffer(Buffer.CACHE2)
                 .baseConvert( data, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
                 .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 9)
@@ -78,47 +84,9 @@ public class SolScript {
         return script;
     }
 
-    public static String getTransferSelfScript() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData fromAccount = sac.getArgument(32);
-        ScriptData programId = sac.getArgument(32);
-        ScriptData recentBlockHash = sac.getArgument(32);
-        ScriptData dataLength = sac.getArgument(1);
-        ScriptData programIdIndex = sac.getArgument(4);
-        ScriptData data = sac.getArgumentAll();
-
-        ScriptAssembler scriptAsb = new ScriptAssembler();
-        String script = scriptAsb
-                .setCoinType(0x01f5)
-                .copyString("01")
-                .copyString("00")
-                .copyString("01")
-                .copyString("02")
-                .copyArgument(fromAccount)
-                .copyArgument(programId)
-                .copyArgument(recentBlockHash)
-                .copyString("01")
-                .copyString("01")
-                .copyString("02")
-                .copyString("0000")
-                .copyArgument(dataLength)
-                .copyArgument(programIdIndex)
-                .copyArgument(data)
-                .showMessage("SOL")
-                .baseConvert( fromAccount, Buffer.CACHE2, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                .clearBuffer(Buffer.CACHE2)
-                .baseConvert( data, Buffer.CACHE1,8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
-                .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 9)
-                .clearBuffer(Buffer.CACHE1)
-                .showPressButton()
-                .setHeader(HashType.NONE, SignType.EDDSA)
-                .getScript();
-        return script;
-    }
-
     public static String getSolSmartScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData keysCount = sac.getArgument(1);
         ScriptData keys = sac.getArgumentRightJustified(96);
         ScriptData recentBlockHash = sac.getArgumentRightJustified(32);
         ScriptData dataLength = sac.getArgument(1);
@@ -130,7 +98,7 @@ public class SolScript {
                 .copyString("01")
                 .copyString("00")
                 .copyString("01")
-                .copyString("03")
+                .copyArgument(keysCount)
                 .copyArgument(keys)
                 .copyArgument(recentBlockHash)
                 .copyString("01")
@@ -149,6 +117,7 @@ public class SolScript {
 
     public static String getTransferSplTokenScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData keysCount = sac.getArgument(1);
         ScriptData ownerAccount = sac.getArgument(32);
         ScriptData toAssociateAccount = sac.getArgument(32);
         ScriptData fromAssociateAccount = sac.getArgument(32);
@@ -165,7 +134,7 @@ public class SolScript {
                 .copyString("01")
                 .copyString("00")
                 .copyString("01")
-                .copyString("04")
+                .copyArgument(keysCount)
                 .copyArgument(ownerAccount)
                 .copyArgument(toAssociateAccount)
                 .copyArgument(fromAssociateAccount)
