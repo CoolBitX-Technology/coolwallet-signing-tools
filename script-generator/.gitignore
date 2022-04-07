@@ -6,9 +6,7 @@
 **/nbbuild/
 **/nbdist/
 **/.nb-gradle/
-**/.idea/
 /bin/
 .settings/
 .classpath
 .project
-*.iml

@@ -7,6 +7,4 @@
 **/nbdist/
 **/.nb-gradle/
 **/node_modules/
-**/.idea
 /bin/
-*.iml
