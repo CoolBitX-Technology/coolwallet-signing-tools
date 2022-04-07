@@ -54,11 +54,6 @@ public class ThetaScript {
         String script = new ScriptAssembler()
                 .setCoinType(500)
 
-                // ETH Wrapper
-                .arrayPointer()
-                .copyString("80808094000000000000000000000000000000000000000080")
-                .arrayPointer()
-
                 // chainId + txType
                 .copyString("876d61696e6e657402")
                 .arrayPointer()
@@ -90,8 +85,15 @@ public class ThetaScript {
                 .arrayEnd(1)
                 .arrayEnd(1)
                 .arrayEnd(1)
+
+                // ETH Wrapper
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
+                .clearBuffer(Buffer.TRANSACTION)
+                .arrayPointer()
+                .copyString("80808094000000000000000000000000000000000000000080")
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .arrayEnd(1)
-                .arrayEnd(1)
+                .clearBuffer(Buffer.CACHE1)
 
                 .showMessage("THETA")
                 .showWrap("SEND", "")
@@ -139,11 +141,6 @@ public class ThetaScript {
         String script = new ScriptAssembler()
                 .setCoinType(500)
 
-                // ETH Wrapper
-                .arrayPointer()
-                .copyString("80808094000000000000000000000000000000000000000080")
-                .arrayPointer()
-
                 // chainId + txType
                 .copyString("876d61696e6e657408")
                 .arrayPointer()
@@ -169,8 +166,15 @@ public class ThetaScript {
                 // purpose
                 .copyString("00")
                 .arrayEnd(1)
+
+                // ETH Wrapper
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
+                .clearBuffer(Buffer.TRANSACTION)
+                .arrayPointer()
+                .copyString("80808094000000000000000000000000000000000000000080")
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .arrayEnd(1)
-                .arrayEnd(1)
+                .clearBuffer(Buffer.CACHE1)
 
                 .showMessage("THETA")
                 .showWrap("STAKE", "VALIDAT")
@@ -231,11 +235,6 @@ public class ThetaScript {
         String script = new ScriptAssembler()
                 .setCoinType(500)
 
-                // ETH Wrapper
-                .arrayPointer()
-                .copyString("80808094000000000000000000000000000000000000000080")
-                .arrayPointer()
-
                 // chainId + txType
                 .copyString("876d61696e6e65740a")
                 .arrayPointer()
@@ -266,8 +265,15 @@ public class ThetaScript {
                 .copyString("b860").copyArgument(argPop)
                 .copyString("b841").copyArgument(argHolderSig)
                 .arrayEnd(1)
+
+                // ETH Wrapper
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
+                .clearBuffer(Buffer.TRANSACTION)
+                .arrayPointer()
+                .copyString("80808094000000000000000000000000000000000000000080")
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .arrayEnd(1)
-                .arrayEnd(1)
+                .clearBuffer(Buffer.CACHE1)
 
                 .showMessage("THETA")
                 .showWrap("STAKE", "GUARDIA")
@@ -295,11 +301,6 @@ public class ThetaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(500)
-
-                // ETH Wrapper
-                .arrayPointer()
-                .copyString("80808094000000000000000000000000000000000000000080")
-                .arrayPointer()
 
                 // chainId + txType
                 .copyString("876d61696e6e65740a")
@@ -331,8 +332,15 @@ public class ThetaScript {
                 .copyString("b860").copyArgument(argPop)
                 .copyString("b841").copyArgument(argHolderSig)
                 .arrayEnd(1)
+
+                // ETH Wrapper
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
+                .clearBuffer(Buffer.TRANSACTION)
+                .arrayPointer()
+                .copyString("80808094000000000000000000000000000000000000000080")
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .arrayEnd(1)
-                .arrayEnd(1)
+                .clearBuffer(Buffer.CACHE1)
 
                 .showMessage("THETA")
                 .showWrap("STAKE", "EDGE")
@@ -378,11 +386,6 @@ public class ThetaScript {
         String script = new ScriptAssembler()
                 .setCoinType(500)
 
-                // ETH Wrapper
-                .arrayPointer()
-                .copyString("80808094000000000000000000000000000000000000000080")
-                .arrayPointer()
-
                 // chainId + txType
                 .copyString("876d61696e6e657409")
                 .arrayPointer()
@@ -405,8 +408,15 @@ public class ThetaScript {
                 // purpose
                 .copyArgument(argPurpose)
                 .arrayEnd(1)
+
+                // ETH Wrapper
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
+                .clearBuffer(Buffer.TRANSACTION)
+                .arrayPointer()
+                .copyString("80808094000000000000000000000000000000000000000080")
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .arrayEnd(1)
-                .arrayEnd(1)
+                .clearBuffer(Buffer.CACHE1)
 
                 .showMessage("THETA")
                 .showWrap("WITHDRAW", "")
@@ -454,11 +464,6 @@ public class ThetaScript {
         String script = new ScriptAssembler()
                 .setCoinType(500)
 
-                // ETH Wrapper
-                .arrayPointer()
-                .copyString("80808094000000000000000000000000000000000000000080")
-                .arrayPointer()
-
                 // chainId + txType
                 .copyString("876d61696e6e657407")
                 .arrayPointer()
@@ -482,8 +487,15 @@ public class ThetaScript {
                 .copyString("8603a352944000") // gasPrice
                 .rlpString(argData) // data
                 .arrayEnd(1)
+
+                // ETH Wrapper
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
+                .clearBuffer(Buffer.TRANSACTION)
+                .arrayPointer()
+                .copyString("80808094000000000000000000000000000000000000000080")
+                .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .arrayEnd(1)
-                .arrayEnd(1)
+                .clearBuffer(Buffer.CACHE1)
 
                 .showMessage("THETA")
                 .showWrap("SMART", "")
@@ -520,7 +532,7 @@ public class ThetaScript {
                 .copyString("8080") // r, s
                 .arrayEnd(1)
                 .showMessage("THETA")
-                .showWrap("EVM", "")
+                .showWrap("SMART", "")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
