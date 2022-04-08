@@ -24,6 +24,7 @@ public class AllScript {
         LunaScript.listAll();
         MaticScript.listAll();
         TerraScript.listAll();
+        ThetaScript.listAll();
     }
 
 }
