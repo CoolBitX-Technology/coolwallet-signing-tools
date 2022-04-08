@@ -129,7 +129,7 @@ public class ThetaScript {
     //   coin             c2
     //     theta            80
     //     tfuel            80
-    // purpose          00
+    // purpose          80
 
     public static String getStakeValidatorScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -164,7 +164,7 @@ public class ThetaScript {
                 .copyString("c28080") // coin
 
                 // purpose
-                .copyString("00")
+                .copyString("80")
                 .arrayEnd(1)
 
                 // ETH Wrapper
@@ -406,7 +406,10 @@ public class ThetaScript {
                 .copyString("c28080") // coin
 
                 // purpose
-                .copyArgument(argPurpose)
+                .ifEqual(argPurpose, "00",
+                    new ScriptAssembler().copyString("80").getScript(),
+                    new ScriptAssembler().copyArgument(argPurpose).getScript()
+                )
                 .arrayEnd(1)
 
                 // ETH Wrapper
@@ -542,4 +545,13 @@ public class ThetaScript {
                 .getScript();
         return script;
     }
+
+    public static String SendScriptSignature = "3046022100A9029FCB1A3837175E72E7B82BF9D0CA9CFEE82754484D9D9A197A862A48991A02210084C2930961240F2B873D1AE31132BCF30CE34BE96F6B0877051BB5EC84AAD747";
+    public static String StakeValidatorScriptSignature = "003045022100D8B723603E3BD225502C4F10AC611252F7D7D483433DFA55F61681407B64F5330220609E9241BF151AB0D40E266037FD5E01A80B320DF4FBD76119735E9B5F983714";
+    public static String StakeGuardianScriptSignature = "0000304402206A2DD7A69F061727FAC36906C5175D51AFFEF6D12A3D54DC2E7EA974961CCB460220206D13DAAB675D4DD2FC6024005CC4ED786AD86EFCBF6554138CFEFA4A4A6211";
+    public static String StakeEdgeScriptSignature = "00304402202FF36E88FD5FEE3E092932B680B354622EE4C988DBF9F02D191462E2FC9C6F6D02203E0283345A2E4D67D3EE0835AA7E0F7DDDA7359ED3CE7EA79262FF01FC343C20";
+    public static String WithdrawScriptSignature = "3046022100A024547E919125CB2E81D718C859DF8CC7B794BD37BD70604B3CA335A702541C022100D3B61E0404D767F65EFD6372F38B75D03699E975A3CF82E4FCEF5DD01B65D136";
+    public static String SmartScriptSignature = "00304502204DCEA460906F02204D4857B1F088A8FCD60A6AAA2BD37A87D262076B54FEBDBC022100DE1CDEC3DE950EF93C38E2D74F3C974AE97C6E0F00710E90BD7334F2E14FE152";
+    public static String EvmScriptSignature = "003045022100C05C200C8D22EBD84DD2180B9EDAC4F8EAF5A00D4BFAC06EDCEAD24DBE965E6402201EF56C5F9DAB66FF3BBCF135C841C4CD94DB3C264826816CDBDB85A7EABB4073";
+
 }
