@@ -27,6 +27,8 @@ public class TerraScript{
         System.out.println("Terra Withdraw Signature: \n" + TerraWithdrawScriptSignature + "\n");
         System.out.println("Terra Smart Contract: \n" + getTerraSmartScript(mainnet) + "\n");
         System.out.println("Terra Smart Contract Signature: \n" + TerraSmartScriptSignature + "\n");
+        System.out.println("Terra CW20: \n" + getTerraCW20Script(mainnet) + "\n");
+        System.out.println("Terra CW20 Signature: \n" + TerraCW20ScriptSignature + "\n");
 
         System.out.println("Terra Test Send: \n" + getTerraScript(TerraTxType.SEND, testnet) + "\n");
         System.out.println("Terra Test Send Signature: \n" + TerraTestSendScriptSignature + "\n");
@@ -38,6 +40,8 @@ public class TerraScript{
         System.out.println("Terra Test Withdraw Signature: \n" + TerraTestWithdrawScriptSignature + "\n");
         System.out.println("Terra Test Smart Contract: \n" + getTerraSmartScript(testnet) + "\n");
         System.out.println("Terra Test Smart Contract Signature: \n" + TerraTestSmartScriptSignature + "\n");
+        System.out.println("Terra Test CW20: \n" + getTerraCW20Script(testnet) + "\n");
+        System.out.println("Terra Test CW20 Signature: \n" + TerraTestCW20ScriptSignature + "\n");
     }
 
     public enum TerraTxType{
@@ -328,6 +332,112 @@ public class TerraScript{
         return script;
     }
 
+    public static String getTerraCW20Script(String chainId){
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argPublicKey = sac.getArgument(33);
+        ScriptData argSender = sac.getArgumentRightJustified(64);
+        ScriptData argContract = sac.getArgumentRightJustified(64);
+
+        ScriptData argTo = sac.getArgumentRightJustified(64);
+        ScriptData argValue = sac.getArgument(8);
+
+        ScriptData argFeeDenomInfo = sac.getArgumentUnion(0, 16);
+        ScriptData argFeeDenomLabel = sac.getArgumentRightJustified(8);
+        ScriptData argFeeDenom = sac.getArgumentRightJustified(8);
+        ScriptData argFeeDenomSign = sac.getArgument(72);
+        ScriptData argFeeAmount = sac.getArgument(8);
+        ScriptData argGas = sac.getArgument(8);
+        ScriptData argAccountNumber = sac.getArgument(8);
+        ScriptData argSequence = sac.getArgument(8);
+        ScriptData argMemo = sac.getArgumentRightJustified(128);
+
+        ScriptData argTokenInfo = sac.getArgumentUnion(0, 53);
+        ScriptData argDecimal = sac.getArgument(1);
+        ScriptData argNameLength = sac.getArgument(1);
+        ScriptData argName = sac.getArgumentVariableLength(7);
+        ScriptData argContractHex = sac.getArgument(44);
+        ScriptData argSign = sac.getArgument(72);
+
+        ScriptData argExecuteMsg = sac.getArgumentAll();
+
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb
+            .setCoinType(0x014a)
+            // tx_body
+            .copyString("0a").arrayPointer()
+            // message
+            .copyString("0a").arrayPointer()
+            // message.url - /terra.wasm.v1beta1.MsgExecuteContract
+            .copyString("0a262f74657272612e7761736d2e763162657461312e4d736745786563757465436f6e7472616374")
+            // message.value
+            .copyString("12").arrayPointer()
+            // sender_address
+            .copyString("0a").protobuf(argSender, typeString)
+            // contract_address
+            .copyString("12").protobuf(argContract, typeString)
+            //execute_msg
+            .copyString("1a").protobuf(argExecuteMsg, typeString)
+            .arrayEnd() // message.value end
+            .arrayEnd() // message end
+            // memo
+            .copyString("12").arrayPointer()
+            .copyRegularString(argMemo)
+            .arrayEnd() // memo end
+            .arrayEnd() // tx_body end
+
+            // auth_info
+            .copyString("12").arrayPointer()
+            // signer_info
+            .copyString("0a").arrayPointer()
+            // pubkey
+            .copyString("0a460a1f2f636f736d6f732e63727970746f2e736563703235366b312e5075624b657912230a21")
+            .copyArgument(argPublicKey)
+            // mode_info
+            .copyString("12040a020801")
+            // sequence
+            .copyString("18")
+            .protobuf(argSequence, typeInt)
+            .arrayEnd() // signer_info end
+            // fee
+            .copyString("12").arrayPointer()
+            // amount<Coin>
+            .copyString("0a").arrayPointer()
+            // coin.denom - from argument
+            .ifSigned(argFeeDenomInfo, argFeeDenomSign, "", ScriptAssembler.throwSEError)
+            .copyArgument(argFeeDenom)
+            // fee.amount
+            .copyString("12").arrayPointer()
+            .baseConvert(argFeeAmount, Buffer.TRANSACTION, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+            .arrayEnd() // coin.amount end
+            .arrayEnd() // amount<coin> end
+            // gas_limit
+            .copyString("10")
+            .protobuf(argGas, typeInt)
+            .arrayEnd() // fee end
+            .arrayEnd() // auth_info end
+            // chain_id
+            .copyString(chainId)
+            // account_number
+            .copyString("20")
+            .protobuf(argAccountNumber, typeInt)
+            // display
+            .showMessage("TERRA")
+            .ifSigned(argTokenInfo, argSign, "",
+                        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
+                                .getScript())
+            .setBufferInt(argNameLength, 1, 7)
+            .copyArgument(argName, Buffer.CACHE2)
+            .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+            .clearBuffer(Buffer.CACHE2)
+            .showAddress(argTo)
+            .showAmount(argValue, 6)
+            .showPressButton()
+            // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
+            .setHeader(HashType.SHA256, SignType.ECDSA)
+            .getScript();
+        return script;
+    }
+
     public static String TerraSendScriptSignature = Strings.padStart(
         "304502203213ED60C19C5E64F4A52F80F9EDCEC7E7081DE3657704D338C791526FE869BB0221008C936D28248FE8B7BDE31EDA79229CC92EC69317DC1183BAAC2575179100B2B1", 
         144, '0');
@@ -342,6 +452,9 @@ public class TerraScript{
         144, '0');
     public static String TerraSmartScriptSignature = Strings.padStart(
         "3045022100E77792E57E91446794A1A66948C7398D4C002A9A3CA808E5B897388CDCFC1D6A02203B9D8C2879E670D8387E2BD876BEF04286A7FA853532609429A6D763BA83A0F0", 
+        144, '0');
+    public static String TerraCW20ScriptSignature = Strings.padStart(
+        "3045022100DEA07F9EA9C85887CF85A479C8336BB87DD4310498979EEC0E46AD74CF05B7BD022059FFCF2DF8CE12539B645F2CD092D23D3C1A4CDD2971465F91B04F99801C0E65", 
         144, '0');
 
     public static String TerraTestSendScriptSignature = Strings.padStart(
@@ -358,5 +471,8 @@ public class TerraScript{
         144, '0');
     public static String TerraTestSmartScriptSignature = Strings.padStart(
         "3046022100FC407346F1F0A8019993E99E662B83480FED580B1539333CB42BDE87EF7BAC05022100DE349584B53C945469448DD1C9043D920524DF08EC3A417D0BA795F4FFB64045", 
+        144, '0');
+    public static String TerraTestCW20ScriptSignature = Strings.padStart(
+        "304602210085D47B950DE28BCA15692D87B13902B5CFAD189721D0BEFEEEE1E73D3691A9C9022100888CF4A5BF2B74BA920164A72C702C7E2C0D5BE67E87CF5243986C1CBC47BD95", 
         144, '0');
 }
