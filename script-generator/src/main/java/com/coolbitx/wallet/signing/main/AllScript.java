@@ -25,6 +25,7 @@ public class AllScript {
         MaticScript.listAll();
         TerraScript.listAll();
         VlxScript.listAll();
+        ThetaScript.listAll();
     }
 
 }
