@@ -40,6 +40,7 @@ public class SolScript {
         ScriptData toAccount = sac.getArgument(32);
         ScriptData programId = sac.getArgument(32);
         ScriptData recentBlockHash = sac.getArgument(32);
+        ScriptData keyIndices = sac.getArgument(2);
         ScriptData dataLength = sac.getArgument(1);
         ScriptData programIdIndex = sac.getArgument(4);
         ScriptData data = sac.getArgumentAll();
@@ -58,20 +59,20 @@ public class SolScript {
                 .copyString("01")
                 .ifEqual(keysCount,"02",new ScriptAssembler().copyString("01").getScript(), new ScriptAssembler().copyString("02").getScript())
                 .copyString("02")
-                .ifEqual(keysCount,"02",new ScriptAssembler().copyString("0000").getScript(), new ScriptAssembler().copyString("0001").getScript())
+                .copyArgument(keyIndices)
                 .copyArgument(dataLength)
                 .copyArgument(programIdIndex)
                 .copyArgument(data)
                 .showMessage("SOL")
-                .ifEqual(keysCount,"02",
-                    new ScriptAssembler()
-                            .baseConvert(fromAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
-                            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                            .getScript(),
-                    new ScriptAssembler()
-                            .baseConvert(toAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
-                            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                            .getScript()
+                .ifEqual(keyIndices,"0001",
+                        new ScriptAssembler()
+                                .baseConvert(toAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .getScript(),
+                        new ScriptAssembler()
+                                .baseConvert(fromAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .getScript()
                 )
                 .clearBuffer(Buffer.CACHE2)
                 .baseConvert( data, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
@@ -104,11 +105,12 @@ public class SolScript {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData keysCount = sac.getArgument(1);
         ScriptData ownerAccount = sac.getArgument(32);
+        ScriptData fromAssociateAccount  = sac.getArgument(32);
         ScriptData toAssociateAccount = sac.getArgument(32);
-        ScriptData fromAssociateAccount = sac.getArgument(32);
         ScriptData programId = sac.getArgument(32);
 
         ScriptData recentBlockHash = sac.getArgument(32);
+        ScriptData keyIndices = sac.getArgument(3);
         ScriptData dataLength = sac.getArgument(1);
         ScriptData programIdIndex = sac.getArgument(1);
         ScriptData data = sac.getArgument(8);
@@ -122,21 +124,28 @@ public class SolScript {
                 .copyString("01")
                 .copyArgument(keysCount)
                 .copyArgument(ownerAccount)
-                .copyArgument(toAssociateAccount)
-                .ifEqual(keysCount,"03","", new ScriptAssembler().copyArgument(fromAssociateAccount).getScript())
+                .copyArgument(fromAssociateAccount)
+                .ifEqual(keysCount,"03","", new ScriptAssembler().copyArgument(toAssociateAccount).getScript())
                 .copyArgument(programId)
                 .copyArgument(recentBlockHash)
                 .copyString("01")
                 .ifEqual(keysCount,"03",new ScriptAssembler().copyString("02").getScript(), new ScriptAssembler().copyString("03").getScript())
                 .copyString("03")
-                .ifEqual(keysCount,"03",new ScriptAssembler().copyString("010100").getScript(), new ScriptAssembler().copyString("020100").getScript())
+                .copyArgument(keyIndices)
                 .copyArgument(dataLength)
                 .copyArgument(programIdIndex)
                 .copyArgument(data)
                 .showWrap("SOL", "SPL")
-
-                .baseConvert(toAssociateAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .ifEqual(keyIndices,"010200",
+                        new ScriptAssembler()
+                                .baseConvert(toAssociateAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .getScript(),
+                        new ScriptAssembler()
+                                .baseConvert(fromAssociateAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .getScript()
+                )
                 .clearBuffer(Buffer.CACHE2)
                 .baseConvert(data, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
                 .setBufferInt(decimals, 0, 20)
