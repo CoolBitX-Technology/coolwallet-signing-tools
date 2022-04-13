@@ -18,6 +18,7 @@ public class NearScript {
     }
 
     public static String getNearScript() {
+
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argAmount = sac.getArgumentRightJustified(10);
         ScriptData argPayload = sac.getArgumentAll();
@@ -26,6 +27,44 @@ public class NearScript {
             .setCoinType(0x018d)
             .copyArgument(argPayload)
             .showMessage("NEAR")
+            .showAmount(argAmount, 18)
+            .showPressButton()
+            .setHeader(HashType.SHA256, SignType.EDDSA)
+            .getScript();
+
+        return script;
+    }
+
+    public static String getNearStakeScript() {
+
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argAmount = sac.getArgumentRightJustified(10);
+        ScriptData argPayload = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+            .setCoinType(0x018d)
+            .copyArgument(argPayload)
+            .showMessage("NEAR")
+            .showMessage("STAKE")
+            .showAmount(argAmount, 18)
+            .showPressButton()
+            .setHeader(HashType.SHA256, SignType.EDDSA)
+            .getScript();
+
+        return script;
+    }
+
+    public static String getNearSCScript() {
+        
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argAmount = sac.getArgumentRightJustified(10);
+        ScriptData argPayload = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+            .setCoinType(0x018d)
+            .copyArgument(argPayload)
+            .showMessage("NEAR")
+            .showMessage("SMART")
             .showAmount(argAmount, 18)
             .showPressButton()
             .setHeader(HashType.SHA256, SignType.EDDSA)
