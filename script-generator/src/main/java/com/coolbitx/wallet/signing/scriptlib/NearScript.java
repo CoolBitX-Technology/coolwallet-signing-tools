@@ -72,4 +72,21 @@ public class NearScript {
 
         return script;
     }
+
+    public static String getNearSCNoAmountScript() {
+        
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argPayload = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+            .setCoinType(0x018d)
+            .copyArgument(argPayload)
+            .showMessage("NEAR")
+            .showMessage("SMART")
+            .showPressButton()
+            .setHeader(HashType.SHA256, SignType.EDDSA)
+            .getScript();
+
+        return script;
+    }
 }
