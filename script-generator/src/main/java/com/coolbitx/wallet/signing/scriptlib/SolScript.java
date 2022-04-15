@@ -114,7 +114,12 @@ public class SolScript {
         ScriptData dataLength = sac.getArgument(1);
         ScriptData programIdIndex = sac.getArgument(1);
         ScriptData data = sac.getArgument(8);
-        ScriptData decimals = sac.getArgument(1);
+        ScriptData tokenInfo = sac.getArgumentUnion(0, 73);
+        ScriptData tokenDecimals = sac.getArgument(1);
+        ScriptData tokenNameLength = sac.getArgument(1);
+        ScriptData tokenName = sac.getArgumentVariableLength(7);
+        ScriptData tokenAddress = sac.getArgument(64);
+        ScriptData tokenSign = sac.getArgumentAll();
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
         String script = scriptAsb
@@ -136,6 +141,13 @@ public class SolScript {
                 .copyArgument(programIdIndex)
                 .copyArgument(data)
                 .showWrap("SOL", "SPL")
+                .ifSigned(tokenInfo, tokenSign, "",
+                        new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
+                                .getScript())
+                .setBufferInt(tokenNameLength, 1, 7)
+                .copyArgument(tokenName, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
                 .ifEqual(keyIndices,"010200",
                         new ScriptAssembler()
                                 .baseConvert(toAssociateAccount, Buffer.CACHE2,0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
@@ -148,7 +160,7 @@ public class SolScript {
                 )
                 .clearBuffer(Buffer.CACHE2)
                 .baseConvert(data, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
-                .setBufferInt(decimals, 0, 20)
+                .setBufferInt(tokenDecimals, 0, 20)
                 .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 1000)
                 .clearBuffer(Buffer.CACHE1)
                 .showPressButton()
