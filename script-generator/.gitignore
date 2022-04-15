@@ -1,3 +1,4 @@
+
 **/nbproject/
 **/dist
 **/build
@@ -8,5 +9,8 @@
 **/.nb-gradle/
 /bin/
 .settings/
+<<<<<<< HEAD
+=======
 .classpath
 .project
+>>>>>>> dev
