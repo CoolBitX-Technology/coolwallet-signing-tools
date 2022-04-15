@@ -22,7 +22,6 @@ public class AllScript {
         CronosScript.listAll();
         CroScript.listAll();
         XtzScript.listAll();
-        LunaScript.listAll();
         MaticScript.listAll();
         TerraScript.listAll();
         ThetaScript.listAll();
