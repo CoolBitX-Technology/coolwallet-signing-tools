@@ -187,19 +187,26 @@ public class TerraScript{
                 .protobuf(argAccountNumber, typeInt)
                 // display
                 .showMessage("TERRA")
-                // dispay - from argument
-                .showMessage(argDenomLabel)
                 .getScript();
         if (null != type) {
             switch (type) {
+                case SEND:
+                    scriptAsb.showMessage(argDenomLabel).getScript();
+                    break;
                 case DELEGATE:
-                    scriptAsb.showMessage("Delgt").getScript();
+                    scriptAsb.showMessage("LUNA")
+                    .showMessage("Delgt")
+                    .getScript();
                     break;
                 case UNDELEGATE:
-                    scriptAsb.showMessage("UnDel").getScript();
+                    scriptAsb.showMessage("LUNA")
+                    .showMessage("UnDel")
+                    .getScript();
                     break;
                 case WITHDRAW:
-                    scriptAsb.showMessage("Reward").getScript();
+                    scriptAsb.showMessage("LUNA")
+                    .showMessage("Reward")
+                    .getScript();
                     break;
                 default:
                     break;
@@ -315,16 +322,17 @@ public class TerraScript{
             .copyString("20")
             .protobuf(argAccountNumber, typeInt)
             // display
-            .showMessage("LUNA")
+            .showMessage("TERRA")
             .showWrap("SMART", "")
             .showAddress(argContract)
-            .ifEqual(argFundsDenomInfo, Strings.padStart("", 16, '0'), 
-                    "",
-                    new ScriptAssembler()
-                    .showMessage(argFundsDenomLabel)
-                    .showAmount(argFundsAmount, 6)
-                    .getScript()
-            )
+            // Display Funds
+            // .ifEqual(argFundsDenomInfo, Strings.padStart("", 16, '0'), 
+            //         "",
+            //         new ScriptAssembler()
+            //         .showMessage(argFundsDenomLabel)
+            //         .showAmount(argFundsAmount, 6)
+            //         .getScript()
+            // )
             .showPressButton()
             // version=03 ScriptAssembler.hash=02=sha256 sign=01=ECDSA
             .setHeader(HashType.SHA256, SignType.ECDSA)
@@ -442,16 +450,16 @@ public class TerraScript{
         "304502203213ED60C19C5E64F4A52F80F9EDCEC7E7081DE3657704D338C791526FE869BB0221008C936D28248FE8B7BDE31EDA79229CC92EC69317DC1183BAAC2575179100B2B1", 
         144, '0');
     public static String TerraDelegateScriptSignature = Strings.padStart(
-        "30450220481EF5838F8B91171E9C0C1E270190BB2AE6A414890E38425E01D81D4263C023022100DA6EEA82D2CAB16DC718A5F027857C3758C02F328710366010860A4205E88D0E", 
+        "30450220073FBB49A7A51DBAA03C4E8D68E01BB02C2ED73936D2F1A667474D09DF74A89A022100D9930172BBE0CAB5EB023D1833B2E214016BAE1F809F7B5B991FA7E8A6FB88EB", 
         144, '0');
     public static String TerraUndelegateScriptSignature = Strings.padStart(
-        "3045022060A0DE165A565D8A81E42B753C0C6F92E24B53FF6092938BF16C9037F8B973EC022100EC2EEA96DE2E988B36DD064138DD180A6E6F138B25BEBD234415FFC67F3DC22C", 
+        "304502202EE1CB2C101DB7B5250CD91040C06846D978422CD6AF2BC90BB7410E27CE53A20221008DB95BC8C0A82E12AA2D40B11205EFB5E1EB1758F4FB80FB3D0CBEECABC1C6B8", 
         144, '0');
     public static String TerraWithdrawScriptSignature = Strings.padStart(
-        "3044022075FFEC543A760F437E66BBC9490D204188E6A57324EADBAAAAC304EF754B191002200EEE8D90DCE52B790CA5D56EDB2CC0D9D8744ECD913F2E9AEC4B3A765F414048", 
+        "30450221008F008A721BEE998992F47F3E72C7BA38AA43896CE6E41255BE6B5FD21467AAD3022052EC824AE12B25C51D84A5C590277BEBA6555385603D40D140E9843F0D73744C", 
         144, '0');
     public static String TerraSmartScriptSignature = Strings.padStart(
-        "3045022100E77792E57E91446794A1A66948C7398D4C002A9A3CA808E5B897388CDCFC1D6A02203B9D8C2879E670D8387E2BD876BEF04286A7FA853532609429A6D763BA83A0F0", 
+        "304502210081917F513F1DEE39D26DF556ED10207FC886ABC1BC706AAF06D36952C76254ED0220338B0A93D7EA8EA0990C2ECE437EF6547CA99E0BACD6D462A4B785F61B21D79E", 
         144, '0');
     public static String TerraCW20ScriptSignature = Strings.padStart(
         "3045022100DEA07F9EA9C85887CF85A479C8336BB87DD4310498979EEC0E46AD74CF05B7BD022059FFCF2DF8CE12539B645F2CD092D23D3C1A4CDD2971465F91B04F99801C0E65", 
@@ -461,16 +469,16 @@ public class TerraScript{
         "3046022100AED3450B1B9C921E02C16D88043921645449AE924A2DB355B326DAEBF654DC5602210081F0234EC9BE6AF86D7672BA49D45C4F3628D7C2601B42F3F4BEE267DF870AE5", 
         144, '0');
     public static String TerraTestDelegateScriptSignature = Strings.padStart(
-        "3045022100F92F9EB921D8D1DAF6F9312831DF646F7B1BE54F87D5F04296FBFAAEDE047F46022013D6DDB8053EB7A7C9B8ECF81CCC035B0619FCF48CC8F18649CCDD97B9EDD00D", 
+        "30450221009C27248E54079CCCE3CBD76D159053F8193221C61CF073E94364AD51133FB6690220362326F8D0FC47BF6B7B540664F7052722BEF4DC14A14A4BF164E38850E39A98", 
         144, '0');
     public static String TerraTestUndelegateScriptSignature = Strings.padStart(
-        "3045022031321B08CC503B9F745408DB0092F601D1958EFF4CD50C3F746C4059F4814006022100D01CF54A4EC223406DA27A7CFD9B7DD59A8B91159437CE4473FE8043360C70EA", 
+        "3046022100E66D9847C7C91B5424B29DBC1F93CED2C1D6036AE851C8F6163F33162C1218D602210093F1C9D77CB3C6340C59A1946A21BFAEEA19A98F7C76D4DE30E85227617F7FBC", 
         144, '0');
     public static String TerraTestWithdrawScriptSignature = Strings.padStart(
-        "3046022100D4C5CADA66BC8362B6594F3C3C14974101FBDC146724270179A9AEBBB36D53D0022100F5358B1B7F9B8D08F03ADE8E72785B4CC4E4E4C866AA5CF17BC1885C9F64A90E", 
+        "304402202F81F4F05F7EEAA9D64CAD2232C6E6D9104D5D5146D8BE046EA9788DE9A4ADC502205887F261F9B5923A864765EC492E335B31497C214C3B96D41E3E04CE46F67642", 
         144, '0');
     public static String TerraTestSmartScriptSignature = Strings.padStart(
-        "3046022100FC407346F1F0A8019993E99E662B83480FED580B1539333CB42BDE87EF7BAC05022100DE349584B53C945469448DD1C9043D920524DF08EC3A417D0BA795F4FFB64045", 
+        "3046022100B821F9FA8EBF5A2142282F4CF62A2E7EC5E24BB07E74D77413999C8F820F2D72022100AF7D8147B621E018D43676B7B438CBB71EB247D8731807B3767B85E6C19E0CC1", 
         144, '0');
     public static String TerraTestCW20ScriptSignature = Strings.padStart(
         "304602210085D47B950DE28BCA15692D87B13902B5CFAD189721D0BEFEEEE1E73D3691A9C9022100888CF4A5BF2B74BA920164A72C702C7E2C0D5BE67E87CF5243986C1CBC47BD95", 
