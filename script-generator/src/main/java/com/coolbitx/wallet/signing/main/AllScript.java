@@ -7,6 +7,7 @@ public class AllScript {
     public static void main(String[] args) throws Exception {
         System.out.println("----- script list -----");
         AtomScript.listAll();
+        AvaxCScript.listAll();
         BnbScript.listAll();
         BtcFamilyScript.listAll();
         DotScript.listAll();
@@ -24,6 +25,7 @@ public class AllScript {
         LunaScript.listAll();
         MaticScript.listAll();
         TerraScript.listAll();
+        ThetaScript.listAll();
     }
 
 }
