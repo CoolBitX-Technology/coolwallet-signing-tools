@@ -49,6 +49,7 @@ public class NearScript {
             .copyString("0100000003")
             .baseConvert(deposit, Buffer.TRANSACTION, 16, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
             .showMessage("NEAR")
+            .showAddress(receiver)
             .showAmount(amount, 10)
             .showPressButton()
             .setHeader(HashType.SHA256, SignType.EDDSA)
