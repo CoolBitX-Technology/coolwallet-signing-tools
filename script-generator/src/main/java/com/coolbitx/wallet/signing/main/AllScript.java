@@ -23,8 +23,8 @@ public class AllScript {
         CroScript.listAll();
         XtzScript.listAll();
         MaticScript.listAll();
+        SolScript.listAll();
         TerraScript.listAll();
         ThetaScript.listAll();
     }
-
 }
