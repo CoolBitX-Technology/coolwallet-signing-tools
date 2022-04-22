@@ -120,7 +120,7 @@ public class ETHScript {
                 .baseConvert(argTo, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .setBufferInt(argDecimal, 0, 20)
-                .showAmount(argValue, 1000)
+                .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 //version=00 ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
                 .setHeader(HashType.Keccak256, SignType.ECDSA) 

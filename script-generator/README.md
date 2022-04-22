@@ -112,7 +112,7 @@ public class main {
         // Step 5. Define which parts of the arguments shall be showed on the screen to be validated.
         String display = ScriptAssembler.showMessage("TEMPLATE")
                 + ScriptAssembler.setBufferInt(argDecimal, 0, 20)
-                + ScriptAssembler.showAmount(argValue, 1000)
+                + ScriptAssembler.showAmount(argValue, ScriptData.bufInt)
                 + ScriptAssembler.showPressButton();
 
         // Step 6. Generate the script using maven

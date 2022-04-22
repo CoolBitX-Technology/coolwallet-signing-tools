@@ -33,8 +33,8 @@ public class ScriptData {
         return "[" + "bufferType=" + bufferType + ", offset=" + offset + ", length=" + length + "]";
     }
 
-    public static final int bufInt = 1000;
-    public static final int max = 2000;
+    public static final int bufInt = 88888888;
+    public static final int max = 99999999;
 
     public static ScriptData getBuffer(Buffer bufferType, int offset, int length) {
         return new ScriptData(bufferType, offset, length);

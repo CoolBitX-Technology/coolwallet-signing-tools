@@ -161,7 +161,7 @@ public class SolScript {
                 .clearBuffer(Buffer.CACHE2)
                 .baseConvert(data, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
                 .setBufferInt(tokenDecimals, 0, 20)
-                .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 1000)
+                .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), ScriptData.bufInt)
                 .clearBuffer(Buffer.CACHE1)
                 .showPressButton()
                 .setHeader(HashType.NONE, SignType.EDDSA)

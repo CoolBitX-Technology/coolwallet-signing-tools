@@ -196,7 +196,7 @@ accessList :       c0
                 )
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .setBufferInt(argDecimal, 0, 20)
-                .showAmount(argValue, 1000)
+                .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
                 .setHeader(HashType.Keccak256, SignType.ECDSA)
@@ -429,7 +429,7 @@ b844 a9059cbb
                 )
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .setBufferInt(argDecimal, 0, 20)
-                .showAmount(argValue, 1000)
+                .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
                 .setHeader(HashType.Keccak256, SignType.ECDSA)

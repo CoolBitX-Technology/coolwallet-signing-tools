@@ -114,7 +114,7 @@ public class AvaxCScript {
                 .baseConvert(argTo, ScriptData.Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2))
                 .setBufferInt(argDecimal, 0, 20)
-                .showAmount(argValue, 1000)
+                .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
                 .setHeader(ScriptAssembler.HashType.Keccak256, ScriptAssembler.SignType.ECDSA)
