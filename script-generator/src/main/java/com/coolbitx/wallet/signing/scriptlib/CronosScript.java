@@ -127,7 +127,7 @@ public class CronosScript {
                         ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                .setBufferInt(argDecimal, 0, 20).showAmount(argValue, 1000)
+                .setBufferInt(argDecimal, 0, 20).showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
                 // sign=01=ECDSA

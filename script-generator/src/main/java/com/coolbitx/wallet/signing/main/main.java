@@ -31,7 +31,7 @@ public class main {
         // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
         String display = scriptAsb.showMessage("TEMPLATE")
                 .setBufferInt(argDecimal, 0, 20)
-                .showAmount(argValue, 1000)
+                .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 .getScript();
 

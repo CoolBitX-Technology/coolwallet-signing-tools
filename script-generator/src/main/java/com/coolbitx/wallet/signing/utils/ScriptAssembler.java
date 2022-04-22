@@ -53,57 +53,57 @@ public class ScriptAssembler {
     private versionType version;
     private String script;
 
-    public ScriptAssembler(){
+    public ScriptAssembler() {
         this.version = versionType.version00;
         this.script = "";
     }
 
-    public String getScript(){
+    public String getScript() {
         return script;
     }
 
-    public enum HashType{
+    public enum HashType {
         NONE("00"),
-        SHA1("01"), 
-        SHA256("02"), 
-        SHA512("03"), 
+        SHA1("01"),
+        SHA256("02"),
+        SHA512("03"),
         SHA3256("04"),
         SHA3512("05"),
-        Keccak256("06"), 
-        Keccak512("07"), 
+        Keccak256("06"),
+        Keccak512("07"),
         RipeMD160("08"),
-        SHA256RipeMD160("09"), 
-        DoubleSHA256("0D"), 
-        CRC16("0A"), 
-        Blake2b256("0E"), 
+        SHA256RipeMD160("09"),
+        DoubleSHA256("0D"),
+        CRC16("0A"),
+        Blake2b256("0E"),
         Blake2b512("0F");
         private final String hashLabel;
 
-        private HashType(String hashLabel){
+        private HashType(String hashLabel) {
             this.hashLabel = hashLabel;
         }
 
-        public String toString(){
+        public String toString() {
             return hashLabel;
         }
     }
 
-    public static enum SignType{
+    public static enum SignType {
         ECDSA("01"),
         EDDSA("02"),
         BIP32EDDSA("03");
         private final String signLabel;
 
-        private SignType(String signLabel){
+        private SignType(String signLabel) {
             this.signLabel = signLabel;
         }
 
-        public String toString(){
+        public String toString() {
             return signLabel;
         }
     }
 
-    public static enum versionType{
+    public static enum versionType {
         version00(0, "00"),
         version02(2, "02"),
         version03(3, "03"),
@@ -112,21 +112,21 @@ public class ScriptAssembler {
         private final int versionNum;
         private final String versionLabel;
 
-        private versionType(int versionNum, String versionLabel){
+        private versionType(int versionNum, String versionLabel) {
             this.versionNum = versionNum;
             this.versionLabel = versionLabel;
         }
 
-        public int getVersionNum(){
+        public int getVersionNum() {
             return versionNum;
         }
 
-        public String toString(){
+        public String toString() {
             return versionLabel;
         }
     }
 
-    public ScriptAssembler setHeader(HashType hash, SignType sign){
+    public ScriptAssembler setHeader(HashType hash, SignType sign) {
         script = "03" + version.versionLabel + hash + sign + script;
         return this;
     }
@@ -199,14 +199,14 @@ public class ScriptAssembler {
             case 64:
                 firstParameter += "6";
                 break;
+            case ScriptData.bufInt:
+                firstParameter += "B";
+                break;
+            case ScriptData.max:
+                firstParameter += "9";
+                break;
             default:
-                if (i > 600) {
-                    if (i < 1500) {
-                        firstParameter += "B";
-                    } else {
-                        firstParameter += "9";
-                    }
-                } else if (i < 0 || i >= 256) {
+                if (i < 0 || i >= 256) {
                     if (i < 0) {
                         i = 0x10000 + i;
                     }
@@ -227,7 +227,7 @@ public class ScriptAssembler {
      * @param coinType
      * @return
      */
-    public ScriptAssembler setCoinType(int coinType){
+    public ScriptAssembler setCoinType(int coinType) {
         String hexCoinType = HexUtil.toHexString(coinType, 4);
         script += compose("C7", null, null, 0, 0) + hexCoinType;
         return this;
@@ -261,7 +261,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler copyString(String data){
+    public ScriptAssembler copyString(String data) {
         return copyString(data, Buffer.TRANSACTION);
     }
 
@@ -391,7 +391,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler rlpDataPlaceholder(ScriptData data) {
-        if(version.getVersionNum() < 5){
+        if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
         script += compose("C4", data, Buffer.TRANSACTION, 0, 0);
@@ -405,7 +405,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler rlpDataPlaceholder(ScriptData data, Buffer destinationBuf) {
-        if(version.getVersionNum() < 5){
+        if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
         script += compose("C4", data, destinationBuf, 0, 0);
@@ -530,7 +530,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler bech32Polymod(ScriptData data, Buffer destinationBuf) {
-        if(version.getVersionNum() < 4){
+        if (version.getVersionNum() < 4) {
             version = versionType.version04;
         }
         script += compose("5A", data, destinationBuf, 0xB, 0);
@@ -624,9 +624,9 @@ public class ScriptAssembler {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        if (argData.length == 1000 || argData.length < 0) {
-          argData.length = expect.length() / 2;
-          restore = true;
+        if (argData.length == ScriptData.bufInt || argData.length < 0) {
+            argData.length = expect.length() / 2;
+            restore = true;
         }
         script += compose("1A", argData, null, trueStatement.length() / 2, 0)
                 + HexUtil.rightJustify(expect, Math.abs(argData.length))
@@ -653,16 +653,16 @@ public class ScriptAssembler {
             trueStatement += skip(falseStatement);
         }
         boolean restoreToThousand = false;
-        if (argData.length == 1000) {
-          argData.length = min.length() / 2;
-          restoreToThousand = true;
+        if (argData.length == ScriptData.bufInt) {
+            argData.length = min.length() / 2;
+            restoreToThousand = true;
         }
         script += compose("12", argData, null, trueStatement.length() / 2, 0)
                 + HexUtil.rightJustify(min, argData.length)
                 + HexUtil.rightJustify(max, argData.length)
                 + trueStatement + falseStatement;
         if (restoreToThousand) {
-            argData.length = 1000;
+            argData.length = ScriptData.bufInt;
         }
         return this;
     }
@@ -786,7 +786,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler protobuf(ScriptData data, Buffer destinationBuf, int wireType) {
-        if(version.getVersionNum() < 3){
+        if (version.getVersionNum() < 3) {
             version = versionType.version03;
         }
         script += compose("BF", data, destinationBuf, wireType, 0);
@@ -821,7 +821,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler arrayEnd(int type) {
-        if(version.getVersionNum() < 3){
+        if (version.getVersionNum() < 3) {
             version = versionType.version04;
         }
         script += compose("BE", null, null, type, 0);
@@ -836,7 +836,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler scaleEncode(ScriptData data, Buffer destinationBuf) {
-        if(version.getVersionNum() < 2){
+        if (version.getVersionNum() < 2) {
             version = versionType.version02;
         }
         script += compose("A2", data, destinationBuf, 0, 0);
@@ -855,7 +855,7 @@ public class ScriptAssembler {
         return this;
     }
 
-    public ScriptAssembler insertString(String data){
+    public ScriptAssembler insertString(String data) {
         script += data;
         return this;
     }

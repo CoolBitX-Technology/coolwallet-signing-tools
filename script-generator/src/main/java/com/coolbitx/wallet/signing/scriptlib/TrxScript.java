@@ -179,7 +179,7 @@ public class TrxScript {
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // display amount
                 .setBufferInt(argDecimal, 0, 20)
-                .showAmount(argValue, 1000)
+                .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
                 .setHeader(HashType.SHA256, SignType.ECDSA)
