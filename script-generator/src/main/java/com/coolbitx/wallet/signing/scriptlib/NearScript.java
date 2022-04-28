@@ -152,4 +152,58 @@ public class NearScript {
 
         return script;
     }
+
+    public static String getNearSCStakeScript() {
+        
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData signerLength = sac.getArgument(1);
+        ScriptData signer = sac.getArgumentVariableLength(68);
+        ScriptData publicKey = sac.getArgument(32);
+        ScriptData nonce = sac.getArgument(8);
+        ScriptData receiverLength = sac.getArgument(1);
+        ScriptData receiver = sac.getArgumentVariableLength(68);
+        ScriptData blockHash = sac.getArgument(32);
+        ScriptData methodLength = sac.getArgument(1);
+        ScriptData method = sac.getArgumentVariableLength(68);
+        ScriptData methodArgsLength = sac.getArgument(1);
+        ScriptData methodArgs = sac.getArgumentVariableLength(68);
+        ScriptData gas = sac.getArgument(8);
+        ScriptData deposit = sac.getArgument(16);
+        ScriptData amount = sac.getArgument(10);
+
+        String script = new ScriptAssembler()
+            .setCoinType(0x018d)
+            .copyArgument(signerLength)
+            .copyString("000000")
+            .setBufferInt(signerLength, 2, 64)
+            .copyArgument(signer)
+            .copyString("00")
+            .copyArgument(publicKey)
+            .baseConvert(nonce, Buffer.TRANSACTION, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
+            .copyArgument(receiverLength)
+            .copyString("000000")
+            .setBufferInt(receiverLength, 2, 64)
+            .copyArgument(receiver)
+            .copyArgument(blockHash)
+            .copyString("0100000002")
+            .copyArgument(methodLength)
+            .copyString("000000")
+            .setBufferInt(methodLength, 2, 64)
+            .copyArgument(method)
+            .copyArgument(methodArgsLength)
+            .copyString("000000")
+            .setBufferInt(methodArgsLength, 2, 64)
+            .copyArgument(methodArgs)
+            .baseConvert(gas, Buffer.TRANSACTION, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
+            .baseConvert(deposit, Buffer.TRANSACTION, 16, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
+            .showMessage("NEAR")
+            .showWrap("SC", "STAKE")
+            .ifEqual(amount, Strings.padStart("", 20, '0'), "", new ScriptAssembler().showAmount(amount, 10).getScript())
+            .showPressButton()
+            .setHeader(HashType.SHA256, SignType.EDDSA)
+            .getScript();
+
+        return script;
+    }
+    
 }
