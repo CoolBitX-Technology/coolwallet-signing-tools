@@ -385,7 +385,7 @@ public class ScriptAssembler {
     }
 
     /**
-     * Send rlp data place holder length to transaction buffer.
+     * Send protobuf data place holder length to transaction buffer.
      *
      * @param data
      * @type type: 0 rlp, type: 1 protobuf
