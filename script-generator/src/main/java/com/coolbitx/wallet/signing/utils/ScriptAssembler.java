@@ -385,6 +385,21 @@ public class ScriptAssembler {
     }
 
     /**
+     * Send protobuf data place holder length to transaction buffer.
+     *
+     * @param data
+     * @type type: 0 rlp, type: 1 protobuf
+     * @return
+     */
+    public ScriptAssembler protobufDataPlaceholder(ScriptData data) {
+        if(version.getVersionNum() < 5){
+            version = versionType.version05;
+        }
+        script += compose("C4", data, Buffer.TRANSACTION, 1, 0);
+        return this;
+    }
+
+    /**
      * Send rlp data place holder length to transaction buffer.
      *
      * @param length
