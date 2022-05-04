@@ -92,15 +92,7 @@ public class ScriptAssembler {
     public static enum SignType {
         ECDSA("01"),
         EDDSA("02"),
-<<<<<<< HEAD
-        BIP32EDDSA("03"),        
-=======
-<<<<<<< HEAD
         BIP32EDDSA("03"),
-=======
-        BIP32EDDSA("03"),        
->>>>>>> 3ee10a9b6a7d5a5a0f632c75fd9f7801721d6ae4
->>>>>>> 7c9bbbc4bedee2e82ae3e86c44b825f8c4b0af4c
         Schnorr("04");
         private final String signLabel;
 
