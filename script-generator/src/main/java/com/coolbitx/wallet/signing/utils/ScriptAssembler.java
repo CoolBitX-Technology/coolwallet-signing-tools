@@ -76,7 +76,8 @@ public class ScriptAssembler {
         DoubleSHA256("0D"),
         CRC16("0A"),
         Blake2b256("0E"),
-        Blake2b512("0F");
+        Blake2b512("0F"),
+        Poseidon("10");
         private final String hashLabel;
 
         private HashType(String hashLabel) {
@@ -91,7 +92,12 @@ public class ScriptAssembler {
     public static enum SignType {
         ECDSA("01"),
         EDDSA("02"),
-        BIP32EDDSA("03");
+<<<<<<< HEAD
+        BIP32EDDSA("03"),
+=======
+        BIP32EDDSA("03"),        
+>>>>>>> 3ee10a9b6a7d5a5a0f632c75fd9f7801721d6ae4
+        Schnorr("04");
         private final String signLabel;
 
         private SignType(String signLabel) {
