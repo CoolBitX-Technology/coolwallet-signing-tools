@@ -26,5 +26,6 @@ public class AllScript {
         SolScript.listAll();
         TerraScript.listAll();
         ThetaScript.listAll();
+        MinaScript.listAll();
     }
 }
