@@ -11,6 +11,7 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
 
@@ -218,7 +219,7 @@ public class BscScript {
                 .copyString("38", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("BSC")
                 .showWrap("SMART", "")
                 .showPressButton()

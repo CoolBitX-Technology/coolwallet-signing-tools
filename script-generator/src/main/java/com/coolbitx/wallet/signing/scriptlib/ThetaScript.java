@@ -6,6 +6,7 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class ThetaScript {
@@ -41,7 +42,6 @@ public class ThetaScript {
     //     coin            c8
     //       theta           80
     //       tfuel           86 5af3107a4000
-
     public static String getSendScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTheta = sac.getArgumentRightJustified(12);
@@ -53,14 +53,11 @@ public class ThetaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(500)
-
                 // chainId + txType
                 .copyString("876d61696e6e657402")
                 .arrayPointer()
-
                 // constant fee 0.3
                 .copyString("ca80880429d069189e0000")
-
                 // inputs.input1
                 .arrayPointer()
                 .arrayPointer()
@@ -68,12 +65,11 @@ public class ThetaScript {
                 .arrayPointer() // coin
                 .rlpString(argTheta)
                 .rlpString(argTFuelPlusFee)
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .rlpString(argSequence) // sequence
                 .copyString("80") // signature
-                .arrayEnd(1)
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
+                .arrayEnd(TYPE_RLP)
                 // outputs.output1
                 .arrayPointer()
                 .arrayPointer()
@@ -81,20 +77,18 @@ public class ThetaScript {
                 .arrayPointer() // coin
                 .rlpString(argTheta)
                 .rlpString(argTFuel)
-                .arrayEnd(1)
-                .arrayEnd(1)
-                .arrayEnd(1)
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
+                .arrayEnd(TYPE_RLP)
+                .arrayEnd(TYPE_RLP)
+                .arrayEnd(TYPE_RLP)
                 // ETH Wrapper
                 .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
                 .clearBuffer(Buffer.TRANSACTION)
                 .arrayPointer()
                 .copyString("80808094000000000000000000000000000000000000000080")
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .clearBuffer(Buffer.CACHE1)
-
                 .showMessage("THETA")
                 .showWrap("SEND", "")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -130,7 +124,6 @@ public class ThetaScript {
     //     theta            80
     //     tfuel            80
     // purpose          80
-
     public static String getStakeValidatorScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTheta = sac.getArgumentRightJustified(12);
@@ -140,42 +133,36 @@ public class ThetaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(500)
-
                 // chainId + txType
                 .copyString("876d61696e6e657408")
                 .arrayPointer()
-
                 // constant fee 0.3
                 .copyString("ca80880429d069189e0000")
-
                 // source
                 .arrayPointer()
                 .copyString("94").copyArgument(argFrom) // from
                 .arrayPointer() // coin
                 .rlpString(argTheta)
                 .copyString("80")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .rlpString(argSequence) // sequence
                 .copyString("80") // signature
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // holder
                 .copyString("d894").copyArgument(argTo) // to
                 .copyString("c28080") // coin
 
                 // purpose
                 .copyString("80")
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // ETH Wrapper
                 .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
                 .clearBuffer(Buffer.TRANSACTION)
                 .arrayPointer()
                 .copyString("80808094000000000000000000000000000000000000000080")
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .clearBuffer(Buffer.CACHE1)
-
                 .showMessage("THETA")
                 .showWrap("STAKE", "VALIDAT")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -220,7 +207,6 @@ public class ThetaScript {
     //                            2f7b0b54ae0e64c57a2abd6e524fd6cc
     //                            2370ccc3756412979bdeff8256062291
     //                            00
-
     public static String getStakeGuardianScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTheta = sac.getArgumentRightJustified(12);
@@ -234,47 +220,40 @@ public class ThetaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(500)
-
                 // chainId + txType
                 .copyString("876d61696e6e65740a")
                 .arrayPointer()
-
                 // constant fee 0.3
                 .copyString("ca80880429d069189e0000")
-
                 // source
                 .arrayPointer()
                 .copyString("94").copyArgument(argFrom) // from
                 .arrayPointer() // coin
                 .rlpString(argTheta)
                 .copyString("80")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .rlpString(argSequence) // sequence
                 .copyString("80") // signature
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // holder
                 .copyString("d894").copyArgument(argTo) // to
                 .copyString("c28080") // coin
 
                 // purpose
                 .copyString("01")
-
                 // nodeKey
                 .copyString("b0").copyArgument(argPubKey)
                 .copyString("b860").copyArgument(argPop)
                 .copyString("b841").copyArgument(argHolderSig)
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // ETH Wrapper
                 .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
                 .clearBuffer(Buffer.TRANSACTION)
                 .arrayPointer()
                 .copyString("80808094000000000000000000000000000000000000000080")
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .clearBuffer(Buffer.CACHE1)
-
                 .showMessage("THETA")
                 .showWrap("STAKE", "GUARDIA")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -301,47 +280,40 @@ public class ThetaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(500)
-
                 // chainId + txType
                 .copyString("876d61696e6e65740a")
                 .arrayPointer()
-
                 // constant fee 0.3
                 .copyString("ca80880429d069189e0000")
-
                 // source
                 .arrayPointer()
                 .copyString("94").copyArgument(argFrom) // from
                 .arrayPointer() // coin
                 .copyString("80")
                 .rlpString(argTFuel)
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .rlpString(argSequence) // sequence
                 .copyString("80") // signature
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // holder
                 .copyString("d894").copyArgument(argTo) // to
                 .copyString("c28080") // coin
 
                 // purpose
                 .copyString("02")
-
                 // nodeKey
                 .copyString("b0").copyArgument(argPubKey)
                 .copyString("b860").copyArgument(argPop)
                 .copyString("b841").copyArgument(argHolderSig)
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // ETH Wrapper
                 .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
                 .clearBuffer(Buffer.TRANSACTION)
                 .arrayPointer()
                 .copyString("80808094000000000000000000000000000000000000000080")
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .clearBuffer(Buffer.CACHE1)
-
                 .showMessage("THETA")
                 .showWrap("STAKE", "EDGE")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -375,7 +347,6 @@ public class ThetaScript {
     //     theta             80
     //     tfuel             80
     // purpose           80
-
     public static String getWithdrawScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argPurpose = sac.getArgument(1);
@@ -385,42 +356,36 @@ public class ThetaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(500)
-
                 // chainId + txType
                 .copyString("876d61696e6e657409")
                 .arrayPointer()
-
                 // constant fee 0.3
                 .copyString("ca80880429d069189e0000")
-
                 // source
                 .arrayPointer()
                 .copyString("94").copyArgument(argFrom) // from
                 .copyString("c28080") // coin
                 .rlpString(argSequence) // sequence
                 .copyString("80") // signature
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // holder
                 .copyString("d894").copyArgument(argTo) // to
                 .copyString("c28080") // coin
 
                 // purpose
                 .ifEqual(argPurpose, "00",
-                    new ScriptAssembler().copyString("80").getScript(),
-                    new ScriptAssembler().copyArgument(argPurpose).getScript()
+                        new ScriptAssembler().copyString("80").getScript(),
+                        new ScriptAssembler().copyArgument(argPurpose).getScript()
                 )
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // ETH Wrapper
                 .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
                 .clearBuffer(Buffer.TRANSACTION)
                 .arrayPointer()
                 .copyString("80808094000000000000000000000000000000000000000080")
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .clearBuffer(Buffer.CACHE1)
-
                 .showMessage("THETA")
                 .showWrap("WITHDRAW", "")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -454,7 +419,6 @@ public class ThetaScript {
     // data          b8 44 a9059cbb
     //                     0000000000000000000000003d65d8d9792b8777188c481e6b8d859e29de293c
     //                     00000000000000000000000000000000000000000000000000000000000003e8
-
     public static String getSmartScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argValue = sac.getArgumentRightJustified(12);
@@ -466,22 +430,19 @@ public class ThetaScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(500)
-
                 // chainId + txType
                 .copyString("876d61696e6e657407")
                 .arrayPointer()
-
                 // input
                 .arrayPointer()
                 .copyString("94").copyArgument(argFrom) // from
                 .arrayPointer() // coin
                 .copyString("80")
                 .rlpString(argValue)
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .rlpString(argSequence) // sequence
                 .copyString("80") // signature
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // output
                 .copyString("d894").copyArgument(argTo) // to
                 .copyString("c28080") // coin
@@ -489,17 +450,15 @@ public class ThetaScript {
                 .rlpString(argGasLimit) // gasLimit
                 .copyString("8603a352944000") // gasPrice
                 .rlpString(argData) // data
-                .arrayEnd(1)
-
+                .arrayEnd(TYPE_RLP)
                 // ETH Wrapper
                 .copyArgument(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE1)
                 .clearBuffer(Buffer.TRANSACTION)
                 .arrayPointer()
                 .copyString("80808094000000000000000000000000000000000000000080")
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .clearBuffer(Buffer.CACHE1)
-
                 .showMessage("THETA")
                 .showWrap("SMART", "")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -533,7 +492,7 @@ public class ThetaScript {
                 .copyString("0169", Buffer.CACHE1) // chainId = 361
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080") // r, s
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("THETA")
                 .showWrap("SMART", "")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)

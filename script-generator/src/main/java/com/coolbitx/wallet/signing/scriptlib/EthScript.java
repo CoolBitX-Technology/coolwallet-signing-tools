@@ -10,6 +10,7 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class EthScript {
@@ -185,7 +186,7 @@ public class EthScript {
                         .rlpString(argData)
                         // accessList
                         .copyString("C0")
-                        .arrayEnd(1)
+                        .arrayEnd(TYPE_RLP)
                         // txDetail
                         .showMessage("ETH")
                         .showWrap("SMART", "")
@@ -227,7 +228,7 @@ public class EthScript {
                 .rlpString(argValue)
                 .rlpDataPlaceholder(argData)
                 // accessList
-                .copyString("C0").arrayEnd(1).showMessage("ETH").showWrap("SMART", "")
+                .copyString("C0").arrayEnd(TYPE_RLP).showMessage("ETH").showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
                 .setHeader(HashType.Keccak256, SignType.ECDSA).getScript();
@@ -432,7 +433,7 @@ public class EthScript {
                 .copyString("01", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 // txDetail
                 .showMessage("ETH")
                 .showWrap("SMART", "")

@@ -3,6 +3,7 @@ package com.coolbitx.wallet.signing.main;
 import com.coolbitx.wallet.signing.utils.*;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 
 public class main {
 
@@ -25,7 +26,7 @@ public class main {
                 .copyArgument(argTo)
                 .rlpString(argValue)
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .getScript();
 
         // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.

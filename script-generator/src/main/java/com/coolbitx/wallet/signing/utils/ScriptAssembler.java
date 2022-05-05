@@ -392,7 +392,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler protobufDataPlaceholder(ScriptData data) {
-        if(version.getVersionNum() < 5){
+        if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
         script += compose("C4", data, Buffer.TRANSACTION, 1, 0);
@@ -825,8 +825,13 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler arrayEnd() {
-        return arrayEnd(0);
+        return arrayEnd(TYPE_PROTOBUF);
     }
+
+    public static final int TYPE_PROTOBUF = 0;
+    public static final int TYPE_RLP = 1;
+    public static final int TYPE_MESSAGE_PACK_MAP = 2;
+    public static final int TYPE_MESSAGE_PACKARRAY = 3;
 
     /**
      * Encode data from the last position point in arrayPointer function with
