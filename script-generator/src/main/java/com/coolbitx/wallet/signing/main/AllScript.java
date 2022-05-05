@@ -6,26 +6,26 @@ public class AllScript {
 
     public static void main(String[] args) throws Exception {
         System.out.println("----- script list -----");
-        // AtomScript.listAll();
-        // AvaxCScript.listAll();
+        AtomScript.listAll();
+        AvaxCScript.listAll();
         BnbScript.listAll();
-        // BtcFamilyScript.listAll();
-        // DotScript.listAll();
-        // EvmScript.listAll();
-        // EthScript.listAll();
-        // IcxScript.listAll();
-        // TrxScript.listAll();
-        // XlmScript.listAll();
-        // XrpScript.listAll();
-        // AdaScript.listAll();
-        // EtcScript.listAll();
-        // CronosScript.listAll();
-        // CroScript.listAll();
-        // XtzScript.listAll();
-        // MaticScript.listAll();
-        // SolScript.listAll();
+        BtcFamilyScript.listAll();
+        DotScript.listAll();
+        EvmScript.listAll();
+        EthScript.listAll();
+        IcxScript.listAll();
+        TrxScript.listAll();
+        XlmScript.listAll();
+        XrpScript.listAll();
+        AdaScript.listAll();
+        EtcScript.listAll();
+        CronosScript.listAll();
+        CroScript.listAll();
+        XtzScript.listAll();
+        MaticScript.listAll();
+        SolScript.listAll();
         TerraScript.listAll();
-        // ThetaScript.listAll();
+        ThetaScript.listAll();
         MinaScript.listAll();
     }
 }

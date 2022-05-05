@@ -76,7 +76,7 @@ public class ScriptAssembler {
         DoubleSHA256("0D"),
         CRC16("0A"),
         Blake2b256("0E"),
-        Blake2b512("0F"),        
+        Blake2b512("0F"),
         Poseidon("10");
         private final String hashLabel;
 
