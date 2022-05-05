@@ -33,14 +33,20 @@ const App: FC = () => {
   const connect = async () => {
     const device = await WebBleTransport.listen();
     const cardName = device.name ?? '';
-    const webBleTransport = await WebBleTransport.connect(device);
-    const SEPublicKey = await config.getSEPublicKey(webBleTransport);
-    transport.current = webBleTransport;
-    setCardName(cardName);
-    setConnected(true);
     localStorage.setItem('cardName', cardName);
-    localStorage.setItem('SEPublicKey', SEPublicKey);
-    console.debug(`SEPublicKey: ${SEPublicKey}`);
+    setCardName(cardName);
+
+    const webBleTransport = await WebBleTransport.connect(device);
+    transport.current = webBleTransport;
+    setConnected(true);
+
+    try {
+      const SEPublicKey = await config.getSEPublicKey(webBleTransport);
+      localStorage.setItem('SEPublicKey', SEPublicKey);
+      console.debug(`SEPublicKey: ${SEPublicKey}`);
+    } catch(err) {
+      console.log('err :', err);
+    }
   };
 
   const disconnect = () => {
