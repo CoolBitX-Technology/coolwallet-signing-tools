@@ -875,6 +875,19 @@ public class ScriptAssembler {
         return this;
     }
 
+    /**
+     * Scale encode data and put the output to destination buffer.
+     *
+     * @param type
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public ScriptAssembler messagePack(int type, ScriptData data, Buffer destinationBuf) {
+        script += compose("C5", data, destinationBuf, type, 0);
+        return this;
+    }
+
     public ScriptAssembler insertString(String data) {
         script += data;
         return this;
