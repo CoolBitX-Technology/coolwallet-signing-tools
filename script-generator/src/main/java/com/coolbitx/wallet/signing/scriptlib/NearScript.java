@@ -30,7 +30,6 @@ public class NearScript {
         ScriptData receiver = sac.getArgumentVariableLength(68);
         ScriptData blockHash = sac.getArgument(32);
         ScriptData deposit = sac.getArgument(16);
-        ScriptData amount = sac.getArgument(10);
 
         String script = new ScriptAssembler()
             .setCoinType(0x018d)
@@ -50,7 +49,7 @@ public class NearScript {
             .baseConvert(deposit, Buffer.TRANSACTION, 16, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
             .showMessage("NEAR")
             .showAddress(receiver)
-            .showAmount(amount, 10)
+            .showAmount(deposit, 24)
             .showPressButton()
             .setHeader(HashType.SHA256, SignType.EDDSA)
             .getScript();
@@ -70,7 +69,6 @@ public class NearScript {
         ScriptData blockHash = sac.getArgument(32);
         ScriptData deposit = sac.getArgument(16);
         ScriptData validatorPublicKey = sac.getArgument(32);
-        ScriptData amount = sac.getArgument(10);
 
         String script = new ScriptAssembler()
             .setCoinType(0x018d)
@@ -92,7 +90,7 @@ public class NearScript {
             .copyArgument(validatorPublicKey)
             .showMessage("NEAR")
             .showMessage("STAKE")
-            .showAmount(amount, 10)
+            .showAmount(deposit, 24)
             .showPressButton()
             .setHeader(HashType.SHA256, SignType.EDDSA)
             .getScript();
@@ -116,7 +114,6 @@ public class NearScript {
         ScriptData methodArgs = sac.getArgumentVariableLength(68);
         ScriptData gas = sac.getArgument(8);
         ScriptData deposit = sac.getArgument(16);
-        ScriptData amount = sac.getArgument(10);
 
         String script = new ScriptAssembler()
             .setCoinType(0x018d)
@@ -145,7 +142,7 @@ public class NearScript {
             .baseConvert(deposit, Buffer.TRANSACTION, 16, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
             .showMessage("NEAR")
             .showMessage("SMART")
-            .ifEqual(amount, Strings.padStart("", 20, '0'), "", new ScriptAssembler().showAmount(amount, 10).getScript())
+            .ifEqual(deposit, Strings.padStart("", 32, '0'), "", new ScriptAssembler().showAmount(deposit, 24).getScript())
             .showPressButton()
             .setHeader(HashType.SHA256, SignType.EDDSA)
             .getScript();
@@ -169,7 +166,6 @@ public class NearScript {
         ScriptData methodArgs = sac.getArgumentVariableLength(68);
         ScriptData gas = sac.getArgument(8);
         ScriptData deposit = sac.getArgument(16);
-        ScriptData amount = sac.getArgument(10);
 
         String script = new ScriptAssembler()
             .setCoinType(0x018d)
@@ -198,7 +194,7 @@ public class NearScript {
             .baseConvert(deposit, Buffer.TRANSACTION, 16, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
             .showMessage("NEAR")
             .showWrap("SC", "STAKE")
-            .ifEqual(amount, Strings.padStart("", 20, '0'), "", new ScriptAssembler().showAmount(amount, 10).getScript())
+            .ifEqual(deposit, Strings.padStart("", 32, '0'), "", new ScriptAssembler().showAmount(deposit, 24).getScript())
             .showPressButton()
             .setHeader(HashType.SHA256, SignType.EDDSA)
             .getScript();
