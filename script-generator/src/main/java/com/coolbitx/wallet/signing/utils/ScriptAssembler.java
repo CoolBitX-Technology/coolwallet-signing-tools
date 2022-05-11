@@ -831,13 +831,13 @@ public class ScriptAssembler {
     public static final int TYPE_PROTOBUF = 0;
     public static final int TYPE_RLP = 1;
     public static final int TYPE_MESSAGE_PACK_MAP = 2;
-    public static final int TYPE_MESSAGE_PACKARRAY = 3;
+    public static final int TYPE_MESSAGE_PACK_ARRAY = 3;
 
     /**
      * Encode data from the last position point in arrayPointer function with
      * specified encoding.
      *
-     * @param type 0: protobuf, 1: rlp
+     * @param type 0: protobuf, 1: rlp, 2: message pack map, 3: message pack array
      * @return
      */
     public ScriptAssembler arrayEnd(int type) {
@@ -875,10 +875,15 @@ public class ScriptAssembler {
         return this;
     }
 
+    public static final byte typeInt = 0;
+    public static final byte typeString = 1;
+    public static final byte typeArray = 2;
+    public static final byte typeMap = 3;
+
     /**
-     * Scale encode data and put the output to destination buffer.
+     * Message pack encode data and put the output to destination buffer.
      *
-     * @param type
+     * @param type 0: Int, 1: String, 2: Array, 3: Map
      * @param data The input data.
      * @param destinationBuf The destination buffer.
      * @return

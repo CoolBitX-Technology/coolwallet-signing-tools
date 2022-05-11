@@ -73,7 +73,7 @@ public class EthScript {
                 .copyString("80")
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 // txDetail
                 .showMessage("ETH")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -133,7 +133,7 @@ public class EthScript {
                 .copyString("80B844a9059cbb000000000000000000000000").copyArgument(argTo)
                 .copyString("0000000000000000000000000000000000000000").copyArgument(argValue)
                 // accessList
-                .copyString("C0").arrayEnd(1).showMessage("ETH")
+                .copyString("C0").arrayEnd(TYPE_RLP).showMessage("ETH")
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
                                 .getScript())
