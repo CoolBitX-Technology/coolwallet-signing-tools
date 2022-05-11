@@ -837,7 +837,8 @@ public class ScriptAssembler {
      * Encode data from the last position point in arrayPointer function with
      * specified encoding.
      *
-     * @param type 0: protobuf, 1: rlp, 2: message pack map, 3: message pack array
+     * @param type 0: protobuf, 1: rlp, 2: message pack map, 3: message pack
+     * array
      * @return
      */
     public ScriptAssembler arrayEnd(int type) {
@@ -877,14 +878,15 @@ public class ScriptAssembler {
 
     public static final byte typeInt = 0;
     public static final byte typeString = 1;
-    public static final byte typeArray = 2;
-    public static final byte typeMap = 3;
+    public static final byte typeBoolean = 2;
 
     /**
      * Message pack encode data and put the output to destination buffer.
      *
-     * @param type 0: Int, 1: String, 2: Array, 3: Map
-     * @param data The input data.
+     * @param type 0: Int, 1: String, 2: Boolean
+     * @param data The input data. When type equals to Int, data is Hexadecimal.
+     * Type equals to String, data is ascii code staing. Type equals to Boolean,
+     * 0x00 means false, 0x01 means true.
      * @param destinationBuf The destination buffer.
      * @return
      */

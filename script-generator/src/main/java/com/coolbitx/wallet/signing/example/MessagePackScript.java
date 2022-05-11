@@ -22,7 +22,7 @@ public class MessagePackScript {
     }
 // JSON format wanted:
 // {
-//   "1294a54f44fc00ae692ead9a1235c4dfc41afcfe":136,
+//   "1294a54f44fc00ae692ead9a1235c4dfc41afcfe":false,
 //   "id":0,
 //   "result":{
 //     "baseFee":"0",
@@ -38,7 +38,7 @@ public class MessagePackScript {
     
 //    Argument:
 //            Hex.toHexString("1294a54f44fc00ae692ead9a1235c4dfc41afcfe".getBytes()) // key1
-//            + "00000088" // value1
+//            + "01" // value1
 //            + Strings.padStart(Hex.toHexString("id".getBytes()), 20, '0') // key2
 //            + "00000000000000000000" // value2
 //            + Strings.padStart(Hex.toHexString("result".getBytes()), 20, '0') // key3
@@ -53,7 +53,7 @@ public class MessagePackScript {
     public static String getTransferScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData key1 = sac.getArgument(40);
-        ScriptData value1 = sac.getArgumentRightJustified(4);
+        ScriptData value1 = sac.getArgument(1);
 
         ScriptData key2 = sac.getArgumentRightJustified(10);
         ScriptData value2 = sac.getArgumentRightJustified(10);
@@ -75,7 +75,7 @@ public class MessagePackScript {
                 //                .copyString("24")
                 .arrayPointer()
                 .messagePack(ScriptAssembler.typeString, key1, Buffer.TRANSACTION)
-                .messagePack(ScriptAssembler.typeInt, value1, Buffer.TRANSACTION)
+                .messagePack(ScriptAssembler.typeBoolean, value1, Buffer.TRANSACTION)
                 .messagePack(ScriptAssembler.typeString, key2, Buffer.TRANSACTION)
                 .messagePack(ScriptAssembler.typeInt, value2, Buffer.TRANSACTION)
                 .messagePack(ScriptAssembler.typeString, key3, Buffer.TRANSACTION)
