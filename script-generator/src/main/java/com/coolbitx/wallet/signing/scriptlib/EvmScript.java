@@ -19,8 +19,8 @@ public class EvmScript {
     System.out.println("Evm erc20: \n" + getERC20Script() + "\n");
     System.out.println("Evm Smart Contract: \n" + getSmartContractScript() + "\n");
     System.out.println("Evm Smart Contract Segment: \n" + getSmartContractSegmentScript() + "\n");
-    System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript() + "\n");
     System.out.println("Evm EIP-712 Message: \n" + getMessageScript() + "\n");
+    System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript() + "\n");
     System.out.println("Evm EIP-1559: \n" + getEIP1559TransferScript() + "\n");
     System.out.println("Evm EIP-1559 erc20: \n" + getEIP1559ERC20Script() + "\n");
     System.out.println("Evm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript() + "\n");
@@ -40,11 +40,13 @@ public class EvmScript {
     ScriptData argGasLimit = sac.getArgumentRightJustified(10);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
 
     String script =
@@ -72,6 +74,16 @@ public class EvmScript {
             // r,s
             .copyString("8080")
             .arrayEnd(1)
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -107,11 +119,13 @@ public class EvmScript {
     ScriptData argGasLimit = sac.getArgumentRightJustified(10);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
 
     // ERC 20 Token Info
@@ -146,6 +160,16 @@ public class EvmScript {
             .copyString("8080")
             .arrayEnd(1)
             // Show symbol
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -193,11 +217,13 @@ public class EvmScript {
     ScriptData argGasLimit = sac.getArgumentRightJustified(10);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
     ScriptData argData = sac.getArgumentAll();
 
@@ -227,6 +253,16 @@ public class EvmScript {
             .copyString("8080")
             .arrayEnd(1)
             // Display phase
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -255,11 +291,13 @@ public class EvmScript {
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     ScriptData argData = sac.getArgument(4);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
 
     String script =
@@ -288,6 +326,16 @@ public class EvmScript {
             .copyString("8080")
             .arrayEnd(1)
             // Display phase
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -311,11 +359,13 @@ public class EvmScript {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
     ScriptData argDomainSeparator = sac.getArgument(32);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
     ScriptData argMessage = sac.getArgumentAll();
 
@@ -328,6 +378,16 @@ public class EvmScript {
             .copyArgument(argDomainSeparator)
             .hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
             // Display phase
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -349,11 +409,13 @@ public class EvmScript {
   public static String getMessageScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
     ScriptData argMessage = sac.getArgumentAll();
 
@@ -365,6 +427,16 @@ public class EvmScript {
             .copyString("19457468657265756D205369676E6564204D6573736167653A0A")
             .copyArgument(argMessage)
             // txDetail
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -392,11 +464,13 @@ public class EvmScript {
     ScriptData argGasLimit = sac.getArgumentRightJustified(10);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
 
     String script =
@@ -429,6 +503,16 @@ public class EvmScript {
             .copyString("C0")
             .arrayEnd(1)
             // txDetail
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -464,11 +548,13 @@ public class EvmScript {
     ScriptData argGasLimit = sac.getArgumentRightJustified(10);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
     // ERC20 Token Info
     ScriptData argTokenInfo = sac.getArgumentUnion(0, 29);
@@ -503,6 +589,16 @@ public class EvmScript {
             // accessList
             .copyString("C0")
             .arrayEnd(1)
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -551,11 +647,13 @@ public class EvmScript {
     ScriptData argGasLimit = sac.getArgumentRightJustified(10);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
     // Variant Data
     ScriptData argData = sac.getArgumentAll();
@@ -583,6 +681,16 @@ public class EvmScript {
             .copyString("C0")
             .arrayEnd(1)
             // txDetail
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -612,11 +720,13 @@ public class EvmScript {
     ScriptData argNonce = sac.getArgumentRightJustified(8);
     ScriptData argData = sac.getArgument(4);
     // Chain Information Info
-    ScriptData argChainInfo = sac.getArgumentUnion(0, 15);
+    ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
     ScriptData argChainIdLength = sac.getArgument(1);
     ScriptData argChainId = sac.getArgumentVariableLength(6);
     ScriptData argSymbolLength = sac.getArgument(1);
     ScriptData argSymbol = sac.getArgumentVariableLength(7);
+    ScriptData argLayerLength = sac.getArgument(1);
+    ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
     ScriptData argChainSign = sac.getArgument(72);
 
     String script =
@@ -641,6 +751,16 @@ public class EvmScript {
             // accessList
             .copyString("C0")
             .arrayEnd(1)
+            .ifEqual(
+                argLayerLength,
+                "00",
+                "",
+                new ScriptAssembler()
+                    .setBufferInt(argLayerLength, 1, 7)
+                    .copyArgument(argLayerSymbol, Buffer.CACHE1)
+                    .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                    .clearBuffer(Buffer.CACHE1)
+                    .getScript())
             .setBufferInt(argSymbolLength, 1, 7)
             .copyArgument(argSymbol, Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
