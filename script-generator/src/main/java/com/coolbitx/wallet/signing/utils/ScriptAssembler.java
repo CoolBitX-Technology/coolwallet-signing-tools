@@ -392,7 +392,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler protobufDataPlaceholder(ScriptData data) {
-        if(version.getVersionNum() < 5){
+        if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
         script += compose("C4", data, Buffer.TRANSACTION, 1, 0);
@@ -825,14 +825,20 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler arrayEnd() {
-        return arrayEnd(0);
+        return arrayEnd(TYPE_PROTOBUF);
     }
+
+    public static final int TYPE_PROTOBUF = 0;
+    public static final int TYPE_RLP = 1;
+    public static final int TYPE_MESSAGE_PACK_MAP = 2;
+    public static final int TYPE_MESSAGE_PACK_ARRAY = 3;
 
     /**
      * Encode data from the last position point in arrayPointer function with
      * specified encoding.
      *
-     * @param type 0: protobuf, 1: rlp
+     * @param type 0: protobuf, 1: rlp, 2: message pack map, 3: message pack
+     * array
      * @return
      */
     public ScriptAssembler arrayEnd(int type) {
@@ -867,6 +873,25 @@ public class ScriptAssembler {
      */
     public ScriptAssembler scaleDecode(ScriptData data, Buffer destinationBuf) {
         script += compose("A3", data, destinationBuf, 0, 0);
+        return this;
+    }
+
+    public static final byte typeInt = 0;
+    public static final byte typeString = 1;
+    public static final byte typeBoolean = 2;
+
+    /**
+     * Message pack encode data and put the output to destination buffer.
+     *
+     * @param type 0: Int, 1: String, 2: Boolean
+     * @param data The input data. When type equals to Int, data is Hexadecimal.
+     * Type equals to String, data is ascii code staing. Type equals to Boolean,
+     * 0x00 means false, 0x01 means true.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public ScriptAssembler messagePack(int type, ScriptData data, Buffer destinationBuf) {
+        script += compose("C5", data, destinationBuf, type, 0);
         return this;
     }
 

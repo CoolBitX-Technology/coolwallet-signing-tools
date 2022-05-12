@@ -10,6 +10,7 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
 
@@ -53,7 +54,7 @@ public class CronosScript {
                 .copyString("19", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
-                .copyString("8080").arrayEnd(1).showMessage("CRO")
+                .copyString("8080").arrayEnd(TYPE_RLP).showMessage("CRO")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(argTo, Buffer.CACHE2, 0,
                         ScriptAssembler.hexadecimalCharset,
@@ -109,7 +110,7 @@ public class CronosScript {
                 // chainId v
                 .setBufferInt(argChainIdLength, 1, 6).rlpString(argChainId)
                 // empty r,s
-                .copyString("8080").arrayEnd(1)
+                .copyString("8080").arrayEnd(TYPE_RLP)
                 // Show symbol
                 .setBufferInt(argSymbolLength, 1, 7)
                 .copyArgument(argSymbol, Buffer.CACHE1)
@@ -166,7 +167,7 @@ public class CronosScript {
                 // chainId v
                 .copyString("19", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .copyString("8080").arrayEnd(1)
+                .copyString("8080").arrayEnd(TYPE_RLP)
                 // Display phase
                 .showMessage("CRO").showWrap("SMART", "").showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
@@ -206,7 +207,7 @@ public class CronosScript {
                 // chainId v
                 .copyString("19", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .copyString("8080").arrayEnd(1)
+                .copyString("8080").arrayEnd(TYPE_RLP)
                 // Display phase
                 .showMessage("CRO").showWrap("SMART", "").showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
