@@ -3,6 +3,7 @@ package com.coolbitx.wallet.signing.scriptlib;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 
 public class AvaxCScript {
@@ -50,7 +51,7 @@ public class AvaxCScript {
                 // r,s
                 .copyString("8080")
                 // .rlpList(1)
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("AVAX")
                 .copyString(HexUtil.toHexString("0x"), ScriptData.Buffer.CACHE2)
                 .baseConvert(argTo, ScriptData.Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
@@ -101,7 +102,7 @@ public class AvaxCScript {
                 // r,s
                 .copyString("8080")
                 // .rlpList(2)
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("AVAX")
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), ScriptData.Buffer.CACHE2).getScript()
@@ -157,7 +158,7 @@ public class AvaxCScript {
                 // r, s
                 .copyString("8080")
                 // .rlpList(2)
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 // txDetail
                 .showMessage("AVAX").showWrap("SMART", "").showPressButton()
                 // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
@@ -194,7 +195,7 @@ public class AvaxCScript {
                 .copyString("A86A", ScriptData.Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
                 .copyString("8080")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 // txDetail
                 .showMessage("Avax")
                 .showWrap("SMART", "")

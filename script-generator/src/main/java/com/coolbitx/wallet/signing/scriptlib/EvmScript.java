@@ -9,6 +9,7 @@ import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
@@ -73,7 +74,7 @@ public class EvmScript {
             .rlpString(argChainId)
             // r,s
             .copyString("8080")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             .ifEqual(
                 argLayerLength,
                 "00",
@@ -158,7 +159,7 @@ public class EvmScript {
             .rlpString(argChainId)
             // empty r,s
             .copyString("8080")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             // Show symbol
             .ifEqual(
                 argLayerLength,
@@ -251,7 +252,7 @@ public class EvmScript {
             .rlpString(argChainId)
             // r, s
             .copyString("8080")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             // Display phase
             .ifEqual(
                 argLayerLength,
@@ -324,7 +325,7 @@ public class EvmScript {
             .rlpString(argChainId)
             // r, s
             .copyString("8080")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             // Display phase
             .ifEqual(
                 argLayerLength,
@@ -501,7 +502,7 @@ public class EvmScript {
             .copyString("80")
             // accessList
             .copyString("C0")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             // txDetail
             .ifEqual(
                 argLayerLength,
@@ -588,7 +589,7 @@ public class EvmScript {
             .copyArgument(argValue)
             // accessList
             .copyString("C0")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             .ifEqual(
                 argLayerLength,
                 "00",
@@ -679,7 +680,7 @@ public class EvmScript {
             .rlpString(argData)
             // accessList
             .copyString("C0")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             // txDetail
             .ifEqual(
                 argLayerLength,
@@ -750,7 +751,7 @@ public class EvmScript {
             .rlpDataPlaceholder(argData)
             // accessList
             .copyString("C0")
-            .arrayEnd(1)
+            .arrayEnd(TYPE_RLP)
             .ifEqual(
                 argLayerLength,
                 "00",

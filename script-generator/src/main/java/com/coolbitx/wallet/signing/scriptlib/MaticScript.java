@@ -10,6 +10,7 @@ import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
@@ -100,7 +101,7 @@ accessList :       c0
                 .copyString("80")
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("MATIC")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(
@@ -172,7 +173,7 @@ accessList :       c0
                 .copyArgument(argValue)
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("MATIC")
                 .ifSigned(
                         argTokenInfo,
@@ -234,7 +235,7 @@ accessList :       c0
                 .rlpString(argData)
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("MATIC")
                 .showWrap("SMART", "")
                 .showPressButton()
@@ -274,7 +275,7 @@ accessList :       c0
                 .rlpDataPlaceholder(argData)
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("MATIC")
                 .showWrap("SMART", "")
                 .showPressButton()
@@ -333,7 +334,7 @@ accessList :       c0
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 // r,s
                 .copyString("8080")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 // .rlpList(1)
                 .showMessage("MATIC")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
@@ -405,7 +406,7 @@ b844 a9059cbb
                 // r,s
                 .copyString("8080")
                 // .rlpList(2)
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("MATIC")
                 .ifSigned(
                         argTokenInfo,
@@ -470,7 +471,7 @@ b844 a9059cbb
                 .copyString("89", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("MATIC")
                 .showWrap("SMART", "")
                 .showPressButton()
@@ -511,7 +512,7 @@ b844 a9059cbb
                 .copyString("89", Buffer.CACHE1)
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .showMessage("MATIC")
                 .showWrap("SMART", "")
                 .showPressButton()

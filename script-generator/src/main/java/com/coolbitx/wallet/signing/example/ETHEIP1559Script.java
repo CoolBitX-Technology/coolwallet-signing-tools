@@ -3,17 +3,18 @@ package com.coolbitx.wallet.signing.example;
 import com.coolbitx.wallet.signing.utils.*;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_RLP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class ETHEIP1559Script {
-	
+
     public static void main(String[] args) throws Exception {
-	    System.out.println("\nETH EIP-1559 Normal Script: " + getNormalScript());
-	    System.out.println("\nETH EIP-1559 ERC-20 Script: " + getERC20Script());
-	    System.out.println("\nETH EIP-1559 Smart Contract Script: " + getSmartContractScript());
-	    System.out.println();
-	}
-	
+        System.out.println("\nETH EIP-1559 Normal Script: " + getNormalScript());
+        System.out.println("\nETH EIP-1559 ERC-20 Script: " + getERC20Script());
+        System.out.println("\nETH EIP-1559 Smart Contract Script: " + getSmartContractScript());
+        System.out.println();
+    }
+
     public static String getNormalScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -50,7 +51,7 @@ public class ETHEIP1559Script {
                 .copyString("80")
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .getScript();
 
         String display = scriptAsb
@@ -69,7 +70,7 @@ public class ETHEIP1559Script {
         //script = header + coinType + payload + display
         return scriptAsb.getScript();
     }
-    
+
     public static String getERC20Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -108,7 +109,7 @@ public class ETHEIP1559Script {
                 .copyArgument(argValue)
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .getScript();
 
         String display = scriptAsb.showMessage("ETH")
@@ -126,7 +127,7 @@ public class ETHEIP1559Script {
                 .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 .getScript();
-        
+
         // length=03 version=04 are auto-generated based on the composition of the payload
         // ScriptAssembler.hash.Keccak256=06 sign=ECDSA=01
         // header =  "03040601"
@@ -165,7 +166,7 @@ public class ETHEIP1559Script {
                 .rlpDataPlaceholder(argData)
                 // accessList
                 .copyString("C0")
-                .arrayEnd(1)
+                .arrayEnd(TYPE_RLP)
                 .getScript();
 
         String display = scriptAsb
