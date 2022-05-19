@@ -275,14 +275,15 @@ public class SolScript {
   public static String getStackingWithdrawScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
     ScriptData keysCount = sac.getArgument(1);
-    ScriptData fromAccount = sac.getArgument(32);
-    ScriptData toAccount = sac.getArgument(32);
+    ScriptData ownerAccount = sac.getArgument(32);
+    ScriptData stakingAccount = sac.getArgument(32);
     ScriptData programId = sac.getArgument(32);
     ScriptData publicKey1 = sac.getArgument(32);
     ScriptData publicKey2 = sac.getArgument(32);
     ScriptData recentBlockHash = sac.getArgument(32);
     ScriptData keyIndices = sac.getArgument(5);
     ScriptData dataLength = sac.getArgument(1);
+    ScriptData programIdIndex = sac.getArgument(4);
     ScriptData data = sac.getArgumentAll();
 
     ScriptAssembler scriptAsb = new ScriptAssembler();
@@ -297,8 +298,8 @@ public class SolScript {
         .copyString("03")
         // keyCount
         .copyArgument(keysCount)
-        .copyArgument(fromAccount)
-        .copyArgument(toAccount)
+        .copyArgument(ownerAccount)
+        .copyArgument(stakingAccount)
         .copyArgument(programId)
         .copyArgument(publicKey1)
         .copyArgument(publicKey2)
@@ -309,9 +310,26 @@ public class SolScript {
         .copyString("05")
         .copyArgument(keyIndices)
         .copyArgument(dataLength)
+        .copyArgument(programIdIndex)
         .copyArgument(data)
         .showMessage("SOL")
         .showMessage("Reward")
+        .baseConvert(
+            stakingAccount,
+            Buffer.CACHE2,
+            0,
+            ScriptAssembler.base58Charset,
+            ScriptAssembler.zeroInherit)
+        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+        .clearBuffer(Buffer.CACHE2)
+        .baseConvert(
+            data,
+            Buffer.CACHE1,
+            8,
+            ScriptAssembler.binaryCharset,
+            ScriptAssembler.inLittleEndian)
+        .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 9)
+        .clearBuffer(Buffer.CACHE1)
         .showPressButton()
         .setHeader(HashType.NONE, SignType.EDDSA)
         .getScript();
