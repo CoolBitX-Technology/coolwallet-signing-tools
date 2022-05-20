@@ -18,6 +18,7 @@ public class SolScript {
     System.out.println("Sol Smart Contract: \n" + getSolSmartScript() + "\n");
     System.out.println("Sol Associate Account: \n" + getAssociateTokenAccountScript() + "\n");
     System.out.println("Sol transfer spl token: \n" + getTransferSplTokenScript() + "\n");
+    System.out.println("Sol Stacking Withdraw: \n" + getStackingWithdrawScript() + "\n");
   }
 
   public static String getTransferScript() {
@@ -269,5 +270,68 @@ public class SolScript {
             .getScript();
 
     return script;
+  }
+  
+  public static String getStackingWithdrawScript() {
+    ScriptArgumentComposer sac = new ScriptArgumentComposer();
+    ScriptData keysCount = sac.getArgument(1);
+    ScriptData ownerAccount = sac.getArgument(32);
+    ScriptData stakingAccount = sac.getArgument(32);
+    ScriptData programId = sac.getArgument(32);
+    ScriptData publicKey1 = sac.getArgument(32);
+    ScriptData publicKey2 = sac.getArgument(32);
+    ScriptData recentBlockHash = sac.getArgument(32);
+    ScriptData keyIndices = sac.getArgument(5);
+    ScriptData dataLength = sac.getArgument(1);
+    ScriptData programIdIndex = sac.getArgument(4);
+    ScriptData data = sac.getArgumentAll();
+
+    ScriptAssembler scriptAsb = new ScriptAssembler();
+
+    return scriptAsb
+        .setCoinType(0x01f5)
+        // numRequiredSignatures
+        .copyString("01")
+        // numReadonlySignedAccounts
+        .copyString("00")
+        // numReadonlyUnsignedAccounts
+        .copyString("03")
+        // keyCount
+        .copyArgument(keysCount)
+        .copyArgument(ownerAccount)
+        .copyArgument(stakingAccount)
+        .copyArgument(programId)
+        .copyArgument(publicKey1)
+        .copyArgument(publicKey2)
+        .copyArgument(recentBlockHash)
+        // instruction count
+        .copyString("01")
+        .copyString("02")
+        .copyString("05")
+        .copyArgument(keyIndices)
+        .copyArgument(dataLength)
+        .copyArgument(programIdIndex)
+        .copyArgument(data)
+        .showMessage("SOL")
+        .showMessage("Reward")
+        .baseConvert(
+            stakingAccount,
+            Buffer.CACHE2,
+            0,
+            ScriptAssembler.base58Charset,
+            ScriptAssembler.zeroInherit)
+        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+        .clearBuffer(Buffer.CACHE2)
+        .baseConvert(
+            data,
+            Buffer.CACHE1,
+            8,
+            ScriptAssembler.binaryCharset,
+            ScriptAssembler.inLittleEndian)
+        .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 9)
+        .clearBuffer(Buffer.CACHE1)
+        .showPressButton()
+        .setHeader(HashType.NONE, SignType.EDDSA)
+        .getScript();
   }
 }
