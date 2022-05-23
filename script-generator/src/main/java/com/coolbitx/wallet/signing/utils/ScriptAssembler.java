@@ -879,6 +879,7 @@ public class ScriptAssembler {
     public static final byte typeInt = 0;
     public static final byte typeString = 1;
     public static final byte typeBoolean = 2;
+    public static final byte typeBinary = 3;
 
     /**
      * Message pack encode data and put the output to destination buffer.
