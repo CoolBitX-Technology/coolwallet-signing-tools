@@ -95,11 +95,11 @@ ffffffff //sequence = const
 
         String outputScript = supportSegwit
                 ? new ScriptAssembler().ifEqual(argChangeScriptType, "02", // if P2WPKH
-                        new ScriptAssembler().hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160).getScript(), 
+                        new ScriptAssembler().hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION, ScriptAssembler.HashType.SHA256RipeMD160).getScript(),
                         "").getScript()
                 : "";
 
-        String ifCoinZen = coin != Coin.ZEN ? "" 
+        String ifCoinZen = coin != Coin.ZEN ? ""
                 : new ScriptAssembler()
                         .copyString("20")
                         .copyArgument(argChangeBlockHash)
@@ -110,23 +110,22 @@ ffffffff //sequence = const
 
         String nonBchNonSegwit = supportSegwit
                 ? new ScriptAssembler().copyString(hrpExpand + "00", Buffer.CACHE2)
-                .ifEqual(argOutputScriptType, "02",
-                        new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript(),
-                        new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript()
-                )
-                .copyString("000000000000", Buffer.CACHE2)
-                .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
-                .clearBuffer(Buffer.CACHE2)
-                .copyString(HexUtil.toHexString(hrp + "1q"), Buffer.CACHE2)
-                .ifEqual(argOutputScriptType, "02",
-                        new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5).getScript(),
-                        new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5).getScript()
-                )
-                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                .getScript()
+                        .ifEqual(argOutputScriptType, "02",
+                                new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript(),
+                                new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript()
+                        )
+                        .copyString("000000000000", Buffer.CACHE2)
+                        .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
+                        .clearBuffer(Buffer.CACHE2)
+                        .copyString(HexUtil.toHexString(hrp + "1q"), Buffer.CACHE2)
+                        .ifEqual(argOutputScriptType, "02",
+                                new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5).getScript(),
+                                new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5).getScript()
+                        )
+                        .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 6, ScriptAssembler.base32BitcoinCashCharset, 0)
+                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                        .getScript()
                 : ScriptAssembler.throwSEError;
-        
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
 
@@ -135,16 +134,16 @@ ffffffff //sequence = const
                 .switchString(argHaveChange, Buffer.TRANSACTION, "01,02")
                 .getScript();
 
-        script = (!isUSDT 
+        script = (!isUSDT
                 ? scriptAsb.baseConvert(argOutputAmount, Buffer.TRANSACTION, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
                 : scriptAsb.baseConvert(argUsdtDust, Buffer.TRANSACTION, 2, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
-                .copyString("000000000000"))
+                        .copyString("000000000000"))
                 .btcScript(argOutputScriptType, supportSegwit ? 4 : (coin == Coin.ZEN ? 79 : 2),
-                        (supportSegwit? new ScriptAssembler().ifEqual(argOutputScriptType, "03", 
-                                new ScriptAssembler().copyArgument(argOutputDest32).getScript(),
-                                new ScriptAssembler().copyArgument(argOutputDest20).getScript()).getScript()
+                        (supportSegwit ? new ScriptAssembler().ifEqual(argOutputScriptType, "03",
+                                        new ScriptAssembler().copyArgument(argOutputDest32).getScript(),
+                                        new ScriptAssembler().copyArgument(argOutputDest20).getScript()).getScript()
                                 : new ScriptAssembler().copyArgument(argOutputDest20).getScript())
-                        )
+                )
                 .getScript();
 
         script = coin != Coin.ZEN
@@ -155,28 +154,28 @@ ffffffff //sequence = const
                         .copyArgument(argOutputBlockHeight)
                         .copyString("B4")
                         .getScript();
-        
+
         script = !isUSDT
                 ? script + ""
                 : scriptAsb.copyString("0000000000000000166a146f6d6e69000000000000001f")
-                .copyArgument(argUsdtAmount)
-                .getScript();
+                        .copyArgument(argUsdtAmount)
+                        .getScript();
 
         script = scriptAsb.ifEqual(argHaveChange, "01", // if haveChange
                 new ScriptAssembler().baseConvert(argChangeAmount, Buffer.TRANSACTION, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
-                .btcScript(argChangeScriptType, supportSegwit ? 3 : (coin == Coin.ZEN ? 79 : 2),
-                        new ScriptAssembler().derivePublicKey(argChangePath, Buffer.CACHE2)
-                        .ifEqual(argChangeScriptType, "00", // if P2PKH
-                                new ScriptAssembler().hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160).getScript(),
-                                "")
-                        .ifEqual(argChangeScriptType, "01", // if P2WPKH in P2SH
-                                new ScriptAssembler().copyString("0014", Buffer.CACHE1)
-                                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, ScriptAssembler.SHA256RipeMD160)
-                                .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.SHA256RipeMD160).getScript(),
-                                "")
-                        .getScript()
-                        + outputScript)
-                .getScript() + ifCoinZen,
+                        .btcScript(argChangeScriptType, supportSegwit ? 3 : (coin == Coin.ZEN ? 79 : 2),
+                                new ScriptAssembler().derivePublicKey(argChangePath, Buffer.CACHE2)
+                                        .ifEqual(argChangeScriptType, "00", // if P2PKH
+                                                new ScriptAssembler().hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION, ScriptAssembler.HashType.SHA256RipeMD160).getScript(),
+                                                "")
+                                        .ifEqual(argChangeScriptType, "01", // if P2WPKH in P2SH
+                                                new ScriptAssembler().copyString("0014", Buffer.CACHE1)
+                                                        .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, ScriptAssembler.HashType.SHA256RipeMD160)
+                                                        .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.SHA256RipeMD160).getScript(),
+                                                "")
+                                        .getScript()
+                                + outputScript)
+                        .getScript() + ifCoinZen,
                 "")
                 .getScript();
 
@@ -185,37 +184,37 @@ ffffffff //sequence = const
                 : script + "";
 
         script = (!isTestnet)
-                        ? scriptAsb.showMessage(coin.getName()).getScript()
-                        : scriptAsb.showWrap(coin.getName(), "TESTNET").getScript();
+                ? scriptAsb.showMessage(coin.getName()).getScript()
+                : scriptAsb.showWrap(coin.getName(), "TESTNET").getScript();
 
         script = scriptAsb
                 .clearBuffer(Buffer.CACHE1)
                 .clearBuffer(Buffer.CACHE2)
                 .getScript();
-                
+
         script = (coin != Coin.BCH
-                        ? // if isnot BCH
-                        scriptAsb.ifRange(argOutputScriptType, "00", "01", // if P2PKH/P2SH , base58 address
-                                (coin.getCoinType() == Coin.BTC.getCoinType()
-                                        ? new ScriptAssembler().switchString(argOutputScriptType, Buffer.CACHE2, !isTestnet ? "00,05" : "6F,C4") // 1,3:mn,2
-                                        : (coin == Coin.LTC
-                                                ? new ScriptAssembler().ifEqual(argOutputScriptType, "00",
-                                                        new ScriptAssembler().copyString(!isTestnet ? "30" : "6F", Buffer.CACHE2).getScript() // L:mn
-                                                        ,
-                                                        new ScriptAssembler().switchString(argLtcNewAddress, Buffer.CACHE2, !isTestnet ? "05,32" : "C4,3A").getScript() // 3,M:2,Q
-                                                )
-                                                : // type==ZEN
-                                                new ScriptAssembler().switchString(argOutputScriptType, Buffer.CACHE2, "2089,2096")) // zn,zs
+                ? // if isnot BCH
+                scriptAsb.ifRange(argOutputScriptType, "00", "01", // if P2PKH/P2SH , base58 address
+                        (coin.getCoinType() == Coin.BTC.getCoinType()
+                                ? new ScriptAssembler().switchString(argOutputScriptType, Buffer.CACHE2, !isTestnet ? "00,05" : "6F,C4") // 1,3:mn,2
+                                : (coin == Coin.LTC
+                                        ? new ScriptAssembler().ifEqual(argOutputScriptType, "00",
+                                                new ScriptAssembler().copyString(!isTestnet ? "30" : "6F", Buffer.CACHE2).getScript() // L:mn
+                                                ,
+                                                 new ScriptAssembler().switchString(argLtcNewAddress, Buffer.CACHE2, !isTestnet ? "05,32" : "C4,3A").getScript() // 3,M:2,Q
+                                        )
+                                        : // type==ZEN
+                                        new ScriptAssembler().switchString(argOutputScriptType, Buffer.CACHE2, "2089,2096")) // zn,zs
                                 )
                                 .copyArgument(argOutputDest20, Buffer.CACHE2)
-                                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.DoubleSHA256)
+                                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.HashType.DoubleSHA256)
                                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, coin != Coin.ZEN ? 25 : 26), Buffer.CACHE1, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
                                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                                 .getScript(), // else P2WPKH/P2WSH , bech32 address
-                                nonBchNonSegwit
-                        )
-                        : // else BCH CashAddress
-                        scriptAsb.copyString(!isTestnet ? "020914030F090E0301130800" : "0203081405131400", Buffer.CACHE2)
+                        nonBchNonSegwit
+                )
+                : // else BCH CashAddress
+                scriptAsb.copyString(!isTestnet ? "020914030F090E0301130800" : "0203081405131400", Buffer.CACHE2)
                         .switchString(argOutputScriptType, Buffer.CACHE1, "00,08")
                         .copyArgument(argOutputDest20, Buffer.CACHE1)
                         .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 34, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
@@ -232,7 +231,7 @@ ffffffff //sequence = const
                 .getScript();
         return "0400000010" + script;
     }
-    
+
     public static String BTCOutputScriptSignature = "00003044022054D20BC70E47EE7F5195A342F8C5D6985C82C57FE55F676AD09A9BCC383ED58D0220799D0585CBF5BD1ACEF8E5134E6B83D317DABE30C5B6868448622858B67B14A8";
     public static String LTCOutputScriptSignature = "003045022100EC80F2512E0B569B4B7B822E2E416DD67291F0D2A2D32BA4DC2065E31DB8A4F902200753ABD1A73484EFA79B273AC071A61E7EC3734A6D1F017023F5A5836C932D53";
     public static String ZENOutputScriptSignature = "003045022100C542A471117AAD2062CF3C73406D433DB90730CA417B43434713B9C6B8F7BBBD0220166EB92302109D6491887735196D455D797480771BC5B923255A8D73A70EA148";

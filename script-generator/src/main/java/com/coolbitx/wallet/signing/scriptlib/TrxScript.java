@@ -68,7 +68,7 @@ public class TrxScript {
                 // type url
                 .copyString("0a2d")
                 .copyString(
-                HexUtil.toHexString("type.googleapis.com/protocol.TransferContract".getBytes()))
+                        HexUtil.toHexString("type.googleapis.com/protocol.TransferContract".getBytes()))
                 // value object
                 .copyString("12").arrayPointer()
                 // owner address
@@ -82,7 +82,7 @@ public class TrxScript {
                 .copyString("70").protobuf(argTimestamp, typeInt).showMessage("TRX")
                 .copyArgument(argToAddr, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
@@ -93,7 +93,7 @@ public class TrxScript {
                 .getScript();
         return script;
     }
-    
+
     public static String TRXScriptSignature = "000030440220753082AA5C31111BC1A081601E46F79219A77D49A0EBC4D70C1F66792FD858400220483BFC13CAB301E4E54F6716251E58410A6F50D117C49A891069F18D56391CBD";
 
     public static String getTRC20Script() {
@@ -112,14 +112,14 @@ public class TrxScript {
         ScriptData argValue = sac.getArgument(12);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
         ScriptData argFeeLimit = sac.getArgumentRightJustified(10);
-        
+
         String script = new ScriptAssembler()
                 // set coinType to C3
                 .setCoinType(0xC3)
                 // ref_block_bytes
                 .copyString("0a").protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                .copyString("22") .protobuf(argBlockHash, typeString)
+                .copyString("22").protobuf(argBlockHash, typeString)
                 // expiration
                 .copyString("40").protobuf(argExpiration, typeInt)
                 // contract object
@@ -131,7 +131,7 @@ public class TrxScript {
                 // type url
                 .copyString("0a31")
                 .copyString(HexUtil.toHexString(
-                "type.googleapis.com/protocol.TriggerSmartContract".getBytes()))
+                        "type.googleapis.com/protocol.TriggerSmartContract".getBytes()))
                 // value object
                 .copyString("12").arrayPointer()
                 // owner address
@@ -164,7 +164,6 @@ public class TrxScript {
                 .ifSigned(argTokenInfo, argSign, "",
                         new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
                 .setBufferInt(argNameLength, 1, 7)
-
                 .copyArgument(argName, Buffer.CACHE2)
                 .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 // display to address
@@ -172,7 +171,7 @@ public class TrxScript {
                 .copyString("41", Buffer.CACHE2)
                 .copyArgument(argTo, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
@@ -219,7 +218,7 @@ public class TrxScript {
                 // type url
                 .copyString("0a32")
                 .copyString(HexUtil.toHexString(
-                "type.googleapis.com/protocol.FreezeBalanceContract".getBytes()))
+                        "type.googleapis.com/protocol.FreezeBalanceContract".getBytes()))
                 // value object
                 .copyString("12").arrayPointer()
                 // ownerAddr
@@ -242,7 +241,7 @@ public class TrxScript {
                 .showMessage("Freeze")
                 .copyArgument(argReceiverAddr, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
@@ -275,34 +274,34 @@ public class TrxScript {
                 .copyString("0a")
                 .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                .copyString("22") 
+                .copyString("22")
                 .protobuf(argBlockHash, typeString)
                 // expiration
-                .copyString("40") 
+                .copyString("40")
                 .protobuf(argExpiration, typeInt)
                 // contracts array
-                .copyString("5a") 
+                .copyString("5a")
                 .arrayPointer()
                 // contract type
                 .copyString("080b")
                 // parameter object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // type url
-                .copyString("0a32") 
+                .copyString("0a32")
                 .copyString(HexUtil.toHexString(
-                "type.googleapis.com/protocol.FreezeBalanceContract".getBytes()))
+                        "type.googleapis.com/protocol.FreezeBalanceContract".getBytes()))
                 // value object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // ownerAddr
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argOwnerAddr, typeString)
                 // frozenBalance
-                .copyString("10") 
+                .copyString("10")
                 .protobuf(argFrozenBalance, typeInt)
                 // frozenDuration
-                .copyString("18") 
+                .copyString("18")
                 .protobuf(argFrozenDuration, typeInt)
                 // resource
                 .ifEqual(argResource, "01", new ScriptAssembler().copyString("5001").getScript(), "")
@@ -317,7 +316,7 @@ public class TrxScript {
                 .showMessage("Freeze")
                 .copyArgument(argOwnerAddr, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
@@ -341,54 +340,54 @@ public class TrxScript {
         ScriptData argResource = sac.getArgument(1);
         ScriptData argReceiverAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        
+
         String script = new ScriptAssembler()
                 // set coinType to C3
                 .setCoinType(0xC3)
                 // ref_block_bytes
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                .copyString("22") 
+                .copyString("22")
                 .protobuf(argBlockHash, typeString)
                 // expiration
-                .copyString("40") 
+                .copyString("40")
                 .protobuf(argExpiration, typeInt)
                 // contracts array
-                .copyString("5a") 
+                .copyString("5a")
                 .arrayPointer()
                 // contract type
                 .copyString("080c")
                 // parameter object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // type url
-                .copyString("0a34") 
+                .copyString("0a34")
                 .copyString(HexUtil.toHexString(
-                "type.googleapis.com/protocol.UnfreezeBalanceContract".getBytes()))
+                        "type.googleapis.com/protocol.UnfreezeBalanceContract".getBytes()))
                 // value object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // ownerAddr
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argOwnerAddr, typeString)
                 // resource
                 .ifEqual(argResource, "01", new ScriptAssembler().copyString("5001").getScript(), "")
                 .ifEqual(argResource, "02", new ScriptAssembler().copyString("5002").getScript(), "")
                 // receiverAddr
-                .copyString("7a") 
+                .copyString("7a")
                 .protobuf(argReceiverAddr, typeString)
-                .arrayEnd() 
-                .arrayEnd() 
+                .arrayEnd()
+                .arrayEnd()
                 .arrayEnd()
                 // timestamp
-                .copyString("70") 
+                .copyString("70")
                 .protobuf(argTimestamp, typeInt)
-                .showMessage("TRX") 
+                .showMessage("TRX")
                 .showMessage("Unfrz")
                 .copyArgument(argReceiverAddr, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
@@ -410,51 +409,51 @@ public class TrxScript {
         ScriptData argOwnerAddr = sac.getArgument(21);
         ScriptData argResource = sac.getArgument(1);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-    
+
         String script = new ScriptAssembler()
                 // set coinType to C3
                 .setCoinType(0xC3)
                 // ref_block_bytes
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                .copyString("22") 
+                .copyString("22")
                 .protobuf(argBlockHash, typeString)
                 // expiration
-                .copyString("40") 
+                .copyString("40")
                 .protobuf(argExpiration, typeInt)
                 // contracts array
-                .copyString("5a") 
+                .copyString("5a")
                 .arrayPointer()
                 // contract type
                 .copyString("080c")
                 // parameter object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // type url
-                .copyString("0a34") 
+                .copyString("0a34")
                 .copyString(HexUtil.toHexString(
-                "type.googleapis.com/protocol.UnfreezeBalanceContract".getBytes()))
+                        "type.googleapis.com/protocol.UnfreezeBalanceContract".getBytes()))
                 // value object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // ownerAddr
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argOwnerAddr, typeString)
                 // resource
                 .ifEqual(argResource, "01", new ScriptAssembler().copyString("5001").getScript(), "")
                 .ifEqual(argResource, "02", new ScriptAssembler().copyString("5002").getScript(), "")
-                .arrayEnd() 
-                .arrayEnd() 
+                .arrayEnd()
+                .arrayEnd()
                 .arrayEnd()
                 // timestamp
-                .copyString("70") 
+                .copyString("70")
                 .protobuf(argTimestamp, typeInt)
-                .showMessage("TRX") 
+                .showMessage("TRX")
                 .showMessage("Unfrz")
                 .copyArgument(argOwnerAddr, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
@@ -465,7 +464,7 @@ public class TrxScript {
                 .getScript();
         return script;
     }
-    
+
     public static String TRXUnfreezeScriptNoReceiverSignature = "3046022100ACEEAFD1797FBF203209DBF988BCEA19C0991E22FAA177615C64C30CB68046E10221008A2B58546CDDF91C0C865E82339C607FE22C4099F4EACA31CCD40DC85A69E357";
 
     public static String getTRXVoteWitnessScript() {
@@ -477,69 +476,69 @@ public class TrxScript {
         ScriptData argVoteAddr = sac.getArgument(21);
         ScriptData argVoteCount = sac.getArgumentRightJustified(10);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        
+
         String script = new ScriptAssembler()
                 // set coinType to C3
                 .setCoinType(0xC3)
                 // ref_block_bytes
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                .copyString("22") 
+                .copyString("22")
                 .protobuf(argBlockHash, typeString)
                 // expiration
-                .copyString("40") 
+                .copyString("40")
                 .protobuf(argExpiration, typeInt)
                 // contracts array
-                .copyString("5a") 
+                .copyString("5a")
                 .arrayPointer()
                 // contract type
                 .copyString("0804")
                 // parameter object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // type url
-                .copyString("0a30") 
+                .copyString("0a30")
                 .copyString(HexUtil.toHexString("type.googleapis.com/protocol.VoteWitnessContract".getBytes()))
                 // value object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // ownerAddr
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argOwnerAddr, typeString)
                 // votes array
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // vote address
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argVoteAddr, typeString)
                 // vote count
-                .copyString("10") 
+                .copyString("10")
                 .protobuf(argVoteCount, typeInt)
-                .arrayEnd() 
-                .arrayEnd() 
+                .arrayEnd()
+                .arrayEnd()
                 .arrayEnd()
                 .arrayEnd()
                 // timestamp
-                .copyString("70") 
+                .copyString("70")
                 .protobuf(argTimestamp, typeInt)
-                .showMessage("TRX") 
+                .showMessage("TRX")
                 .showMessage("Vote")
                 .copyArgument(argVoteAddr, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .showAmount(argVoteCount, 0) 
+                .showAmount(argVoteCount, 0)
                 .showPressButton()
                 // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
                 .setHeader(HashType.SHA256, SignType.ECDSA)
                 .getScript();
         return script;
     }
-    
+
     public static String TRXVoteWitnessScriptSignature = "00304502201944C100D05CD8BC50D530778B78AF53EB5E7551AADCF0A21946B01CE266ED17022100983CC86BDCE4A4A8DD403B3BB53861879E970A8344B57F9862C88C783CDEEC85";
 
     public static String getTRXWithdrawScript() {
@@ -549,48 +548,48 @@ public class TrxScript {
         ScriptData argExpiration = sac.getArgumentRightJustified(10);
         ScriptData argOwnerAddr = sac.getArgument(21);
         ScriptData argTimestamp = sac.getArgumentRightJustified(10);
-        
+
         String script = new ScriptAssembler()
                 // set coinType to C3
                 .setCoinType(0xC3)
                 // ref_block_bytes
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argBlockBytes, typeString)
                 // ref_block_hash
-                .copyString("22") 
+                .copyString("22")
                 .protobuf(argBlockHash, typeString)
                 // expiration
-                .copyString("40") 
+                .copyString("40")
                 .protobuf(argExpiration, typeInt)
                 // contracts array
-                .copyString("5a") 
+                .copyString("5a")
                 .arrayPointer()
                 // contract type
                 .copyString("080d")
                 // parameter object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // type url
-                .copyString("0a34") 
+                .copyString("0a34")
                 .copyString(HexUtil.toHexString(
-                "type.googleapis.com/protocol.WithdrawBalanceContract".getBytes()))
+                        "type.googleapis.com/protocol.WithdrawBalanceContract".getBytes()))
                 // value object
-                .copyString("12") 
+                .copyString("12")
                 .arrayPointer()
                 // ownerAddr
-                .copyString("0a") 
+                .copyString("0a")
                 .protobuf(argOwnerAddr, typeString)
-                .arrayEnd() 
-                .arrayEnd() 
+                .arrayEnd()
+                .arrayEnd()
                 .arrayEnd()
                 // timestamp
-                .copyString("70") 
+                .copyString("70")
                 .protobuf(argTimestamp, typeInt)
-                .showMessage("TRX") 
+                .showMessage("TRX")
                 .showMessage("Reward")
                 .copyArgument(argOwnerAddr, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        ScriptAssembler.DoubleSHA256)
+                        HashType.DoubleSHA256)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
                         Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                         ScriptAssembler.zeroInherit)
@@ -601,7 +600,7 @@ public class TrxScript {
                 .getScript();
         return script;
     }
-    
+
     public static String TRXWithdrawScriptSignature = "3046022100AABEE6C90E63CF3752F426A93E1758A8E77CCFF39569F4778DAD28BD03297F48022100AF717A307446DE373740DEA06781564AFE4D5060462DA386DC2F167BA280B585";
 
 }

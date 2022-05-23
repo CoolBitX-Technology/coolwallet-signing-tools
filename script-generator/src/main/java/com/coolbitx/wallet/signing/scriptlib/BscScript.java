@@ -261,7 +261,7 @@ public class BscScript {
                 // set coinType to 3C
                 .copyString("1901")
                 .copyArgument(argDomainSeparator)
-                .hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
+                .hash(argMessage, Buffer.TRANSACTION, HashType.Keccak256)
                 .showMessage("BSC")
                 .showWrap("TYPED", "DATA")
                 .showPressButton()

@@ -56,7 +56,7 @@ public class XrpScript {
                 .showMessage("XRP")
                 .copyString("00", Buffer.CACHE2)
                 .copyArgument(argDest, Buffer.CACHE2)
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.DoubleSHA256)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
                 .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"), Buffer.CACHE1)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.extendedCharset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
@@ -66,7 +66,7 @@ public class XrpScript {
                 .getScript();
         return script;
     }
-    
+
     public static String XRPScriptSignature = "0000304402206B2A707864EB98033BF83A80E8FDD7FCF903CC059ABC0E4FBB317040B6E9AD1D02203DCD2BDC4480B88DB0D9DC74948BAF6BD62203E90AE39990978999ABEAEABA63";
 
 }

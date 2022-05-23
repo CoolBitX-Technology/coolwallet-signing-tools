@@ -233,7 +233,7 @@ public class AvaxCScript {
                 .setCoinType(0x3C)
                 .copyString("1901")
                 .copyArgument(argDomainSeparator)
-                .hash(argMessage, ScriptData.Buffer.TRANSACTION, ScriptAssembler.Keccak256)
+                .hash(argMessage, ScriptData.Buffer.TRANSACTION, ScriptAssembler.HashType.Keccak256)
                 // txDetail
                 .showMessage("AVAX")
                 .showWrap("EIP712", "")

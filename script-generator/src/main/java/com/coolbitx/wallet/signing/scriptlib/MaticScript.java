@@ -554,7 +554,7 @@ b844 a9059cbb
                 .setCoinType(0x3C)
                 .copyString("1901")
                 .copyArgument(argDomainSeparator)
-                .hash(argMessage, Buffer.TRANSACTION, ScriptAssembler.Keccak256)
+                .hash(argMessage, Buffer.TRANSACTION, HashType.Keccak256)
                 .showMessage("MATIC")
                 .showWrap("EIP712", "")
                 .showPressButton()

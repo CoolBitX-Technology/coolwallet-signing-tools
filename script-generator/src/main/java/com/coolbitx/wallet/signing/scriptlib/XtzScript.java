@@ -36,11 +36,11 @@ public class XtzScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argStorageLimit = sac.getArgumentRightJustified(10);
         ScriptData argPublicKey = sac.getArgument(33);
-       
+
         String script = new ScriptAssembler()
-        // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
-                .setCoinType(0x06C1) 
-        // Step 3. Compose the raw transaction from arguments for signing.
+                // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
+                .setCoinType(0x06C1)
+                // Step 3. Compose the raw transaction from arguments for signing.
                 // Watermark
                 .copyString("03")
                 // Branch: block hash (32 Bytes)
@@ -49,8 +49,8 @@ public class XtzScript {
                 .copyString("6B")
                 // Source address type (1 Byte)
                 .copyArgument(argSourceAddressType)
-                 // Source pub key hash (20 Bytes)
-                .copyArgument(argSourceAddress)               
+                // Source pub key hash (20 Bytes)
+                .copyArgument(argSourceAddress)
                 // fee (variable size)
                 .protobuf(argFee, typeInt)
                 // count (Variable size)
@@ -61,11 +61,11 @@ public class XtzScript {
                 .protobuf(argStorageLimit, typeInt)
                 // public key (33 Bytes)
                 .copyArgument(argPublicKey)
-        // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
+                // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
                 .showMessage("XTZ")
                 .showMessage("Reveal")
                 .showPressButton()
-        // Step 5. Set up Script Header.      
+                // Step 5. Set up Script Header.      
                 .setHeader(HashType.Blake2b256, SignType.EDDSA)
                 .getScript();
 
@@ -84,13 +84,13 @@ public class XtzScript {
         ScriptData argStorageLimit = sac.getArgumentRightJustified(10);
         ScriptData argAmount = sac.getArgumentRightJustified(10);
         ScriptData argDestinationAccountType = sac.getArgument(1);
-        ScriptData argDestinationAddressType = sac.getArgument(1);      
+        ScriptData argDestinationAddressType = sac.getArgument(1);
         ScriptData argDestinationAddress = sac.getArgument(20);
-                
+
         String script = new ScriptAssembler()
-        // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
+                // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
                 .setCoinType(0x06C1)
-        // Step 3. Compose the raw transaction from arguments for signing.        
+                // Step 3. Compose the raw transaction from arguments for signing.        
                 // Watermaek
                 .copyString("03")
                 // Branch: block hash (32 Bytes)
@@ -100,7 +100,7 @@ public class XtzScript {
                 // Source address type (1 Byte)
                 .copyArgument(argSourceAddressType)
                 // Source address (20 Bytes)
-                .copyArgument(argSourceAddress)                
+                .copyArgument(argSourceAddress)
                 // fee (variable size)
                 .protobuf(argFee, typeInt)
                 // count (variable size)
@@ -112,19 +112,19 @@ public class XtzScript {
                 // amount (variable size)
                 .protobuf(argAmount, typeInt)
                 // Destination (22 Bytes)
-                .ifEqual(argDestinationAccountType, "00", 
+                .ifEqual(argDestinationAccountType, "00",
                         new ScriptAssembler().copyArgument(argDestinationAccountType).copyArgument(argDestinationAddressType).copyArgument(argDestinationAddress).getScript(),
                         new ScriptAssembler().copyArgument(argDestinationAccountType).copyArgument(argDestinationAddress).copyArgument(argDestinationAddressType).getScript())
                 // 0 for transfer 
                 .copyString("00")
-        // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
+                // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
                 .showMessage("XTZ")
                 //Show receiving address
                 .ifEqual(argDestinationAccountType, "01",
                         // Originated accounts (KT) 
                         new ScriptAssembler().copyString("025a79", Buffer.CACHE2).getScript(),
                         // Implicit accounts (tz) 
-                        new  ScriptAssembler()
+                        new ScriptAssembler()
                                 // Implicit accounts (tz1)
                                 .ifEqual(argDestinationAddressType, "00", new ScriptAssembler().copyString("06a19f", Buffer.CACHE2).getScript(), "")
                                 // Implicit accounts (tz2)
@@ -134,7 +134,7 @@ public class XtzScript {
                                 .getScript()
                 )
                 .copyArgument(argDestinationAddress, Buffer.CACHE2)
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, ScriptAssembler.DoubleSHA256)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, HashType.DoubleSHA256)
                 .clearBuffer(Buffer.CACHE2)
                 // Show receiving address
                 .ifEqual(argDestinationAccountType, "01",
@@ -158,7 +158,7 @@ public class XtzScript {
                 // Show Amount
                 .showAmount(argAmount, 6)
                 .showPressButton()
-        // Step 5. Set up Script Header.
+                // Step 5. Set up Script Header.
                 .setHeader(HashType.Blake2b256, SignType.EDDSA)
                 .getScript();
 
@@ -181,11 +181,11 @@ public class XtzScript {
         ScriptData argDestinationAddressType = sac.getArgument(1);
         ScriptData argDestinationAddress = sac.getArgument(20);
         ScriptData argParameters = sac.getArgumentAll();
-       
+
         String script = new ScriptAssembler()
-        // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
-                .setCoinType(0x06C1)        
-        // Step 3. Compose the raw transaction from arguments for signing.        
+                // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
+                .setCoinType(0x06C1)
+                // Step 3. Compose the raw transaction from arguments for signing.        
                 // Watermark
                 .copyString("03")
                 // Branch: block hash (32 Bytes)
@@ -195,7 +195,7 @@ public class XtzScript {
                 // Source address type (1 Byte)
                 .copyArgument(argSourceAddressType)
                 // Source address (20 Bytes)
-                .copyArgument(argSourceAddress)                
+                .copyArgument(argSourceAddress)
                 // fee (variable size)
                 .protobuf(argFee, typeInt)
                 // count (variable size)
@@ -211,11 +211,11 @@ public class XtzScript {
                 // 255 for contract interaction
                 .copyString("FF")
                 // contract parameters
-                .copyArgument(argParameters)           
-        // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
+                .copyArgument(argParameters)
+                // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
                 .showMessage("XTZ CT")
                 .showPressButton()
-        // Step 5. Set up Script Header.               
+                // Step 5. Set up Script Header.               
                 .setHeader(HashType.Blake2b256, SignType.EDDSA)
                 .getScript();
 
@@ -236,9 +236,9 @@ public class XtzScript {
         ScriptData argDelegateAddress = sac.getArgument(20);
 
         String script = new ScriptAssembler()
-        // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
-                .setCoinType(0x06C1)        
-        // Step 3. Compose the raw transaction from arguments for signing.        
+                // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
+                .setCoinType(0x06C1)
+                // Step 3. Compose the raw transaction from arguments for signing.        
                 // Watermark
                 .copyString("03")
                 // Branch: block hash (32 Bytes)
@@ -248,7 +248,7 @@ public class XtzScript {
                 // Source address type  (1 Byte)
                 .copyArgument(argSourceAddressType)
                 // Source address (20 Bytes)
-                .copyArgument(argSourceAddress)                
+                .copyArgument(argSourceAddress)
                 // fee (variable size)
                 .protobuf(argFee, typeInt)
                 // count (variable size)
@@ -262,12 +262,12 @@ public class XtzScript {
                 // baker address type (1 Byte)
                 .copyArgument(argDelegateAddressType)
                 // baker address (20 Bytes)
-                .copyArgument(argDelegateAddress)                
-        // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
+                .copyArgument(argDelegateAddress)
+                // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
                 .showMessage("XTZ")
                 .showMessage("Delgt")
                 .showPressButton()
-        // Step 5. Set up Script Header.                 
+                // Step 5. Set up Script Header.                 
                 .setHeader(HashType.Blake2b256, SignType.EDDSA)
                 .getScript();
 
@@ -286,9 +286,9 @@ public class XtzScript {
         ScriptData argStorageLimit = sac.getArgumentRightJustified(10);
 
         String script = new ScriptAssembler()
-        // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
-                .setCoinType(0x06C1)         
-        // Step 3. Compose the raw transaction from arguments for signing.        
+                // Step 2. Set BIP-44/SLIP0010 CoinType for validation to the path. Tezos (1729)
+                .setCoinType(0x06C1)
+                // Step 3. Compose the raw transaction from arguments for signing.        
                 // Watermark
                 .copyString("03")
                 // Branch: block hash (32 Bytes)
@@ -308,12 +308,12 @@ public class XtzScript {
                 // storage limit (variable size)
                 .protobuf(argStorageLimit, typeInt)
                 // 0 for undelegation 
-                .copyString("00")           
-        // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
+                .copyString("00")
+                // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
                 .showMessage("XTZ")
                 .showMessage("UnDel")
                 .showPressButton()
-        // Step 5. Set up Script Header. 
+                // Step 5. Set up Script Header. 
                 .setHeader(HashType.Blake2b256, SignType.EDDSA)
                 .getScript();
 
