@@ -31,20 +31,6 @@ public class ScriptAssembler {
     public static final int bitLeftJustify8to5 = 0x08;
     public static final int inLittleEndian = 0x10;
 
-    public static final int SHA1 = 0x01;
-    public static final int SHA256 = 0x02;
-    public static final int SHA512 = 0x03;
-    public static final int SHA3256 = 0x04;
-    public static final int SHA3512 = 0x05;
-    public static final int Keccak256 = 0x06;
-    public static final int Keccak512 = 0x07;
-    public static final int RipeMD160 = 0x08;
-    public static final int SHA256RipeMD160 = 0x09;
-    public static final int DoubleSHA256 = 0x0D;
-    public static final int CRC16 = 0x0A;
-    public static final int Blake2b256 = 0x0E;
-    public static final int Blake2b512 = 0x0F;
-
     private static String firstParameter, secondParameter;
     public static final String throwSEError = "FF00";
 
@@ -73,10 +59,11 @@ public class ScriptAssembler {
         Keccak512("07"),
         RipeMD160("08"),
         SHA256RipeMD160("09"),
-        DoubleSHA256("0D"),
         CRC16("0A"),
+        DoubleSHA256("0D"),
         Blake2b256("0E"),
-        Blake2b512("0F");
+        Blake2b512("0F"),
+        SHA512256("10");
         private final String hashLabel;
 
         private HashType(String hashLabel) {
@@ -85,6 +72,10 @@ public class ScriptAssembler {
 
         public String toString() {
             return hashLabel;
+        }
+
+        public int toInt() {
+            return Integer.parseInt(hashLabel, 16);
         }
     }
 
@@ -513,14 +504,12 @@ public class ScriptAssembler {
      *
      * @param data The input data.
      * @param destinationBuf The destination buffer.
-     * @param hashType SHA1 = 0x01, SHA256 = 0x02, SHA512 = 0x03, SHA3256 =
-     * 0x04, SHA3512 = 0x05, Keccak256 = 0x06, Keccak512 = 0x07, RipeMD160 =
-     * 0x08, SHA256RipeMD160 = 0x09, DoubleSHA256 = 0x0D, CRC16 = 0x0A,
-     * Blake2b512 = 0x0F;
+     * @param hashType The parameter is defined in enumeration class HashType
      * @return
      */
-    public ScriptAssembler hash(ScriptData data, Buffer destinationBuf, int hashType) {
-        script += compose("5A", data, destinationBuf, hashType, 0);
+    public ScriptAssembler hash(ScriptData data, Buffer destinationBuf, HashType hashType) {
+        int hashIndex = hashType.toInt();
+        script += compose("5A", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
         return this;
     }
 

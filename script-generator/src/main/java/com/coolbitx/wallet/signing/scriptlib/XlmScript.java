@@ -65,14 +65,14 @@ public class XlmScript {
                 .copyString("000000")
                 .copyArgument(argMemoType)
                 .ifRange(argMemoType, "00", "04", "", ScriptAssembler.throwSEError)
-                .ifEqual(argMemoType, "01", 
+                .ifEqual(argMemoType, "01",
                         new ScriptAssembler().setBufferIntFromDataLength(argMemoRJ)
                                 .copyString("0000")
                                 .putBufferInt(Buffer.TRANSACTION)
                                 .copyArgument(argMemoRJ)
                                 .paddingZero(Buffer.TRANSACTION, 4)
-                                .getScript()
-                        , "")
+                                .getScript(),
+                         "")
                 .ifEqual(argMemoType, "02", new ScriptAssembler().copyArgument(argMemo8).getScript(), "")
                 .ifRange(argMemoType, "03", "04", new ScriptAssembler().copyArgument(argMemo32).getScript(), "")
                 .copyString("0000000100000000000000")
@@ -84,11 +84,11 @@ public class XlmScript {
                 .copyString("00000000")
                 .getScript();
         script = (!isTestnet ? scriptAsb.showMessage(symbol[type])
-                        : scriptAsb.showWrap(symbol[type], "TESTNET"))
+                : scriptAsb.showWrap(symbol[type], "TESTNET"))
                 .copyString("30", Buffer.CACHE2)
                 .copyArgument(argDestAccountId, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1,
-                        ScriptAssembler.CRC16)
+                        HashType.CRC16)
                 .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1),
                         Buffer.CACHE2, 2, ScriptAssembler.binaryCharset,
                         ScriptAssembler.littleEndian)
@@ -105,7 +105,7 @@ public class XlmScript {
                 .getScript();
         return script;
     }
-    
+
     public static String StellarScriptSignature = "0030450221008832DD699A98B4EAFA26994C18EBFEFD234914F25492B03BFE36D3DDEFF7C3B30220364A691A115CAD6D283D618813F485BDBF4F5FCCAAD76FCA69D8F165E5DA0173";
 
 }

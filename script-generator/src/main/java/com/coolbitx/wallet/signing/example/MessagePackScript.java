@@ -35,7 +35,7 @@ public class MessagePackScript {
 //     ]
 //   }
 // }
-    
+
 //    Argument:
 //            Hex.toHexString("1294a54f44fc00ae692ead9a1235c4dfc41afcfe".getBytes()) // key1
 //            + "01" // value1
@@ -94,8 +94,9 @@ public class MessagePackScript {
                 .arrayEnd(TYPE_MESSAGE_PACK_MAP)
                 //                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
                 //                .showAmount(argAmount, 6)
+                .hash(key5, Buffer.TRANSACTION, HashType.SHA512256)
                 .showPressButton()
-                .setHeader(HashType.SHA512, SignType.ECDSA)
+                .setHeader(HashType.SHA512256, SignType.ECDSA)
                 .getScript();
         return script;
     }
