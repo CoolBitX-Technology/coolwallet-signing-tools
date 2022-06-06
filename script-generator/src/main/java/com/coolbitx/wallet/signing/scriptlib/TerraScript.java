@@ -172,8 +172,12 @@ public class TerraScript {
                 // mode_info
                 .copyString("12040a020801")
                 // sequence
-                .copyString("18")
-                .protobuf(argSequence, typeInt)
+                .ifEqual(argSequence, "0", "", 
+                        new ScriptAssembler()
+                                .copyString("18")
+                                .protobuf(argSequence, typeInt)
+                                .getScript()
+                )
                 .arrayEnd() // signer_info end
                 // fee
                 .copyString("12").arrayPointer()
@@ -523,7 +527,7 @@ public class TerraScript {
             .getScript();
     }
     public static String TerraSendScriptSignature = Strings.padStart(
-            "30450220643934547386477E4809D786D1F86EFA102EE2EB179CEC69994CA8665E556DAE022100C075C1BF90C9F9BE4A01EC8A6B748EFC98241F04167590C40CE316C73C89ABC0",
+            "3046022100AF9F9CFE87D182527E129666E2E274ED89F942AD4F2EC4AF17BEDE29025D71EE022100D26B716CA5DAF5FE0325E4DCD99E583217CB20F6DBE7003178566C7146DC0AFA",
             144, '0');
     public static String TerraDelegateScriptSignature = Strings.padStart(
             "3046022100F8D017F6508D46611495B192279F0F17722C57877ED8D73315736D165B5F83B402210095D9A210D25DD318C435C82C35F1B3B1D2E8DA4EE0C6A87371B18FD74D7BF2D2",
