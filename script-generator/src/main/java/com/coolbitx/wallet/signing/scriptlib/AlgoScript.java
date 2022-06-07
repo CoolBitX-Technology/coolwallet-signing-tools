@@ -609,7 +609,8 @@ public class AlgoScript {
                 .showMessage("ALGO")
                 .showMessage("axfer")
                 .ifEqual(xaidPresent, "00",
-                        "", new ScriptAssembler().showMessage("assetID").showAmount(xaidValue, 0).getScript())
+                        "", new ScriptAssembler().showMessage("assetID").baseConvert(xaidValue, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
+                                .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1)).clearBuffer(ScriptData.Buffer.CACHE1).getScript())
                 .ifEqual(arcvPresent, "00",
                         "", new ScriptAssembler().hash(arcvValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
                                 .copyArgument(arcvValue, ScriptData.Buffer.CACHE2)
@@ -1120,7 +1121,8 @@ public class AlgoScript {
                 .showMessage("ALGO")
                 .showMessage("appl")
                 .ifEqual(apidPresent, "00",
-                        "", new ScriptAssembler().showMessage("appID").showAmount(apidValue, 0).getScript())
+                        "", new ScriptAssembler().showMessage("appID").baseConvert(apidValue, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
+                                .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1)).clearBuffer(ScriptData.Buffer.CACHE1).getScript())
                 .showPressButton()
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
