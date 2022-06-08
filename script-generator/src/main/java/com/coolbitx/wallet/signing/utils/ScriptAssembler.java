@@ -79,13 +79,14 @@ public class ScriptAssembler {
         }
     }
 
-    public static enum SignType {
+    public enum SignType {
         ECDSA("01"),
         EDDSA("02"),
-        BIP32EDDSA("03");
+        BIP32EDDSA("03"),
+        CURVE25519("04");
         private final String signLabel;
 
-        private SignType(String signLabel) {
+        SignType(String signLabel) {
             this.signLabel = signLabel;
         }
 
