@@ -23,7 +23,7 @@ public class ScriptAssembler {
     public static final String binary32Charset = "binary32Charset";
     public static final String base32BitcoinCashCharset = "base32BitcoinCashCharset";
     public static final String base58Charset = "base58Charset";
-    public static final String extendedCharset = "extendedCharset";
+    public static final String cache1Charset = "cache1Charset";
 
     public static final int leftJustify = 0x01;
     public static final int littleEndian = 0x02;
@@ -79,13 +79,14 @@ public class ScriptAssembler {
         }
     }
 
-    public static enum SignType {
+    public enum SignType {
         ECDSA("01"),
         EDDSA("02"),
-        BIP32EDDSA("03");
+        BIP32EDDSA("03"),
+        CURVE25519("04");
         private final String signLabel;
 
-        private SignType(String signLabel) {
+        SignType(String signLabel) {
             this.signLabel = signLabel;
         }
 
@@ -489,7 +490,7 @@ public class ScriptAssembler {
             charsetIndex = "C";
         } else if (charset.equals(base58Charset)) {
             charsetIndex = "8";
-        } else if (charset.equals(extendedCharset)) {
+        } else if (charset.equals(cache1Charset)) {
             charsetIndex = "1";
         } else {
             script += "XX";
