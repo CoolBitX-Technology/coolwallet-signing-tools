@@ -121,23 +121,6 @@ public class XtzScript {
                 .copyString("00")
                 // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
                 .showMessage("XTZ")
-                //Show receiving address
-                .ifEqual(argDestinationAccountType, "01",
-                        // Originated accounts (KT) 
-                        new ScriptAssembler().copyString("025a79", Buffer.CACHE2).getScript(),
-                        // Implicit accounts (tz) 
-                        new ScriptAssembler()
-                                // Implicit accounts (tz1)
-                                .ifEqual(argDestinationAddressType, "00", new ScriptAssembler().copyString("06a19f", Buffer.CACHE2).getScript(), "")
-                                // Implicit accounts (tz2)
-                                .ifEqual(argDestinationAddressType, "01", new ScriptAssembler().copyString("06a1a1", Buffer.CACHE2).getScript(), "")
-                                // Implicit accounts (tz3)
-                                .ifEqual(argDestinationAddressType, "02", new ScriptAssembler().copyString("06a1a4", Buffer.CACHE2).getScript(), "")
-                                .getScript()
-                )
-                .copyArgument(argDestinationAddress, Buffer.CACHE2)
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, HashType.DoubleSHA256)
-                .clearBuffer(Buffer.CACHE2)
                 // Show receiving address
                 .ifEqual(argDestinationAccountType, "01",
                         // Originated accounts (KT) 
@@ -153,6 +136,7 @@ public class XtzScript {
                                 .getScript()
                 )
                 .copyArgument(argDestinationAddress, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, HashType.DoubleSHA256)
                 .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), Buffer.CACHE2)
                 .clearBuffer(Buffer.CACHE1)
                 .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
@@ -416,22 +400,6 @@ public class XtzScript {
                 )
                 .copyArgument(argToAddress, Buffer.CACHE2)
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, HashType.DoubleSHA256)
-                .clearBuffer(Buffer.CACHE2)
-                // Show receiving address
-                .ifEqual(argToAddressAccountType, "01",
-                        // Originated accounts (KT) 
-                        new ScriptAssembler().copyString("025a79", Buffer.CACHE2).getScript(),
-                        // Implicit accounts (tz) 
-                        new ScriptAssembler()
-                                // Implicit accounts (tz1)
-                                .ifEqual(argToAddressType, "00", new ScriptAssembler().copyString("06a19f", Buffer.CACHE2).getScript(), "")
-                                // Implicit accounts (tz2)
-                                .ifEqual(argToAddressType, "01", new ScriptAssembler().copyString("06a1a1", Buffer.CACHE2).getScript(), "")
-                                // Implicit accounts (tz3)
-                                .ifEqual(argToAddressType, "02", new ScriptAssembler().copyString("06a1a4", Buffer.CACHE2).getScript(), "")
-                                .getScript()
-                )
-                .copyArgument(argToAddress, Buffer.CACHE2)
                 .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), Buffer.CACHE2)
                 .clearBuffer(Buffer.CACHE1)
                 .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
