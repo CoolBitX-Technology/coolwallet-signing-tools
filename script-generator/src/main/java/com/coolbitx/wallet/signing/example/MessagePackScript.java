@@ -5,6 +5,8 @@
  */
 package com.coolbitx.wallet.signing.example;
 
+import com.coolbitx.wallet.signing.utils.Hex;
+import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
@@ -20,9 +22,45 @@ public class MessagePackScript {
     public static void listAll() {
         System.out.println("Xrp: \n" + getTransferScript() + "\n");
     }
+
+    public static String getAddressScript() {
+        String TX = HexUtil.toHexString("TX".getBytes());
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData rcvPresent = sac.getArgument(1);
+        ScriptData rcvKey = sac.getArgumentRightJustified(8);
+        ScriptData rcvValue = sac.getArgumentRightJustified(32);
+        ScriptData ID = sac.getArgumentRightJustified(8);
+
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        String script = scriptAsb.setCoinType(0x11B)
+                .arrayPointer()
+                .copyString(TX)
+                .arrayPointer()
+                .ifEqual(rcvPresent, "00",
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeString, rcvKey, ScriptData.Buffer.TRANSACTION)
+                                .messagePack(ScriptAssembler.typeBinary, rcvValue, ScriptData.Buffer.TRANSACTION).getScript())
+                .arrayEnd(TYPE_MESSAGE_PACK_MAP)
+                .showMessage("ALGO")
+                .hash(rcvValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
+                .copyArgument(rcvValue, ScriptData.Buffer.CACHE2)
+                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.CACHE1, 28, 4), ScriptData.Buffer.CACHE2)
+                .clearBuffer(ScriptData.Buffer.CACHE1)
+                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"), Buffer.CACHE1)
+                .baseConvert(ScriptData.getBuffer(ScriptData.Buffer.CACHE2, 0, 36), ScriptData.Buffer.CACHE2, 58, ScriptAssembler.cache1Charset, ScriptAssembler.bitLeftJustify8to5)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 36))
+                .clearBuffer(ScriptData.Buffer.CACHE1)
+                .clearBuffer(ScriptData.Buffer.CACHE2)
+                .baseConvert(ID, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showPressButton()
+                .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
+                .getScript();
+        return script;
+    }
+
 // JSON format wanted:
 // {
-//   "1294a54f44fc00ae692ead9a1235c4dfc41afcfe":false,
+//   "1294a54f44fc00ae692ead9a1235c4dfc41afcfe":ture,
 //   "id":0,
 //   "result":{
 //     "baseFee":"0",
@@ -35,7 +73,6 @@ public class MessagePackScript {
 //     ]
 //   }
 // }
-
 //    Argument:
 //            Hex.toHexString("1294a54f44fc00ae692ead9a1235c4dfc41afcfe".getBytes()) // key1
 //            + "01" // value1
@@ -71,14 +108,15 @@ public class MessagePackScript {
         ScriptData value5e = sac.getArgumentRightJustified(4);
 
         String script = new ScriptAssembler()
-                .setCoinType(0x90)
+                .setCoinType(0x11b)
                 //                .copyString("24")
                 .arrayPointer()
                 .messagePack(ScriptAssembler.typeString, key1, Buffer.TRANSACTION)
                 .messagePack(ScriptAssembler.typeBoolean, value1, Buffer.TRANSACTION)
                 .messagePack(ScriptAssembler.typeString, key2, Buffer.TRANSACTION)
                 .messagePack(ScriptAssembler.typeInt, value2, Buffer.TRANSACTION)
-                .messagePack(ScriptAssembler.typeString, key3, Buffer.TRANSACTION)
+                //                .messagePack(ScriptAssembler.typeString, key3, Buffer.TRANSACTION)
+                .messagePack(Hex.encode("result".getBytes()), Buffer.TRANSACTION)
                 .arrayPointer()
                 .messagePack(ScriptAssembler.typeString, key4, Buffer.TRANSACTION)
                 .messagePack(ScriptAssembler.typeString, value4, Buffer.TRANSACTION)
@@ -92,9 +130,9 @@ public class MessagePackScript {
                 .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
                 .arrayEnd(TYPE_MESSAGE_PACK_MAP)
                 .arrayEnd(TYPE_MESSAGE_PACK_MAP)
+                .showMessage("ALGO")
                 //                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
                 //                .showAmount(argAmount, 6)
-                .hash(key5, Buffer.TRANSACTION, HashType.SHA512256)
                 .showPressButton()
                 .setHeader(HashType.SHA512256, SignType.ECDSA)
                 .getScript();

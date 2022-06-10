@@ -886,6 +886,20 @@ public class ScriptAssembler {
         return this;
     }
 
+    /**
+     * Message pack string type encode data and put the output to destination
+     * buffer.
+     *
+     * @param data The input data. Only support String, data is ascii code
+     * staing.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public ScriptAssembler messagePack(String data, Buffer destinationBuf) {
+        script += compose("C8", null, destinationBuf, data.length() / 2, 0) + data;
+        return this;
+    }
+
     public ScriptAssembler insertString(String data) {
         script += data;
         return this;
