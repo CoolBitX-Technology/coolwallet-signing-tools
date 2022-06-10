@@ -96,7 +96,7 @@ public class XlmScript {
                 .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
                         Buffer.CACHE1)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 35),
-                        Buffer.CACHE2, 56, ScriptAssembler.extendedCharset,
+                        Buffer.CACHE2, 56, ScriptAssembler.cache1Charset,
                         ScriptAssembler.bitLeftJustify8to5)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 35))
                 .showAmount(argAmount, 7)
