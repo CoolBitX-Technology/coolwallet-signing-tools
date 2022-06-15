@@ -15,84 +15,21 @@ public class TerraScript {
         listAll();
     }
 
+    //final static String sSTART = "\u001B[31m"; // red
+    //final static String sSTART = "\u001B[32m"; // green
+    final static String sSTART = "\u001B[34m"; // blue
+    final static String sEND = "\u001B[0m";
+
+    // chain_id - columbus-5 (main-net)
+    final static String classic = "1a0A636f6c756d6275732d35";
+    // chain_id - phoenix-1 (main-net)
+    final static String mainnet = "1a0970686f656e69782d31";
+    // chain_id - bombay-12 (test-net)
+    // final static String testnet = "1a09626f6d6261792d3132";
+    // chain_id - pisco-1 (test-net)
+    final static String testnet = "1a07706973636f2d31";
+
     public static void listAll() {
-        //String sSTART = "\u001B[31m"; // red
-        //String sSTART = "\u001B[32m"; // green
-        String sSTART = "\u001B[34m"; // blue
-        String sEND = "\u001B[0m";
-
-        // chain_id - columbus-5 (main-net)
-        String classic = "1a0A636f6c756d6275732d35";
-        // chain_id - phoenix-1 (main-net)
-        String mainnet = "1a0970686f656e69782d31";
-        // chain_id - bombay-12 (test-net)
-        // String testnet = "1a09626f6d6261792d3132";
-        // chain_id - pisco-1 (test-net)
-        String testnet = "1a07706973636f2d31";
-        
-        // System.out.println("Terra SEND = {");
-        // System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.SEND, mainnet) + sEND + "`,");
-        // System.out.println("  signature: `" + TerraSendScriptSignature + "`,");
-        // System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.SEND, testnet) + sEND + "`,");
-        // System.out.println("  signature_test: `" + TerraTestSendScriptSignature + "`,");
-        // System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.SEND, classic) + sEND + "`,");
-        // System.out.println("  signature_classic: `" + TerraClassicSendScriptSignature + "`,");
-        // System.out.println("}\n");
-
-        // System.out.println("Terra DELEGATE = {");
-        // System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.DELEGATE, mainnet) + sEND + "`,");
-        // System.out.println("  signature: `" + TerraDelegateScriptSignature + "`,");
-        // System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.DELEGATE, testnet) + sEND + "`,");
-        // System.out.println("  signature_test: `" + TerraTestDelegateScriptSignature + "`,");
-        // System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.DELEGATE, classic) + sEND + "`,");
-        // System.out.println("  signature_classic: `" + TerraClassicDelegateScriptSignature + "`,");
-        // System.out.println("}\n");
-
-        // System.out.println("Terra UNDELEGATE = {");
-        // System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.UNDELEGATE, mainnet) + sEND + "`,");
-        // System.out.println("  signature: `" + TerraUndelegateScriptSignature + "`,");
-        // System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.UNDELEGATE, testnet) + sEND + "`,");
-        // System.out.println("  signature_test: `" + TerraTestUndelegateScriptSignature + "`,");
-        // System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.UNDELEGATE, classic) + sEND + "`,");
-        // System.out.println("  signature_classic: `" + TerraClassicUndelegateScriptSignature + "`,");
-        // System.out.println("}\n");
-
-        // System.out.println("Terra WITHDRAW = {");
-        // System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.WITHDRAW, mainnet) + sEND + "`,");
-        // System.out.println("  signature: `" + TerraWithdrawScriptSignature + "`,");
-        // System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.WITHDRAW, testnet) + sEND + "`,");
-        // System.out.println("  signature_test: `" + TerraTestWithdrawScriptSignature + "`,");
-        // System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.WITHDRAW, classic) + sEND + "`,");
-        // System.out.println("  signature_classic: `" + TerraClassicWithdrawScriptSignature + "`,");
-        // System.out.println("}\n");
-
-        // System.out.println("Terra SMART = {");
-        // System.out.println("  script: `" + sSTART + getTerraSmartScript(mainnet, false) + sEND + "`,");
-        // System.out.println("  signature: `" + TerraSmartScriptSignature + "`,");
-        // System.out.println("  script_test: `" + sSTART + getTerraSmartScript(testnet, false) + sEND + "`,");
-        // System.out.println("  signature_test: `" + TerraTestSmartScriptSignature + "`,");
-        // System.out.println("  script_classic: `" + sSTART + getTerraSmartScript(classic, true) + sEND + "`,");
-        // System.out.println("  signature_classic: `" + TerraClassicSmartScriptSignature + "`,");
-        // System.out.println("}\n");
-
-        // System.out.println("Terra CW20 = {");
-        // System.out.println("  script: `" + sSTART + getTerraCW20Script(mainnet, false) + sEND + "`,");
-        // System.out.println("  signature: `" + TerraCW20ScriptSignature + "`,");
-        // System.out.println("  script_test: `" + sSTART + getTerraCW20Script(testnet, false) + sEND + "`,");
-        // System.out.println("  signature_test: `" + TerraTestCW20ScriptSignature + "`,");
-        // System.out.println("  script_classic: `" + sSTART + getTerraCW20Script(classic, true) + sEND + "`,");
-        // System.out.println("  signature_classic: `" + TerraClassicCW20ScriptSignature + "`,");
-        // System.out.println("}\n");
-
-        // System.out.println("Terra BLIND = {");
-        // System.out.println("  script: `" + sSTART + getTerraBlindScript(mainnet) + sEND + "`,");
-        // System.out.println("  signature: `" + TerraBlindScriptSignature + "`,");
-        // System.out.println("  script_test: `" + sSTART + getTerraBlindScript(testnet) + sEND + "`,");
-        // System.out.println("  signature_test: `" + TerraTestBlindScriptSignature + "`,");
-        // System.out.println("  script_classic: `" + sSTART + getTerraBlindScript(classic) + sEND + "`,");
-        // System.out.println("  signature_classic: `" + TerraClassicBlindScriptSignature + "`,");
-        // System.out.println("}\n");
-
         System.out.println("Terra Send: \n" + getTerraScript(TerraTxType.SEND, mainnet) + "\n");
         System.out.println("Terra Send Signature: \n" + TerraSendScriptSignature + "\n");
         System.out.println("Terra Delegate: \n" + getTerraScript(TerraTxType.DELEGATE, mainnet) + "\n");
@@ -122,6 +59,71 @@ public class TerraScript {
         System.out.println("Terra Test CW20 Signature: \n" + TerraTestCW20ScriptSignature + "\n");
         System.out.println("Terra Test Blind: \n" + getTerraBlindScript(testnet) + "\n");
         System.out.println("Terra Test Blind Signature: \n" + TerraTestBlindScriptSignature + "\n");   
+    }
+
+    public static void listJSON() {        
+        System.out.println("Terra SEND = {");
+        System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.SEND, mainnet) + sEND + "`,");
+        System.out.println("  signature: `" + TerraSendScriptSignature + "`,");
+        System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.SEND, classic) + sEND + "`,");
+        System.out.println("  signature_classic: `" + TerraClassicSendScriptSignature + "`,");
+        System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.SEND, testnet) + sEND + "`,");
+        System.out.println("  signature_test: `" + TerraTestSendScriptSignature + "`,");
+        System.out.println("}\n");
+
+        System.out.println("Terra DELEGATE = {");
+        System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.DELEGATE, mainnet) + sEND + "`,");
+        System.out.println("  signature: `" + TerraDelegateScriptSignature + "`,");
+        System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.DELEGATE, classic) + sEND + "`,");
+        System.out.println("  signature_classic: `" + TerraClassicDelegateScriptSignature + "`,");
+        System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.DELEGATE, testnet) + sEND + "`,");
+        System.out.println("  signature_test: `" + TerraTestDelegateScriptSignature + "`,");
+        System.out.println("}\n");
+
+        System.out.println("Terra UNDELEGATE = {");
+        System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.UNDELEGATE, mainnet) + sEND + "`,");
+        System.out.println("  signature: `" + TerraUndelegateScriptSignature + "`,");
+        System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.UNDELEGATE, classic) + sEND + "`,");
+        System.out.println("  signature_classic: `" + TerraClassicUndelegateScriptSignature + "`,");
+        System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.UNDELEGATE, testnet) + sEND + "`,");
+        System.out.println("  signature_test: `" + TerraTestUndelegateScriptSignature + "`,");
+        System.out.println("}\n");
+
+        System.out.println("Terra WITHDRAW = {");
+        System.out.println("  script: `" + sSTART + getTerraScript(TerraTxType.WITHDRAW, mainnet) + sEND + "`,");
+        System.out.println("  signature: `" + TerraWithdrawScriptSignature + "`,");
+        System.out.println("  script_classic: `" + sSTART + getTerraScript(TerraTxType.WITHDRAW, classic) + sEND + "`,");
+        System.out.println("  signature_classic: `" + TerraClassicWithdrawScriptSignature + "`,");
+        System.out.println("  script_test: `" + sSTART + getTerraScript(TerraTxType.WITHDRAW, testnet) + sEND + "`,");
+        System.out.println("  signature_test: `" + TerraTestWithdrawScriptSignature + "`,");
+        System.out.println("}\n");
+
+        System.out.println("Terra SMART = {");
+        System.out.println("  script: `" + sSTART + getTerraSmartScript(mainnet, false) + sEND + "`,");
+        System.out.println("  signature: `" + TerraSmartScriptSignature + "`,");
+        System.out.println("  script_classic: `" + sSTART + getTerraSmartScript(classic, true) + sEND + "`,");
+        System.out.println("  signature_classic: `" + TerraClassicSmartScriptSignature + "`,");
+        System.out.println("  script_test: `" + sSTART + getTerraSmartScript(testnet, false) + sEND + "`,");
+        System.out.println("  signature_test: `" + TerraTestSmartScriptSignature + "`,");
+        System.out.println("}\n");
+
+        System.out.println("Terra CW20 = {");
+        System.out.println("  script: `" + sSTART + getTerraCW20Script(mainnet, false) + sEND + "`,");
+        System.out.println("  signature: `" + TerraCW20ScriptSignature + "`,");
+        System.out.println("  script_classic: `" + sSTART + getTerraCW20Script(classic, true) + sEND + "`,");
+        System.out.println("  signature_classic: `" + TerraClassicCW20ScriptSignature + "`,");
+        System.out.println("  script_test: `" + sSTART + getTerraCW20Script(testnet, false) + sEND + "`,");
+        System.out.println("  signature_test: `" + TerraTestCW20ScriptSignature + "`,");
+        System.out.println("}\n");
+
+        System.out.println("Terra BLIND = {");
+        System.out.println("  script: `" + sSTART + getTerraBlindScript(mainnet) + sEND + "`,");
+        System.out.println("  signature: `" + TerraBlindScriptSignature + "`,");
+        System.out.println("  script_classic: `" + sSTART + getTerraBlindScript(classic) + sEND + "`,");
+        System.out.println("  signature_classic: `" + TerraClassicBlindScriptSignature + "`,");
+        System.out.println("  script_test: `" + sSTART + getTerraBlindScript(testnet) + sEND + "`,");
+        System.out.println("  signature_test: `" + TerraTestBlindScriptSignature + "`,");
+        System.out.println("}\n");
     }
 
     public enum TerraTxType {
