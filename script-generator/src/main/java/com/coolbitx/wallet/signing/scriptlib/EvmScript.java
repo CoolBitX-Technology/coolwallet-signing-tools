@@ -21,7 +21,6 @@ public class EvmScript {
         System.out.println("Evm erc20: \n" + getERC20Script() + "\n");
         System.out.println("Evm Smart Contract: \n" + getSmartContractScript() + "\n");
         System.out.println("Evm Smart Contract Segment: \n" + getSmartContractSegmentScript() + "\n");
-        System.out.println("Evm Staking: \n" + getStakingScript() + "\n");
         System.out.println("Evm EIP-712 Message: \n" + getMessageScript() + "\n");
         System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript() + "\n");
         System.out.println("Evm EIP-1559: \n" + getEIP1559TransferScript() + "\n");
@@ -228,7 +227,33 @@ public class EvmScript {
         ScriptData argLayerLength = sac.getArgument(1);
         ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
         ScriptData argChainSign = sac.getArgument(72);
+        ScriptData argStakingType = sac.getArgument(1);
         ScriptData argData = sac.getArgumentAll();
+
+        String DefaultStakingDisplay = new ScriptAssembler()
+                //.copyArgument(argData, Buffer.CACHE1)
+                //.ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "9fa6dd35",
+                .ifEqual(argStakingType, "01", 
+                        new ScriptAssembler()
+                                .showWrap("Delgt", "")
+                                .getScript(),
+                        new ScriptAssembler()
+                                .showWrap("SMART", "")
+                                .getScript())
+                //.clearBuffer(Buffer.CACHE1)
+                .getScript();
+        String WithdrawStakingDisplay = new ScriptAssembler()
+                .ifEqual(argStakingType, "02", 
+                        new ScriptAssembler()
+                                .showWrap("Withdr", "")
+                                .getScript(), DefaultStakingDisplay)
+                .getScript();
+        String StakingDisplay = new ScriptAssembler()
+                .ifEqual(argStakingType, "03",  
+                        new ScriptAssembler()
+                        .showWrap("Undelgt", "")
+                        .getScript(), WithdrawStakingDisplay)
+                .getScript();
 
         String script
                 = new ScriptAssembler()
@@ -270,7 +295,29 @@ public class EvmScript {
                         .copyArgument(argSymbol, Buffer.CACHE1)
                         .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
                         .clearBuffer(Buffer.CACHE1)
-                        .showWrap("SMART", "")
+                        .copyArgument(argData, Buffer.CACHE1)
+                        .ifEqual(argStakingType, "00",
+                                new ScriptAssembler()
+                                        .showWrap("SMART", "")
+                                        .getScript(), StakingDisplay + 
+                                new ScriptAssembler()
+                                        .copyString("494420", Buffer.CACHE2)
+                                        .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 4, 32), Buffer.CACHE2, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                        .clearBuffer(Buffer.CACHE2)
+                                        .getScript())
+                        // Display amount for delegate
+                        .ifEqual(argStakingType, "01",
+                                new ScriptAssembler()
+                                        .showAmount(argValue, 18)
+                                        .getScript(), "")
+                        // Display amount for undelegate
+                        .ifEqual(argStakingType, "03",
+                                new ScriptAssembler()
+                                        // The last 32 byte of argData is undelegate amount
+                                        .showAmount(ScriptData.getBuffer(Buffer.CACHE1, 68, 32), 18)
+                                        .getScript(), "")
+                        .clearBuffer(Buffer.CACHE1)
                         .showPressButton()
                         // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
                         // sign=01=ECDSA
@@ -281,7 +328,7 @@ public class EvmScript {
 
     public static String SmartContractScriptSignature
             = Strings.padStart(
-                    "3045022100B8AAAB03BF6863E9817E371DEEF7F7280CD4A2F489D9B495CC2529783EE617FB022044C6D0BA4E5471BD0F2B3A10B2CA1F8A490BEEE956A8A7FC2A64594B4D05AA10",
+                    "3046022100DC1ADEA62F3E91FB750DF234D92FE689761295C0109C513FA2D0B1C10A499A8E022100AF385C94F532CB84F35CAD6B83E05DFFA49FC639F45CEEF8D856BB586F551ECC",
                     144,
                     '0');
 
@@ -355,103 +402,6 @@ public class EvmScript {
     public static String SmartContractSegmentScriptSignature
             = Strings.padStart(
                     "30450220283BAE00DEF6E51D430DB1FAD4F66E5E063E161A83E23790A1C5BDC8FD16B0DD0221009A8D7F6CFB48E18EF3942BC9D6F99EE9077CDBD2BE3AAB04FAC6F3B94F7742E3",
-                    144,
-                    '0');
-
-    public static String getStakingScript() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgumentRightJustified(10);
-        ScriptData argGasPrice = sac.getArgumentRightJustified(10);
-        ScriptData argGasLimit = sac.getArgumentRightJustified(10);
-        ScriptData argNonce = sac.getArgumentRightJustified(8);
-        // Chain Information Info
-        ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
-        ScriptData argChainIdLength = sac.getArgument(1);
-        ScriptData argChainId = sac.getArgumentVariableLength(6);
-        ScriptData argSymbolLength = sac.getArgument(1);
-        ScriptData argSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argLayerLength = sac.getArgument(1);
-        ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argChainSign = sac.getArgument(72);
-        ScriptData argStakingType = sac.getArgument(1);
-        ScriptData argData = sac.getArgumentAll();
-
-        String script
-                = new ScriptAssembler()
-                        // set coinType to 3C
-                        .setCoinType(0x3C)
-                        .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
-                        .arrayPointer()
-                        // nonce
-                        .rlpString(argNonce)
-                        // gasPrice
-                        .rlpString(argGasPrice)
-                        // gasLimit
-                        .rlpString(argGasLimit)
-                        // toAddress
-                        .copyString("94")
-                        .copyArgument(argTo)
-                        // value
-                        .rlpString(argValue)
-                        // data
-                        .rlpString(argData)
-                        // chainId v
-                        .setBufferInt(argChainIdLength, 1, 6)
-                        .rlpString(argChainId)
-                        // r, s
-                        .copyString("8080")
-                        .arrayEnd(TYPE_RLP)
-                        // Display phase
-                        .ifEqual(
-                                argLayerLength,
-                                "00",
-                                "",
-                                new ScriptAssembler()
-                                        .setBufferInt(argLayerLength, 1, 7)
-                                        .copyArgument(argLayerSymbol, Buffer.CACHE1)
-                                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                                        .clearBuffer(Buffer.CACHE1)
-                                        .getScript())
-                        .setBufferInt(argSymbolLength, 1, 7)
-                        .copyArgument(argSymbol, Buffer.CACHE1)
-                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                        .clearBuffer(Buffer.CACHE1)
-                        .copyArgument(argData, Buffer.CACHE1)
-                        //.ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "9fa6dd35",
-                        .ifEqual(argStakingType, "01", 
-                                new ScriptAssembler()
-                                .showWrap("Delgt", "")
-                                .getScript(), 
-                                "")
-                        //.ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "0962ef79",
-                        .ifEqual(argStakingType, "02", 
-                                new ScriptAssembler()
-                                .showWrap("Withdr", "")
-                                .getScript(), 
-                                "")
-                        //.ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "4f864df4",
-                        .ifEqual(argStakingType, "03",  
-                                new ScriptAssembler()
-                                .showWrap("Undelgt", "")
-                                .getScript(), 
-                                "")
-                        .copyString("494420", Buffer.CACHE2)
-                        .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 4, 32), Buffer.CACHE2, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                        .clearBuffer(Buffer.CACHE2)
-                        .clearBuffer(Buffer.CACHE1)
-                        .showPressButton()
-                        // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
-                        // sign=01=ECDSA
-                        .setHeader(HashType.Keccak256, SignType.ECDSA)
-                        .getScript();
-        return script;
-    }
-
-    public static String StakingScriptSignature
-            = Strings.padStart(
-                    "3045022100BC4659770FFB2FA65B4590FF3410D95435C95579D6FBD21924E1A8411185B80E0220215F09C0E4C7DE81EF177C09C544D1C5B8B48AA1D5F09A7494E6B7802714B85F",
                     144,
                     '0');
 
