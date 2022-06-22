@@ -227,32 +227,47 @@ public class EvmScript {
         ScriptData argLayerLength = sac.getArgument(1);
         ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
         ScriptData argChainSign = sac.getArgument(72);
-        ScriptData argStakingType = sac.getArgument(1);
         ScriptData argData = sac.getArgumentAll();
 
-        String DefaultStakingDisplay = new ScriptAssembler()
-                //.copyArgument(argData, Buffer.CACHE1)
-                //.ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "9fa6dd35",
-                .ifEqual(argStakingType, "01", 
+        // FANTOM staking display
+        String StakingDisplay = new ScriptAssembler()
+                .copyArgument(argData, Buffer.CACHE1)
+                .ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "9fa6dd35",                         // Delegate
                         new ScriptAssembler()
                                 .showWrap("Delgt", "")
                                 .getScript(),
                         new ScriptAssembler()
-                                .showWrap("SMART", "")
+                                .ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "0962ef79",         // Withdraw
+                                        new ScriptAssembler()
+                                                .showWrap("Withdr", "")
+                                                .getScript(),
+                                        new ScriptAssembler()
+                                        .ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "4f864df4", // Undelegate
+                                                new ScriptAssembler()
+                                                        .showWrap("Undelgt", "")
+                                                        .getScript(),
+                                                new ScriptAssembler()
+                                                        .showWrap("SMART", "")
+                                                        .getScript())
+                                                .getScript())
                                 .getScript())
-                //.clearBuffer(Buffer.CACHE1)
-                .getScript();
-        String WithdrawStakingDisplay = new ScriptAssembler()
-                .ifEqual(argStakingType, "02", 
+                // Display validator ID
+                .copyString("494420", Buffer.CACHE2)
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 4, 32), Buffer.CACHE2, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                // Display amount for delegate
+                .ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "9fa6dd35",
                         new ScriptAssembler()
-                                .showWrap("Withdr", "")
-                                .getScript(), DefaultStakingDisplay)
-                .getScript();
-        String StakingDisplay = new ScriptAssembler()
-                .ifEqual(argStakingType, "03",  
+                                .showAmount(argValue, 18)
+                                .getScript(), "")
+                // Display amount for undelegate
+                .ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "4f864df4",
                         new ScriptAssembler()
-                        .showWrap("Undelgt", "")
-                        .getScript(), WithdrawStakingDisplay)
+                                // The last 32 byte of argData is undelegate amount
+                                .showAmount(ScriptData.getBuffer(Buffer.CACHE1, 68, 32), 18)
+                                .getScript(), "")
+                .clearBuffer(Buffer.CACHE1)
                 .getScript();
 
         String script
@@ -295,29 +310,17 @@ public class EvmScript {
                         .copyArgument(argSymbol, Buffer.CACHE1)
                         .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
                         .clearBuffer(Buffer.CACHE1)
-                        .copyArgument(argData, Buffer.CACHE1)
-                        .ifEqual(argStakingType, "00",
+                        // Show staking info for FANTOM only if the to address is 0xfc00face00000000000000000000000000000000
+                        .ifEqual(argTo, "fc00face00000000000000000000000000000000", 
+                                new ScriptAssembler()
+                                        .ifEqual(argChainId, "fa0000000000", StakingDisplay, 
+                                                new ScriptAssembler()
+                                                        .showWrap("SMART", "")
+                                                        .getScript())
+                                        .getScript(),
                                 new ScriptAssembler()
                                         .showWrap("SMART", "")
-                                        .getScript(), StakingDisplay + 
-                                new ScriptAssembler()
-                                        .copyString("494420", Buffer.CACHE2)
-                                        .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 4, 32), Buffer.CACHE2, 0, ScriptAssembler.decimalCharset, ScriptAssembler.leftJustify)
-                                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .clearBuffer(Buffer.CACHE2)
                                         .getScript())
-                        // Display amount for delegate
-                        .ifEqual(argStakingType, "01",
-                                new ScriptAssembler()
-                                        .showAmount(argValue, 18)
-                                        .getScript(), "")
-                        // Display amount for undelegate
-                        .ifEqual(argStakingType, "03",
-                                new ScriptAssembler()
-                                        // The last 32 byte of argData is undelegate amount
-                                        .showAmount(ScriptData.getBuffer(Buffer.CACHE1, 68, 32), 18)
-                                        .getScript(), "")
-                        .clearBuffer(Buffer.CACHE1)
                         .showPressButton()
                         // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
                         // sign=01=ECDSA
