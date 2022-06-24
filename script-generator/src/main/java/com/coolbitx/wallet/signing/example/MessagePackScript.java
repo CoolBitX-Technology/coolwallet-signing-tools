@@ -26,56 +26,56 @@ public class MessagePackScript {
     public static String getApplicationCallTransaction3() {
         String TX = HexUtil.toHexString("TX".getBytes());
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData apaaPresent = sac.getArgumentRLPItem();
-        ScriptData apaaValue1 = sac.getArgumentRLPItem();
-        ScriptData apaaValue2 = sac.getArgumentRLPItem();
-        ScriptData apaaValue3 = sac.getArgumentRLPItem();
-        ScriptData apaaValue4 = sac.getArgumentRLPItem();
-        ScriptData apaaValue5 = sac.getArgumentRLPItem();
-        ScriptData apaaValue6 = sac.getArgumentRLPItem();
-        ScriptData apanValue = sac.getArgumentRLPItem();
-        ScriptData apasPresent = sac.getArgumentRLPItem();
-        ScriptData apasValue1 = sac.getArgumentRLPItem();
-        ScriptData apasValue2 = sac.getArgumentRLPItem();
-        ScriptData apasValue3 = sac.getArgumentRLPItem();
-        ScriptData apasValue4 = sac.getArgumentRLPItem();
-        ScriptData apasValue5 = sac.getArgumentRLPItem();
-        ScriptData apasValue6 = sac.getArgumentRLPItem();
-        ScriptData apatPresent = sac.getArgumentRLPItem();
-        ScriptData apatValue1 = sac.getArgumentRLPItem();
-        ScriptData apatValue2 = sac.getArgumentRLPItem();
-        ScriptData apatValue3 = sac.getArgumentRLPItem();
-        ScriptData apatValue4 = sac.getArgumentRLPItem();
-        ScriptData apatValue5 = sac.getArgumentRLPItem();
-        ScriptData apatValue6 = sac.getArgumentRLPItem();
-        ScriptData apfaPresent = sac.getArgumentRLPItem();
-        ScriptData apfaValue1 = sac.getArgumentRLPItem();
-        ScriptData apfaValue2 = sac.getArgumentRLPItem();
-        ScriptData apfaValue3 = sac.getArgumentRLPItem();
-        ScriptData apfaValue4 = sac.getArgumentRLPItem();
-        ScriptData apfaValue5 = sac.getArgumentRLPItem();
-        ScriptData apfaValue6 = sac.getArgumentRLPItem();
-        ScriptData apidValue = sac.getArgumentRLPItem();
-        ScriptData feeValue = sac.getArgumentRLPItem();
-        ScriptData fvValue = sac.getArgumentRLPItem();
+        ScriptData apaaPresent = sac.getArgumentRlpItem();
+        ScriptData apaaValue1 = sac.getArgumentRlpItem();
+        ScriptData apaaValue2 = sac.getArgumentRlpItem();
+        ScriptData apaaValue3 = sac.getArgumentRlpItem();
+        ScriptData apaaValue4 = sac.getArgumentRlpItem();
+        ScriptData apaaValue5 = sac.getArgumentRlpItem();
+        ScriptData apaaValue6 = sac.getArgumentRlpItem();
+        ScriptData apanValue = sac.getArgumentRlpItem();
+        ScriptData apasPresent = sac.getArgumentRlpItem();
+        ScriptData apasValue1 = sac.getArgumentRlpItem();
+        ScriptData apasValue2 = sac.getArgumentRlpItem();
+        ScriptData apasValue3 = sac.getArgumentRlpItem();
+        ScriptData apasValue4 = sac.getArgumentRlpItem();
+        ScriptData apasValue5 = sac.getArgumentRlpItem();
+        ScriptData apasValue6 = sac.getArgumentRlpItem();
+        ScriptData apatPresent = sac.getArgumentRlpItem();
+        ScriptData apatValue1 = sac.getArgumentRlpItem();
+        ScriptData apatValue2 = sac.getArgumentRlpItem();
+        ScriptData apatValue3 = sac.getArgumentRlpItem();
+        ScriptData apatValue4 = sac.getArgumentRlpItem();
+        ScriptData apatValue5 = sac.getArgumentRlpItem();
+        ScriptData apatValue6 = sac.getArgumentRlpItem();
+        ScriptData apfaPresent = sac.getArgumentRlpItem();
+        ScriptData apfaValue1 = sac.getArgumentRlpItem();
+        ScriptData apfaValue2 = sac.getArgumentRlpItem();
+        ScriptData apfaValue3 = sac.getArgumentRlpItem();
+        ScriptData apfaValue4 = sac.getArgumentRlpItem();
+        ScriptData apfaValue5 = sac.getArgumentRlpItem();
+        ScriptData apfaValue6 = sac.getArgumentRlpItem();
+        ScriptData apidValue = sac.getArgumentRlpItem();
+        ScriptData feeValue = sac.getArgumentRlpItem();
+        ScriptData fvValue = sac.getArgumentRlpItem();
         // GenesisID
-        ScriptData genValue = sac.getArgumentRLPItem();
+        ScriptData genValue = sac.getArgumentRlpItem();
         // Group
-        ScriptData grpValue = sac.getArgumentRLPItem();
+        ScriptData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
-        ScriptData ghValue = sac.getArgumentRLPItem();
+        ScriptData ghValue = sac.getArgumentRlpItem();
         // Last Valid
-        ScriptData lvValue = sac.getArgumentRLPItem();
+        ScriptData lvValue = sac.getArgumentRlpItem();
         // Lease
-        ScriptData lxValue = sac.getArgumentRLPItem();
+        ScriptData lxValue = sac.getArgumentRlpItem();
         // Note
-        ScriptData noteValue = sac.getArgumentRLPItem();
+        ScriptData noteValue = sac.getArgumentRlpItem();
         // Rekey To
-        ScriptData rekeyValue = sac.getArgumentRLPItem();
+        ScriptData rekeyValue = sac.getArgumentRlpItem();
         // Sender
-        ScriptData sndValue = sac.getArgumentRLPItem();
+        ScriptData sndValue = sac.getArgumentRlpItem();
         // Type
-        ScriptData typeValue = sac.getArgumentRLPItem();
+        ScriptData typeValue = sac.getArgumentRlpItem();
 
         String script = new ScriptAssembler().setCoinType(0x11B)
             .arrayPointer()

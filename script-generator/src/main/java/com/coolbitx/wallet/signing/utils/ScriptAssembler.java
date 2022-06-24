@@ -30,21 +30,18 @@ public class ScriptAssembler {
     public static final int zeroInherit = 0x04;
     public static final int bitLeftJustify8to5 = 0x08;
     public static final int inLittleEndian = 0x10;
-
-    private static String firstParameter, secondParameter;
     public static final String throwSEError = "FF00";
-
-    private static int argumentOffset = 0;
 
     private versionType version;
     private String script;
-
-    private static String argType = "00";
+    private String firstParameter, secondParameter;
+    private String argType = "00";
 
     public ScriptAssembler() {
         this.version = versionType.version00;
         this.script = "";
         argType = "00";
+        clearParameter();
     }
 
     public String getScript() {
@@ -131,7 +128,7 @@ public class ScriptAssembler {
         return this;
     }
 
-    private static String compose(String command, ScriptData dataBuf, Buffer destBuf, int arg0, int arg1) {
+    private String compose(String command, ScriptData dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
         if (dataBuf == null) {
             firstParameter += "0";
@@ -182,11 +179,11 @@ public class ScriptAssembler {
         return command + firstParameter + secondParameter;
     }
 
-    private static void clearParameter() {
+    private void clearParameter() {
         firstParameter = secondParameter = "";
     }
 
-    private static void addIntParameter(int i) {
+    private void addIntParameter(int i) {
         switch (i) {
             case 0:
                 firstParameter += "0";
@@ -625,7 +622,7 @@ public class ScriptAssembler {
      * @param script The script want to skip.
      * @return
      */
-    public static String skip(String script) {
+    public String skip(String script) {
         return compose("15", null, null, script.length() / 2, 0);
     }
 

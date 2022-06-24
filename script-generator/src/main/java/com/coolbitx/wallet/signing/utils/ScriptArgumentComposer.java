@@ -85,7 +85,7 @@ public class ScriptArgumentComposer {
      * </code>
      * @return Buffer data with the rest argument length.
      */
-    public ScriptData getArgumentRLPItem() {
+    public ScriptData getArgumentRlpItem() {
         return ScriptData.getBuffer(Buffer.RLP_ITEM, rlpCount++, ScriptData.rlpItem);
     }
 
