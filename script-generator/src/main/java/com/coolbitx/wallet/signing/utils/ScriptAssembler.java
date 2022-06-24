@@ -39,9 +39,12 @@ public class ScriptAssembler {
     private versionType version;
     private String script;
 
+    private static String argType = "00";
+
     public ScriptAssembler() {
         this.version = versionType.version00;
         this.script = "";
+        argType = "00";
     }
 
     public String getScript() {
@@ -100,7 +103,8 @@ public class ScriptAssembler {
         version02(2, "02"),
         version03(3, "03"),
         version04(4, "04"),
-        version05(5, "05");
+        version05(5, "05"),
+        version06(6, "06");
         private final int versionNum;
         private final String versionLabel;
 
@@ -119,7 +123,11 @@ public class ScriptAssembler {
     }
 
     public ScriptAssembler setHeader(HashType hash, SignType sign) {
-        script = "03" + version.versionLabel + hash + sign + script;
+        if (!argType.equals("01")) {
+            script = "03" + version.versionLabel + hash + sign + script;
+        } else {
+            script = "05" + version.versionLabel + hash + sign + "00" + argType + script;
+        }
         return this;
     }
 
@@ -131,6 +139,10 @@ public class ScriptAssembler {
             switch (dataBuf.bufferType) {
                 case ARGUMENT:
                     firstParameter += "A";
+                    break;
+                case RLP_ITEM:
+                    firstParameter += "B";
+                    argType = "01";
                     break;
                 case TRANSACTION:
                     firstParameter += "7";
@@ -190,6 +202,10 @@ public class ScriptAssembler {
                 break;
             case 64:
                 firstParameter += "6";
+                break;
+            case ScriptData.rlpItem:
+                firstParameter += "A";
+                argType = "01";
                 break;
             case ScriptData.bufInt:
                 firstParameter += "B";
@@ -629,7 +645,7 @@ public class ScriptAssembler {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        if (argData.length == ScriptData.bufInt || argData.length < 0) {
+        if (argData.length == ScriptData.bufInt || argData.length == ScriptData.rlpItem || argData.length < 0) {
             argData.length = expect.length() / 2;
             restore = true;
         }
@@ -639,6 +655,18 @@ public class ScriptAssembler {
         if (restore) {
             argData.length = tempLength;
         }
+        return this;
+    }
+
+    public ScriptAssembler isEmpty(ScriptData argData, String trueStatement, String falseStatement) {
+        if (version.getVersionNum() < 6) {
+            version = versionType.version06;
+        }
+        if (!falseStatement.equals("")) {
+            trueStatement += skip(falseStatement);
+        }
+        script += compose("1C", argData, null, trueStatement.length() / 2, 0)
+            + trueStatement + falseStatement;
         return this;
     }
 
@@ -882,6 +910,9 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler messagePack(int type, ScriptData data, Buffer destinationBuf) {
+        if (version.getVersionNum() < 6) {
+            version = versionType.version06;
+        }
         script += compose("C5", data, destinationBuf, type, 0);
         return this;
     }
@@ -896,6 +927,9 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler messagePack(String data, Buffer destinationBuf) {
+        if (version.getVersionNum() < 6) {
+            version = versionType.version06;
+        }
         script += compose("C8", null, destinationBuf, data.length() / 2, 0) + data;
         return this;
     }
