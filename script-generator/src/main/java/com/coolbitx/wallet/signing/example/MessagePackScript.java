@@ -10,8 +10,6 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
-import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
-import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_MESSAGE_PACK_ARRAY;
 import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_MESSAGE_PACK_MAP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
@@ -236,7 +234,7 @@ public class MessagePackScript {
                 .baseConvert(ID, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
                 .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .showPressButton()
-                .setHeader(ScriptAssembler.HashType.SHA512256, ScriptAssembler.SignType.ECDSA)
+                .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
         return script;
     }
@@ -317,7 +315,7 @@ public class MessagePackScript {
                 //                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
                 //                .showAmount(argAmount, 6)
                 .showPressButton()
-                .setHeader(HashType.SHA512256, SignType.ECDSA)
+                .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
         return script;
     }
