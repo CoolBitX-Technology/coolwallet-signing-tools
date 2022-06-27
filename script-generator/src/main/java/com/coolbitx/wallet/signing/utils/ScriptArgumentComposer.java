@@ -16,9 +16,11 @@ import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 public class ScriptArgumentComposer {
 
     private int offset;
+    private int rlpCount;
 
     public ScriptArgumentComposer() {
         this.offset = 0;
+        this.rlpCount = 0;
     }
 
     /**
@@ -71,6 +73,20 @@ public class ScriptArgumentComposer {
         ScriptData db = ScriptData.getBuffer(Buffer.ARGUMENT, this.offset, ScriptData.bufInt);
         this.offset += length;
         return db;
+    }
+
+    /**
+     * Get an argument which length is determined by argument(Encoded in rlp).
+     *
+     * <code>
+     *   // The argument of address should be:
+     *   // 94(RLP encoded prefix) 2b0b9ae953fca925f0aeb04dec3054b996a05ed1(address in hex)
+     *   ScriptData address = sac.getArgumentRLPItem();
+     * </code>
+     * @return Buffer data with the rest argument length.
+     */
+    public ScriptData getArgumentRlpItem() {
+        return ScriptData.getBuffer(Buffer.RLP_ITEM, rlpCount++, ScriptData.rlpItem);
     }
 
     /**
