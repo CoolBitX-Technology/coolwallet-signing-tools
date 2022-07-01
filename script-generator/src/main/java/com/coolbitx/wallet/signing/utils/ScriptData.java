@@ -13,13 +13,11 @@ public class ScriptData implements ScriptDataInterface {
 
     public enum Buffer {
         ARGUMENT,
-//        RLP_ITEM,
         TRANSACTION,
         CACHE1,
         CACHE2;
     }
 
-//    public static final int rlpItem = 77777777;
     public static final int bufInt = 88888888;
     public static final int max = 99999999;
 

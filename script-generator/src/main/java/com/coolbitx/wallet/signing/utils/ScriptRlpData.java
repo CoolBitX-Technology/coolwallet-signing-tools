@@ -15,7 +15,6 @@ public class ScriptRlpData implements ScriptDataInterface {
         RLP_ITEM;
     }
 
-    public static final int rlpItem = 77777777;
 
     protected Buffer bufferType;
     private int rlpCount;
@@ -46,7 +45,7 @@ public class ScriptRlpData implements ScriptDataInterface {
 
     @Override
     public int getBufferParameter2() {
-        return rlpItem;
+        return 0;
     }
 
     @Override

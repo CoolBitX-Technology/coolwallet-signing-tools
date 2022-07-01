@@ -154,7 +154,7 @@ public class ScriptAssembler {
             addIntParameter(dataBuf.getBufferParameter2());
         } else if (dataBuf instanceof ScriptRlpData) {
             argType = "01";
-            
+
             ScriptRlpData dataBuf_ = (ScriptRlpData) dataBuf;
             firstParameter += "B";
             addIntParameter(dataBuf_.getBufferParameter1());
@@ -646,9 +646,14 @@ public class ScriptAssembler {
             trueStatement += skip(falseStatement);
         }
         int argDataLength = argData.getBufferParameter2();
-        if (argDataLength == ScriptData.bufInt || argDataLength == ScriptRlpData.rlpItem || argDataLength < 0) {
+        if (argData instanceof ScriptRlpData) {
             argData.setBufferParameter2(expect.length() / 2);
             restore = true;
+        } else if (argData instanceof ScriptData) {
+            if (argDataLength == ScriptData.bufInt || argDataLength < 0) {
+                argData.setBufferParameter2(expect.length() / 2);
+                restore = true;
+            }
         }
         script += compose("1A", argData, null, trueStatement.length() / 2, 0)
                 + HexUtil.rightJustify(expect, Math.abs(argDataLength))
