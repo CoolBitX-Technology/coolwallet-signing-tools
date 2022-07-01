@@ -9,11 +9,13 @@ import com.coolbitx.wallet.signing.utils.Hex;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
-import com.coolbitx.wallet.signing.utils.ScriptData;
 import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_MESSAGE_PACK_ARRAY;
 import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_MESSAGE_PACK_MAP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
+import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptRlpArgumentComposer;
+import com.coolbitx.wallet.signing.utils.ScriptRlpData;
 
 public class MessagePackScript {
 
@@ -23,57 +25,57 @@ public class MessagePackScript {
     
     public static String getApplicationCallTransaction3() {
         String TX = HexUtil.toHexString("TX".getBytes());
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData apaaPresent = sac.getArgumentRlpItem();
-        ScriptData apaaValue1 = sac.getArgumentRlpItem();
-        ScriptData apaaValue2 = sac.getArgumentRlpItem();
-        ScriptData apaaValue3 = sac.getArgumentRlpItem();
-        ScriptData apaaValue4 = sac.getArgumentRlpItem();
-        ScriptData apaaValue5 = sac.getArgumentRlpItem();
-        ScriptData apaaValue6 = sac.getArgumentRlpItem();
-        ScriptData apanValue = sac.getArgumentRlpItem();
-        ScriptData apasPresent = sac.getArgumentRlpItem();
-        ScriptData apasValue1 = sac.getArgumentRlpItem();
-        ScriptData apasValue2 = sac.getArgumentRlpItem();
-        ScriptData apasValue3 = sac.getArgumentRlpItem();
-        ScriptData apasValue4 = sac.getArgumentRlpItem();
-        ScriptData apasValue5 = sac.getArgumentRlpItem();
-        ScriptData apasValue6 = sac.getArgumentRlpItem();
-        ScriptData apatPresent = sac.getArgumentRlpItem();
-        ScriptData apatValue1 = sac.getArgumentRlpItem();
-        ScriptData apatValue2 = sac.getArgumentRlpItem();
-        ScriptData apatValue3 = sac.getArgumentRlpItem();
-        ScriptData apatValue4 = sac.getArgumentRlpItem();
-        ScriptData apatValue5 = sac.getArgumentRlpItem();
-        ScriptData apatValue6 = sac.getArgumentRlpItem();
-        ScriptData apfaPresent = sac.getArgumentRlpItem();
-        ScriptData apfaValue1 = sac.getArgumentRlpItem();
-        ScriptData apfaValue2 = sac.getArgumentRlpItem();
-        ScriptData apfaValue3 = sac.getArgumentRlpItem();
-        ScriptData apfaValue4 = sac.getArgumentRlpItem();
-        ScriptData apfaValue5 = sac.getArgumentRlpItem();
-        ScriptData apfaValue6 = sac.getArgumentRlpItem();
-        ScriptData apidValue = sac.getArgumentRlpItem();
-        ScriptData feeValue = sac.getArgumentRlpItem();
-        ScriptData fvValue = sac.getArgumentRlpItem();
+        ScriptRlpArgumentComposer sac = new ScriptRlpArgumentComposer();
+        ScriptRlpData apaaPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apanValue = sac.getArgumentRlpItem();
+        ScriptRlpData apasPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apatPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apidValue = sac.getArgumentRlpItem();
+        ScriptRlpData feeValue = sac.getArgumentRlpItem();
+        ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
-        ScriptData genValue = sac.getArgumentRlpItem();
+        ScriptRlpData genValue = sac.getArgumentRlpItem();
         // Group
-        ScriptData grpValue = sac.getArgumentRlpItem();
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
-        ScriptData ghValue = sac.getArgumentRlpItem();
+        ScriptRlpData ghValue = sac.getArgumentRlpItem();
         // Last Valid
-        ScriptData lvValue = sac.getArgumentRlpItem();
+        ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
-        ScriptData lxValue = sac.getArgumentRlpItem();
+        ScriptRlpData lxValue = sac.getArgumentRlpItem();
         // Note
-        ScriptData noteValue = sac.getArgumentRlpItem();
+        ScriptRlpData noteValue = sac.getArgumentRlpItem();
         // Rekey To
-        ScriptData rekeyValue = sac.getArgumentRlpItem();
+        ScriptRlpData rekeyValue = sac.getArgumentRlpItem();
         // Sender
-        ScriptData sndValue = sac.getArgumentRlpItem();
+        ScriptRlpData sndValue = sac.getArgumentRlpItem();
         // Type
-        ScriptData typeValue = sac.getArgumentRlpItem();
+        ScriptRlpData typeValue = sac.getArgumentRlpItem();
 
         String script = new ScriptAssembler().setCoinType(0x11B)
             .arrayPointer()
