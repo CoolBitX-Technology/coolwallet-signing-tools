@@ -230,12 +230,19 @@ public class EthScript {
                 .arrayPointer()
                 // chainId
                 .copyString("01")
+                //.copyString("03") // Ropsten chainId
                 .rlpString(argNonce)
                 .rlpString(argGasTipCap)
                 .rlpString(argGasFeeCap)
                 .rlpString(argGasLimit)
-                .copyString("94")
-                .copyArgument(argTo)
+                .ifEqual(argTo, emptyAddress, 
+                        new ScriptAssembler()
+                                .copyString("80")
+                                .getScript(), 
+                        new ScriptAssembler()
+                                .copyString("94")
+                                .copyArgument(argTo)
+                                .getScript())
                 .rlpString(argValue)
                 .rlpDataPlaceholder(argData)
                 // accessList
@@ -247,7 +254,9 @@ public class EthScript {
     }
 
     public static String ETHEIP1559SmartSegmentScriptSignature
-            = "003045022100F994CBD35DA01724AE1189B299F80FB5DD6A304EB0C27E5DBA7B9AD6588C92E70220170BBE5ADFF78C30FDA82784ED4C647D6D855EBACC5F13D8C171C5E529E1AF39";
+            = Strings.padStart(
+                "304402204FB15EF6265448A62E72CDB21FA585F97D05DE852AFC08CC792FCE1C3CAA472802204DD8B51801089F1D510222664D6D7A9D291671FAC8480458EA5D19E5B354B976",
+                144, '0');
 
     /*
     E7
@@ -445,13 +454,21 @@ public class EthScript {
                 // gasLimit
                 .rlpString(argGasLimit)
                 // toAddress
-                .copyString("94").copyArgument(argTo)
+                .ifEqual(argTo, emptyAddress, 
+                        new ScriptAssembler()
+                                .copyString("80")
+                                .getScript(), 
+                        new ScriptAssembler()
+                                .copyString("94")
+                                .copyArgument(argTo)
+                                .getScript())
                 // value
                 .rlpString(argValue)
                 // data
                 .rlpDataPlaceholder(argData)
                 // chainId v
                 .copyString("01", Buffer.CACHE1)
+                //.copyString("03", Buffer.CACHE1)  // Ropsten chainId
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
                 .arrayEnd(TYPE_RLP)
@@ -465,7 +482,9 @@ public class EthScript {
     }
 
     public static String EtherContractBlindSegmentScriptSignature
-            = "003045022060FC29B9ACA3BDFA237ED377E410A9A9BB12FB88416C06298857AE17D688992D022100F87D2C80BBECDC7192FF64D13A28F7763D6E1610FC1B1254B3D6446822CBA414";
+            = Strings.padStart(
+                "30450220418A010D1F92DAD570FE7D74424BB28927A14474AB68A008440EB4B49F2B77E30221008C3E598B4BE9D33F54C8C04B40AF5136733FE497791A2E43D107EE53E4D87DD6",
+                144, '0');
 
     public static String getEtherMessageBlindScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
