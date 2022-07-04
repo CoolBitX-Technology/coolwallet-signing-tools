@@ -16,9 +16,11 @@ import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 public class ScriptArgumentComposer {
 
     private int offset;
+    private int rlpCount;
 
     public ScriptArgumentComposer() {
         this.offset = 0;
+        this.rlpCount = 0;
     }
 
     /**
