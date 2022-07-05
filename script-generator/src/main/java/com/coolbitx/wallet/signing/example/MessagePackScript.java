@@ -9,277 +9,202 @@ import com.coolbitx.wallet.signing.utils.Hex;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
-import com.coolbitx.wallet.signing.utils.ScriptData;
-import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
-import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_MESSAGE_PACK_ARRAY;
 import static com.coolbitx.wallet.signing.utils.ScriptAssembler.TYPE_MESSAGE_PACK_MAP;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
+import com.coolbitx.wallet.signing.utils.ScriptData;
+import com.coolbitx.wallet.signing.utils.ScriptRlpArgumentComposer;
+import com.coolbitx.wallet.signing.utils.ScriptRlpData;
 
 public class MessagePackScript {
 
     public static void listAll() {
-        System.out.println("Xrp: \n" + getTransferScript() + "\n");
+        System.out.println("Algorand: \n" + getTransferScript() + "\n");
     }
     
     public static String getApplicationCallTransaction3() {
         String TX = HexUtil.toHexString("TX".getBytes());
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-
-        // App Arguments
-        ScriptData apaaPresent = sac.getArgument(1);
-        // App Argument 1
-        ScriptData apaaValue1Present = sac.getArgument(1);
-        ScriptData apaaValue1 = sac.getArgumentRightJustified(1024);
-        // App Argument 2
-        ScriptData apaaValue2Present = sac.getArgument(1);
-        ScriptData apaaValue2 = sac.getArgumentRightJustified(1024);
-        // App Argument 3
-        ScriptData apaaValue3Present = sac.getArgument(1);
-        ScriptData apaaValue3 = sac.getArgumentRightJustified(1024);
-        // App Argument 4
-        ScriptData apaaValue4Present = sac.getArgument(1);
-        ScriptData apaaValue4 = sac.getArgumentRightJustified(1024);
-        // App Argument 5
-        ScriptData apaaValue5Present = sac.getArgument(1);
-        ScriptData apaaValue5 = sac.getArgumentRightJustified(1024);
-        // App Argument 6
-        ScriptData apaaValue6Present = sac.getArgument(1);
-        ScriptData apaaValue6 = sac.getArgumentRightJustified(1024);
-
-        // On Complete
-        ScriptData apanPresent = sac.getArgument(1);
-        ScriptData apanValue = sac.getArgumentRightJustified(8);
-
-        // Foreign Asset
-        ScriptData apasPresent = sac.getArgument(1);
-        // Foreign Asset 1
-        ScriptData apasValue1Present = sac.getArgument(1);
-        ScriptData apasValue1 = sac.getArgumentRightJustified(8);
-        // Foreign Asset 2
-        ScriptData apasValue2Present = sac.getArgument(1);
-        ScriptData apasValue2 = sac.getArgumentRightJustified(8);
-        // Foreign Asset 3
-        ScriptData apasValue3Present = sac.getArgument(1);
-        ScriptData apasValue3 = sac.getArgumentRightJustified(8);
-        // Foreign Asset 4
-        ScriptData apasValue4Present = sac.getArgument(1);
-        ScriptData apasValue4 = sac.getArgumentRightJustified(8);
-        // Foreign Asset 5
-        ScriptData apasValue5Present = sac.getArgument(1);
-        ScriptData apasValue5 = sac.getArgumentRightJustified(8);
-        // Foreign Asset 6
-        ScriptData apasValue6Present = sac.getArgument(1);
-        ScriptData apasValue6 = sac.getArgumentRightJustified(8);
-
-        // Accounts
-        ScriptData apatPresent = sac.getArgument(1);
-        // Accounts 1
-        ScriptData apatValue1Present = sac.getArgument(1);
-        ScriptData apatValue1 = sac.getArgumentRightJustified(32);
-        // Accounts 2
-        ScriptData apatValue2Present = sac.getArgument(1);
-        ScriptData apatValue2 = sac.getArgumentRightJustified(32);
-        // Accounts 3
-        ScriptData apatValue3Present = sac.getArgument(1);
-        ScriptData apatValue3 = sac.getArgumentRightJustified(32);
-        // Accounts 4
-        ScriptData apatValue4Present = sac.getArgument(1);
-        ScriptData apatValue4 = sac.getArgumentRightJustified(32);
-        // Accounts 5
-        ScriptData apatValue5Present = sac.getArgument(1);
-        ScriptData apatValue5 = sac.getArgumentRightJustified(32);
-        // Accounts 6
-        ScriptData apatValue6Present = sac.getArgument(1);
-        ScriptData apatValue6 = sac.getArgumentRightJustified(32);
-
-        // Foreign App
-        ScriptData apfaPresent = sac.getArgument(1);
-        // Foreign App 1
-        ScriptData apfaValue1Present = sac.getArgument(1);
-        ScriptData apfaValue1 = sac.getArgumentRightJustified(8);
-        // Foreign App 2
-        ScriptData apfaValue2Present = sac.getArgument(1);
-        ScriptData apfaValue2 = sac.getArgumentRightJustified(8);
-        // Foreign App 3
-        ScriptData apfaValue3Present = sac.getArgument(1);
-        ScriptData apfaValue3 = sac.getArgumentRightJustified(8);
-        // Foreign App 4
-        ScriptData apfaValue4Present = sac.getArgument(1);
-        ScriptData apfaValue4 = sac.getArgumentRightJustified(8);
-        // Foreign App 5
-        ScriptData apfaValue5Present = sac.getArgument(1);
-        ScriptData apfaValue5 = sac.getArgumentRightJustified(8);
-        // Foreign App 6
-        ScriptData apfaValue6Present = sac.getArgument(1);
-        ScriptData apfaValue6 = sac.getArgumentRightJustified(8);
-
-        // Application ID
-        ScriptData apidPresent = sac.getArgument(1);
-        ScriptData apidValue = sac.getArgumentRightJustified(8);
-
-        // Fee
-        ScriptData feePresent = sac.getArgument(1);
-        ScriptData feeValue = sac.getArgumentRightJustified(8);
-        // First Valid
-        ScriptData fvPresent = sac.getArgument(1);
-        ScriptData fvValue = sac.getArgumentRightJustified(8);
+        ScriptRlpArgumentComposer sac = new ScriptRlpArgumentComposer();
+        ScriptRlpData apaaPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apaaValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apanValue = sac.getArgumentRlpItem();
+        ScriptRlpData apasPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apasValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apatPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apatValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaPresent = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue1 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue2 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue3 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue4 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue5 = sac.getArgumentRlpItem();
+        ScriptRlpData apfaValue6 = sac.getArgumentRlpItem();
+        ScriptRlpData apidValue = sac.getArgumentRlpItem();
+        ScriptRlpData feeValue = sac.getArgumentRlpItem();
+        ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
-        ScriptData genPresent = sac.getArgument(1);
-        ScriptData genValue = sac.getArgumentRightJustified(32);
+        ScriptRlpData genValue = sac.getArgumentRlpItem();
         // Group
-        ScriptData grpPresent = sac.getArgument(1);
-        ScriptData grpValue = sac.getArgumentRightJustified(32);
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
-        ScriptData ghPresent = sac.getArgument(1);
-        ScriptData ghValue = sac.getArgumentRightJustified(32);
+        ScriptRlpData ghValue = sac.getArgumentRlpItem();
         // Last Valid
-        ScriptData lvPresent = sac.getArgument(1);
-        ScriptData lvValue = sac.getArgumentRightJustified(8);
+        ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
-        ScriptData lxPresent = sac.getArgument(1);
-        ScriptData lxValue = sac.getArgumentRightJustified(32);
+        ScriptRlpData lxValue = sac.getArgumentRlpItem();
         // Note
-        ScriptData notePresent = sac.getArgument(1);
-        ScriptData noteValue = sac.getArgumentRightJustified(1024);
+        ScriptRlpData noteValue = sac.getArgumentRlpItem();
         // Rekey To
-        ScriptData rekeyPresent = sac.getArgument(1);
-        ScriptData rekeyValue = sac.getArgumentRightJustified(32);
+        ScriptRlpData rekeyValue = sac.getArgumentRlpItem();
         // Sender
-        ScriptData sndPresent = sac.getArgument(1);
-        ScriptData sndValue = sac.getArgumentRightJustified(32);
+        ScriptRlpData sndValue = sac.getArgumentRlpItem();
         // Type
-        ScriptData typePresent = sac.getArgument(1);
-        ScriptData typeValue = sac.getArgumentRightJustified(8);
+        ScriptRlpData typeValue = sac.getArgumentRlpItem();
 
-        ScriptAssembler scriptAsb = new ScriptAssembler();
-        String script = scriptAsb.setCoinType(0x11B)
-                .arrayPointer()
-                .copyString(TX)
-                .arrayPointer()
-                .ifEqual(apaaPresent, "00",
-                        "", new ScriptAssembler()
-                                .messagePack(Hex.encode("apaa".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .arrayPointer()
-                                .ifEqual(apaaValue1Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue1, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apaaValue2Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue2, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apaaValue3Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue3, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apaaValue4Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue4, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apaaValue5Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue5, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apaaValue6Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue6, ScriptData.Buffer.TRANSACTION).getScript())
-                                .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
-                                .getScript())
-                .ifEqual(apanPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("apan".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeInt, apanValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(apasPresent, "00",
-                        "", new ScriptAssembler()
-                                .messagePack(Hex.encode("apas".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .arrayPointer()
-                                .ifEqual(apasValue1Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue1, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apasValue2Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue2, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apasValue3Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue3, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apasValue4Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue4, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apasValue5Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue5, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apasValue6Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue6, ScriptData.Buffer.TRANSACTION).getScript())
-                                .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
-                                .getScript())
-                .ifEqual(apatPresent, "00",
-                        "", new ScriptAssembler()
-                                .messagePack(Hex.encode("apat".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .arrayPointer()
-                                .ifEqual(apatValue1Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue1, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apatValue2Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue2, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apatValue3Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue3, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apatValue4Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue4, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apatValue5Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue5, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apatValue6Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue6, ScriptData.Buffer.TRANSACTION).getScript())
-                                .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
-                                .getScript())
-                .ifEqual(apfaPresent, "00",
-                        "", new ScriptAssembler()
-                                .messagePack(Hex.encode("apfa".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .arrayPointer()
-                                .ifEqual(apfaValue1Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue1, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apfaValue2Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue2, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apfaValue3Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue3, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apfaValue4Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue4, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apfaValue5Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue5, ScriptData.Buffer.TRANSACTION).getScript())
-                                .ifEqual(apfaValue6Present, "00",
-                                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue6, ScriptData.Buffer.TRANSACTION).getScript())
-                                .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
-                                .getScript())
-                .ifEqual(apidPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("apid".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeInt, apidValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(feePresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("fee".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeInt, feeValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(fvPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("fv".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeInt, fvValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(genPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(grpPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(ghPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(lvPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(lxPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("lx".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, lxValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(notePresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("note".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, noteValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(rekeyPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("rekey".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, rekeyValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(sndPresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("snd".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, sndValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .ifEqual(typePresent, "00",
-                        "", new ScriptAssembler().messagePack(Hex.encode("type".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeString, typeValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .arrayEnd(TYPE_MESSAGE_PACK_MAP)
-                .showMessage("ALGO")
-                .showMessage("appl")
-                .ifEqual(apidPresent, "00",
-                        "", new ScriptAssembler().showMessage("appID").baseConvert(apidValue, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
-                                .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1)).clearBuffer(ScriptData.Buffer.CACHE1).getScript())
-                .showPressButton()
-                .setHeader(ScriptAssembler.HashType.SHA512256, ScriptAssembler.SignType.ECDSA)
-                .getScript();
+        String script = new ScriptAssembler().setCoinType(0x11B)
+            .arrayPointer()
+            .copyString(TX)
+            .arrayPointer()
+            .isEmpty(apaaPresent,
+                "", new ScriptAssembler()
+                    .messagePack(Hex.encode("apaa".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .arrayPointer()
+                    .isEmpty(apaaValue1,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue1, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apaaValue2,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue2, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apaaValue3,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue3, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apaaValue4,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue4, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apaaValue5,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue5, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apaaValue6,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apaaValue6, ScriptData.Buffer.TRANSACTION).getScript())
+                    .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
+                    .getScript())
+            .isEmpty(apanValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("apan".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeInt, apanValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(apasPresent,
+                "", new ScriptAssembler()
+                    .messagePack(Hex.encode("apas".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .arrayPointer()
+                    .isEmpty(apasValue1,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue1, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apasValue2,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue2, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apasValue3,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue3, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apasValue4,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue4, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apasValue5,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue5, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apasValue6,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apasValue6, ScriptData.Buffer.TRANSACTION).getScript())
+                    .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
+                    .getScript())
+            .isEmpty(apatPresent,
+                "", new ScriptAssembler()
+                    .messagePack(Hex.encode("apat".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .arrayPointer()
+                    .isEmpty(apatValue1,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue1, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apatValue2,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue2, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apatValue3,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue3, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apatValue4,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue4, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apatValue5,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue5, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apatValue6,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeBinary, apatValue6, ScriptData.Buffer.TRANSACTION).getScript())
+                    .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
+                    .getScript())
+            .isEmpty(apfaPresent,
+                "", new ScriptAssembler()
+                    .messagePack(Hex.encode("apfa".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .arrayPointer()
+                    .isEmpty(apfaValue1,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue1, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apfaValue2,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue2, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apfaValue3,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue3, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apfaValue4,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue4, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apfaValue5,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue5, ScriptData.Buffer.TRANSACTION).getScript())
+                    .isEmpty(apfaValue6,
+                        "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue6, ScriptData.Buffer.TRANSACTION).getScript())
+                    .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
+                    .getScript())
+            .isEmpty(apidValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("apid".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeInt, apidValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(feeValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("fee".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeInt, feeValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(fvValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("fv".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeInt, fvValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(genValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(grpValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(ghValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(lvValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(lxValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("lx".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeBinary, lxValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(noteValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("note".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeBinary, noteValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(rekeyValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("rekey".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeBinary, rekeyValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(sndValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("snd".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeBinary, sndValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .isEmpty(typeValue,
+                "", new ScriptAssembler().messagePack(Hex.encode("type".getBytes()), ScriptData.Buffer.TRANSACTION)
+                    .messagePack(ScriptAssembler.typeString, typeValue, ScriptData.Buffer.TRANSACTION).getScript())
+            .arrayEnd(TYPE_MESSAGE_PACK_MAP)
+            .showMessage("ALGO")
+            .showMessage("appl")
+            .isEmpty(apidValue,
+                "", new ScriptAssembler().showMessage("appID").baseConvert(apidValue, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
+                    .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1)).clearBuffer(ScriptData.Buffer.CACHE1).getScript())
+            .showPressButton()
+            .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
+            .getScript();
         return script;
     }
+
+    public static String ApplicationIDScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getAddressScript() {
         String TX = HexUtil.toHexString("TX".getBytes());
@@ -311,7 +236,7 @@ public class MessagePackScript {
                 .baseConvert(ID, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
                 .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .showPressButton()
-                .setHeader(ScriptAssembler.HashType.SHA512256, ScriptAssembler.SignType.ECDSA)
+                .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
         return script;
     }
@@ -392,11 +317,11 @@ public class MessagePackScript {
                 //                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
                 //                .showAmount(argAmount, 6)
                 .showPressButton()
-                .setHeader(HashType.SHA512256, SignType.ECDSA)
+                .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
         return script;
     }
 
-    public static String Signature = Strings.padEnd("FA", 144, '0');
+    public static String TransferScriptSignature = Strings.padEnd("FA", 144, '0');
 
 }

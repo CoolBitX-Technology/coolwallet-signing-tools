@@ -9,11 +9,41 @@ package com.coolbitx.wallet.signing.utils;
  *
  * @author Hank Liu (hankliu@coolbitx.com)
  */
-public class ScriptData {
+public class ScriptData implements ScriptDataInterface {
+
+    public enum Buffer {
+        ARGUMENT,
+        TRANSACTION,
+        CACHE1,
+        CACHE2;
+    }
+
+    public static final int bufInt = 88888888;
+    public static final int max = 99999999;
 
     protected Buffer bufferType;
-    protected int offset;
-    protected int length;
+    private int offset;
+    private int length;
+
+    @Override
+    public int getBufferParameter1() {
+        return offset;
+    }
+
+    @Override
+    public void setBufferParameter1(int parameter) {
+        this.offset = parameter;
+    }
+
+    @Override
+    public int getBufferParameter2() {
+        return length;
+    }
+
+    @Override
+    public void setBufferParameter2(int parameter) {
+        this.length = parameter;
+    }
 
     private ScriptData(Buffer type, int offset, int length) {
         this.bufferType = type;
@@ -21,20 +51,10 @@ public class ScriptData {
         this.length = length;
     }
 
-    public static enum Buffer {
-        ARGUMENT,
-        TRANSACTION,
-        CACHE1,
-        CACHE2;
-    }
-
     @Override
     public String toString() {
         return "[" + "bufferType=" + bufferType + ", offset=" + offset + ", length=" + length + "]";
     }
-
-    public static final int bufInt = 88888888;
-    public static final int max = 99999999;
 
     public static ScriptData getBuffer(Buffer bufferType, int offset, int length) {
         return new ScriptData(bufferType, offset, length);
