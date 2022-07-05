@@ -211,6 +211,7 @@ public class EvmScript {
                     144,
                     '0');
 
+    private static final String emptyAddress = "0000000000000000000000000000000000000000";
     public static String getSmartContractScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -242,8 +243,14 @@ public class EvmScript {
                         // gasLimit
                         .rlpString(argGasLimit)
                         // toAddress
-                        .copyString("94")
-                        .copyArgument(argTo)
+                        .ifEqual(argTo, emptyAddress, 
+                                new ScriptAssembler()
+                                        .copyString("80")
+                                        .getScript(), 
+                                new ScriptAssembler()
+                                        .copyString("94")
+                                        .copyArgument(argTo)
+                                        .getScript())
                         // value
                         .rlpString(argValue)
                         // data
@@ -280,7 +287,7 @@ public class EvmScript {
 
     public static String SmartContractScriptSignature
             = Strings.padStart(
-                    "3045022100B8AAAB03BF6863E9817E371DEEF7F7280CD4A2F489D9B495CC2529783EE617FB022044C6D0BA4E5471BD0F2B3A10B2CA1F8A490BEEE956A8A7FC2A64594B4D05AA10",
+                    "30450221008D508FDA3E15A6BF55E681C8960B7DBECB82080C708EC1EC200CA8A37DC6367302203AB71C34F44359FD10508358A2C3953C26D173B06A4876C1DCEEE2657DFC26FF",
                     144,
                     '0');
 
@@ -315,8 +322,14 @@ public class EvmScript {
                         // gasLimit
                         .rlpString(argGasLimit)
                         // toAddress
-                        .copyString("94")
-                        .copyArgument(argTo)
+                        .ifEqual(argTo, emptyAddress, 
+                                new ScriptAssembler()
+                                        .copyString("80")
+                                        .getScript(), 
+                                new ScriptAssembler()
+                                        .copyString("94")
+                                        .copyArgument(argTo)
+                                        .getScript())
                         // value
                         .rlpString(argValue)
                         // data
@@ -353,7 +366,7 @@ public class EvmScript {
 
     public static String SmartContractSegmentScriptSignature
             = Strings.padStart(
-                    "30450220283BAE00DEF6E51D430DB1FAD4F66E5E063E161A83E23790A1C5BDC8FD16B0DD0221009A8D7F6CFB48E18EF3942BC9D6F99EE9077CDBD2BE3AAB04FAC6F3B94F7742E3",
+                    "3046022100CA24B84A65567CDCDD3FB73770804C4551FF332C360A36203442425730EDBC87022100DCB7E67EA5431A0CC050C8AE85D371A7977FC3F828497EA70287C13020593BD9",
                     144,
                     '0');
 
@@ -675,8 +688,14 @@ public class EvmScript {
                         .rlpString(argGasTipCap)
                         .rlpString(argGasFeeCap)
                         .rlpString(argGasLimit)
-                        .copyString("94")
-                        .copyArgument(argTo)
+                        .ifEqual(argTo, emptyAddress, 
+                                new ScriptAssembler()
+                                        .copyString("80")
+                                        .getScript(), 
+                                new ScriptAssembler()
+                                        .copyString("94")
+                                        .copyArgument(argTo)
+                                        .getScript())
                         .rlpString(argValue)
                         .rlpString(argData)
                         // accessList
@@ -708,7 +727,7 @@ public class EvmScript {
 
     public static String EIP1559SmartContractScriptSignature
             = Strings.padStart(
-                    "304502201E374F271D594996626AD958CC38EF9F294AB43216AC2F50F92A35F94349ED70022100BF0AF56BDAFF13D95647069BECF1B34A5EEED9200DD17255CFF69DEACA32CC5B",
+                    "3046022100D5A6DC2AD5987313B5CFF6856CB9363FBCBF7F3F611CF64AE6FBFF7FE459068D022100A61244F5DC81DFB10BBB6C6448E7ED48107539C8D0E4C6C669760D6CFD117021",
                     144,
                     '0');
 
@@ -746,8 +765,14 @@ public class EvmScript {
                         .rlpString(argGasTipCap)
                         .rlpString(argGasFeeCap)
                         .rlpString(argGasLimit)
-                        .copyString("94")
-                        .copyArgument(argTo)
+                        .ifEqual(argTo, emptyAddress, 
+                                new ScriptAssembler()
+                                        .copyString("80")
+                                        .getScript(), 
+                                new ScriptAssembler()
+                                        .copyString("94")
+                                        .copyArgument(argTo)
+                                        .getScript())
                         .rlpString(argValue)
                         .rlpDataPlaceholder(argData)
                         // accessList
@@ -777,7 +802,7 @@ public class EvmScript {
 
     public static String EIP1559SmartContractSegmentScriptSignature
             = Strings.padStart(
-                    "304502203AA1464B065974B32154ED243C1300E826EBE28EDDA64548858EB5A1F9D3D2460221008DB6C7AAFD98909E296DC08175C324E85F2B6C818E8A3E6DF830FB0419766B93",
+                    "30460221009FCD7C75763F56788FE4293FBACE40FC3ED17228BDEFBC43E5D8E72F4D85197E022100CA7B7BF1118B1FE611C9E422F3C4DEE66A375502F1305D9B6F4BDABAE5CDD2B5",
                     144,
                     '0');
 }
