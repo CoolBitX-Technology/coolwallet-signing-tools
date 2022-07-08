@@ -370,7 +370,7 @@ public class CosmosScript {
           new ScriptAssembler()
               .copyString("12")
               .arrayPointer()
-              .setBufferInt(argMemoLength, 1, 128)
+              .setBufferInt(argMemoLength, 1, 127)
               .copyRegularString(argMemo)
               .arrayEnd() // memo end
               .getScript());
@@ -408,7 +408,7 @@ public class CosmosScript {
     ScriptData argChainInfoSignature = sac.getArgument(72);
 
     ScriptData argMemoLength = sac.getArgument(1);
-    ScriptData argMemo = sac.getArgumentVariableLength(128);
+    ScriptData argMemo = sac.getArgumentVariableLength(127);
     ScriptAssembler scriptAsb = new ScriptAssembler();
     CosmosTransactionMaker maker = new CosmosTransactionMaker(scriptAsb);
     scriptAsb.setCoinType(coinType);
@@ -524,7 +524,7 @@ public class CosmosScript {
     ScriptData argChainInfoSignature = sac.getArgument(72);
 
     ScriptData argMemoLength = sac.getArgument(1);
-    ScriptData argMemo = sac.getArgumentVariableLength(128);
+    ScriptData argMemo = sac.getArgumentVariableLength(127);
     ScriptAssembler scriptAsb = new ScriptAssembler();
     CosmosTransactionMaker maker = new CosmosTransactionMaker(scriptAsb);
     scriptAsb.setCoinType(coinType);
