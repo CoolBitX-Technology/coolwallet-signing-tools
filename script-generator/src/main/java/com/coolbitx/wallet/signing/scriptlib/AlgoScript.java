@@ -111,6 +111,16 @@ public class AlgoScript {
                                 .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
                                 .clearBuffer(ScriptData.Buffer.CACHE1)
                                 .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
+                .isEmpty(rekeyValue,
+                        "", new ScriptAssembler().showMessage("rekey").hash(rekeyValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
+                                .copyArgument(rekeyValue, ScriptData.Buffer.CACHE2)
+                                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.CACHE1, 28, 4), ScriptData.Buffer.CACHE2)
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"), ScriptData.Buffer.CACHE1)
+                                .baseConvert(ScriptData.getBuffer(ScriptData.Buffer.CACHE2, 0, 36), ScriptData.Buffer.CACHE2, 58, ScriptAssembler.cache1Charset, ScriptAssembler.bitLeftJustify8to5)
+                                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
                 .showPressButton()
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
@@ -218,6 +228,16 @@ public class AlgoScript {
                 .arrayEnd(TYPE_MESSAGE_PACK_MAP)
                 .showMessage("ALGO")
                 .showMessage("keyreg")
+                .isEmpty(rekeyValue,
+                        "", new ScriptAssembler().showMessage("rekey").hash(rekeyValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
+                                .copyArgument(rekeyValue, ScriptData.Buffer.CACHE2)
+                                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.CACHE1, 28, 4), ScriptData.Buffer.CACHE2)
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"), ScriptData.Buffer.CACHE1)
+                                .baseConvert(ScriptData.getBuffer(ScriptData.Buffer.CACHE2, 0, 36), ScriptData.Buffer.CACHE2, 58, ScriptAssembler.cache1Charset, ScriptAssembler.bitLeftJustify8to5)
+                                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
                 .showPressButton()
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
@@ -358,6 +378,19 @@ public class AlgoScript {
                 .arrayEnd(TYPE_MESSAGE_PACK_MAP)
                 .showMessage("ALGO")
                 .showMessage("acfg")
+                .isEmpty(caidValue,
+                        "", new ScriptAssembler().showMessage("assetID").baseConvert(caidValue, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
+                                .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1)).clearBuffer(ScriptData.Buffer.CACHE1).getScript())
+                .isEmpty(rekeyValue,
+                        "", new ScriptAssembler().showMessage("rekey").hash(rekeyValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
+                                .copyArgument(rekeyValue, ScriptData.Buffer.CACHE2)
+                                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.CACHE1, 28, 4), ScriptData.Buffer.CACHE2)
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"), ScriptData.Buffer.CACHE1)
+                                .baseConvert(ScriptData.getBuffer(ScriptData.Buffer.CACHE2, 0, 36), ScriptData.Buffer.CACHE2, 58, ScriptAssembler.cache1Charset, ScriptAssembler.bitLeftJustify8to5)
+                                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
                 .showPressButton()
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
@@ -468,6 +501,16 @@ public class AlgoScript {
                                 .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
                                 .clearBuffer(ScriptData.Buffer.CACHE1)
                                 .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
+                .isEmpty(rekeyValue,
+                        "", new ScriptAssembler().showMessage("rekey").hash(rekeyValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
+                                .copyArgument(rekeyValue, ScriptData.Buffer.CACHE2)
+                                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.CACHE1, 28, 4), ScriptData.Buffer.CACHE2)
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"), ScriptData.Buffer.CACHE1)
+                                .baseConvert(ScriptData.getBuffer(ScriptData.Buffer.CACHE2, 0, 36), ScriptData.Buffer.CACHE2, 58, ScriptAssembler.cache1Charset, ScriptAssembler.bitLeftJustify8to5)
+                                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
                 .showPressButton()
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
@@ -555,6 +598,19 @@ public class AlgoScript {
                 .arrayEnd(TYPE_MESSAGE_PACK_MAP)
                 .showMessage("ALGO")
                 .showMessage("afrz")
+                .isEmpty(faidValue,
+                        "", new ScriptAssembler().showMessage("assetID").baseConvert(faidValue, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
+                                .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1)).clearBuffer(ScriptData.Buffer.CACHE1).getScript())
+                .isEmpty(rekeyValue,
+                        "", new ScriptAssembler().showMessage("rekey").hash(rekeyValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
+                                .copyArgument(rekeyValue, ScriptData.Buffer.CACHE2)
+                                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.CACHE1, 28, 4), ScriptData.Buffer.CACHE2)
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"), ScriptData.Buffer.CACHE1)
+                                .baseConvert(ScriptData.getBuffer(ScriptData.Buffer.CACHE2, 0, 36), ScriptData.Buffer.CACHE2, 58, ScriptAssembler.cache1Charset, ScriptAssembler.bitLeftJustify8to5)
+                                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
                 .showPressButton()
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
@@ -861,6 +917,16 @@ public class AlgoScript {
                 .isEmpty(apidValue,
                         "", new ScriptAssembler().showMessage("appID").baseConvert(apidValue, ScriptData.Buffer.CACHE1, 16, ScriptAssembler.decimalCharset, ScriptAssembler.zeroInherit)
                                 .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1)).clearBuffer(ScriptData.Buffer.CACHE1).getScript())
+                .isEmpty(rekeyValue,
+                        "", new ScriptAssembler().showMessage("rekey").hash(rekeyValue, ScriptData.Buffer.CACHE1, ScriptAssembler.HashType.SHA512256)
+                                .copyArgument(rekeyValue, ScriptData.Buffer.CACHE2)
+                                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.CACHE1, 28, 4), ScriptData.Buffer.CACHE2)
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .copyString(HexUtil.toHexString("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"), ScriptData.Buffer.CACHE1)
+                                .baseConvert(ScriptData.getBuffer(ScriptData.Buffer.CACHE2, 0, 36), ScriptData.Buffer.CACHE2, 58, ScriptAssembler.cache1Charset, ScriptAssembler.bitLeftJustify8to5)
+                                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE2, 36))
+                                .clearBuffer(ScriptData.Buffer.CACHE1)
+                                .clearBuffer(ScriptData.Buffer.CACHE2).getScript())
                 .showPressButton()
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
