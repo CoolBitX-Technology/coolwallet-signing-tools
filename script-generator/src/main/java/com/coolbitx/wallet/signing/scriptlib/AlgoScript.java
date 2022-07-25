@@ -32,10 +32,10 @@ public class AlgoScript {
         ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
         ScriptRlpData genValue = sac.getArgumentRlpItem();
-        // Group
-        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
         ScriptRlpData ghValue = sac.getArgumentRlpItem();
+        // Group
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Last Valid
         ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
@@ -70,12 +70,12 @@ public class AlgoScript {
                 .isEmpty(genValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .isEmpty(grpValue,
-                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(ghValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
+                .isEmpty(grpValue,
+                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(lvValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
@@ -136,10 +136,10 @@ public class AlgoScript {
         ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
         ScriptRlpData genValue = sac.getArgumentRlpItem();
-        // Group
-        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
         ScriptRlpData ghValue = sac.getArgumentRlpItem();
+        // Group
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Last Valid
         ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
@@ -180,12 +180,12 @@ public class AlgoScript {
                 .isEmpty(genValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .isEmpty(grpValue,
-                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(ghValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
+                .isEmpty(grpValue,
+                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(lvValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
@@ -279,10 +279,10 @@ public class AlgoScript {
         ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
         ScriptRlpData genValue = sac.getArgumentRlpItem();
-        // Group
-        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
         ScriptRlpData ghValue = sac.getArgumentRlpItem();
+        // Group
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Last Valid
         ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
@@ -351,12 +351,12 @@ public class AlgoScript {
                 .isEmpty(genValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .isEmpty(grpValue,
-                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(ghValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
+                .isEmpty(grpValue,
+                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(lvValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
@@ -414,10 +414,10 @@ public class AlgoScript {
         ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
         ScriptRlpData genValue = sac.getArgumentRlpItem();
-        // Group
-        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
         ScriptRlpData ghValue = sac.getArgumentRlpItem();
+        // Group
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Last Valid
         ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
@@ -458,12 +458,12 @@ public class AlgoScript {
                 .isEmpty(genValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .isEmpty(grpValue,
-                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(ghValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
+                .isEmpty(grpValue,
+                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(lvValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
@@ -532,10 +532,10 @@ public class AlgoScript {
         ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
         ScriptRlpData genValue = sac.getArgumentRlpItem();
-        // Group
-        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
         ScriptRlpData ghValue = sac.getArgumentRlpItem();
+        // Group
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Last Valid
         ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
@@ -571,12 +571,12 @@ public class AlgoScript {
                 .isEmpty(genValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .isEmpty(grpValue,
-                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(ghValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
+                .isEmpty(grpValue,
+                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(lvValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
@@ -708,19 +708,19 @@ public class AlgoScript {
         // Application ID
         ScriptRlpData apidValue = sac.getArgumentRlpItem();
 
-        // Local State Schema
-        ScriptRlpData aplsPresent = sac.getArgumentRlpItem();
-        // Number Byte Slices
-        ScriptRlpData lnbsValue = sac.getArgumentRlpItem();
-        // Number Ints
-        ScriptRlpData lnuiValue = sac.getArgumentRlpItem();
-
         // Global State Schema
         ScriptRlpData apgsPresent = sac.getArgumentRlpItem();
         // Number Byte Slices
         ScriptRlpData gnbsValue = sac.getArgumentRlpItem();
         // Number Ints
         ScriptRlpData gnuiValue = sac.getArgumentRlpItem();
+
+        // Local State Schema
+        ScriptRlpData aplsPresent = sac.getArgumentRlpItem();
+        // Number Byte Slices
+        ScriptRlpData lnbsValue = sac.getArgumentRlpItem();
+        // Number Ints
+        ScriptRlpData lnuiValue = sac.getArgumentRlpItem();
 
         // Clear State Program
         ScriptRlpData apsuValue = sac.getArgumentRlpItem();
@@ -730,10 +730,10 @@ public class AlgoScript {
         ScriptRlpData fvValue = sac.getArgumentRlpItem();
         // GenesisID
         ScriptRlpData genValue = sac.getArgumentRlpItem();
-        // Group
-        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Genesis Hash
         ScriptRlpData ghValue = sac.getArgumentRlpItem();
+        // Group
+        ScriptRlpData grpValue = sac.getArgumentRlpItem();
         // Last Valid
         ScriptRlpData lvValue = sac.getArgumentRlpItem();
         // Lease
@@ -848,18 +848,6 @@ public class AlgoScript {
                                         "", new ScriptAssembler().messagePack(ScriptAssembler.typeInt, apfaValue8, ScriptData.Buffer.TRANSACTION).getScript())
                                 .arrayEnd(TYPE_MESSAGE_PACK_ARRAY)
                                 .getScript())
-                .isEmpty(aplsPresent,
-                        "", new ScriptAssembler()
-                                .messagePack(Hex.encode("apls".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .arrayPointer()
-                                .isEmpty(lnbsValue,
-                                        "", new ScriptAssembler().messagePack(Hex.encode("nbs".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                                .messagePack(ScriptAssembler.typeInt, lnbsValue, ScriptData.Buffer.TRANSACTION).getScript())
-                                .isEmpty(lnuiValue,
-                                        "", new ScriptAssembler().messagePack(Hex.encode("nui".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                                .messagePack(ScriptAssembler.typeInt, lnuiValue, ScriptData.Buffer.TRANSACTION).getScript())
-                                .arrayEnd(TYPE_MESSAGE_PACK_MAP)
-                                .getScript())
                 .isEmpty(apgsPresent,
                         "", new ScriptAssembler()
                                 .messagePack(Hex.encode("apgs".getBytes()), ScriptData.Buffer.TRANSACTION)
@@ -870,6 +858,18 @@ public class AlgoScript {
                                 .isEmpty(gnuiValue,
                                         "", new ScriptAssembler().messagePack(Hex.encode("nui".getBytes()), ScriptData.Buffer.TRANSACTION)
                                                 .messagePack(ScriptAssembler.typeInt, gnuiValue, ScriptData.Buffer.TRANSACTION).getScript())
+                                .arrayEnd(TYPE_MESSAGE_PACK_MAP)
+                                .getScript())
+                .isEmpty(aplsPresent,
+                        "", new ScriptAssembler()
+                                .messagePack(Hex.encode("apls".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                .arrayPointer()
+                                .isEmpty(lnbsValue,
+                                        "", new ScriptAssembler().messagePack(Hex.encode("nbs".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                                .messagePack(ScriptAssembler.typeInt, lnbsValue, ScriptData.Buffer.TRANSACTION).getScript())
+                                .isEmpty(lnuiValue,
+                                        "", new ScriptAssembler().messagePack(Hex.encode("nui".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                                .messagePack(ScriptAssembler.typeInt, lnuiValue, ScriptData.Buffer.TRANSACTION).getScript())
                                 .arrayEnd(TYPE_MESSAGE_PACK_MAP)
                                 .getScript())
                 .isEmpty(apidValue,
@@ -887,12 +887,12 @@ public class AlgoScript {
                 .isEmpty(genValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gen".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeString, genValue, ScriptData.Buffer.TRANSACTION).getScript())
-                .isEmpty(grpValue,
-                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
-                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(ghValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("gh".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeBinary, ghValue, ScriptData.Buffer.TRANSACTION).getScript())
+                .isEmpty(grpValue,
+                        "", new ScriptAssembler().messagePack(Hex.encode("grp".getBytes()), ScriptData.Buffer.TRANSACTION)
+                                .messagePack(ScriptAssembler.typeBinary, grpValue, ScriptData.Buffer.TRANSACTION).getScript())
                 .isEmpty(lvValue,
                         "", new ScriptAssembler().messagePack(Hex.encode("lv".getBytes()), ScriptData.Buffer.TRANSACTION)
                                 .messagePack(ScriptAssembler.typeInt, lvValue, ScriptData.Buffer.TRANSACTION).getScript())
