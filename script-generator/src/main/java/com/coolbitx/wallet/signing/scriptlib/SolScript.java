@@ -760,7 +760,7 @@ public class SolScript {
         return script;
     }
 
-    public static String getCreateAndTransferSplTokenScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String getCreateAndTransferSplTokenScriptSignature = Strings.padStart("304502204da918f88d8a2821e4d1cfc03fc0420d4913245258995f7214c5b1a0154cf0c1022100e3797f9c27e58a5532540d28b6580744a98ea37554c0a771a6bd3ae028d4131a", 144, '0');
 
     public static String getUndelegateScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
