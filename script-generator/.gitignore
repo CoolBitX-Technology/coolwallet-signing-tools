@@ -8,8 +8,5 @@
 **/.nb-gradle/
 /bin/
 .settings/
-<<<<<<< HEAD
-=======
 .classpath
 .project
->>>>>>> dev
