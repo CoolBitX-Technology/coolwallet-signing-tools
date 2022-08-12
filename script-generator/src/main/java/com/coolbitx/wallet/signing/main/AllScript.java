@@ -6,6 +6,7 @@ public class AllScript {
 
     public static void main(String[] args) throws Exception {
         System.out.println("----- script list -----");
+        AlgoScript.listAll();
         AtomScript.listAll();
         AvaxCScript.listAll();
         BnbScript.listAll();
