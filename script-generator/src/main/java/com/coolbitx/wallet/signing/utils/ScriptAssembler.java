@@ -834,6 +834,16 @@ public class ScriptAssembler {
     }
 
     /**
+     * Encode uint to varint
+     *
+     * @return
+     */
+    public ScriptAssembler varint(ScriptDataInterface data, Buffer destinationBuf) {
+        script += compose("A1", data, destinationBuf, 0, 0);
+        return this;
+    }
+
+    /**
      * Point the array start position.
      *
      * @return
