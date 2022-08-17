@@ -293,7 +293,7 @@ public class VetScript {
         .copyArgument(argMessage)
         // txDetail
         .showMessage("VET")
-        .showWrap("MESSAGE", "")
+        .showWrap("CERT", "")
         .showPressButton()
         // version=00, hash=0E, sign=01
         .setHeader(HashType.Blake2b256, SignType.ECDSA)
