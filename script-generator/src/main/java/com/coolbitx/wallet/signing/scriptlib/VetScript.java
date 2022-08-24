@@ -41,10 +41,10 @@ public class VetScript {
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
     ScriptData argValue = sac.getArgumentRightJustified(32);
-    ScriptData argData = sac.getArgument(6);
+    ScriptData argData = sac.getArgumentRightJustified(6);
     ScriptData argGasPrice = sac.getArgumentRightJustified(1);
     ScriptData argGas = sac.getArgumentRightJustified(8);
-    ScriptData argDependsOn = sac.getArgument(32);
+    ScriptData argDependsOn = sac.getArgumentRightJustified(32);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
 
     String script = new ScriptAssembler()
@@ -65,14 +65,7 @@ public class VetScript {
         // value
         .rlpString(argValue)
         // data
-        .ifEqual(
-            argData, "000000000000",
-            // ---- output count start ----
-            new ScriptAssembler().copyString("80").getScript(),
-            new ScriptAssembler().rlpString(argData).getScript()
-        // ---- output count end ----
-        )
-        // .rlpString(argData)
+        .rlpString(argData)
         .arrayEnd(TYPE_RLP)
         .arrayEnd(TYPE_RLP)
         // gas price
@@ -81,13 +74,7 @@ public class VetScript {
         // gas
         .rlpString(argGas)
         // dependon
-        .ifEqual(
-            argDependsOn, "0000000000000000000000000000000000000000000000000000000000000000",
-            // ---- output count start ----
-            new ScriptAssembler().copyString("80").getScript(),
-            new ScriptAssembler().rlpString(argDependsOn).getScript()
-        // ---- output count end ----
-        )
+        .rlpString(argDependsOn)
         // nonce
         .rlpString(argNonce)
         // reserved
@@ -132,10 +119,12 @@ public class VetScript {
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
     ScriptData argValue = sac.getArgumentRightJustified(32);
-    ScriptData argData = sac.getArgumentRightJustified(68);
+    // ScriptData argData = sac.getArgumentRightJustified(68);
+    ScriptData argData1 = sac.getArgument(36);
+    ScriptData argData2 = sac.getArgument(32);
     ScriptData argGasPrice = sac.getArgumentRightJustified(1);
     ScriptData argGas = sac.getArgumentRightJustified(8);
-    ScriptData argDependsOn = sac.getArgument(32);
+    ScriptData argDependsOn = sac.getArgumentRightJustified(32);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
 
     String script = new ScriptAssembler()
@@ -156,7 +145,11 @@ public class VetScript {
         // value
         .rlpString(argValue)
         // data
-        .rlpString(argData)
+        // .rlpString(argData)
+        .copyArgument(argData1, Buffer.CACHE1)
+        .copyArgument(argData2, Buffer.CACHE1)
+        .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
+        .clearBuffer(Buffer.CACHE1)
         .arrayEnd(TYPE_RLP)
         .arrayEnd(TYPE_RLP)
         // gas price
@@ -165,13 +158,7 @@ public class VetScript {
         // gas
         .rlpString(argGas)
         // dependon
-        .ifEqual(
-            argDependsOn, "0000000000000000000000000000000000000000000000000000000000000000",
-            // ---- output count start ----
-            new ScriptAssembler().copyString("80").getScript(),
-            new ScriptAssembler().rlpString(argDependsOn).getScript()
-        // ---- output count end ----
-        )
+        .rlpString(argDependsOn)
         // nonce
         .rlpString(argNonce)
         // reserved
@@ -186,7 +173,8 @@ public class VetScript {
             ScriptAssembler.hexadecimalCharset,
             ScriptAssembler.zeroInherit)
         .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-        .showAmount(argValue, 18)
+        // .showAmount(argValue, 18)
+        .showAmount(argData2, 18)
         .showPressButton()
         // version=00, hash=0E, sign=01
         .setHeader(HashType.Blake2b256, SignType.ECDSA)
