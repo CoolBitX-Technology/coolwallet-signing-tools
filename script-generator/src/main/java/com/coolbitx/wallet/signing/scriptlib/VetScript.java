@@ -52,7 +52,7 @@ public class VetScript {
         .setCoinType(0x0332)
         .arrayPointer()
         // chainTag
-        .rlpString(argChainTag)
+        .copyString("4a")
         // blockRef
         .rlpString(argBlockRef)
         // expiration
@@ -138,7 +138,7 @@ public class VetScript {
         .setCoinType(0x0332)
         .arrayPointer()
         // chainTag
-        .rlpString(argChainTag)
+        .copyString("4a")
         // blockRef
         .rlpString(argBlockRef)
         // expiration
@@ -229,7 +229,7 @@ public class VetScript {
         .setCoinType(0x0332)
         .arrayPointer()
         // chainTag
-        .rlpString(argChainTag)
+        .copyString("4a")
         // blockRef
         .rlpString(argBlockRef)
         // expiration
