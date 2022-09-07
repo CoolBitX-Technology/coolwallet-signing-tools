@@ -120,12 +120,18 @@ public class VetScript {
     ScriptData argTo = sac.getArgument(20);
     ScriptData argValue = sac.getArgumentRightJustified(32);
     // ScriptData argData = sac.getArgumentRightJustified(68);
-    ScriptData argData1 = sac.getArgument(36);
-    ScriptData argData2 = sac.getArgument(32);
+    ScriptData argData1 = sac.getArgument(16);
+    ScriptData argDataTo = sac.getArgument(20);
+    ScriptData argDataValue = sac.getArgument(32);
     ScriptData argGasPrice = sac.getArgumentRightJustified(1);
     ScriptData argGas = sac.getArgumentRightJustified(8);
     ScriptData argDependsOn = sac.getArgumentRightJustified(32);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
+    ScriptData argTokenInfo = sac.getArgumentUnion(0, 29);
+    ScriptData argDecimal = sac.getArgument(1);
+    ScriptData argNameLength = sac.getArgument(1);
+    ScriptData argName = sac.getArgumentVariableLength(7);
+    ScriptData argContractAddress = sac.getArgument(20);
 
     String script = new ScriptAssembler()
         // set coinType to 0332
@@ -147,7 +153,8 @@ public class VetScript {
         // data
         // .rlpString(argData)
         .copyArgument(argData1, Buffer.CACHE1)
-        .copyArgument(argData2, Buffer.CACHE1)
+        .copyArgument(argDataTo, Buffer.CACHE1)
+        .copyArgument(argDataValue, Buffer.CACHE1)
         .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
         .clearBuffer(Buffer.CACHE1)
         .arrayEnd(TYPE_RLP)
@@ -164,17 +171,23 @@ public class VetScript {
         // reserved
         .copyString("c0")
         .arrayEnd(TYPE_RLP)
-        .showMessage("VTHO")
+        .showMessage("VET")
+        // txDetail
+        .setBufferInt(argNameLength, 1, 7)
+        .copyArgument(argName, Buffer.CACHE2)
+        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+        .clearBuffer(Buffer.CACHE2)
         .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
         .baseConvert(
-            argTo,
+            argDataTo,
             Buffer.CACHE2,
             0,
             ScriptAssembler.hexadecimalCharset,
             ScriptAssembler.zeroInherit)
         .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-        // .showAmount(argValue, 18)
-        .showAmount(argData2, 18)
+        .setBufferInt(argDecimal, 0, 20)
+        .showAmount(argDataValue, ScriptData.bufInt)
+        // .showAmount(argDataValue, 18)
         .showPressButton()
         // version=00, hash=0E, sign=01
         .setHeader(HashType.Blake2b256, SignType.ECDSA)
@@ -254,7 +267,7 @@ public class VetScript {
             ScriptAssembler.hexadecimalCharset,
             ScriptAssembler.zeroInherit)
         .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-        .showAmount(argValue, 18)
+        // .showAmount(argValue, 18)
         .showPressButton()
         // version=00, hash=0E, sign=01
         .setHeader(HashType.Blake2b256, SignType.ECDSA)
