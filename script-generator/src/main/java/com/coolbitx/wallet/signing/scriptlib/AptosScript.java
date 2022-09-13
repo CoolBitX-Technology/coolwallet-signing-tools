@@ -34,7 +34,7 @@ public class AptosScript {
        max_gas              e803000000000000 (1000)
        gas_price            0100000000000000 (1)
        expiration           3eae156300000000 (1662365246)
-       chain_id             19 (25)
+       chain_id             1b (27)
      */
 
     public static String getAptosTransferScript() {
@@ -64,9 +64,10 @@ public class AptosScript {
                 .copyArgument(argGasLimit)
                 .copyArgument(argGasPrice)
                 .copyArgument(argExpiration)
-                .copyString("19")
+                .copyString("1b")
 
-                .showMessage("APTOS")
+                // .showMessage("APTOS")
+                .showWrap("APTOS", "Devnet")
                 .showAddress(argReceiver)
                 .baseConvert(argAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
                 .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8)
