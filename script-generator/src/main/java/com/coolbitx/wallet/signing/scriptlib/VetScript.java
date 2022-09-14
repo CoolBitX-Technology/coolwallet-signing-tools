@@ -24,7 +24,6 @@ public class VetScript {
   public static String getVetTransactionScript() {
 
     /*
-     * chainTag - 1byte - rlp
      * blockRef - 8 byte - fixed length
      * expiration - 4 byte - rlp
      * clauses - array
@@ -101,7 +100,6 @@ public class VetScript {
   public static String getVthoTokenScript() {
 
     /*
-     * chainTag - 1byte - rlp
      * blockRef - 8 byte - fixed length
      * expiration - 4 byte - rlp
      * clauses - array
@@ -197,7 +195,6 @@ public class VetScript {
 
   public static String getVIP191OriginScript() {
     /*
-     * chainTag - 1byte - rlp
      * blockRef - 8 byte - fixed length
      * expiration - 4 byte - rlp
      * clauses - array
@@ -295,7 +292,6 @@ public class VetScript {
   public static String getVetContractBlindScript() {
 
     /*
-     * chainTag - 1byte - rlp
      * blockRef - 8 byte - fixed length
      * expiration - 4 byte - rlp
      * clauses - array
