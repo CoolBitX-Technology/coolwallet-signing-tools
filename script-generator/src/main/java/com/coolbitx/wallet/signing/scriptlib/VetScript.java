@@ -37,7 +37,6 @@ public class VetScript {
      * Nonce 8 byte - rlp
      */
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
-    ScriptData argChainTag = sac.getArgumentRightJustified(1);
     ScriptData argBlockRef = sac.getArgumentRightJustified(8);
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
@@ -115,7 +114,6 @@ public class VetScript {
      * Nonce 8 byte - rlp
      */
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
-    ScriptData argChainTag = sac.getArgumentRightJustified(1);
     ScriptData argBlockRef = sac.getArgumentRightJustified(8);
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
@@ -213,7 +211,6 @@ public class VetScript {
      * Feature - 1byte- rlp (from reserved) - (buffer kind)
      */
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
-    ScriptData argChainTag = sac.getArgumentRightJustified(1);
     ScriptData argBlockRef = sac.getArgumentRightJustified(8);
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
@@ -311,7 +308,6 @@ public class VetScript {
      * Nonce 8 byte - rlp
      */
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
-    ScriptData argChainTag = sac.getArgumentRightJustified(1);
     ScriptData argBlockRef = sac.getArgumentRightJustified(8);
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
