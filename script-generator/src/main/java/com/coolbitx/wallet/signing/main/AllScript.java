@@ -30,6 +30,7 @@ public class AllScript {
         ThetaScript.listAll();
         NearScript.listAll();
         IotxScript.listAll();
+        AptosScript.listAll();
         VetScript.listAll();
     }
 }
