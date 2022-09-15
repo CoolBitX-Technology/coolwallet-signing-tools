@@ -31,5 +31,6 @@ public class AllScript {
         NearScript.listAll();
         IotxScript.listAll();
         AptosScript.listAll();
+        VetScript.listAll();
     }
 }
