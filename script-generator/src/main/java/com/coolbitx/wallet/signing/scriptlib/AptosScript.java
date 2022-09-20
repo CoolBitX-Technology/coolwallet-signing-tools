@@ -46,7 +46,7 @@ public class AptosScript {
         ScriptData argGasLimit = sac.getArgument(8);
         ScriptData argGasPrice = sac.getArgument(8);
         ScriptData argExpiration = sac.getArgument(8);
-        // ScriptData argChainID = sac.getArgument(1);
+        ScriptData argChainID = sac.getArgument(1);
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
         String script = scriptAsb
@@ -64,7 +64,8 @@ public class AptosScript {
                 .copyArgument(argGasLimit)
                 .copyArgument(argGasPrice)
                 .copyArgument(argExpiration)
-                .copyString("1b")
+                .ifRange(argChainID, "19", "7f", "", ScriptAssembler.throwSEError)
+                .copyArgument(argChainID)
 
                 // .showMessage("APTOS")
                 .showWrap("APTOS", "Devnet")
