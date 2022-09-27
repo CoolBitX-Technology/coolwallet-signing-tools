@@ -14,14 +14,12 @@ import com.coolbitx.wallet.signing.utils.HexUtil;
 public class VetScript {
   
   public static void listAll() {
-    System.out.println("Vet: \n" + getVetTransactionScript() + "\n");
-    System.out.println("VTHO: \n" + getVthoTokenScript() + "\n");
-    System.out.println("VIP191 Origin: \n" + getVIP191OriginScript() + "\n");
-    System.out.println("VIP191 Vet Cert: \n" + getVetCertificateScript() + "\n");
-    System.out.println("Vet Smart Contract: \n" + getVetContractBlindScript() + "\n");
+    System.out.println("VET Transaction: \n" + getTransactionScript() + "\n");
+    System.out.println("VET Token: \n" + getTokenScript() + "\n");
+    System.out.println("VET Certificate: \n" + getCertificateScript() + "\n");
   }
 
-  public static String getVetTransactionScript() {
+  public static String getTransactionScript() {
 
     /*
      * blockRef - 8 byte - fixed length
@@ -29,7 +27,7 @@ public class VetScript {
      * clauses - array
      * to - 20 byte - fixed length (nullable)
      * value - 32 byte - rlp
-     * data - no mention (blob kind)
+     * data - variant length
      * gasPriceCoef - 1 byte - rlp
      * gas - 8 byte - rlp
      * dependsOn - 32 byte - fixed length (nullable)
@@ -40,11 +38,13 @@ public class VetScript {
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
     ScriptData argValue = sac.getArgumentRightJustified(32);
-    ScriptData argData = sac.getArgumentRightJustified(6);
     ScriptData argGasPrice = sac.getArgumentRightJustified(1);
     ScriptData argGas = sac.getArgumentRightJustified(8);
     ScriptData argDependsOn = sac.getArgumentRightJustified(32);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
+    ScriptData argIsVIP191 = sac.getArgumentRightJustified(1);
+    ScriptData argIsSmart = sac.getArgumentRightJustified(1);
+    ScriptData argData = sac.getArgumentAll();
 
     String script = new ScriptAssembler()
         // set coinType to 0332
@@ -64,11 +64,14 @@ public class VetScript {
         // value
         .rlpString(argValue)
         // data
-        .rlpString(argData)
+        .ifEqual(argIsSmart, "01",
+          new ScriptAssembler().rlpString(argData).getScript(),
+          new ScriptAssembler().copyString("80").getScript()
+        )
         .arrayEnd(TYPE_RLP)
         .arrayEnd(TYPE_RLP)
         // gas price
-        //.copyString("81").copyArgument(argGasPrice)
+        // .copyString("81").copyArgument(argGasPrice)
         .rlpString(argGasPrice)
         // gas
         .rlpString(argGas)
@@ -77,9 +80,21 @@ public class VetScript {
         // nonce
         .rlpString(argNonce)
         // reserved
-        .copyString("c0")
+        .ifEqual(argIsVIP191, "01",
+          new ScriptAssembler().copyString("c101").getScript(),
+          new ScriptAssembler().copyString("c0").getScript()
+        )
         .arrayEnd(TYPE_RLP)
-        .showMessage("VET")
+
+        // .showMessage("VET")
+        .ifEqual(argIsVIP191, "01",
+          new ScriptAssembler().showWrap("VET", "VIP191").getScript(),
+          new ScriptAssembler().showWrap("VET", "").getScript()
+        )
+        .ifEqual(argIsSmart, "01",
+          new ScriptAssembler().showWrap("SMART", "").getScript(),
+          ""
+        )
         .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
         .baseConvert(
             argTo,
@@ -97,7 +112,7 @@ public class VetScript {
     return script;
   }
 
-  public static String getVthoTokenScript() {
+  public static String getTokenScript() {
 
     /*
      * blockRef - 8 byte - fixed length
@@ -193,85 +208,7 @@ public class VetScript {
     return script;
   }
 
-  public static String getVIP191OriginScript() {
-    /*
-     * blockRef - 8 byte - fixed length
-     * expiration - 4 byte - rlp
-     * clauses - array
-     * to - 20 byte - fixed length (nullable)
-     * value - 32 byte - rlp
-     * data - no mention (blob kind)
-     * gasPriceCoef - 1 byte - rlp
-     * gas - 8 byte - rlp
-     * dependsOn - 32 byte - fixed length (nullable)
-     * Nonce 8 byte - rlp
-     * Feature - 1byte- rlp (from reserved) - (buffer kind)
-     */
-    ScriptArgumentComposer sac = new ScriptArgumentComposer();
-    ScriptData argBlockRef = sac.getArgumentRightJustified(8);
-    ScriptData argExpiration = sac.getArgumentRightJustified(4);
-    ScriptData argTo = sac.getArgument(20);
-    ScriptData argValue = sac.getArgumentRightJustified(32);
-    ScriptData argData = sac.getArgumentRightJustified(4);
-    ScriptData argGasPrice = sac.getArgumentRightJustified(1);
-    ScriptData argGas = sac.getArgumentRightJustified(8);
-    ScriptData argDependsOn = sac.getArgumentRightJustified(32);
-    ScriptData argNonce = sac.getArgumentRightJustified(8);
-    ScriptData argFeatures = sac.getArgumentRightJustified(1);
-
-    String script = new ScriptAssembler()
-        // set coinType to 0332
-        .setCoinType(0x0332)
-        .arrayPointer()
-        // chainTag
-        .copyString("4a")
-        // blockRef
-        .rlpString(argBlockRef)
-        // expiration
-        .rlpString(argExpiration)
-        // array of clauses
-        .arrayPointer()
-        .arrayPointer()
-        // to
-        .copyString("94").copyArgument(argTo)
-        // value
-        .rlpString(argValue)
-        // data
-        .rlpString(argData)
-        .arrayEnd(TYPE_RLP)
-        .arrayEnd(TYPE_RLP)
-        // gas price
-        .rlpString(argGasPrice)
-        // gas
-        .rlpString(argGas)
-        // dependon
-        .rlpString(argDependsOn)
-        // nonce
-        .rlpString(argNonce)
-        .arrayPointer()
-        .rlpString(argFeatures)
-        .arrayEnd(TYPE_RLP)
-        .arrayEnd(TYPE_RLP)
-        .showMessage("VET")
-        .showMessage("SMART")
-        .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
-        .baseConvert(
-            argTo,
-            Buffer.CACHE2,
-            0,
-            ScriptAssembler.hexadecimalCharset,
-            ScriptAssembler.zeroInherit)
-        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-        // .showAmount(argValue, 18)
-        .showPressButton()
-        // version=00, hash=0E, sign=01
-        .setHeader(HashType.Blake2b256, SignType.ECDSA)
-        .getScript();
-
-    return script;
-  }
-
-  public static String getVetCertificateScript() {
+  public static String getCertificateScript() {
     ScriptArgumentComposer sac = new ScriptArgumentComposer();
     ScriptData argMessage = sac.getArgumentAll();
 
@@ -288,72 +225,4 @@ public class VetScript {
         .getScript();
     return script;
   }
-
-  public static String getVetContractBlindScript() {
-
-    /*
-     * blockRef - 8 byte - fixed length
-     * expiration - 4 byte - rlp
-     * clauses - array
-     * to - 20 byte - fixed length (nullable)
-     * value - 32 byte - rlp
-     * data - variant length
-     * gasPriceCoef - 1 byte - rlp
-     * gas - 8 byte - rlp
-     * dependsOn - 32 byte - fixed length (nullable)
-     * Nonce 8 byte - rlp
-     */
-    ScriptArgumentComposer sac = new ScriptArgumentComposer();
-    ScriptData argBlockRef = sac.getArgumentRightJustified(8);
-    ScriptData argExpiration = sac.getArgumentRightJustified(4);
-    ScriptData argTo = sac.getArgument(20);
-    ScriptData argValue = sac.getArgumentRightJustified(32);
-    ScriptData argGasPrice = sac.getArgumentRightJustified(1);
-    ScriptData argGas = sac.getArgumentRightJustified(8);
-    ScriptData argDependsOn = sac.getArgumentRightJustified(32);
-    ScriptData argNonce = sac.getArgumentRightJustified(8);
-    ScriptData argData = sac.getArgumentAll();
-    
-    String script = new ScriptAssembler()
-        // set coinType to 0332
-        .setCoinType(0x0332)
-        .arrayPointer()
-        // chainTag
-        .copyString("4a")
-        // blockRef
-        .rlpString(argBlockRef)
-        // expiration
-        .rlpString(argExpiration)
-        // array of clauses
-        .arrayPointer()
-        .arrayPointer()
-        // to
-        .copyString("94").copyArgument(argTo)
-        // value
-        .rlpString(argValue)
-        // data
-        .rlpString(argData)
-        .arrayEnd(TYPE_RLP)
-        .arrayEnd(TYPE_RLP)
-        // gas price
-        // .copyString("81").copyArgument(argGasPrice)
-        .rlpString(argGasPrice)
-        // gas
-        .rlpString(argGas)
-        // dependon
-        .rlpString(argDependsOn)
-        // nonce
-        .rlpString(argNonce)
-        // reserved
-        .copyString("c0")
-        .arrayEnd(TYPE_RLP)
-        .showMessage("VET").showWrap("SMART", "")
-        .showPressButton()
-        // version=00, hash=0E, sign=01
-        .setHeader(HashType.Blake2b256, SignType.ECDSA)
-        .getScript();
-
-    return script;
-  }
-
 }
