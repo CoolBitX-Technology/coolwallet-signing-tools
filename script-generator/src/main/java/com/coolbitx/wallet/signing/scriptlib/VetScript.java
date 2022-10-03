@@ -38,7 +38,7 @@ public class VetScript {
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
     ScriptData argValue = sac.getArgumentRightJustified(32);
-    ScriptData argGasPrice = sac.getArgument(1);
+    ScriptData argGasPrice = sac.getArgumentRightJustified(1);
     ScriptData argGas = sac.getArgumentRightJustified(8);
     ScriptData argDependsOn = sac.getArgumentRightJustified(32);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
@@ -119,7 +119,7 @@ public class VetScript {
     ScriptData argExpiration = sac.getArgumentRightJustified(4);
     ScriptData argTo = sac.getArgument(20);
     ScriptData argValue = sac.getArgument(32);
-    ScriptData argGasPrice = sac.getArgument(1);
+    ScriptData argGasPrice = sac.getArgumentRightJustified(1);
     ScriptData argGas = sac.getArgumentRightJustified(8);
     ScriptData argDependsOn = sac.getArgumentRightJustified(32);
     ScriptData argNonce = sac.getArgumentRightJustified(8);
