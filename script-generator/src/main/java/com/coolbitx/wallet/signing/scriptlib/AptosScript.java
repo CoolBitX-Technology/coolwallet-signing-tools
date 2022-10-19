@@ -50,32 +50,35 @@ public class AptosScript {
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
         String script = scriptAsb
-                .setCoinType(0x27d)
-                .copyString("b5e97db07fa0bd0e5598aa3643a9bc6f6693bddc1a9fec9e674a461eaa00b193")
-                .copyArgument(argSender)
-                .copyArgument(argSequence)
-                .copyString("020000000000000000000000000000000000000000000000000000000000000001")
-                .copyString("0d6170746f735f6163636f756e74")
-                .copyString("087472616e73666572")
-                .copyString("000220")
-                .copyArgument(argReceiver)
-                .copyString("08")
-                .copyArgument(argAmount)
-                .copyArgument(argGasLimit)
-                .copyArgument(argGasPrice)
-                .copyArgument(argExpiration)
-                .ifRange(argChainID, "19", "7f", "", ScriptAssembler.throwSEError)
-                .copyArgument(argChainID)
-
-                // .showMessage("APTOS")
-                .showWrap("APTOS", "Devnet")
-                .showAddress(argReceiver)
-                .baseConvert(argAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
-                .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8)
-                .clearBuffer(Buffer.CACHE1)
-                .showPressButton()
-                .setHeader(HashType.NONE, SignType.EDDSA)
-                .getScript();
+            .setCoinType(0x27d)
+            .copyString("b5e97db07fa0bd0e5598aa3643a9bc6f6693bddc1a9fec9e674a461eaa00b193")
+            .copyArgument(argSender)
+            .copyArgument(argSequence)
+            .copyString("020000000000000000000000000000000000000000000000000000000000000001")
+            .copyString("0d6170746f735f6163636f756e74")
+            .copyString("087472616e73666572")
+            .copyString("000220")
+            .copyArgument(argReceiver)
+            .copyString("08")
+            .copyArgument(argAmount)
+            .copyArgument(argGasLimit)
+            .copyArgument(argGasPrice)
+            .copyArgument(argExpiration)
+            .copyArgument(argChainID)
+            .ifEqual(argChainID, "01",
+                new ScriptAssembler().showMessage("APTOS").getScript(),
+                new ScriptAssembler().ifEqual(argChainID, "02",
+                    new ScriptAssembler().showWrap("APTOS", "Testnet").getScript(),
+                    new ScriptAssembler().showWrap("APTOS", "Devnet").getScript()
+                ).getScript()
+            )
+            .showAddress(argReceiver)
+            .baseConvert(argAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
+            .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8)
+            .clearBuffer(Buffer.CACHE1)
+            .showPressButton()
+            .setHeader(HashType.NONE, SignType.EDDSA)
+            .getScript();
         return script;
     }
 
