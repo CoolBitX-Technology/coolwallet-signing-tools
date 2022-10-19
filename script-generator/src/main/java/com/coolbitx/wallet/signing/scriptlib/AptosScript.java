@@ -72,7 +72,13 @@ public class AptosScript {
                     new ScriptAssembler().showWrap("APTOS", "Devnet").getScript()
                 ).getScript()
             )
-            .showAddress(argReceiver)
+
+            .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
+            .baseConvert(argReceiver, Buffer.CACHE2, 0, ScriptAssembler.hexadecimalCharset,
+                    ScriptAssembler.zeroInherit)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+            .clearBuffer(Buffer.CACHE2)
+
             .baseConvert(argAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
             .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8)
             .clearBuffer(Buffer.CACHE1)
