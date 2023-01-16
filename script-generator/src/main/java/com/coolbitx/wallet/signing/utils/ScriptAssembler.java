@@ -656,7 +656,7 @@ public class ScriptAssembler {
             }
         }
         script += compose("1A", argData, null, trueStatement.length() / 2, 0)
-                + HexUtil.rightJustify(expect, Math.abs(argDataLength))
+                + HexUtil.rightJustify(expect, Math.abs(argData.getBufferParameter2()))
                 + trueStatement + falseStatement;
         if (restore) {
             argData.setBufferParameter2(argDataLength);

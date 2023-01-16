@@ -25,6 +25,7 @@ public class AdaScript {
     public static void listAll() {
         System.out.println("ADA Transfer: \n" + getADATransactionScript() + "\n");
         System.out.println("ADA Stake Register: \n" + getADAStakeRegisterScript() + "\n");
+        System.out.println("ADA Stake Register And Delegate: \n" + getADAStakeRegisterAndDelegateScript() + "\n");
         System.out.println("ADA Stake Delegate: \n" + getADAStakeDelegateScript() + "\n");
         System.out.println("ADA Stake Deregister: \n" + getADAStakeDeregisterScript() + "\n");
         System.out.println("ADA Stake Withdraw: \n" + getADAStakeWithdrawScript() + "\n");
@@ -245,6 +246,100 @@ public class AdaScript {
                 // -- payload end --
                 .showMessage("ADA")
                 .showMessage("REGISTER")
+                .showPressButton()
+                // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+                .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
+                .getScript();
+        return script;
+    }
+
+    public static String getADAStakeRegisterAndDelegateScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+
+        ScriptData changeAddressLength = sac.getArgument(1);
+        ScriptData changeAddress = sac.getArgumentVariableLength(90);
+        ScriptData changeAmountLength = sac.getArgument(1);
+        ScriptData changeAmountPrefix = sac.getArgument(1);
+        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+
+        ScriptData feeLength = sac.getArgument(1);
+        ScriptData feePrefix = sac.getArgument(1);
+        ScriptData fee = sac.getArgumentVariableLength(8);
+
+        ScriptData ttlLength = sac.getArgument(1);
+        ScriptData ttlPrefix = sac.getArgument(1);
+        ScriptData ttl = sac.getArgumentVariableLength(8);
+
+        ScriptData stakeKeyHash = sac.getArgument(28);
+        ScriptData poolKeyHash = sac.getArgument(28);
+
+        ScriptData inputs = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+                .setCoinType(0x0717)
+                // -- payload start --
+                .copyString("a5")
+                // --- intput start ---
+                .copyArgument(inputs)
+                // --- intput end ---
+                // --- output start ---
+                .copyString("01")
+                .ifEqual(changeAmount, "0000000000000000",
+                    // ---- output count start ----
+                    new ScriptAssembler().copyString("80").getScript(),
+                    new ScriptAssembler().copyString("81")
+                    // ---- output count end ----
+                    // --- output change start ---
+                    .copyString("8258")
+                    .copyArgument(changeAddressLength)
+                    .setBufferInt(changeAddressLength, 29, 90)
+                    .copyArgument(changeAddress)
+                    .copyArgument(changeAmountPrefix)
+                    .setBufferInt(changeAmountLength, 0, 8)
+                    .copyArgument(changeAmount).getScript()
+                    // --- output change end ---
+                )
+                // --- output end ---
+                // --- fee start ---
+                .copyString("02")
+                .copyArgument(feePrefix)
+                .setBufferInt(feeLength, 0, 8)
+                .copyArgument(fee)
+                // --- fee end ---
+                //ttl         03 (Uint)
+                //            1a (Uint) 02126ed9
+
+                // --- ttl start ---
+                .copyString("03")
+                .copyArgument(ttlPrefix)
+                .setBufferInt(ttlLength, 0, 8)
+                .copyArgument(ttl)
+                // --- ttl end ---
+                // --- certs start ---
+                //  certs       04 (Uint)
+                //              82 (Array)
+                //    cert1       82 (Array)
+                //      register    00 (Uint)
+                //      credential  82 (Array)
+                //        type        00 (Uint)
+                //        addrKH      58 (Byte) 1c b7ef7a17a5eb9d5c6e82046cc4b22b6f25509cf225c5a4c848988567
+                //     cert2       83 (Array)
+                //       delegate    02 (Uint)
+                //       credential  82 (Array)
+                //         type        00 (Uint)
+                //         addrKH      58 (Byte) 1c b7ef7a17a5eb9d5c6e82046cc4b22b6f25509cf225c5a4c848988567
+                //       poolKH      58 (Byte) 1c 007c8cf86eb1eebd45871699623a283e77400e96789ffd2fa7d9a4b1
+                .copyString("048282008200581c")
+                .copyArgument(stakeKeyHash)
+                .copyString("83028200581c")
+                .copyArgument(stakeKeyHash)
+                .copyString("581c")
+                .copyArgument(poolKeyHash)
+                // --- certs end ---
+
+                // -- payload end --
+                .showMessage("ADA")
+                .showMessage("DELEGATE")
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
                 .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
