@@ -21,6 +21,9 @@ import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 // (not support) Shelley address with "stake" prefix
 
 public class AdaScript {
+    public static void main(String[] args) {
+        listAll();
+    }
 
     public static void listAll() {
         System.out.println("ADA Transfer: \n" + getADATransactionScript() + "\n");
@@ -245,7 +248,7 @@ public class AdaScript {
 
                 // -- payload end --
                 .showMessage("ADA")
-                .showMessage("REGISTER")
+                .showMessage("Reg")
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
                 .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
@@ -339,7 +342,7 @@ public class AdaScript {
 
                 // -- payload end --
                 .showMessage("ADA")
-                .showMessage("DELEGATE")
+                .showMessage("Delgt")
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
                 .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
@@ -426,7 +429,7 @@ public class AdaScript {
 
                 // -- payload end --
                 .showMessage("ADA")
-                .showMessage("DELEGATE")
+                .showMessage("Delgt")
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
                 .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
@@ -509,7 +512,7 @@ public class AdaScript {
 
                 // -- payload end --
                 .showMessage("ADA")
-                .showMessage("DEREGIST")
+                .showMessage("Dereg")
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
                 .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
@@ -596,7 +599,7 @@ public class AdaScript {
 
                 // -- payload end --
                 .showMessage("ADA")
-                .showMessage("WITHDRAW")
+                .showMessage("Withdr")
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
                 .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
