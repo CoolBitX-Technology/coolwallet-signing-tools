@@ -12,6 +12,9 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
 public class BtcFamilyScript {
+    public static void main(String[] args) {
+        listAll();
+    }
 
     public static void listAll() {
         System.out.println("Btc: \n" + getBTCOutputScript(Coin.BTC, false) + "\n");
@@ -128,11 +131,21 @@ ffffffff //sequence = const
                 : ScriptAssembler.throwSEError;
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
-
-        String script = scriptAsb
+        String script;
+        if (isUSDT) {
+            script = scriptAsb.setCoinType(coin.getCoinType())
+                .ifEqual(argHaveChange, "01",
+                    new ScriptAssembler().copyString("03").getScript(),
+                    new ScriptAssembler().copyString("02").getScript()
+                )
+                .getScript();
+        } else {
+            script = scriptAsb
                 .setCoinType(coin.getCoinType())
                 .switchString(argHaveChange, Buffer.TRANSACTION, "01,02")
                 .getScript();
+        }
+
 
         script = (!isUSDT
                 ? scriptAsb.baseConvert(argOutputAmount, Buffer.TRANSACTION, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
