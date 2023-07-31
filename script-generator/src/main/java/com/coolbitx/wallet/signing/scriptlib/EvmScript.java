@@ -15,27 +15,42 @@ import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
 
 public class EvmScript {
+    public static void main(String[] args) {
+        listAll();
+    }
 
     public static void listAll() {
-        System.out.println("Evm: \n" + getTransferScript() + "\n");
-        System.out.println("Evm erc20: \n" + getERC20Script() + "\n");
-        System.out.println("Evm Smart Contract: \n" + getSmartContractScript() + "\n");
-        System.out.println("Evm Smart Contract Segment: \n" + getSmartContractSegmentScript() + "\n");
-        System.out.println("Evm Staking: \n" + getStakingScript() + "\n");
-        System.out.println("Evm EIP-712 Message: \n" + getMessageScript() + "\n");
-        System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript() + "\n");
-        System.out.println("Evm EIP-1559: \n" + getEIP1559TransferScript() + "\n");
-        System.out.println("Evm EIP-1559 erc20: \n" + getEIP1559ERC20Script() + "\n");
-        System.out.println("Evm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript() + "\n");
+        System.out.println("Evm: \n" + getTransferScript(0x3c) + "\n");
+        System.out.println("Evm erc20: \n" + getERC20Script(0x3c) + "\n");
+        System.out.println("Evm Smart Contract: \n" + getSmartContractScript(0x3c) + "\n");
+        System.out.println("Evm Smart Contract Segment: \n" + getSmartContractSegmentScript(0x3c) + "\n");
+        System.out.println("Evm Staking: \n" + getStakingScript(0x3c) + "\n");
+        System.out.println("Evm EIP-712 Message: \n" + getMessageScript(0x3c) + "\n");
+        System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript(0x3c) + "\n");
+        System.out.println("Evm EIP-1559: \n" + getEIP1559TransferScript(0x3c) + "\n");
+        System.out.println("Evm EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x3c) + "\n");
+        System.out.println("Evm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript(0x3c) + "\n");
         System.out.println(
-                "Evm EIP-1559 Smart Contract Segment: \n" + getEIP1559SmartContractSegmentScript() + "\n");
+                "Evm EIP-1559 Smart Contract Segment: \n" + getEIP1559SmartContractSegmentScript(0x3c) + "\n");
+        System.out.println("Flare: \n" + getTransferScript(0x22a) + "\n");
+        System.out.println("Flare erc20: \n" + getERC20Script(0x22a) + "\n");
+        System.out.println("Flare Smart Contract: \n" + getSmartContractScript(0x22a) + "\n");
+        System.out.println("Flare Smart Contract Segment: \n" + getSmartContractSegmentScript(0x22a) + "\n");
+        System.out.println("Flare Staking: \n" + getStakingScript(0x22a) + "\n");
+        System.out.println("Flare EIP-712 Message: \n" + getMessageScript(0x22a) + "\n");
+        System.out.println("Flare EIP-712 Typed Data: \n" + getTypedDataScript(0x22a) + "\n");
+        System.out.println("Flare EIP-1559: \n" + getEIP1559TransferScript(0x22a) + "\n");
+        System.out.println("Flare EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x22a) + "\n");
+        System.out.println("Flare EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript(0x22a) + "\n");
+        System.out.println(
+            "Flare EIP-1559 Smart Contract Segment: \n" + getEIP1559SmartContractSegmentScript(0x22a) + "\n");
     }
 
     /*
    * E7 2A 85 09C74AFE1F 82 5208 94 A3255ECFE3F6727A62D938F4C29B2F73C361B26C 83 989680 80 03
    * 80 80
      */
-    public static String getTransferScript() {
+    public static String getTransferScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -55,7 +70,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         .arrayPointer()
                         // nonce
@@ -114,7 +129,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getERC20Script() {
+    public static String getERC20Script(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgument(12);
@@ -142,7 +157,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         .arrayPointer()
                         .rlpString(argNonce)
@@ -213,7 +228,7 @@ public class EvmScript {
                     '0');
 
     private static final String emptyAddress = "0000000000000000000000000000000000000000";
-    public static String getSmartContractScript() {
+    public static String getSmartContractScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -234,7 +249,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         .arrayPointer()
                         // nonce
@@ -292,7 +307,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getSmartContractSegmentScript() {
+    public static String getSmartContractSegmentScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -313,7 +328,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         .arrayPointer()
                         // nonce
@@ -371,7 +386,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getStakingScript() {
+    public static String getStakingScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -431,7 +446,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         .arrayPointer()
                         // nonce
@@ -489,7 +504,7 @@ public class EvmScript {
                 144,
                 '0');
 
-    public static String getTypedDataScript() {
+    public static String getTypedDataScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argDomainSeparator = sac.getArgument(32);
         // Chain Information Info
@@ -506,7 +521,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         .copyString("1901")
                         .copyArgument(argDomainSeparator)
@@ -540,7 +555,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getMessageScript() {
+    public static String getMessageScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         // Chain Information Info
         ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
@@ -556,7 +571,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         .copyString("19457468657265756D205369676E6564204D6573736167653A0A")
                         .copyArgument(argMessage)
@@ -589,7 +604,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getEIP1559TransferScript() {
+    public static String getEIP1559TransferScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -610,7 +625,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         // txType (EIP-2718)
                         .copyString("02")
@@ -673,7 +688,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getEIP1559ERC20Script() {
+    public static String getEIP1559ERC20Script(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgument(12);
@@ -701,7 +716,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         // txType (EIP-2718)
                         .copyString("02")
@@ -772,7 +787,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getEIP1559SmartContractScript() {
+    public static String getEIP1559SmartContractScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -795,7 +810,7 @@ public class EvmScript {
         String script
                 = // set coinType to 3C
                 new ScriptAssembler()
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         // txType (EIP-2718)
                         .copyString("02")
@@ -850,7 +865,7 @@ public class EvmScript {
                     144,
                     '0');
 
-    public static String getEIP1559SmartContractSegmentScript() {
+    public static String getEIP1559SmartContractSegmentScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
         ScriptData argValue = sac.getArgumentRightJustified(10);
@@ -872,7 +887,7 @@ public class EvmScript {
         String script
                 = new ScriptAssembler()
                         // set coinType to 3C
-                        .setCoinType(0x3C)
+                        .setCoinType(coinType)
                         .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         // txType (EIP-2718)
                         .copyString("02")
