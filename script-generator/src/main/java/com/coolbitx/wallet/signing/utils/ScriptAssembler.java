@@ -63,7 +63,8 @@ public class ScriptAssembler {
         DoubleSHA256("0D"),
         Blake2b256("0E"),
         Blake2b512("0F"),
-        SHA512256("10");
+        SHA512256("10"),
+        Blake3256("11");
         private final String hashLabel;
 
         private HashType(String hashLabel) {
@@ -433,6 +434,14 @@ public class ScriptAssembler {
             version = versionType.version05;
         }
         script += compose("C4", data, destinationBuf, 0, 0);
+        return this;
+    }
+
+    public ScriptAssembler dataPlaceholder(ScriptDataInterface data, Buffer destinationBuf) {
+        if (version.getVersionNum() < 5) {
+            version = versionType.version05;
+        }
+        script += compose("C4", data, destinationBuf, 3, 0);
         return this;
     }
 
