@@ -81,6 +81,7 @@ public class ScriptAssembler {
     }
 
     public enum SignType {
+        NONE("00"),
         ECDSA("01"),
         EDDSA("02"),
         BIP32EDDSA("03"),
@@ -102,7 +103,8 @@ public class ScriptAssembler {
         version03(3, "03"),
         version04(4, "04"),
         version05(5, "05"),
-        version06(6, "06");
+        version06(6, "06"),
+        version07(7, "07");
         private final int versionNum;
         private final String versionLabel;
 
@@ -442,6 +444,20 @@ public class ScriptAssembler {
             version = versionType.version05;
         }
         script += compose("C4", data, destinationBuf, 3, 0);
+        return this;
+    }
+
+    /**
+     * Send utxo data place holder length.
+     *
+     * @param data
+     * @return
+     */
+    public ScriptAssembler utxoDataPlaceholder(ScriptDataInterface data) {
+        if (version.getVersionNum() < 7) {
+            version = versionType.version07;
+        }
+        script += compose("C4", data, Buffer.TRANSACTION, 2, 0);
         return this;
     }
 
