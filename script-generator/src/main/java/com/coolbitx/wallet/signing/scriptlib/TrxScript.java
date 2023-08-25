@@ -12,7 +12,6 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
-import com.google.common.base.Strings;
 
 public class TrxScript {
 
@@ -25,8 +24,8 @@ public class TrxScript {
         System.out.println("Trx Unfreeze Without Receiver: \n" + getTRXUnfreezeScriptNoReceiver() + "\n");
         System.out.println("Trx Vote Witness: \n" + getTRXVoteWitnessScript() + "\n");
         System.out.println("Trx Withdraw: \n" + getTRXWithdrawScript() + "\n");
-        System.out.println("Trx Freeze: \n" + getTRXFreezeV2Script() + "\n");
-        System.out.println("Trx Unfreeze: \n" + getTRXUnfreezeV2Script() + "\n");
+        System.out.println("Trx Freeze V2: \n" + getTRXFreezeV2Script() + "\n");
+        System.out.println("Trx Unfreeze V2: \n" + getTRXUnfreezeV2Script() + "\n");
     }
 
     private static int typeString = 2;
@@ -664,8 +663,8 @@ public class TrxScript {
         return script;
     }
 
-    public static String TRXFreezeV2ScriptSignature = Strings.padEnd("FA", 144, '0');
-    
+    public static String TRXFreezeV2ScriptSignature = "003045022039527863aaf58fdc19ea3f5fbcaa728cc6e4efdabb4bcbb431928c5ad7581ec0022100cfba499029bf1ca8231fac2ac372c16ca05c58e5693c0110dc4f44859223a360";
+
     public static String getTRXUnfreezeV2Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argBlockBytes = sac.getArgument(2);
@@ -733,5 +732,5 @@ public class TrxScript {
         return script;
     }
 
-    public static String TRXUnfreezeV2ScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String TRXUnfreezeV2ScriptSignature = "003045022100a278a75fb8c774579600afaebab63b34cec21e77fc57f44385b98358078d390d0220498ca95c4b827dbf4c8d50f2691b63b7c26f618374062622da0fa2101f48e864";
 }
