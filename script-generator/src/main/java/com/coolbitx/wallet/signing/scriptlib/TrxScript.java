@@ -12,6 +12,7 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
+import com.google.common.base.Strings;
 
 public class TrxScript {
 
@@ -26,6 +27,7 @@ public class TrxScript {
         System.out.println("Trx Withdraw: \n" + getTRXWithdrawScript() + "\n");
         System.out.println("Trx Freeze V2: \n" + getTRXFreezeV2Script() + "\n");
         System.out.println("Trx Unfreeze V2: \n" + getTRXUnfreezeV2Script() + "\n");
+        System.out.println("Trx Cancel All Unfreeze V2: \n" + getTRXCancelAllUnfreezeV2Script() + "\n");
     }
 
     private static int typeString = 2;
@@ -733,4 +735,57 @@ public class TrxScript {
     }
 
     public static String TRXUnfreezeV2ScriptSignature = "003045022100a278a75fb8c774579600afaebab63b34cec21e77fc57f44385b98358078d390d0220498ca95c4b827dbf4c8d50f2691b63b7c26f618374062622da0fa2101f48e864";
+
+    public static String getTRXCancelAllUnfreezeV2Script() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argBlockBytes = sac.getArgument(2);
+        ScriptData argBlockHash = sac.getArgument(8);
+        ScriptData argExpiration = sac.getArgumentRightJustified(10);
+        ScriptData argOwnerAddr = sac.getArgument(21);
+        ScriptData argTimestamp = sac.getArgumentRightJustified(10);
+
+        String script = new ScriptAssembler()
+                // set coinType to C3
+                .setCoinType(0xC3)
+                // ref_block_bytes
+                .copyString("0a").protobuf(argBlockBytes, typeString)
+                // ref_block_hash
+                .copyString("22").protobuf(argBlockHash, typeString)
+                // expiration
+                .copyString("40").protobuf(argExpiration, typeInt)
+                // contracts array
+                .copyString("5a").arrayPointer()
+                // contract type
+                .copyString("083b")
+                // parameter object
+                .copyString("12").arrayPointer()
+                // type url
+                .copyString("0a38")
+                .copyString(HexUtil.toHexString(
+                        "type.googleapis.com/protocol.CancelAllUnfreezeV2Contract".getBytes()))
+                // value object
+                .copyString("12").arrayPointer()
+                // ownerAddr
+                .copyString("0a").protobuf(argOwnerAddr, typeString)
+                .arrayEnd().arrayEnd().arrayEnd()
+                // timestamp
+                .copyString("70")
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX")
+                .showWrap("Cancel", "Unfrz")
+                .copyArgument(argOwnerAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                        HashType.DoubleSHA256)
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                        Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
+                        ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
+    }
+
+    public static String TRXCancelAllUnfreezeV2ScriptSignature = Strings.padStart("30440220521963e48ce132d80a54af21918be2f123b7c33c74de34150597a10202f194c1022004d0652cce3931ff11a1b46ba3d4dc45a708b8c7761beef85546028b5480ecce", 144, '0');
 }
