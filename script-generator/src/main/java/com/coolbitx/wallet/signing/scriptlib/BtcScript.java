@@ -133,7 +133,7 @@ public class BtcScript {
         return script;
     }
 
-    public static String BTCScriptSignature = Strings.padStart("30440220402f80ad31d44b999139106ddfe7d6f7342a95992299c76a665260b5ef31d9cf022047d196f9f306feb123c1616d45dc86723378097587981a49431a132a724c4264", 144, '0');
+    public static String BTCScriptSignature = Strings.padStart("30450221008045ebe0e3cd3acd60352be817c9accf637f7a9ffdcbf7f9c5b6b43315e40f0902204d67bd336afd02a6834f602d9d53c8f9537a47080271a9e866b11903caa89aa4", 144, '0');
 
     public static String getUSDTScript(boolean isTestnet) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
