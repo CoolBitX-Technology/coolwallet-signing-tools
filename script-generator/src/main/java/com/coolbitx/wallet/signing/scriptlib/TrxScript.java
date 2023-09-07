@@ -27,6 +27,7 @@ public class TrxScript {
         System.out.println("Trx Withdraw: \n" + getTRXWithdrawScript() + "\n");
         System.out.println("Trx Freeze V2: \n" + getTRXFreezeV2Script() + "\n");
         System.out.println("Trx Unfreeze V2: \n" + getTRXUnfreezeV2Script() + "\n");
+        System.out.println("Trx Cancel All Unfreeze V2: \n" + getTRXCancelAllUnfreezeV2Script() + "\n");
     }
 
     private static int typeString = 2;
@@ -786,5 +787,5 @@ public class TrxScript {
         return script;
     }
 
-    public static String TRXCancelAllUnfreezeV2ScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String TRXCancelAllUnfreezeV2ScriptSignature = Strings.padStart("30440220521963e48ce132d80a54af21918be2f123b7c33c74de34150597a10202f194c1022004d0652cce3931ff11a1b46ba3d4dc45a708b8c7761beef85546028b5480ecce", 144, '0');
 }
