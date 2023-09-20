@@ -788,4 +788,57 @@ public class TrxScript {
     }
 
     public static String TRXCancelAllUnfreezeV2ScriptSignature = Strings.padStart("30440220521963e48ce132d80a54af21918be2f123b7c33c74de34150597a10202f194c1022004d0652cce3931ff11a1b46ba3d4dc45a708b8c7761beef85546028b5480ecce", 144, '0');
+    
+    public static String getTRXWithdrawExpireUnfreezeScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argBlockBytes = sac.getArgument(2);
+        ScriptData argBlockHash = sac.getArgument(8);
+        ScriptData argExpiration = sac.getArgumentRightJustified(10);
+        ScriptData argOwnerAddr = sac.getArgument(21);
+        ScriptData argTimestamp = sac.getArgumentRightJustified(10);
+
+        String script = new ScriptAssembler()
+                // set coinType to C3
+                .setCoinType(0xC3)
+                // ref_block_bytes
+                .copyString("0a").protobuf(argBlockBytes, typeString)
+                // ref_block_hash
+                .copyString("22").protobuf(argBlockHash, typeString)
+                // expiration
+                .copyString("40").protobuf(argExpiration, typeInt)
+                // contracts array
+                .copyString("5a").arrayPointer()
+                // contract type
+                .copyString("0838")
+                // parameter object
+                .copyString("12").arrayPointer()
+                // type url
+                .copyString("0a3b")
+                .copyString(HexUtil.toHexString(
+                        "type.googleapis.com/protocol.WithdrawExpireUnfreezeContract".getBytes()))
+                // value object
+                .copyString("12").arrayPointer()
+                // ownerAddr
+                .copyString("0a").protobuf(argOwnerAddr, typeString)
+                .arrayEnd().arrayEnd().arrayEnd()
+                // timestamp
+                .copyString("70")
+                .protobuf(argTimestamp, typeInt)
+                .showMessage("TRX")
+                .showMessage("Withdraw")
+                .copyArgument(argOwnerAddr, Buffer.CACHE2)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
+                        HashType.DoubleSHA256)
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25),
+                        Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
+                        ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
+    }
+
+    public static String TRXWithdrawExpireUnfreezeScriptSignature = Strings.padStart("3046022100abfa3c6ac84c20fe91d630b7f83c822fa6e037e7bb6de2d17eba4e3997f9fa9a022100dc45c119c277363849e08c181d8f61a80795ddd30469d4fb3091ccd6af6a7fe5", 144, '0');
 }
