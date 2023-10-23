@@ -993,7 +993,7 @@ public class ScriptAssembler {
         public String toString() {
             return tagName;
         }
-        
+
         public int toInt() {
             return Integer.parseInt(tagName, 16);
         }
@@ -1004,6 +1004,7 @@ public class ScriptAssembler {
      *
      * @param data
      * @param destinationBuf The destination buffer.
+     * @param tag
      * @return
      */
     public ScriptAssembler taggedHash(ScriptDataInterface data, Buffer destinationBuf, Tag tag) {
