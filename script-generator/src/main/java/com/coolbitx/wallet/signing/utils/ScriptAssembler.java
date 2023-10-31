@@ -71,6 +71,7 @@ public class ScriptAssembler {
             this.hashLabel = hashLabel;
         }
 
+        @Override
         public String toString() {
             return hashLabel;
         }
@@ -973,6 +974,41 @@ public class ScriptAssembler {
             version = versionType.version06;
         }
         script += compose("C8", null, destinationBuf, data.length() / 2, 0) + data;
+        return this;
+    }
+
+    public enum Tag {
+        CHALLENGE("00"),
+        AUX("01"),
+        NONCE("02"),
+        TAP_TWEAK("03");
+
+        private final String tagName;
+
+        Tag(String tagName) {
+            this.tagName = tagName;
+        }
+
+        @Override
+        public String toString() {
+            return tagName;
+        }
+
+        public int toInt() {
+            return Integer.parseInt(tagName, 16);
+        }
+    }
+
+    /**
+     * Tagged hash data to destination buffer.
+     *
+     * @param data
+     * @param destinationBuf The destination buffer.
+     * @param tag
+     * @return
+     */
+    public ScriptAssembler taggedHash(ScriptDataInterface data, Buffer destinationBuf, Tag tag) {
+        script += compose("AE", data, destinationBuf, tag.toInt(), 0);
         return this;
     }
 
