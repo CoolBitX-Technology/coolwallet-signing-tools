@@ -86,7 +86,8 @@ public class ScriptAssembler {
         ECDSA("01"),
         EDDSA("02"),
         BIP32EDDSA("03"),
-        CURVE25519("04");
+        CURVE25519("04"),
+        SCHNORR("05");
         private final String signLabel;
 
         SignType(String signLabel) {
