@@ -36,11 +36,12 @@ public class BtcScript {
 
         String bech32Address = new ScriptAssembler().copyString(hrpExpand + "00", Buffer.CACHE2)
                 .ifEqual(argOutputScriptType, "02",
-                        new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript(),
-                        new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript()
+                        new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
+                                .copyString("000000000000", Buffer.CACHE2)
+                                .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1).getScript(),
+                        new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).copyString("000000000000", Buffer.CACHE2)
+                                .bech32mPolymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1).getScript()
                 )
-                .copyString("000000000000", Buffer.CACHE2)
-                .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
                 .clearBuffer(Buffer.CACHE2)
                 .copyString(HexUtil.toHexString(hrp + "1q"), Buffer.CACHE2)
                 .ifEqual(argOutputScriptType, "02",

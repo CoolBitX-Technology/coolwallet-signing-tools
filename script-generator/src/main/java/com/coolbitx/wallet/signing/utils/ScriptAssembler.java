@@ -585,6 +585,21 @@ public class ScriptAssembler {
         script += compose("5A", data, destinationBuf, 0xB, 0);
         return this;
     }
+    
+    /**
+     * Compute Bech3m2 ploymod checksum and put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public ScriptAssembler bech32mPolymod(ScriptDataInterface data, Buffer destinationBuf) {
+        if (version.getVersionNum() < 4) {
+            version = versionType.version04;
+        }
+        script += compose("5A", data, destinationBuf, 0x2, 0x1);
+        return this;
+    }
 
     /**
      * Compute BCH ploymod checksum and put the output to destination buffer.
