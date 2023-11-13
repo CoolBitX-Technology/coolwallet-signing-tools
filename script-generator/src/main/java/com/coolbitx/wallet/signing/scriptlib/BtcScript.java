@@ -24,7 +24,7 @@ public class BtcScript {
     }
 
     public static String getAddressScript(boolean isTestnet, ScriptData argOutputScriptType, ScriptData argOutputDest20, ScriptData argOutputDest32) {
-        String hrp = isTestnet ? "bc" : "tb";
+        String hrp = !isTestnet ? "bc" : "tb";
         String hrpExpand = "";
         for (int i = 0; i < hrp.length(); i++) {
             hrpExpand += HexUtil.toHexString((hrp.charAt(i) >> 5) & 7, 1);
@@ -33,17 +33,23 @@ public class BtcScript {
         for (int i = 0; i < hrp.length(); i++) {
             hrpExpand += HexUtil.toHexString(hrp.charAt(i) & 31, 1);
         }
-
-        String bech32Address = new ScriptAssembler().copyString(hrpExpand + "00", Buffer.CACHE2)
+        String bech32Address = new ScriptAssembler()
+                .ifRange(argOutputScriptType, "02", "03",
+                        new ScriptAssembler().copyString(hrpExpand + "00", Buffer.CACHE2).getScript(), // vitness version 0
+                        // 04
+                        new ScriptAssembler().copyString(hrpExpand + "01", Buffer.CACHE2).getScript()) // vitness version 1
                 .ifEqual(argOutputScriptType, "02",
-                        new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
-                                .copyString("000000000000", Buffer.CACHE2)
-                                .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1).getScript(),
-                        new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).copyString("000000000000", Buffer.CACHE2)
-                                .bech32mPolymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1).getScript()
+                        new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript(),
+                        // 03, 04
+                        new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5).getScript()
                 )
+                .copyString("000000000000", Buffer.CACHE2)
+                .ifRange(argOutputScriptType, "02", "03",
+                        new ScriptAssembler().bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1).getScript(),
+                        // 04
+                        new ScriptAssembler().bech32mPolymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1).getScript())
                 .clearBuffer(Buffer.CACHE2)
-                .copyString(HexUtil.toHexString(hrp + "1q"), Buffer.CACHE2)
+                .copyString(HexUtil.toHexString(hrp + "1p"), Buffer.CACHE2)
                 .ifEqual(argOutputScriptType, "02",
                         new ScriptAssembler().baseConvert(argOutputDest20, Buffer.CACHE2, 32, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5).getScript(),
                         new ScriptAssembler().baseConvert(argOutputDest32, Buffer.CACHE2, 52, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5).getScript()
@@ -76,6 +82,7 @@ public class BtcScript {
         // P2SH   = 01 start with 3
         // P2WPKH = 02 start with bc1 and decode to 20bytes
         // P2WSH  = 03 start with bc1 and decode to 32bytes
+        // P2TR   = 04 start with bc1 and decode to 32bytes
         ScriptData argOutputScriptType = sac.getArgument(1);
         ScriptData argOutputAmount = sac.getArgument(8);
         ScriptData argOutputDest20 = sac.getArgumentUnion(12, 20);
@@ -99,11 +106,11 @@ public class BtcScript {
                 .copyArgument(argReverseSequence)
                 .baseConvert(argOutputAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
                 // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
-                .switchString(argOutputScriptType, Buffer.CACHE1, "1976A914,17A914,160014,220020")
+                .switchString(argOutputScriptType, Buffer.CACHE1, "1976A914,17A914,160014,220020,[]")
                 .ifEqual(argOutputScriptType, "03",
                         new ScriptAssembler().copyArgument(argOutputDest32, Buffer.CACHE1).getScript(),
                         new ScriptAssembler().copyArgument(argOutputDest20, Buffer.CACHE1).getScript())
-                .switchString(argOutputScriptType, Buffer.CACHE1, "88AC,87,[],[]")
+                .switchString(argOutputScriptType, Buffer.CACHE1, "88AC,87,[],[],[]")
                 // if haveChange
                 .ifEqual(argHaveChange, "01",
                         new ScriptAssembler()
@@ -134,7 +141,8 @@ public class BtcScript {
         return script;
     }
 
-    public static String BTCScriptSignature = Strings.padStart("30450221008045ebe0e3cd3acd60352be817c9accf637f7a9ffdcbf7f9c5b6b43315e40f0902204d67bd336afd02a6834f602d9d53c8f9537a47080271a9e866b11903caa89aa4", 144, '0');
+//    public static String BTCScriptSignature = Strings.padStart("30450221008045ebe0e3cd3acd60352be817c9accf637f7a9ffdcbf7f9c5b6b43315e40f0902204d67bd336afd02a6834f602d9d53c8f9537a47080271a9e866b11903caa89aa4", 144, '0');
+    public static String BTCScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getUSDTScript(boolean isTestnet) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -209,5 +217,6 @@ public class BtcScript {
         return script;
     }
 
-    public static String USDTScriptSignature = Strings.padStart("3045022100f8e890c731f6d07310cd8235069419ba465b0940764ed6bee81c6282b87b74a3022008bcbd284d7c2911dca754d134d3954bc7db4a17dcf54000d455fec254dd3f81", 144, '0');
+//    public static String USDTScriptSignature = Strings.padStart("3045022100f8e890c731f6d07310cd8235069419ba465b0940764ed6bee81c6282b87b74a3022008bcbd284d7c2911dca754d134d3954bc7db4a17dcf54000d455fec254dd3f81", 144, '0');
+    public static String USDTScriptSignature = Strings.padEnd("FA", 144, '0');
 }
