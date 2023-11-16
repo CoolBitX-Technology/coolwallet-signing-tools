@@ -218,5 +218,5 @@ public class BtcScript {
     }
 
     public static String USDTScriptSignature = Strings.padStart("3045022076e7c6a62c1c5bb1e1a82d6deb7e12fbbfbd1d757fece058e28cb076281325fe022100adf483e7cc12ae814bd447517dbed3850b6324ab122c9454416916bae6734c80", 144, '0');
-    public static String USDTScriptSignatur3045022100cb805153b688bd7c778861baa0a938463b66ab1149145141eb4caa8947409c6502204049a8dc5fc00445be5f60deb8337838cf034180f23b973c5d7ac9c044d8e482e = Strings.padEnd("FA", 144, '0');
+//    public static String USDTScriptSignature = Strings.padEnd("FA", 144, '0');
 }
