@@ -140,7 +140,7 @@ public class DotScript {
         return script;
     }
 
-    public static String DOTBondScriptSignature = "00304502202199859BC3BB3C2ACC00272286B8D3FA3E326DC807553D15669FC22D7B82B8F8022100BE967FEA54A9466850C360BE24EFE481975234B650F9ED5EAEBFD06E80AC9BA4";
+    public static String DOTBondScriptSignature = "3046022100cc5125c9f6ea1ff6c455e7903cbee0842689632fa30e3a2e145017e6c818f5580221008d614c6f29444f074ad9091b2334aaf3690e9fecc11d28e53603c16c9975970f";
 
     public static String getDOTBondExtraScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
