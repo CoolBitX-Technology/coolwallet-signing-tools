@@ -482,7 +482,6 @@ public class DotScript {
     public static String getKSMBondScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
-        ScriptData argControllerAddr = sac.getArgument(32);
         ScriptData argAmount = sac.getArgumentRightJustified(10);
         ScriptData argPayeeType = sac.getArgument(1);
         ScriptData argMortalEra = sac.getArgumentRightJustified(5);
@@ -498,9 +497,6 @@ public class DotScript {
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
-                // controller address
-                .copyString("00")
-                .copyArgument(argControllerAddr)
                 // value
                 .scaleEncode(argAmount, Buffer.TRANSACTION)
                 // payeeType
@@ -521,15 +517,6 @@ public class DotScript {
                 .copyArgument(argBlockHash)
                 .showMessage("KSM")
                 .showMessage("Bond")
-                .copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
-                .copyString("02", Buffer.CACHE2)
-                .copyArgument(argControllerAddr, Buffer.CACHE2)
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        HashType.Blake2b512)
-                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35),
-                        Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
-                        ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .showAmount(argAmount, 12)
                 .showWrap("PRESS", "BUTToN")
                 // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
