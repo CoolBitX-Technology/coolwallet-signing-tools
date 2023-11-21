@@ -140,7 +140,7 @@ public class DotScript {
         return script;
     }
 
-    public static String DOTBondScriptSignature = "00304502202199859BC3BB3C2ACC00272286B8D3FA3E326DC807553D15669FC22D7B82B8F8022100BE967FEA54A9466850C360BE24EFE481975234B650F9ED5EAEBFD06E80AC9BA4";
+    public static String DOTBondScriptSignature = "3046022100cc5125c9f6ea1ff6c455e7903cbee0842689632fa30e3a2e145017e6c818f5580221008d614c6f29444f074ad9091b2334aaf3690e9fecc11d28e53603c16c9975970f";
 
     public static String getDOTBondExtraScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -482,7 +482,6 @@ public class DotScript {
     public static String getKSMBondScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
-        ScriptData argControllerAddr = sac.getArgument(32);
         ScriptData argAmount = sac.getArgumentRightJustified(10);
         ScriptData argPayeeType = sac.getArgument(1);
         ScriptData argMortalEra = sac.getArgumentRightJustified(5);
@@ -498,9 +497,6 @@ public class DotScript {
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
-                // controller address
-                .copyString("00")
-                .copyArgument(argControllerAddr)
                 // value
                 .scaleEncode(argAmount, Buffer.TRANSACTION)
                 // payeeType
@@ -521,15 +517,6 @@ public class DotScript {
                 .copyArgument(argBlockHash)
                 .showMessage("KSM")
                 .showMessage("Bond")
-                .copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
-                .copyString("02", Buffer.CACHE2)
-                .copyArgument(argControllerAddr, Buffer.CACHE2)
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2,
-                        HashType.Blake2b512)
-                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35),
-                        Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
-                        ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .showAmount(argAmount, 12)
                 .showWrap("PRESS", "BUTToN")
                 // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
@@ -538,7 +525,7 @@ public class DotScript {
         return script;
     }
 
-    public static String KSMBondScriptSignature = "00003044022054C4D1F81B043D19B238402E55285AB9BE0AA381026A228C1A43818550FDAF1A022051B7F4B2583B0A983D8991EA3AF09979B422B4BA8BF4FBAF6F365D0820D87A67";
+    public static String KSMBondScriptSignature = "00304502200848e5611e49f0a4af059f8ef957655b6bd4488fa8c0a63e68bc83bfb5d78f8d022100c7005b9e9d0237d74c538b13c059b8e9544479322f8588fb0c81b1caf788a4df";
 
     public static String getKSMUnbondScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
