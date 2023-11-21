@@ -525,7 +525,7 @@ public class DotScript {
         return script;
     }
 
-    public static String KSMBondScriptSignature = "00003044022054C4D1F81B043D19B238402E55285AB9BE0AA381026A228C1A43818550FDAF1A022051B7F4B2583B0A983D8991EA3AF09979B422B4BA8BF4FBAF6F365D0820D87A67";
+    public static String KSMBondScriptSignature = "00304502200848e5611e49f0a4af059f8ef957655b6bd4488fa8c0a63e68bc83bfb5d78f8d022100c7005b9e9d0237d74c538b13c059b8e9544479322f8588fb0c81b1caf788a4df";
 
     public static String getKSMUnbondScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
