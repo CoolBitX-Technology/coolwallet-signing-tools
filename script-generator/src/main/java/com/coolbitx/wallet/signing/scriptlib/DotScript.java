@@ -36,6 +36,7 @@ public class DotScript {
         System.out.println("Ksm Nominate Single Hash: \n" + getKSMNominateSingleHashScript() + "\n");
         System.out.println("Ksm Nominate Double Hash: \n" + getKSMNominateDoubleHashScript() + "\n");
         System.out.println("Ksm Withdraw: \n" + getKSMWithdrawScript() + "\n");
+        System.out.println("Ksm Chill: \n" + getKSMChillScript() + "\n");
     }
 
     public static String getDOTScript() {
@@ -422,6 +423,8 @@ public class DotScript {
         return script;
     }
 
+    public static String DOTChillScriptSignature = "30460221009E3B5055B297103AA32FCE3F6521A74FDB09B62048F3E72FF13470706487E44C022100BF342262F5802FD8F5A8A0A69EC897191062E3F4F0A19BD66D1C40CA0C545ECF";
+
     public static String getKSMScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
@@ -436,7 +439,7 @@ public class DotScript {
         ScriptData argBlockHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
-                // set coinType to 0162
+                // set coinType to 01b2
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
@@ -493,7 +496,7 @@ public class DotScript {
         ScriptData argBlockHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
-                // set coinType to 0162
+                // set coinType to 01b2
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
@@ -540,7 +543,7 @@ public class DotScript {
         ScriptData argBlockHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
-                // set coinType to 0162
+                // set coinType to 01b2
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
@@ -585,7 +588,7 @@ public class DotScript {
         ScriptData argBlockHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
-                // set coinType to 0162
+                // set coinType to 01b2
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
@@ -631,7 +634,7 @@ public class DotScript {
         ScriptData argTargetAddrs = sac.getArgumentAll();
 
         String script = new ScriptAssembler()
-                // set coinType to 0162
+                // set coinType to 01b2
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
@@ -680,7 +683,7 @@ public class DotScript {
         ScriptData argTargetAddrs = sac.getArgumentAll();
 
         String script = new ScriptAssembler()
-                // set coinType to 0162
+                // set coinType to 01b2
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
@@ -731,7 +734,7 @@ public class DotScript {
         ScriptData argBlockHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
-                // set coinType to 0162
+                // set coinType to 01b2
                 .setCoinType(0x01b2)
                 // call index
                 .copyArgument(argCallIndex)
@@ -766,5 +769,46 @@ public class DotScript {
     }
 
     public static String KSMWithdrawScriptSignature = "3046022100C2409FB6AC6E7B8F851C58CD16A8C9B1E9D3FD34EB57D10909C5D1937323EFA3022100D775322BE66104258839F9444BA1114A8EDB07E620F5EEF7F8D2A1CF052E047C";
+
+    public static String getKSMChillScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argCallIndex = sac.getArgument(2);
+        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argNonce = sac.getArgumentRightJustified(5);
+        ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argSpecVer = sac.getArgument(4);
+        ScriptData argTxVer = sac.getArgument(4);
+        ScriptData argGenesisHash = sac.getArgument(32);
+        ScriptData argBlockHash = sac.getArgument(32);
+
+        String script = new ScriptAssembler()
+                // set coinType to 01b2
+                .setCoinType(0x01b2)
+                // call index
+                .copyArgument(argCallIndex)
+                // MortalEra
+                .copyArgument(argMortalEra)
+                // nonce
+                .scaleEncode(argNonce, Buffer.TRANSACTION)
+                // tip
+                .scaleEncode(argTip, Buffer.TRANSACTION)
+                // spec ver
+                .copyArgument(argSpecVer)
+                // tx ver
+                .copyArgument(argTxVer)
+                // genesis hash
+                .copyArgument(argGenesisHash)
+                // block hash
+                .copyArgument(argBlockHash)
+                .showMessage("KSM")
+                .showMessage("Chill")
+                .showWrap("PRESS", "BUTToN")
+                // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
+                .setHeader(HashType.Blake2b256, SignType.ECDSA)
+                .getScript();
+        return script;
+    }
+    
+    public static String KSMChillScriptSignature = "";
 
 }
