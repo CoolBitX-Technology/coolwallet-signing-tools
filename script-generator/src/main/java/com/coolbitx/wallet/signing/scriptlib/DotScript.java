@@ -809,6 +809,6 @@ public class DotScript {
         return script;
     }
     
-    public static String KSMChillScriptSignature = "3046022100cc5125c9f6ea1ff6c455e7903cbee0842689632fa30e3a2e145017e6c818f5580221008d614c6f29444f074ad9091b2334aaf3690e9fecc11d28e53603c16c9975970f";
+    public static String KSMChillScriptSignature = "0000304402207ffe34baace4cd517489ca82fbe651b29ed242ea7897b5b6470806d9822688aa02200716817824c290b6add915baad2acfad76c8b8acecc42f94500ab1c7d6c6ef65";
 
 }
