@@ -19,8 +19,9 @@ public class BtcScript {
     }
 
     public static void listAll() {
-        System.out.println("Btc: \n" + getBTCScript(false) + "\n");
-        System.out.println("USDT: \n" + getUSDTScript(false) + "\n");
+        System.out.println("BTC witness 0: \n" + getBTCScript(false) + "\n");
+        System.out.println("BTC witness 1: \n" + getBTCWitnessV1Script(false) + "\n");
+        System.out.println("USDT witness 0: \n" + getUSDTScript(false) + "\n");
     }
 
     public static String getAddressScript(boolean isTestnet, ScriptData argOutputScriptType, ScriptData argOutputDest20, ScriptData argOutputDest32) {
@@ -145,7 +146,7 @@ public class BtcScript {
         return script;
     }
 
-    public static String BTCScriptSignature = Strings.padStart("3045022100cb805153b688bd7c778861baa0a938463b66ab1149145141eb4caa8947409c6502204049a8dc5fc00445be5f60deb8337838cf034180f23b973c5d7ac9c044d8e482", 144, '0');
+    public static String BTCScriptSignature = Strings.padStart("304502200f255c7e238f586478e20a97161433cc32cd8cc916d0638a3081e5dc329f2ca1022100de05b467c312effef03a810ec390b8907bb64a8f61a49ff90f9f1228b8bd134c", 144, '0');
 //    public static String BTCScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getBTCWitnessV1Script(boolean isTestnet) {
@@ -225,8 +226,8 @@ public class BtcScript {
         return script;
     }
 
-//    public static String BTCWitnessV1ScriptSignature = Strings.padStart("", 144, '0');
-    public static String BTCWitnessV1ScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String BTCWitnessV1ScriptSignature = Strings.padStart("3046022100d183b304f000baeaf010429c7f20302cb0da8259d018b33362ce4822d2c655ee022100de5c6e4fefe5e8b25806fef62c7a68d4fa21c374b37e5b55ffe83e8ab5106494", 144, '0');
+//    public static String BTCWitnessV1ScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getUSDTScript(boolean isTestnet) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
