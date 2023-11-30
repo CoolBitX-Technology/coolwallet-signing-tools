@@ -172,7 +172,6 @@ public class BtcScript {
         ScriptData argChangeScriptType = sac.getArgument(1);
         ScriptData argChangeAmount = sac.getArgument(8);
         ScriptData argChangePath = sac.getArgument(21);
-        ScriptData argReverseSequence = sac.getArgument(4);
         String addressScript = getAddressScript(isTestnet, argOutputScriptType, argOutputDest20, argOutputDest32);
 
         String script = new ScriptAssembler()
@@ -212,21 +211,20 @@ public class BtcScript {
                                         new ScriptAssembler().copyArgument(ScriptData.getBuffer(Buffer.CACHE2, 1, 33), Buffer.CACHE1).getScript(),
                                         "")
                                 .switchString(argChangeScriptType, Buffer.CACHE1, "88AC,87,[],[],[]").getScript(), "")
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.DoubleSHA256)
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.SHA256)
                 .copyString("00") // spend_type
                 .utxoDataPlaceholder(argZeroPadding)
-                .copyArgument(argReverseSequence)
                 .clearBuffer(Buffer.CACHE1)
                 .clearBuffer(Buffer.CACHE2)
                 .showMessage("BTC")
                 .insertString(addressScript)
                 .showAmount(argOutputAmount, 8)
                 .showPressButton()
-                .setHeader(ScriptAssembler.HashType.DoubleSHA256, ScriptAssembler.SignType.ECDSA).getScript();
+                .setHeader(ScriptAssembler.HashType.SHA256, ScriptAssembler.SignType.ECDSA).getScript();
         return script;
     }
 
-    public static String BTCWitnessV1ScriptSignature = Strings.padStart("3046022100d183b304f000baeaf010429c7f20302cb0da8259d018b33362ce4822d2c655ee022100de5c6e4fefe5e8b25806fef62c7a68d4fa21c374b37e5b55ffe83e8ab5106494", 144, '0');
+    public static String BTCWitnessV1ScriptSignature = Strings.padStart("30450220036f5940b33f4c918d5571f881baf77349e136681ab5ec77922250809e0a329e022100c2ec0fe0e5dcf113f176772df4ebb8629e010591d87f8a5e84062e2bb10ce64a", 144, '0');
 //    public static String BTCWitnessV1ScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getUSDTScript(boolean isTestnet) {
