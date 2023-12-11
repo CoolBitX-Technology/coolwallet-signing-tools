@@ -210,7 +210,7 @@ public class BtcScript {
                                         "")
                                 // if P2TR
                                 .ifEqual(argChangeScriptType, "04",
-                                        new ScriptAssembler().copyArgument(ScriptData.getBuffer(Buffer.CACHE2, 1, 33), Buffer.CACHE1).getScript(),
+                                        new ScriptAssembler().copyArgument(ScriptData.getBuffer(Buffer.CACHE2, 1, 32), Buffer.CACHE1).getScript(),
                                         "")
                                 .switchString(argChangeScriptType, Buffer.CACHE1, "88AC,87,[],[],[]").getScript(), "")
                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.SHA256)
@@ -226,7 +226,7 @@ public class BtcScript {
         return script;
     }
 
-    public static String BTCWitnessV1ScriptSignature = Strings.padStart("30450220036f5940b33f4c918d5571f881baf77349e136681ab5ec77922250809e0a329e022100c2ec0fe0e5dcf113f176772df4ebb8629e010591d87f8a5e84062e2bb10ce64a", 144, '0');
+    public static String BTCWitnessV1ScriptSignature = Strings.padStart("304402205050833795f112be224c98eb1018b7110ef0d181da66dcba6acbe8f0455f6d330220443c321a3aa050be76c95d6e9a07cdc734486f6ffc134c0d58c467a9465d15eb", 144, '0');
 //    public static String BTCWitnessV1ScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getUSDTScript(boolean isTestnet) {
