@@ -177,6 +177,7 @@ public class BtcScript {
         String script = new ScriptAssembler()
                 .setCoinType(0x00)
                 .copyString("F40A48DF4B2A70C8B4924BF2654661ED3D95FD66A313EB87237597C628E4A031F40A48DF4B2A70C8B4924BF2654661ED3D95FD66A313EB87237597C628E4A031")
+                .copyString("00")
                 .copyString("00") // hash_type: SIGHASH_DEFAULT
                 .copyArgument(argReverseVersion)
                 .copyArgument(argReverseLockTime)
