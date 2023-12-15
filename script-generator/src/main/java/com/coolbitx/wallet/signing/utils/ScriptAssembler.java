@@ -997,7 +997,8 @@ public class ScriptAssembler {
         CHALLENGE("00"),
         AUX("01"),
         NONCE("02"),
-        TAP_TWEAK("03");
+        TAP_TWEAK("03"),
+        TAP_SIGHASH("04");
 
         private final String tagName;
 
