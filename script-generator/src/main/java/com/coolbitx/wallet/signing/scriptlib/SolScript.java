@@ -236,6 +236,7 @@ public class SolScript {
                 .showPressButton()
                 .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
+
     }
 
     public static String getAssociateTokenAccountScript() {
