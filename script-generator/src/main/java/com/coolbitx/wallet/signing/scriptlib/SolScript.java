@@ -236,8 +236,10 @@ public class SolScript {
                 .showPressButton()
                 .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
-
     }
+
+    public static String getSignInScriptSignature = Strings.padEnd("FA", 144, '0');
+
 
     public static String getAssociateTokenAccountScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
