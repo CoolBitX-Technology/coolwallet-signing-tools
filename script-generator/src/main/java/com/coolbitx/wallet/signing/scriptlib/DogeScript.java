@@ -5,7 +5,6 @@
  */
 package com.coolbitx.wallet.signing.scriptlib;
 
-import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
 import com.coolbitx.wallet.signing.utils.ScriptData;
@@ -19,7 +18,7 @@ public class DogeScript {
     }
 
     public static void listAll() {
-        System.out.println("DOGE witness 0: \n" + getDOGEScript() + "\n");
+        System.out.println("DOGE transfer: \n" + getDOGEScript() + "\n");
     }
 
     public static String getAddressScript(ScriptData argOutputScriptType, ScriptData argOutputDest) {
@@ -86,7 +85,7 @@ public class DogeScript {
         return script;
     }
 
-//    public static String DOGEcriptSignature = Strings.padStart("", 144, '0');
-    public static String DOGEScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String DOGEcriptSignature = Strings.padStart("304402205ca345d645aa68218ace302785706b40801ce8255add3c161ca646e88bc365e402207c7d72789867c4356c66c87c4ca8e89fce31445c5c886eaf5487fac3c1cd3412", 144, '0');
+//    public static String DOGEScriptSignature = Strings.padEnd("FA", 144, '0');
 
 }
