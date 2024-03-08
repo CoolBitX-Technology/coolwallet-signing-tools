@@ -18,16 +18,17 @@ public class SolScript {
     public static void listAll() {
         System.out.println("Sol transfer: \n" + getTransferScript() + "\n");
         System.out.println("Sol Smart Contract: \n" + getSolSmartScript() + "\n");
+        System.out.println("Sol Sign-In: \n" + getSignInScript() + "\n");
+        System.out.println("Sol Sign Message: \n" + getSignMessageScript() + "\n");
         System.out.println("Sol Associate Account: \n" + getAssociateTokenAccountScript() + "\n");
-        System.out.println("Sol transfer spl token: \n" + getTransferSplTokenScript() + "\n");
-        System.out.println(
-                "Sol Create and transfer spl token: \n" + getCreateAndTransferSplTokenScript() + "\n");
+        System.out.println("Sol transfer spl token-2022: \n" + getTransferSplToken22Script() + "\n");
+        System.out.println("Sol create and transfer spl token-2022: \n" + getCreateAndTransferSplToken22Script() + "\n");
         System.out.println("Sol Delegate: \n" + getDelegateScript() + "\n");
         System.out.println("Sol Undelegate: \n" + getUndelegateScript() + "\n");
         System.out.println(
                 "Sol Delegate And Create Account With Seed \n"
-                + getDelegateAndCreateAccountWithSeedScript()
-                + "\n");
+                        + getDelegateAndCreateAccountWithSeedScript()
+                        + "\n");
         System.out.println("Sol Withdraw: \n" + getStackingWithdrawScript() + "\n");
     }
 
@@ -44,65 +45,62 @@ public class SolScript {
         ScriptData data = sac.getArgumentAll();
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
-        String script
-                = scriptAsb
-                        .setCoinType(0x01f5)
-                        .copyString("01")
-                        .copyString("00")
-                        .copyString("01")
-                        .copyArgument(keysCount)
-                        .copyArgument(fromAccount)
-                        .ifEqual(keysCount, "02", "", new ScriptAssembler().copyArgument(toAccount).getScript())
-                        .copyArgument(programId)
-                        .copyArgument(recentBlockHash)
-                        // instruction count
-                        .copyString("01")
-                        .ifEqual(
-                                keysCount,
-                                "02",
-                                new ScriptAssembler().copyString("01").getScript(),
-                                new ScriptAssembler().copyString("02").getScript())
-                        .copyString("02")
-                        .copyArgument(keyIndices)
-                        .copyArgument(dataLength)
-                        .copyArgument(programIdIndex)
-                        .copyArgument(data)
-                        .showMessage("SOL")
-                        .ifEqual(
-                                keyIndices,
-                                "0001",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                toAccount,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .getScript(),
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                fromAccount,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .getScript())
-                        .clearBuffer(Buffer.CACHE2)
-                        .baseConvert(
-                                data,
-                                Buffer.CACHE1,
-                                8,
-                                ScriptAssembler.binaryCharset,
-                                ScriptAssembler.inLittleEndian)
-                        .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 9)
-                        .clearBuffer(Buffer.CACHE1)
-                        .showPressButton()
-                        .setHeader(HashType.NONE, SignType.EDDSA)
-                        .getScript();
-
-        return script;
+        return scriptAsb
+                .setCoinType(0x01f5)
+                .copyString("01")
+                .copyString("00")
+                .copyString("01")
+                .copyArgument(keysCount)
+                .copyArgument(fromAccount)
+                .ifEqual(keysCount, "02", "", new ScriptAssembler().copyArgument(toAccount).getScript())
+                .copyArgument(programId)
+                .copyArgument(recentBlockHash)
+                // instruction count
+                .copyString("01")
+                .ifEqual(
+                        keysCount,
+                        "02",
+                        new ScriptAssembler().copyString("01").getScript(),
+                        new ScriptAssembler().copyString("02").getScript())
+                .copyString("02")
+                .copyArgument(keyIndices)
+                .copyArgument(dataLength)
+                .copyArgument(programIdIndex)
+                .copyArgument(data)
+                .showMessage("SOL")
+                .ifEqual(
+                        keyIndices,
+                        "0001",
+                        new ScriptAssembler()
+                                .baseConvert(
+                                        toAccount,
+                                        Buffer.CACHE2,
+                                        0,
+                                        ScriptAssembler.base58Charset,
+                                        ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .getScript(),
+                        new ScriptAssembler()
+                                .baseConvert(
+                                        fromAccount,
+                                        Buffer.CACHE2,
+                                        0,
+                                        ScriptAssembler.base58Charset,
+                                        ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .getScript())
+                .clearBuffer(Buffer.CACHE2)
+                .baseConvert(
+                        data,
+                        Buffer.CACHE1,
+                        8,
+                        ScriptAssembler.binaryCharset,
+                        ScriptAssembler.inLittleEndian)
+                .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 9)
+                .clearBuffer(Buffer.CACHE1)
+                .showPressButton()
+                .setHeader(HashType.NONE, SignType.EDDSA)
+                .getScript();
     }
 
     public static String getSolSmartScript() {
@@ -110,17 +108,65 @@ public class SolScript {
         ScriptData data = sac.getArgumentAll();
 
         ScriptAssembler scriptAsb = new ScriptAssembler();
-        String script
-                = scriptAsb
-                        .setCoinType(0x01f5)
-                        .copyArgument(data)
-                        .showMessage("SOL")
-                        .showWrap("SMART", "")
-                        .showPressButton()
-                        .setHeader(HashType.NONE, SignType.EDDSA)
-                        .getScript();
-        return script;
+        return scriptAsb
+                .setCoinType(0x01f5)
+                .copyArgument(data)
+                .showMessage("SOL")
+                .showWrap("SMART", "")
+                .showPressButton()
+                .setHeader(HashType.NONE, SignType.EDDSA)
+                .getScript();
     }
+
+    public static String getSignInScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData domainLength = sac.getArgument(1);
+        ScriptData domain = sac.getArgumentVariableLength(128);
+        ScriptData optionalMessageLength = sac.getArgument(2);
+        ScriptData optionalMessage = sac.getArgumentVariableLength(1024);
+        ScriptData argAddressPath = sac.getArgument(17);
+        //" wants you to sign in with your Solana account:\n"
+        String fixedText = "2077616e747320796f7520746f207369676e20696e207769746820796f757220536f6c616e61206163636f756e743a0a";
+
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        return scriptAsb
+                .setCoinType(0x01f5)
+                .setBufferIntUnsafe(domainLength)
+                .copyArgument(domain)
+                .copyString(fixedText)
+                .derivePublicKey(argAddressPath, Buffer.CACHE2)
+                .baseConvert(
+                        ScriptData.getDataBufferAll(Buffer.CACHE2),
+                        Buffer.TRANSACTION,
+                        0,
+                        ScriptAssembler.base58Charset,
+                        ScriptAssembler.zeroInherit)
+                .setBufferIntUnsafe(optionalMessageLength)
+                .copyArgument(optionalMessage)
+                .showMessage("SOL")
+                .showWrap("SIGN IN", "")
+                .showPressButton()
+                .setHeader(HashType.NONE, SignType.EDDSA)
+                .getScript();
+    }
+
+    public static String getTempScriptSignature = Strings.padEnd("FA", 144, '0');
+
+    public static String getSignMessageScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData data = sac.getArgumentAll();
+
+        ScriptAssembler scriptAsb = new ScriptAssembler();
+        return scriptAsb
+                .setCoinType(0x01f5)
+                .copyArgument(data)
+                .showMessage("SOL")
+                .showWrap("MESSAGE", "")
+                .showPressButton()
+                .setHeader(HashType.NONE, SignType.EDDSA)
+                .getScript();
+    }
+
 
     public static String getAssociateTokenAccountScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -479,19 +525,20 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getTransferSplTokenScript() {
+    public static String getTransferSplToken22Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData keysCount = sac.getArgument(1);
         ScriptData ownerAccount = sac.getArgument(32);
         ScriptData fromAssociateAccount = sac.getArgument(32);
         ScriptData toAssociateAccount = sac.getArgument(32);
+        ScriptData tokenAccount = sac.getArgument(32);
         ScriptData programId = sac.getArgument(32);
-
         ScriptData recentBlockHash = sac.getArgument(32);
-        ScriptData keyIndices = sac.getArgument(3);
+        ScriptData keyIndices = sac.getArgument(4);
         ScriptData dataLength = sac.getArgument(1);
         ScriptData programIdIndex = sac.getArgument(1);
-        ScriptData data = sac.getArgument(8);
+        ScriptData tokenAmount = sac.getArgument(8);
+        ScriptData customTokenDecimals= sac.getArgument(1);
         ScriptData tokenInfo = sac.getArgumentUnion(0, 41);
         ScriptData tokenDecimals = sac.getArgument(1);
         ScriptData tokenNameLength = sac.getArgument(1);
@@ -501,83 +548,70 @@ public class SolScript {
         ScriptAssembler scriptAsb = new ScriptAssembler();
         String script
                 = scriptAsb
-                        .setCoinType(0x01f5)
-                        .copyString("01")
-                        .copyString("00")
-                        .copyString("01")
-                        .copyArgument(keysCount)
-                        .copyArgument(ownerAccount)
-                        .copyArgument(fromAssociateAccount)
-                        .ifEqual(
-                                keysCount,
-                                "03",
-                                "",
-                                new ScriptAssembler().copyArgument(toAssociateAccount).getScript())
-                        .copyArgument(programId)
-                        .copyArgument(recentBlockHash)
-                        .copyString("01")
-                        .ifEqual(
-                                keysCount,
-                                "03",
-                                new ScriptAssembler().copyString("02").getScript(),
-                                new ScriptAssembler().copyString("03").getScript())
-                        .copyString("03")
-                        .copyArgument(keyIndices)
-                        .copyArgument(dataLength)
-                        .copyArgument(programIdIndex)
-                        .copyArgument(data)
-                        .showMessage("SOL")
-                        .ifSigned(
-                                tokenInfo,
-                                tokenSign,
-                                "",
-                                new ScriptAssembler()
-                                        .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
-                                        .getScript())
-                        .setBufferInt(tokenNameLength, 1, 7)
-                        .copyArgument(tokenName, Buffer.CACHE2)
-                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                        .clearBuffer(Buffer.CACHE2)
-                        .ifEqual(
-                                keyIndices,
-                                "010200",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                toAssociateAccount,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .getScript(),
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                fromAssociateAccount,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .getScript())
-                        .clearBuffer(Buffer.CACHE2)
-                        .baseConvert(
-                                data,
-                                Buffer.CACHE1,
-                                8,
-                                ScriptAssembler.binaryCharset,
-                                ScriptAssembler.inLittleEndian)
-                        .setBufferInt(tokenDecimals, 0, 20)
-                        .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), ScriptData.bufInt)
-                        .clearBuffer(Buffer.CACHE1)
-                        .showPressButton()
-                        .setHeader(HashType.NONE, SignType.EDDSA)
-                        .getScript();
-
+                .setCoinType(0x01f5)
+                //numRequiredSignatures
+                .copyString("01")
+                //numReadonlySignedAccounts
+                .copyString("00")
+                //numReadonlyUnsignedAccounts
+                .copyString("02")
+                .copyArgument(keysCount)
+                .copyArgument(ownerAccount)
+                .copyArgument(fromAssociateAccount)
+                .copyArgument(toAssociateAccount)
+                .copyArgument(tokenAccount)
+                .copyArgument(programId)
+                .copyArgument(recentBlockHash)
+                // instructions count
+                .copyString("01")
+                // indexToProgramIds
+                .copyString("04")
+                // key Indices length
+                .copyString("04")
+                .copyArgument(keyIndices)
+                .copyArgument(dataLength)
+                .copyArgument(programIdIndex)// 0C for TransferChecked
+                .copyArgument(tokenAmount) // amount
+                .copyArgument(customTokenDecimals)
+                .showMessage("SOL")
+                .ifSigned(
+                        tokenInfo,
+                        tokenSign,
+                        "",
+                        new ScriptAssembler()
+                                .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
+                                .getScript())
+                .setBufferInt(tokenNameLength, 1, 7)
+                .copyArgument(tokenName, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                .baseConvert(
+                        toAssociateAccount,
+                        Buffer.CACHE2,
+                        0,
+                        ScriptAssembler.base58Charset,
+                        ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                .baseConvert(
+                        tokenAmount,
+                        Buffer.CACHE1,
+                        8,
+                        ScriptAssembler.binaryCharset,
+                        ScriptAssembler.inLittleEndian)
+                .setBufferInt(tokenDecimals, 0, 20)
+                .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), ScriptData.bufInt)
+                .clearBuffer(Buffer.CACHE1)
+                .showPressButton()
+                .setHeader(HashType.NONE, SignType.EDDSA)
+                .getScript();
         return script;
     }
 
-    public static String getCreateAndTransferSplTokenScript() {
+    
+    public static String getCreateAndTransferSplToken22Script() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData keysCount = sac.getArgument(1);
         ScriptData publicKey0 = sac.getArgument(32);
         ScriptData publicKey1 = sac.getArgument(32);
         ScriptData publicKey2 = sac.getArgument(32);
@@ -586,19 +620,20 @@ public class SolScript {
         ScriptData publicKey5 = sac.getArgument(32);
         ScriptData publicKey6 = sac.getArgument(32);
         ScriptData publicKey7 = sac.getArgument(32);
-        ScriptData publicKey8 = sac.getArgument(32);
         ScriptData recentBlockhash = sac.getArgument(32);
         // Create Account Instruction
-        ScriptData programIdIndex0 = sac.getArgument(1);
-        ScriptData keyIndex0 = sac.getArgument(1);
-        ScriptData keyIndex1 = sac.getArgument(1);
-        ScriptData keyIndex2 = sac.getArgument(1);
-        ScriptData remainKeys = sac.getArgument(4);
+        ScriptData indexToCreateProgramIds = sac.getArgument(1);
+
+        ScriptData keyIndices0 = sac.getArgument(1);
+        ScriptData keyIndices1 = sac.getArgument(1);
+        ScriptData keyIndices2 = sac.getArgument(1);
+        ScriptData remainKeys = sac.getArgument(3);
         // Transfer SPL Token Instruction
-        ScriptData programIdIndex1 = sac.getArgument(1);
-        ScriptData keys = sac.getArgument(3);
+        ScriptData indexToTransferProgramIds = sac.getArgument(1);
+        ScriptData transferKeyIndices0 = sac.getArgument(4);
         ScriptData transferInstruction = sac.getArgument(1);
         ScriptData amount = sac.getArgument(8);
+        ScriptData customTokenDecimals= sac.getArgument(1);
         ScriptData tokenInfo = sac.getArgumentUnion(0, 41);
         ScriptData tokenDecimals = sac.getArgument(1);
         ScriptData tokenNameLength = sac.getArgument(1);
@@ -609,153 +644,143 @@ public class SolScript {
         ScriptAssembler scriptAsb = new ScriptAssembler();
         String script
                 = scriptAsb
-                        .setCoinType(0x01f5)
-                        .copyString("01")
-                        .copyString("00")
-                        .copyString("06")
-                        .copyString("09")
-                        .copyArgument(publicKey0)
-                        .copyArgument(publicKey1)
-                        .copyArgument(publicKey2)
-                        .copyArgument(publicKey3)
-                        .copyArgument(publicKey4)
-                        .copyArgument(publicKey5)
-                        .copyArgument(publicKey6)
-                        .copyArgument(publicKey7)
-                        .copyArgument(publicKey8)
-                        .copyArgument(recentBlockhash)
-                        // instructions count
-                        .copyString("02")
-                        // create account instruction
-                        .copyArgument(programIdIndex0)
-                        // key Indices length
-                        .copyString("07")
-                        .copyArgument(keyIndex0)
-                        .copyArgument(keyIndex1)
-                        .copyArgument(keyIndex2)
-                        .copyArgument(remainKeys)
-                        // data length zero
-                        .copyString("00")
-                        // transfer instruction
-                        .copyArgument(programIdIndex1)
-                        // key Indices length
-                        .copyString("03")
-                        .copyArgument(keys)
-                        // data length Token program id index(1 bytes) + amount (8 bytes)
-                        .copyString("09")
-                        .copyArgument(transferInstruction)
-                        .copyArgument(amount)
-                        .showMessage("SOL")
-                        // display token name
-                        .ifSigned(
-                                tokenInfo,
-                                tokenSign,
-                                "",
-                                new ScriptAssembler()
-                                        .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
-                                        .getScript())
-                        .setBufferInt(tokenNameLength, 1, 7)
-                        .copyArgument(tokenName, Buffer.CACHE2)
-                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                        .clearBuffer(Buffer.CACHE2)
-                        // Show owner sol address, since sol address is not signer and not writable, it will have many possibilities.
-                        .ifEqual(
-                                keyIndex2,
-                                "03",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                publicKey3,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .clearBuffer(Buffer.CACHE2)
-                                        .getScript(),
-                                "")
-                        .ifEqual(
-                                keyIndex2,
-                                "04",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                publicKey4,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .clearBuffer(Buffer.CACHE2)
-                                        .getScript(),
-                                "")
-                        .ifEqual(
-                                keyIndex2,
-                                "05",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                publicKey5,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .clearBuffer(Buffer.CACHE2)
-                                        .getScript(),
-                                "")
-                        .ifEqual(
-                                keyIndex2,
-                                "06",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                publicKey6,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .clearBuffer(Buffer.CACHE2)
-                                        .getScript(),
-                                "")
-                        .ifEqual(
-                                keyIndex2,
-                                "07",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                publicKey7,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .clearBuffer(Buffer.CACHE2)
-                                        .getScript(),
-                                "")
-                        .ifEqual(
-                                keyIndex2,
-                                "08",
-                                new ScriptAssembler()
-                                        .baseConvert(
-                                                publicKey8,
-                                                Buffer.CACHE2,
-                                                0,
-                                                ScriptAssembler.base58Charset,
-                                                ScriptAssembler.zeroInherit)
-                                        .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                        .clearBuffer(Buffer.CACHE2)
-                                        .getScript(),
-                                "")
-                        // show amount
-                        .baseConvert(
-                                amount,
-                                Buffer.CACHE1,
-                                8,
-                                ScriptAssembler.binaryCharset,
-                                ScriptAssembler.inLittleEndian)
-                        .setBufferInt(tokenDecimals, 0, 20)
-                        .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), ScriptData.bufInt)
-                        .clearBuffer(Buffer.CACHE1)
-                        .showPressButton()
-                        .setHeader(HashType.NONE, SignType.EDDSA)
-                        .getScript();
+                .setCoinType(0x01f5)
+                // numRequiredSignatures
+                .copyString("01")
+                // numReadonlySignedAccounts
+                .copyString("00")
+                // numReadonlyUnsignedAccounts
+                .copyString("05")
+                // key count
+                .copyArgument(keysCount)
+                .copyArgument(publicKey0)
+                .copyArgument(publicKey1)
+                .copyArgument(publicKey2)
+                .copyArgument(publicKey3)
+                .copyArgument(publicKey4)
+                .copyArgument(publicKey5)
+                .copyArgument(publicKey6)
+                .copyArgument(publicKey7)
+                .copyArgument(recentBlockhash)
+                // instructions count
+                .copyString("02")
+                // create account instruction
+                .copyArgument(indexToCreateProgramIds)
+                // key Indices length
+                .copyString("06")
+                .copyArgument(keyIndices0)
+                .copyArgument(keyIndices1)
+                .copyArgument(keyIndices2)
+                .copyArgument(remainKeys)
+                // data length zero
+                .copyString("00")
+                // transfer instruction
+                .copyArgument(indexToTransferProgramIds)
+                // key Indices length
+                .copyString("04")
+                .copyArgument(transferKeyIndices0)
+                // data length = TokenInstruction (1 bytes) + amount (8 bytes) + decimals (1 bytes)
+                .copyString("0a")
+                .copyArgument(transferInstruction)
+                .copyArgument(amount)
+                .copyArgument(customTokenDecimals)
+                .showMessage("SOL")
+                // display token name
+                .ifSigned(
+                        tokenInfo,
+                        tokenSign,
+                        "",
+                        new ScriptAssembler()
+                                .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
+                                .getScript())
+                .setBufferInt(tokenNameLength, 1, 7)
+                .copyArgument(tokenName, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE2)
+                // Show owner sol address, since sol address is not signer and not writable, it will have many possibilities.
+                .ifEqual(
+                        keyIndices2,
+                        "03",
+                        new ScriptAssembler()
+                                .baseConvert(
+                                        publicKey3,
+                                        Buffer.CACHE2,
+                                        0,
+                                        ScriptAssembler.base58Charset,
+                                        ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .clearBuffer(Buffer.CACHE2)
+                                .getScript(),
+                        "")
+                .ifEqual(
+                        keyIndices2,
+                        "04",
+                        new ScriptAssembler()
+                                .baseConvert(
+                                        publicKey4,
+                                        Buffer.CACHE2,
+                                        0,
+                                        ScriptAssembler.base58Charset,
+                                        ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .clearBuffer(Buffer.CACHE2)
+                                .getScript(),
+                        "")
+                .ifEqual(
+                        keyIndices2,
+                        "05",
+                        new ScriptAssembler()
+                                .baseConvert(
+                                        publicKey5,
+                                        Buffer.CACHE2,
+                                        0,
+                                        ScriptAssembler.base58Charset,
+                                        ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .clearBuffer(Buffer.CACHE2)
+                                .getScript(),
+                        "")
+                .ifEqual(
+                        keyIndices2,
+                        "06",
+                        new ScriptAssembler()
+                                .baseConvert(
+                                        publicKey6,
+                                        Buffer.CACHE2,
+                                        0,
+                                        ScriptAssembler.base58Charset,
+                                        ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .clearBuffer(Buffer.CACHE2)
+                                .getScript(),
+                        "")
+                .ifEqual(
+                        keyIndices2,
+                        "07",
+                        new ScriptAssembler()
+                                .baseConvert(
+                                        publicKey7,
+                                        Buffer.CACHE2,
+                                        0,
+                                        ScriptAssembler.base58Charset,
+                                        ScriptAssembler.zeroInherit)
+                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                                .clearBuffer(Buffer.CACHE2)
+                                .getScript(),
+                        "")
+                // show amount
+                .baseConvert(
+                        amount,
+                        Buffer.CACHE1,
+                        8,
+                        ScriptAssembler.binaryCharset,
+                        ScriptAssembler.inLittleEndian)
+                .setBufferInt(tokenDecimals, 0, 20)
+                .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), ScriptData.bufInt)
+                .clearBuffer(Buffer.CACHE1)
+                .showPressButton()
+                .setHeader(HashType.NONE, SignType.EDDSA)
+                .getScript();
 
         return script;
     }
