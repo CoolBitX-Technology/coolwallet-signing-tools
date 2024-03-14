@@ -221,23 +221,6 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getTempScriptSignature = Strings.padEnd("FA", 144, '0');
-
-    public static String getSignMessageScript() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData data = sac.getArgumentAll();
-
-        ScriptAssembler scriptAsb = new ScriptAssembler();
-        return scriptAsb
-                .setCoinType(0x01f5)
-                .copyArgument(data)
-                .showMessage("SOL")
-                .showWrap("MESSAGE", "")
-                .showPressButton()
-                .setHeader(HashType.NONE, SignType.EDDSA)
-                .getScript();
-    }
-
     public static String getSignInScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getSignMessageScript() {
