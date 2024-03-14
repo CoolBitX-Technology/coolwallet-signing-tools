@@ -628,6 +628,17 @@ public class ScriptAssembler {
     }
 
     /**
+     * Set bufferInt from data length without range checks.
+     *
+     * @param data
+     * @return
+     */
+    public ScriptAssembler setBufferIntUnsafe(ScriptDataInterface data) {
+        script += compose("B5", data, null, 0, 0);
+        return this;
+    }
+
+    /**
      * Set bufferInt from buffer length.
      *
      * @param data
