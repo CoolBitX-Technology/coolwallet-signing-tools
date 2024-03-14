@@ -221,7 +221,7 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getTempScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String getSignInScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getSignMessageScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -237,6 +237,7 @@ public class SolScript {
                 .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
     }
+
 
     public static String getAssociateTokenAccountScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
