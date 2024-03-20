@@ -23,7 +23,7 @@ public class SolScript {
         System.out.println("Sol Sign Message: \n" + getSignMessageScript() + "\n");
         System.out.println("Sol Associate Account: \n" + getAssociateTokenAccountScript() + "\n");
         System.out.println("Sol transfer spl token-2022: \n" + getTransferSplToken22Script() + "\n");
-        System.out.println("Sol transfer spl token-2022 to self: \n" + getTransferSplToken22ToSelfScript() + "\n");
+        System.out.println("Sol transfer spl token-2022 with compute budget: \n" + getTransferSplToken22WithComputeBudgetScript() + "\n");
         System.out.println("Sol create and transfer spl token-2022: \n" + getCreateAndTransferSplToken22Script() + "\n");
         System.out.println("Sol Delegate: \n" + getDelegateScript() + "\n");
         System.out.println("Sol Undelegate: \n" + getUndelegateScript() + "\n");
@@ -33,6 +33,8 @@ public class SolScript {
                 + "\n");
         System.out.println("Sol Withdraw: \n" + getStackingWithdrawScript() + "\n");
     }
+
+    private static String EMPTY_PUBLIC_KEY = "0000000000000000000000000000000000000000000000000000000000000000";
 
     public static String getTransferScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -237,7 +239,6 @@ public class SolScript {
                 .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
     }
-
 
     public static String getAssociateTokenAccountScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -596,115 +597,126 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getTransferSplToken22Script() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData keysCount = sac.getArgument(1);
-        ScriptData ownerAccount = sac.getArgument(32);
-        ScriptData toAssociateAccount = sac.getArgument(32);
-        ScriptData fromAssociateAccount = sac.getArgument(32);
-        ScriptData tokenAccount = sac.getArgument(32);
-        ScriptData programId = sac.getArgument(32);
-        ScriptData recentBlockHash = sac.getArgument(32);
-        ScriptData keyIndices = sac.getArgument(4);
-        ScriptData dataLength = sac.getArgument(1);
-        ScriptData programIdIndex = sac.getArgument(1);
-        ScriptData tokenAmount = sac.getArgument(8);
-        ScriptData customTokenDecimals = sac.getArgument(1);
-        ScriptData tokenInfo = sac.getArgumentUnion(0, 41);
-        ScriptData tokenDecimals = sac.getArgument(1);
-        ScriptData tokenNameLength = sac.getArgument(1);
-        ScriptData tokenName = sac.getArgumentVariableLength(7);
-        ScriptData tokenAddr = sac.getArgument(32);
-        ScriptData tokenSign = sac.getArgument(72);
-        return splTransferScript(new SplTransferScriptData(keysCount, ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, programId, recentBlockHash, keyIndices, dataLength, programIdIndex, tokenAmount, customTokenDecimals, tokenInfo, tokenDecimals, tokenNameLength, tokenName, tokenAddr, tokenSign));
-    }
-    public static String getTransferSplToken22ScriptSignature = Strings.padStart("3045022100ab8d46f19e38cfe3129180f815791c804ebcef05c8173e9ad8ae27183f39f96b02204ab0f2a8d14c57c434964d11fbf93633e7fb9d28ee11fcd8c378c510174249ae", 144, '0');
+    public enum SplTxType {
+        TRANSFER("00"),
+        TRANSFER_WITH_COMPUTE_BUDGET("01");
+        private final String signLabel;
 
-    public static String getTransferSplToken22ToSelfScript() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData keysCount = sac.getArgument(1);
-        ScriptData ownerAccount = sac.getArgument(32);
-        ScriptData fromAssociateAccount = sac.getArgument(32);
-        ScriptData tokenAccount = sac.getArgument(32);
-        ScriptData programId = sac.getArgument(32);
-        ScriptData recentBlockHash = sac.getArgument(32);
-        ScriptData keyIndices = sac.getArgument(4);
-        ScriptData dataLength = sac.getArgument(1);
-        ScriptData programIdIndex = sac.getArgument(1);
-        ScriptData tokenAmount = sac.getArgument(8);
-        ScriptData customTokenDecimals = sac.getArgument(1);
-        ScriptData tokenInfo = sac.getArgumentUnion(0, 41);
-        ScriptData tokenDecimals = sac.getArgument(1);
-        ScriptData tokenNameLength = sac.getArgument(1);
-        ScriptData tokenName = sac.getArgumentVariableLength(7);
-        ScriptData tokenAddr = sac.getArgument(32);
-        ScriptData tokenSign = sac.getArgument(72);
-        return splTransferScript(new SplTransferScriptData(keysCount, ownerAccount, null, fromAssociateAccount, tokenAccount, programId, recentBlockHash, keyIndices, dataLength, programIdIndex, tokenAmount, customTokenDecimals, tokenInfo, tokenDecimals, tokenNameLength, tokenName, tokenAddr, tokenSign));
-    }
-    public static String getTransferSplToken22ToSelfScriptSignature = Strings.padStart("3046022100e4fd64de5249c828e9377805c7a63ffb9127ac2178722ba7faa51a9f87bf3d29022100e56d07139a9a5355895661a1a940244dc7b8eac0a77ed385289b8c8b8375c5af", 144, '0');
+        SplTxType(String signLabel) {
+            this.signLabel = signLabel;
+        }
 
-    static class SplTransferScriptData {
-
-        ScriptData keysCount;
-        ScriptData ownerAccount;
-        ScriptData toAssociateAccount;
-        ScriptData fromAssociateAccount;
-        ScriptData tokenAccount;
-        ScriptData programId;
-        ScriptData recentBlockHash;
-        ScriptData keyIndices;
-        ScriptData dataLength;
-        ScriptData programIdIndex;
-        ScriptData tokenAmount;
-        ScriptData customTokenDecimals;
-        ScriptData tokenInfo;
-        ScriptData tokenDecimals;
-        ScriptData tokenNameLength;
-        ScriptData tokenName;
-        ScriptData tokenAddr;
-        ScriptData tokenSign;
-
-        public SplTransferScriptData(ScriptData keysCount, ScriptData ownerAccount, ScriptData toAssociateAccount, ScriptData fromAssociateAccount, ScriptData tokenAccount, ScriptData programId, ScriptData recentBlockHash, ScriptData keyIndices, ScriptData dataLength, ScriptData programIdIndex, ScriptData tokenAmount, ScriptData customTokenDecimals, ScriptData tokenInfo, ScriptData tokenDecimals, ScriptData tokenNameLength, ScriptData tokenName, ScriptData tokenAddr, ScriptData tokenSign) {
-            this.keysCount = keysCount;
-            this.ownerAccount = ownerAccount;
-            this.toAssociateAccount = toAssociateAccount;
-            this.fromAssociateAccount = fromAssociateAccount;
-            this.tokenAccount = tokenAccount;
-            this.programId = programId;
-            this.recentBlockHash = recentBlockHash;
-            this.keyIndices = keyIndices;
-            this.dataLength = dataLength;
-            this.programIdIndex = programIdIndex;
-            this.tokenAmount = tokenAmount;
-            this.customTokenDecimals = customTokenDecimals;
-            this.tokenInfo = tokenInfo;
-            this.tokenDecimals = tokenDecimals;
-            this.tokenNameLength = tokenNameLength;
-            this.tokenName = tokenName;
-            this.tokenAddr = tokenAddr;
-            this.tokenSign = tokenSign;
+        @Override
+        public String toString() {
+            return signLabel;
         }
     }
 
-    private static String splTransferScript(SplTransferScriptData splTransferScriptData) {
-        ScriptData keysCount = splTransferScriptData.keysCount;
-        ScriptData ownerAccount = splTransferScriptData.ownerAccount;
-        ScriptData toAssociateAccount = splTransferScriptData.toAssociateAccount;
-        ScriptData fromAssociateAccount = splTransferScriptData.fromAssociateAccount;
-        ScriptData tokenAccount = splTransferScriptData.tokenAccount;
-        ScriptData programId = splTransferScriptData.programId;
-        ScriptData recentBlockHash = splTransferScriptData.recentBlockHash;
-        ScriptData keyIndices = splTransferScriptData.keyIndices;
-        ScriptData dataLength = splTransferScriptData.dataLength;
-        ScriptData programIdIndex = splTransferScriptData.programIdIndex;
-        ScriptData tokenAmount = splTransferScriptData.tokenAmount;
-        ScriptData customTokenDecimals = splTransferScriptData.customTokenDecimals;
-        ScriptData tokenInfo = splTransferScriptData.tokenInfo;
-        ScriptData tokenDecimals = splTransferScriptData.tokenDecimals;
-        ScriptData tokenNameLength = splTransferScriptData.tokenNameLength;
-        ScriptData tokenName = splTransferScriptData.tokenName;
-        ScriptData tokenAddr = splTransferScriptData.tokenAddr;
-        ScriptData tokenSign = splTransferScriptData.tokenSign;
+    public static String getTransferSplToken22Script() {
+        return splTransferScript(SplTxType.TRANSFER);
+    }
+    public static String getTransferSplToken22ScriptSignature = Strings.padStart("30460221009607028b2a852dbc684b5cf621cac990d332af87748f6e5f03a6bcfc2d6554d3022100ffe29102ad067bf24be054224494e53e94eae02432ba93019799237d2ce5902a", 144, '0');
+
+    public static String getTransferSplToken22WithComputeBudgetScript() {
+        return splTransferScript(SplTxType.TRANSFER_WITH_COMPUTE_BUDGET);
+    }
+    public static String getTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3045022100990fe9ab2724e589effdee777dbab9716febff1b5d3c46709720cb6dd5238852022076de7f880a9a4571059e1ed29440726e80759e28f43899ed1cafe83f964552fd", 144, '0');
+
+    private static String splTransferScript(SplTxType txType) {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData keysCount = sac.getArgument(1);
+        // SplTxType.TRANSFER
+        // to other : [ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
+        // to self  : [ownerAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
+        // SplTxType.TRANSFER_WITH_COMPUTE_BUDGET
+        // to other : [ownerAccount, toAssociateAccount, fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId]
+        // to self  : [ownerAccount, fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId]
+        ScriptData publicKey1 = sac.getArgument(32);
+        ScriptData publicKey2 = sac.getArgument(32);
+        ScriptData publicKey3 = sac.getArgument(32);
+        ScriptData publicKey4 = sac.getArgument(32);
+        ScriptData publicKey5 = sac.getArgument(32);
+        ScriptData publicKey6 = sac.getArgument(32);
+
+        ScriptData recentBlockHash = sac.getArgument(32);
+
+        ScriptData gasPriceProgramIdIndex = null;
+        ScriptData gasPriceKeyLength = null;
+        ScriptData gasPriceDataLength = null;
+        ScriptData gasPriceComputeBudgetInstructionType = null;
+        ScriptData gasPrice = null;
+        ScriptData gasLimitProgramIdIndex = null;
+        ScriptData gasLimitKeyLength = null;
+        ScriptData gasLimitDataLength = null;
+        ScriptData gasLimitComputeBudgetInstructionType = null;
+        ScriptData gasLimit = null;
+        if (txType == SplTxType.TRANSFER_WITH_COMPUTE_BUDGET) {
+            gasPriceProgramIdIndex = sac.getArgument(1);
+            gasPriceKeyLength = sac.getArgument(1);
+            gasPriceDataLength = sac.getArgument(1);
+            gasPriceComputeBudgetInstructionType = sac.getArgument(1); // 03 for SetComputeUnitPrice
+            gasPrice = sac.getArgument(8);
+
+            gasLimitProgramIdIndex = sac.getArgument(1);
+            gasLimitKeyLength = sac.getArgument(1);
+            gasLimitDataLength = sac.getArgument(1);
+            gasLimitComputeBudgetInstructionType = sac.getArgument(1); // 02 for SetComputeUnitLimit
+            gasLimit = sac.getArgument(4);
+        }
+        ScriptData tokenProgramIdIndex = sac.getArgument(1);
+        ScriptData keyIndicesLength = sac.getArgument(1);
+        ScriptData keyIndices = sac.getArgument(4);
+        ScriptData dataLength = sac.getArgument(1);
+        ScriptData tokenInstruction = sac.getArgument(1); // 0C for TransferChecked
+        ScriptData tokenAmount = sac.getArgument(8);
+        ScriptData customTokenDecimals = sac.getArgument(1);
+
+        ScriptData tokenInfo = sac.getArgumentUnion(0, 41);
+        ScriptData tokenDecimals = sac.getArgument(1);
+        ScriptData tokenNameLength = sac.getArgument(1);
+        ScriptData tokenName = sac.getArgumentVariableLength(7);
+        ScriptData tokenAddr = sac.getArgument(32);
+        ScriptData tokenSign = sac.getArgument(72);
+
+        String instructionScript = "";
+        if (txType == SplTxType.TRANSFER) {
+            instructionScript += new ScriptAssembler()
+                    .copyString("01") // instructions count
+                    // 1st instruction
+                    .copyArgument(tokenProgramIdIndex)
+                    .copyArgument(keyIndicesLength)
+                    .copyArgument(keyIndices)
+                    .copyArgument(dataLength)
+                    .copyArgument(tokenInstruction)
+                    .copyArgument(tokenAmount) // amount
+                    .copyArgument(customTokenDecimals)
+                    .getScript();
+        } else if (txType == SplTxType.TRANSFER_WITH_COMPUTE_BUDGET) {
+            instructionScript += new ScriptAssembler()
+                    .copyString("03") // instructions count
+                    // 1st instruction
+                    .copyArgument(gasPriceProgramIdIndex)
+                    .copyArgument(gasPriceKeyLength)
+                    .copyArgument(gasPriceDataLength)
+                    .copyArgument(gasPriceComputeBudgetInstructionType)
+                    .copyArgument(gasPrice)
+                    // 2nd instruction
+                    .copyArgument(gasLimitProgramIdIndex)
+                    .copyArgument(gasLimitKeyLength)
+                    .copyArgument(gasLimitDataLength)
+                    .copyArgument(gasLimitComputeBudgetInstructionType) // SetComputeUnitLimit
+                    .copyArgument(gasLimit)
+                    // 3rd instruction
+                    .copyArgument(tokenProgramIdIndex)
+                    .copyArgument(keyIndicesLength)
+                    .copyArgument(keyIndices)
+                    .copyArgument(dataLength)
+                    .copyArgument(tokenInstruction)
+                    .copyArgument(tokenAmount)
+                    .copyArgument(customTokenDecimals)
+                    .getScript();
+        }
+
         return new ScriptAssembler()
                 .setCoinType(0x01f5)
                 //numRequiredSignatures
@@ -712,31 +724,20 @@ public class SolScript {
                 //numReadonlySignedAccounts
                 .copyString("00")
                 //numReadonlyUnsignedAccounts
-                .copyString("02")
+                .copyString("03")
                 .copyArgument(keysCount)
-                .copyArgument(ownerAccount)
-                // keysCount 05 means keys: [ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, programId]
-                // keysCount 04 means keys: [ownerAccount, fromAssociateAccount, tokenAccount, programId], toAssociateAccount = fromAssociateAccount
-                .ifEqual(keysCount, "04", "", new ScriptAssembler().copyArgument(toAssociateAccount).getScript())
-                .copyArgument(fromAssociateAccount)
-                .copyArgument(tokenAccount)
-                .copyArgument(programId)
+                .copyArgument(publicKey1)
+                .copyArgument(publicKey2)
+                .copyArgument(publicKey3)
+                .copyArgument(publicKey4)
+                .ifEqual(publicKey5, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey5).getScript())
+                .ifEqual(publicKey6, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey6).getScript())
+                // transactionType 00 means keys: [ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
+                // transactionType 01 means keys: [ownerAccount, fromAssociateAccount, tokenAccount, tokenProgramId], toAssociateAccount = fromAssociateAccount
+                // transactionType 02 means keys: [ownerAccount, toAssociateAccount, fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId]
+                // transactionType 03 means keys: [ownerAccount, fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId], toAssociateAccount = fromAssociateAccount
                 .copyArgument(recentBlockHash)
-                // instructions count
-                .copyString("01")
-                // index of ProgramIds
-                .ifEqual(
-                        keysCount,
-                        "04",
-                        new ScriptAssembler().copyString("03").getScript(),
-                        new ScriptAssembler().copyString("04").getScript())
-                // key Indices length
-                .copyString("04")
-                .copyArgument(keyIndices)
-                .copyArgument(dataLength)
-                .copyArgument(programIdIndex)// 0C for TransferChecked
-                .copyArgument(tokenAmount) // amount
-                .copyArgument(customTokenDecimals)
+                .insertString(instructionScript)
                 .showMessage("SOL")
                 .ifSigned(
                         tokenInfo,
@@ -749,29 +750,13 @@ public class SolScript {
                 .copyArgument(tokenName, Buffer.CACHE2)
                 .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .clearBuffer(Buffer.CACHE2)
-                // keyIndices 02030100 means fromAccount != toAccount
-                // keyIndices 01020100 means fromAccount == toAccount
-                .ifEqual(
-                        keyIndices,
-                        "02030100",
-                        new ScriptAssembler()
-                                .baseConvert(
-                                        toAssociateAccount,
-                                        Buffer.CACHE2,
-                                        0,
-                                        ScriptAssembler.base58Charset,
-                                        ScriptAssembler.zeroInherit)
-                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                .getScript(),
-                        new ScriptAssembler()
-                                .baseConvert(
-                                        fromAssociateAccount,
-                                        Buffer.CACHE2,
-                                        0,
-                                        ScriptAssembler.base58Charset,
-                                        ScriptAssembler.zeroInherit)
-                                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                                .getScript())
+                .baseConvert(
+                        publicKey2,
+                        Buffer.CACHE2,
+                        0,
+                        ScriptAssembler.base58Charset,
+                        ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .clearBuffer(Buffer.CACHE2)
                 .baseConvert(
                         tokenAmount,
