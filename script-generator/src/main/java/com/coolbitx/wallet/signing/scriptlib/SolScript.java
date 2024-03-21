@@ -63,7 +63,7 @@ public class SolScript {
     public static String getTransferWithComputeBudgetScript() {
         return transferScript(TxType.TRANSFER_WITH_COMPUTE_BUDGET);
     }
-    public static String getTransferToSelfScriptSignature = Strings.padStart("3046022100dc715c0b360b4c758650422d02a512f740f735a7991b4baccd59bfe89e07a0fc022100e0db4b5f77676436eeb3157606edae202bbf3b9dc084de068c19396c19fbcebe", 144, '0');
+    public static String getTransferWithComputeBudgetScriptSignature = Strings.padStart("3045022100f40d2846095de3ade5e1bfac77590b6bbcbcdf20f4131fa221b49029e538411d0220043aacdafb9692205fe3c1d194019b507d5fea277f1053c5a8704957ccbd60c9", 144, '0');
 
     private static String transferScript(TxType txType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -115,9 +115,18 @@ public class SolScript {
         ScriptAssembler script = new ScriptAssembler()
                 .setCoinType(0x01f5)
                 .copyString("01")
-                .copyString("00")
-                .copyString("01")
-                .copyArgument(keysCount)
+                .copyString("00");
+        switch (txType) {
+            case TRANSFER:
+                script.copyString("01");
+                break;
+            case TRANSFER_WITH_COMPUTE_BUDGET:
+                script.copyString("02");
+                break;
+            default:
+                break;
+        }
+        script.copyArgument(keysCount)
                 .copyArgument(publicKey0)
                 .copyArgument(publicKey1)
                 .ifEqual(publicKey2, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey2).getScript())
@@ -625,7 +634,7 @@ public class SolScript {
     public static String getTransferSplToken22Script() {
         return splTransferScript(TxType.TRANSFER);
     }
-    public static String getTransferSplToken22ScriptSignature = Strings.padStart("30450220024e5a07ef4904aff52bdc84e40a421aa38975fd40463547ec5da98b3f05341a022100c7aaad4f9ee59e6048c56a9b9593775d5e0e421523efd240cef0df08b60676af", 144, '0');
+    public static String getTransferSplToken22ScriptSignature = Strings.padStart("3045022054e1f282e197b1288576809da57b3b4578dc3f49bc7f442743d0e18e452f2655022100a98f56d089b72e06886cbb8fa7d914d3784f1286f90790b30bcec4f16944075a", 144, '0');
 
     public static String getTransferSplToken22WithComputeBudgetScript() {
         return splTransferScript(TxType.TRANSFER_WITH_COMPUTE_BUDGET);
@@ -635,12 +644,12 @@ public class SolScript {
     public static String getCreateAndTransferSplToken22Script() {
         return splTransferScript(TxType.CREATE_AND_TRANSFER);
     }
-    public static String getCreateAndTransferSplTokenScriptSignature = Strings.padStart("3045022100f839a565c0cb9dce86f893520b2005f263711f92a54ce44a912cc10c8c7e3c8c0220242f804fc71807cbe9db170ea1e7cfcd3bd16db6cb5bea8955d8f7169f26fb21", 144, '0');
+    public static String getCreateAndTransferSplTokenScriptSignature = Strings.padStart("30460221008c46b69d4255c1ce52b04e79789d601325971dc81aaa0848b121e0192107b768022100df369fd9fb65f9580cce98cee7f09f46a24c1f540b9a43c85ae457d27c161f68", 144, '0');
 
     public static String getCreateAndTransferSplToken22WithComputeBudgetScript() {
         return splTransferScript(TxType.CREATE_AND_TRANSFER_WITH_COMPUTE_BUDGET);
     }
-    public static String getCreateAndTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3046022100a61bb0137dc6c5a07ab97f1e3ea0df59ff6234c5deb54dda9b90d50e0439d9c5022100c34d56584dc02680c155f98d8165455273bba350df54fbd752f1b565e95f021d", 144, '0');
+    public static String getCreateAndTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3046022100a61bb0137dc6c5a07ab97f1e3ea0df59ff6234c5deb54dda9b90d50e0439d9c5022100c34d56584dc02680c155f98d8165455273bba350df54fbd752f1b565e95f021dx", 144, '0');
 
     private static String splTransferScript(TxType txType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -725,12 +734,21 @@ public class SolScript {
                 //numReadonlySignedAccounts
                 .copyString("00");
         //numReadonlyUnsignedAccounts
-        if (txType == TxType.TRANSFER || txType == TxType.TRANSFER_WITH_COMPUTE_BUDGET) {
-            script
-                    .copyString("03");
-        } else {
-            script
-                    .copyString("06");
+        switch (txType) {
+            case TRANSFER:
+                script.copyString("02");
+                break;
+            case TRANSFER_WITH_COMPUTE_BUDGET:
+                script.copyString("03");
+                break;
+            case CREATE_AND_TRANSFER:
+                script.copyString("05");
+                break;
+            case CREATE_AND_TRANSFER_WITH_COMPUTE_BUDGET:
+                script.copyString("06");
+                break;
+            default:
+                break;
         }
         script
                 .copyArgument(keysCount);
