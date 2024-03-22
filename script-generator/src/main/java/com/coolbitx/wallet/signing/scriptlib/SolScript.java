@@ -273,6 +273,8 @@ public class SolScript {
                 .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
     }
+    
+    public static String getSignMessageScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getAssociateTokenAccountScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
