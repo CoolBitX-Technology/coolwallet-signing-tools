@@ -651,7 +651,7 @@ public class SolScript {
     public static String getCreateAndTransferSplToken22WithComputeBudgetScript() {
         return splTransferScript(TxType.CREATE_AND_TRANSFER_WITH_COMPUTE_BUDGET);
     }
-    public static String getCreateAndTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3046022100a61bb0137dc6c5a07ab97f1e3ea0df59ff6234c5deb54dda9b90d50e0439d9c5022100c34d56584dc02680c155f98d8165455273bba350df54fbd752f1b565e95f021dx", 144, '0');
+    public static String getCreateAndTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3046022100a61bb0137dc6c5a07ab97f1e3ea0df59ff6234c5deb54dda9b90d50e0439d9c5022100c34d56584dc02680c155f98d8165455273bba350df54fbd752f1b565e95f021d", 144, '0');
 
     private static String splTransferScript(TxType txType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
