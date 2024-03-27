@@ -36,7 +36,7 @@ public class SolScript {
         System.out.println("Sol Withdraw: \n" + getStackingWithdrawScript() + "\n");
     }
 
-    private static String EMPTY_PUBLIC_KEY = Hex.encode("--------------------------------".getBytes());
+    public static String EMPTY_PUBLIC_KEY = Hex.encode("--------------------------------".getBytes());
 
     public enum TxType {
         TRANSFER("01"),
@@ -58,12 +58,12 @@ public class SolScript {
     public static String getTransferScript() {
         return transferScript(TxType.TRANSFER);
     }
-    public static String getTransferScriptSignature = Strings.padStart("3045022100faa7dc199887906875a006eb78f5c39ba7f64790826b06c2af1d6a59802f9bf702203f9d6e70cc2ba8b71b538cf224d7c15da07f049a4c53bc4557b1cdcffff3299e", 144, '0');
+    public static String getTransferScriptSignature = Strings.padStart("3045022100cafc6eb0bf1c5cb46f53a0ff33624e77838b8c6870d31f44f7f0643f6ed67e5502206eb945316d6ec6907c997e48350df3c6aff96ec42a7b5bd1c1439afb63797043", 144, '0');
 
     public static String getTransferWithComputeBudgetScript() {
         return transferScript(TxType.TRANSFER_WITH_COMPUTE_BUDGET);
     }
-    public static String getTransferWithComputeBudgetScriptSignature = Strings.padStart("3045022100f40d2846095de3ade5e1bfac77590b6bbcbcdf20f4131fa221b49029e538411d0220043aacdafb9692205fe3c1d194019b507d5fea277f1053c5a8704957ccbd60c9", 144, '0');
+    public static String getTransferWithComputeBudgetScriptSignature = Strings.padStart("3046022100aa2c53e27cb43658c89271f74b7c867a9f89bf4ccd7720301552ac2e074f660a022100f7fbc892b306c7ee22639c743510b770071db3fead9b639de9b92174ecb4a145", 144, '0');
 
     private static String transferScript(TxType txType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -168,6 +168,7 @@ public class SolScript {
                 .copyArgument(dataLength)
                 .copyArgument(instruction)
                 .copyArgument(amount)
+                .showMessage("SOL")
                 .ifEqual(
                         toKeyIndex,
                         "00",
@@ -273,7 +274,7 @@ public class SolScript {
                 .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
     }
-    
+
     public static String getSignMessageScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getAssociateTokenAccountScript() {
@@ -716,7 +717,7 @@ public class SolScript {
         }
         ScriptData tokenProgramIdIndex = sac.getArgument(1);
         ScriptData keyIndicesLength = sac.getArgument(1);
-        ScriptData keyIndices = sac.getArgument(4);
+        ScriptData keyIndices = sac.getArgument(4); // [from token address, contract address, to token address, owner address]
         ScriptData dataLength = sac.getArgument(1);
         ScriptData tokenInstruction = sac.getArgument(1); // 0C for TransferChecked
         ScriptData tokenAmount = sac.getArgument(8);
@@ -754,11 +755,10 @@ public class SolScript {
         }
         script
                 .copyArgument(keysCount);
-
-        // transactionType 00 means keys: [ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
-        // transactionType 01 means keys: [ownerAccount, fromAssociateAccount, tokenAccount, tokenProgramId], toAssociateAccount = fromAssociateAccount
-        // transactionType 02 means keys: [ownerAccount, toAssociateAccount, fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId]
-        // transactionType 03 means keys: [ownerAccount, fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId], toAssociateAccount = fromAssociateAccount
+        // transfer token to other [ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
+        // transfer token to self  [ownerAccount, fromAssociateAccount, tokenAccount, tokenProgramId], toAssociateAccount = fromAssociateAccount
+        // transfer token with compute budget to other [ownerAccount, toAssociateAccount, fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId]
+        // transfer token with compute budget to self  fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId], toAssociateAccount = fromAssociateAccount
         if (txType == TxType.TRANSFER || txType == TxType.TRANSFER_WITH_COMPUTE_BUDGET) {
             script
                     .copyArgument(publicKey0)
