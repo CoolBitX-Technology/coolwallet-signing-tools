@@ -22,7 +22,6 @@ public class SolScript {
         System.out.println("Sol Smart Contract: \n" + getSolSmartScript() + "\n");
         System.out.println("Sol Sign-In: \n" + getSignInScript() + "\n");
         System.out.println("Sol Sign Message: \n" + getSignMessageScript() + "\n");
-        System.out.println("Sol Associate Account: \n" + getAssociateTokenAccountScript() + "\n");
         System.out.println("Sol transfer spl token-2022: \n" + getTransferSplToken22Script() + "\n");
         System.out.println("Sol transfer spl token-2022 with compute budget: \n" + getTransferSplToken22WithComputeBudgetScript() + "\n");
         System.out.println("Sol create and transfer spl token-2022: \n" + getCreateAndTransferSplToken22Script() + "\n");
@@ -266,69 +265,6 @@ public class SolScript {
     }
 
     public static String getSignMessageScriptSignature = Strings.padEnd("FA", 144, '0');
-
-    public static String getAssociateTokenAccountScript() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData keyCount = sac.getArgument(1);
-        ScriptData publicKey0 = sac.getArgument(32);
-        ScriptData publicKey1 = sac.getArgument(32);
-        ScriptData publicKey2 = sac.getArgument(32);
-        ScriptData publicKey3 = sac.getArgument(32);
-        ScriptData publicKey4 = sac.getArgument(32);
-        ScriptData publicKey5 = sac.getArgument(32);
-        ScriptData publicKey6 = sac.getArgument(32);
-        ScriptData publicKey7 = sac.getArgument(32);
-        ScriptData recentBlockhash = sac.getArgument(32);
-        ScriptData programIndex = sac.getArgument(1);
-        ScriptData keyIndices = sac.getArgument(7);
-
-        ScriptAssembler scriptAsb = new ScriptAssembler();
-
-        return scriptAsb
-                .setCoinType(0x01f5)
-                // numRequiredSignatures
-                .copyString("01")
-                // numReadonlySignedAccounts
-                .copyString("00")
-                // numReadonlyUnsignedAccounts
-                .ifEqual(
-                        keyCount,
-                        "08",
-                        new ScriptAssembler().copyString("06").getScript(),
-                        new ScriptAssembler().copyString("05").getScript())
-                // keyCount
-                .copyArgument(keyCount)
-                .copyArgument(publicKey0)
-                .copyArgument(publicKey1)
-                .copyArgument(publicKey2)
-                .copyArgument(publicKey3)
-                .copyArgument(publicKey4)
-                .copyArgument(publicKey5)
-                .copyArgument(publicKey6)
-                .ifEqual(keyCount, "08", new ScriptAssembler().copyArgument(publicKey7).getScript(), "")
-                .copyArgument(recentBlockhash)
-                // instruction count
-                .copyString("01")
-                .copyArgument(programIndex)
-                // account length
-                .copyString("07")
-                .copyArgument(keyIndices)
-                // empty data
-                .copyString("00")
-                .showMessage("SOL")
-                .showWrap("ToKEN", "ACCoUNT")
-                // Since associatedToken is writable and not singer, it will always in index 1.
-                .baseConvert(
-                        publicKey1,
-                        Buffer.CACHE2,
-                        0,
-                        ScriptAssembler.base58Charset,
-                        ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                .showPressButton()
-                .setHeader(HashType.NONE, SignType.EDDSA)
-                .getScript();
-    }
 
     public static String getDelegateScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
