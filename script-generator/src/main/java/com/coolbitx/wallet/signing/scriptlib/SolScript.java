@@ -58,15 +58,16 @@ public class SolScript {
     public static String getTransferScript() {
         return transferScript(TxType.TRANSFER);
     }
-    public static String getTransferScriptSignature = Strings.padStart("3045022100cafc6eb0bf1c5cb46f53a0ff33624e77838b8c6870d31f44f7f0643f6ed67e5502206eb945316d6ec6907c997e48350df3c6aff96ec42a7b5bd1c1439afb63797043", 144, '0');
+    public static String getTransferScriptSignature = Strings.padStart("304502201feef74de887b6d8513f56371cebf5e9d7f05e2ddbef25eb6dd91cd088910018022100d4afd1ea9d5f9ae142cdab5419e8c0974f10651376af03a141a26e49b08691dc", 144, '0');
 
     public static String getTransferWithComputeBudgetScript() {
         return transferScript(TxType.TRANSFER_WITH_COMPUTE_BUDGET);
     }
-    public static String getTransferWithComputeBudgetScriptSignature = Strings.padStart("3046022100aa2c53e27cb43658c89271f74b7c867a9f89bf4ccd7720301552ac2e074f660a022100f7fbc892b306c7ee22639c743510b770071db3fead9b639de9b92174ecb4a145", 144, '0');
+    public static String getTransferWithComputeBudgetScriptSignature = Strings.padStart("3044022032851d9ca464de5ae92c063f33ada384fa0dee27d6e3d469197a367ef9cc9cbe0220137ffa77407186912ffbb5fd74529b3818c7e8fa1d4eb13d4a924a44cb7caaf9", 144, '0');
 
     private static String transferScript(TxType txType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData header = sac.getArgument(3);
         ScriptData keysCount = sac.getArgument(1);
         // SplTxType.TRANSFER
         // to other : [ownerAccount, toAccount, programId]
@@ -114,19 +115,8 @@ public class SolScript {
 
         ScriptAssembler script = new ScriptAssembler()
                 .setCoinType(0x01f5)
-                .copyString("01")
-                .copyString("00");
-        switch (txType) {
-            case TRANSFER:
-                script.copyString("01");
-                break;
-            case TRANSFER_WITH_COMPUTE_BUDGET:
-                script.copyString("02");
-                break;
-            default:
-                break;
-        }
-        script.copyArgument(keysCount)
+                .copyArgument(header)
+                .copyArgument(keysCount)
                 .copyArgument(publicKey0)
                 .copyArgument(publicKey1)
                 .ifEqual(publicKey2, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey2).getScript())
