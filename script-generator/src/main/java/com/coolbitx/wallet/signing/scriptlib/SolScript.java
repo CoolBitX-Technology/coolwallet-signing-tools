@@ -563,25 +563,26 @@ public class SolScript {
     public static String getTransferSplToken22Script() {
         return splTransferScript(TxType.TRANSFER);
     }
-    public static String getTransferSplToken22ScriptSignature = Strings.padStart("3045022054e1f282e197b1288576809da57b3b4578dc3f49bc7f442743d0e18e452f2655022100a98f56d089b72e06886cbb8fa7d914d3784f1286f90790b30bcec4f16944075a", 144, '0');
+    public static String getTransferSplToken22ScriptSignature = Strings.padStart("30450221008ca60fc77d2ab62548366000044c4972ae2f6cca5716472bb78483cc5064cb7b022075ad4281dc8cded2139b5cd414305d10c55c2625c9dae47ec0c5a113e8752551", 144, '0');
 
     public static String getTransferSplToken22WithComputeBudgetScript() {
         return splTransferScript(TxType.TRANSFER_WITH_COMPUTE_BUDGET);
     }
-    public static String getTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3045022100b1d99c57f0132e26550c5c0a4a6a353c11601d8b7fa84ad5505d5f292791c27f02204827c2e8fcbdd75cd4f41dfceefed7efc58efca2aae17987bcb342e8270c48e0", 144, '0');
+    public static String getTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3046022100f7bcc7b763b598a4aa43ace333e3416b45307190b5e9bcff45c9415d3caf4ee8022100bb990f958b7c12f13bd25b8ad5f5cd1a49cd89d4cae9f45b85adff699f747285", 144, '0');
 
     public static String getCreateAndTransferSplToken22Script() {
         return splTransferScript(TxType.CREATE_AND_TRANSFER);
     }
-    public static String getCreateAndTransferSplTokenScriptSignature = Strings.padStart("30460221008c46b69d4255c1ce52b04e79789d601325971dc81aaa0848b121e0192107b768022100df369fd9fb65f9580cce98cee7f09f46a24c1f540b9a43c85ae457d27c161f68", 144, '0');
+    public static String getCreateAndTransferSplTokenScriptSignature = Strings.padStart("30460221009d7b2401e110fd30b7db32f60bbc0aefd1d2ff71a75f470c005348f59ce113080221009dd281a9dd7951e93013787694433dc74104a4dd663cf7c5d8c2a6be4335fcdf", 144, '0');
 
     public static String getCreateAndTransferSplToken22WithComputeBudgetScript() {
         return splTransferScript(TxType.CREATE_AND_TRANSFER_WITH_COMPUTE_BUDGET);
     }
-    public static String getCreateAndTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("3046022100a61bb0137dc6c5a07ab97f1e3ea0df59ff6234c5deb54dda9b90d50e0439d9c5022100c34d56584dc02680c155f98d8165455273bba350df54fbd752f1b565e95f021d", 144, '0');
+    public static String getCreateAndTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart("304402205b763b3e3dc745dadda5f6fbddd2af9990bcc0fd7b32a1ab97d4af14d31ae6230220203177f933a507026a145c796ea8b4b1fe221eda157f0dda28bdb7290da9ee53", 144, '0');
 
     private static String splTransferScript(TxType txType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData header = sac.getArgument(3);
         ScriptData keysCount = sac.getArgument(1);
         // SplTxType.TRANSFER
         // to other : [ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
@@ -658,28 +659,7 @@ public class SolScript {
 
         ScriptAssembler script = new ScriptAssembler()
                 .setCoinType(0x01f5)
-                //numRequiredSignatures
-                .copyString("01")
-                //numReadonlySignedAccounts
-                .copyString("00");
-        //numReadonlyUnsignedAccounts
-        switch (txType) {
-            case TRANSFER:
-                script.copyString("02");
-                break;
-            case TRANSFER_WITH_COMPUTE_BUDGET:
-                script.copyString("03");
-                break;
-            case CREATE_AND_TRANSFER:
-                script.copyString("05");
-                break;
-            case CREATE_AND_TRANSFER_WITH_COMPUTE_BUDGET:
-                script.copyString("06");
-                break;
-            default:
-                break;
-        }
-        script
+                .copyArgument(header) // numRequiredSignatures(1B) numReadonlySignedAccounts(1B) numReadonlyUnsignedAccounts(1B)
                 .copyArgument(keysCount);
         // transfer token to other [ownerAccount, toAssociateAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
         // transfer token to self  [ownerAccount, fromAssociateAccount, tokenAccount, tokenProgramId], toAssociateAccount = fromAssociateAccount
