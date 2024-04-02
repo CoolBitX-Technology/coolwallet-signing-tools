@@ -516,17 +516,21 @@ public class SolScript {
         ScriptData createAccountKeyIndicesLength = sac.getArgument(1);
         ScriptData createAccountKeyIndices = sac.getArgument(2);
         ScriptData createAccountDataLength = sac.getArgument(1);
-        ScriptData createAccountData = sac.getArgument(114);
-
+        ScriptData createAccountInstruction = sac.getArgument(4);
+        ScriptData createAccountBase = sac.getArgument(32);
+        ScriptData createAccountSeedLength = sac.getArgument(4);
+        ScriptData createAccountSeedPaddingLength = sac.getArgument(4);
+        ScriptData createAccountSeed = sac.getArgumentRightJustified(32);
+        ScriptData createAccountLamports = sac.getArgument(8);
+        ScriptData createAccountSpace = sac.getArgument(8);
+        ScriptData createAccountProgramId = sac.getArgument(32);
+        
         ScriptData initializeProgramIdIndex = sac.getArgument(1);
         ScriptData initializeKeyIndicesLength = sac.getArgument(1);
         ScriptData initializeKeyIndices = sac.getArgument(2);
         ScriptData initializeDataLength = sac.getArgument(1);
-        ScriptData initializeDataPrefix = sac.getArgument(44);
-        ScriptData initializeSeed = sac.getArgumentRightJustified(32);
-        ScriptData initializeLamports = sac.getArgument(8);
-        ScriptData initializeDataPostfix = sac.getArgument(40);
-
+        ScriptData initializeData = sac.getArgument(116);
+        
         ScriptData delegateProgramIdIndex = sac.getArgument(1);
         ScriptData delegateKeyIndicesLength = sac.getArgument(1);
         ScriptData delegateKeyIndex0 = sac.getArgument(1);
@@ -546,6 +550,11 @@ public class SolScript {
                 .copyArgument(publicKey2)
                 .copyArgument(publicKey3)
                 .copyArgument(publicKey4)
+                .copyArgument(publicKey5)
+                .copyArgument(publicKey6)
+                .copyArgument(publicKey7)
+                .copyArgument(publicKey8)
+                .ifEqual(publicKey9, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey9).getScript())
                 .copyArgument(recentBlockhash)
                 .copyArgument(instructionsCount)
                 .ifEqual(argHavePrice,
@@ -570,15 +579,19 @@ public class SolScript {
                 .copyArgument(createAccountKeyIndicesLength)
                 .copyArgument(createAccountKeyIndices)
                 .copyArgument(createAccountDataLength)
-                .copyArgument(createAccountData)
+                .copyArgument(createAccountInstruction) // 03000000
+                .copyArgument(createAccountBase)
+                .copyArgument(createAccountSeedLength)
+                .copyArgument(createAccountSeedPaddingLength)
+                .copyArgument(createAccountSeed)
+                .copyArgument(createAccountLamports)
+                .copyArgument(createAccountSpace)
+                .copyArgument(createAccountProgramId)
                 .copyArgument(initializeProgramIdIndex)
                 .copyArgument(initializeKeyIndicesLength)
                 .copyArgument(initializeKeyIndices)
                 .copyArgument(initializeDataLength)
-                .copyArgument(initializeDataPrefix)
-                .copyArgument(initializeSeed)
-                .copyArgument(initializeLamports)
-                .copyArgument(initializeDataPostfix)
+                .copyArgument(initializeData)
                 .copyArgument(delegateProgramIdIndex)
                 .copyArgument(delegateKeyIndicesLength)
                 .copyArgument(delegateKeyIndex0)
@@ -597,7 +610,7 @@ public class SolScript {
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .clearBuffer(Buffer.CACHE2)
                 .baseConvert(
-                        initializeLamports,
+                        createAccountLamports,
                         Buffer.CACHE1,
                         8,
                         ScriptAssembler.binaryCharset,
@@ -609,7 +622,7 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getDelegateAndCreateAccountWithSeedScriptSignature = Strings.padStart("304502206abed964994b34efa7b43c4b457e49c30fa24a9f941d71732710830c98aaf0a1022100d9f58373675ed9847b977260f661eaef9abdb817ffec615db32354e3ae273f86", 144, '0');
+    public static String getDelegateAndCreateAccountWithSeedScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getUndelegateScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -623,14 +636,12 @@ public class SolScript {
         ScriptData recentBlockhash = sac.getArgument(32);
         ScriptData instructionsCount = sac.getArgument(1);
 
-        ScriptData argHavePrice = sac.getArgument(1);
         ScriptData gasPriceProgramIdIndex = sac.getArgument(1);
         ScriptData gasPriceKeyLength = sac.getArgument(1);
         ScriptData gasPriceDataLength = sac.getArgument(1);
         ScriptData gasPriceComputeBudgetInstructionType = sac.getArgument(1); // 03 for SetComputeUnitPrice
         ScriptData gasPrice = sac.getArgument(8);
 
-        ScriptData argHaveLimit = sac.getArgument(1);
         ScriptData gasLimitProgramIdIndex = sac.getArgument(1);
         ScriptData gasLimitKeyLength = sac.getArgument(1);
         ScriptData gasLimitDataLength = sac.getArgument(1);
@@ -653,10 +664,10 @@ public class SolScript {
                 .copyArgument(publicKey1)
                 .copyArgument(publicKey2)
                 .copyArgument(publicKey3)
-                .copyArgument(publicKey4)
+                .ifEqual(publicKey4, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey4).getScript())
                 .copyArgument(recentBlockhash)
                 .copyArgument(instructionsCount)
-                .ifEqual(argHavePrice,
+                .ifEqual(gasPriceDataLength,
                         "00",
                         "", new ScriptAssembler()
                                 .copyArgument(gasPriceProgramIdIndex)
@@ -665,7 +676,7 @@ public class SolScript {
                                 .copyArgument(gasPriceComputeBudgetInstructionType)
                                 .copyArgument(gasPrice).getScript()
                 )
-                .ifEqual(argHaveLimit,
+                .ifEqual(gasLimitDataLength,
                         "00",
                         "", new ScriptAssembler()
                                 .copyArgument(gasLimitProgramIdIndex)
@@ -694,7 +705,7 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getUndelegateScriptSignature = Strings.padStart("3045022007a47429e64d145a7c8317c07b340783cebbe21b57b93ca38699a56d3b73a50d022100e14b4a1a43894d9b7dd7c548a6336ae01c790d8edbdb0e20bab8b2d45c3305a1", 144, '0');
+    public static String getUndelegateScriptSignature = Strings.padStart("3044022040054884f42bb7257f16c9cc121f15d2466ce8d9efb5e83f7b96973ed29d1f260220328d320b2ce9339123d923e3a2d81ffb6382a3588da19e93d8795d0265dfe561", 144, '0');
 
     public static String getStackingWithdrawScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -706,6 +717,7 @@ public class SolScript {
         ScriptData publicKey3 = sac.getArgument(32);
         ScriptData publicKey4 = sac.getArgument(32);
         ScriptData publicKey5 = sac.getArgument(32);
+        ScriptData publicKey6 = sac.getArgument(32);
         ScriptData recentBlockHash = sac.getArgument(32);
         ScriptData instructionsCount = sac.getArgument(1);
 
@@ -743,6 +755,7 @@ public class SolScript {
                 .copyArgument(publicKey3)
                 .copyArgument(publicKey4)
                 .ifEqual(publicKey5, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey5).getScript())
+                .ifEqual(publicKey6, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey6).getScript())
                 .copyArgument(recentBlockHash)
                 .copyArgument(instructionsCount)
                 .ifEqual(argHavePrice,
