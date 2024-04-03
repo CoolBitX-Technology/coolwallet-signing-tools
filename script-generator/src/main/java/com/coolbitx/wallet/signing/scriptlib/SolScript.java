@@ -498,14 +498,12 @@ public class SolScript {
         ScriptData recentBlockhash = sac.getArgument(32);
         ScriptData instructionsCount = sac.getArgument(1);
 
-        ScriptData argHavePrice = sac.getArgument(1);
         ScriptData gasPriceProgramIdIndex = sac.getArgument(1);
         ScriptData gasPriceKeyLength = sac.getArgument(1);
         ScriptData gasPriceDataLength = sac.getArgument(1);
         ScriptData gasPriceComputeBudgetInstructionType = sac.getArgument(1); // 03 for SetComputeUnitPrice
         ScriptData gasPrice = sac.getArgument(8);
 
-        ScriptData argHaveLimit = sac.getArgument(1);
         ScriptData gasLimitProgramIdIndex = sac.getArgument(1);
         ScriptData gasLimitKeyLength = sac.getArgument(1);
         ScriptData gasLimitDataLength = sac.getArgument(1);
@@ -557,7 +555,7 @@ public class SolScript {
                 .ifEqual(publicKey9, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey9).getScript())
                 .copyArgument(recentBlockhash)
                 .copyArgument(instructionsCount)
-                .ifEqual(argHavePrice,
+                .ifEqual(gasPriceDataLength,
                         "00",
                         "", new ScriptAssembler()
                                 .copyArgument(gasPriceProgramIdIndex)
@@ -566,7 +564,7 @@ public class SolScript {
                                 .copyArgument(gasPriceComputeBudgetInstructionType)
                                 .copyArgument(gasPrice).getScript()
                 )
-                .ifEqual(argHaveLimit,
+                .ifEqual(gasLimitDataLength,
                         "00",
                         "", new ScriptAssembler()
                                 .copyArgument(gasLimitProgramIdIndex)
@@ -622,7 +620,7 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getDelegateAndCreateAccountWithSeedScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String getDelegateAndCreateAccountWithSeedScriptSignature = Strings.padStart("3044022026ea0b1c5ab42fc52fa4542db17b9a0a92b42ffc941a53b82ec8cedd7fa4fd1d02200b2edd468c0d6761add53a597774cdc1c5d1599b186a1ade4b2458c559771411", 144, '0');
 
      public static String getUndelegateScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
