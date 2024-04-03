@@ -624,7 +624,7 @@ public class SolScript {
 
     public static String getDelegateAndCreateAccountWithSeedScriptSignature = Strings.padEnd("FA", 144, '0');
 
-    public static String getUndelegateScript() {
+     public static String getUndelegateScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData header = sac.getArgument(3);
         ScriptData keysCount = sac.getArgument(1);
@@ -721,14 +721,12 @@ public class SolScript {
         ScriptData recentBlockHash = sac.getArgument(32);
         ScriptData instructionsCount = sac.getArgument(1);
 
-        ScriptData argHavePrice = sac.getArgument(1);
         ScriptData gasPriceProgramIdIndex = sac.getArgument(1);
         ScriptData gasPriceKeyLength = sac.getArgument(1);
         ScriptData gasPriceDataLength = sac.getArgument(1);
         ScriptData gasPriceComputeBudgetInstructionType = sac.getArgument(1); // 03 for SetComputeUnitPrice
         ScriptData gasPrice = sac.getArgument(8);
 
-        ScriptData argHaveLimit = sac.getArgument(1);
         ScriptData gasLimitProgramIdIndex = sac.getArgument(1);
         ScriptData gasLimitKeyLength = sac.getArgument(1);
         ScriptData gasLimitDataLength = sac.getArgument(1);
@@ -736,6 +734,7 @@ public class SolScript {
         ScriptData gasLimit = sac.getArgument(4);
 
         ScriptData withdrawProgramIdIndex = sac.getArgument(1);
+        ScriptData withdrawKeyIndicesLength = sac.getArgument(1);
         ScriptData withdrawKeyIndex0 = sac.getArgument(1);
         ScriptData withdrawKeyIndex1 = sac.getArgument(1);
         ScriptData withdrawRemainKeyIndices = sac.getArgument(3);
@@ -758,7 +757,7 @@ public class SolScript {
                 .ifEqual(publicKey6, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey6).getScript())
                 .copyArgument(recentBlockHash)
                 .copyArgument(instructionsCount)
-                .ifEqual(argHavePrice,
+                .ifEqual(gasPriceDataLength,
                         "00",
                         "", new ScriptAssembler()
                                 .copyArgument(gasPriceProgramIdIndex)
@@ -767,7 +766,7 @@ public class SolScript {
                                 .copyArgument(gasPriceComputeBudgetInstructionType)
                                 .copyArgument(gasPrice).getScript()
                 )
-                .ifEqual(argHaveLimit,
+                .ifEqual(gasLimitDataLength,
                         "00",
                         "", new ScriptAssembler()
                                 .copyArgument(gasLimitProgramIdIndex)
@@ -777,7 +776,7 @@ public class SolScript {
                                 .copyArgument(gasLimit).getScript()
                 )
                 .copyArgument(withdrawProgramIdIndex)
-                .copyString("05")
+                .copyArgument(withdrawKeyIndicesLength)
                 .copyArgument(withdrawKeyIndex0)
                 .copyArgument(withdrawKeyIndex1)
                 .copyArgument(withdrawRemainKeyIndices)
@@ -834,5 +833,5 @@ public class SolScript {
                 .setHeader(HashType.NONE, SignType.EDDSA)
                 .getScript();
     }
-    public static String getStackingWithdrawScriptSignature = Strings.padStart("3045022100a571d7a4a9f1c1441f7ab230d1c75248d01c8d0de10c29460e50003155b7e133022044cce02740adc131d26670aa63ea414c37560b1dd3475075751f552e831a6d70", 144, '0');
+    public static String getStackingWithdrawScriptSignature = Strings.padStart("304402200329a67f8ce88f59b5dc7514488c07434fe0dc05cf9e25f151d964fff052eed102204ef7f0b5ae72bf209f093968bbaa48aeda3216103f04667cc6481fd49d82defc", 144, '0');
 }
