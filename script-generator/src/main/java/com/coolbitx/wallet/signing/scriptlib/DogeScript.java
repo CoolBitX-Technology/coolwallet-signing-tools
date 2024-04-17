@@ -73,7 +73,6 @@ public class DogeScript {
                                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.SHA256RipeMD160)
                                 .copyString("88AC")
                                 .getScript(), "")
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.DoubleSHA256)
                 .copyArgument(argReverseLockTime)
                 .copyString("81000000")
                 .clearBuffer(Buffer.CACHE1)
