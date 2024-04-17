@@ -84,7 +84,7 @@ public class DogeScript {
         return script;
     }
 
-    public static String DOGEcriptSignature = Strings.padStart("304402205ca345d645aa68218ace302785706b40801ce8255add3c161ca646e88bc365e402207c7d72789867c4356c66c87c4ca8e89fce31445c5c886eaf5487fac3c1cd3412", 144, '0');
+    public static String DOGEcriptSignature = Strings.padStart("3045022100b6187cc319d5069afb13218129d1f4fc962bf0bfcc3fdf4da1727c98c367e5d6022024ee7dfdcaf0152171816cc101d2b19532e644c1df263cd981520c90ffce78af", 144, '0');
 //    public static String DOGEScriptSignature = Strings.padEnd("FA", 144, '0');
 
 }
