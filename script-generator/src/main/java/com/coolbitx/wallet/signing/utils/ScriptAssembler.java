@@ -106,7 +106,8 @@ public class ScriptAssembler {
         version04(4, "04"),
         version05(5, "05"),
         version06(6, "06"),
-        version07(7, "07");
+        version07(7, "07"),
+        version08(8, "08");
         private final int versionNum;
         private final String versionLabel;
 
@@ -290,7 +291,7 @@ public class ScriptAssembler {
         return this;
     }
 
-    /**
+    /**＝
      * Copy string to destination buffer with switch condition.
      *
      * @param conditionData One byte condition data, number only(
@@ -621,7 +622,7 @@ public class ScriptAssembler {
      * @param max
      * @return
      */
-    public ScriptAssembler setBufferInt(ScriptDataInterface data, int min, int max) {
+public ScriptAssembler setBufferInt(ScriptDataInterface data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         script += new ScriptAssembler().ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError).getScript() + setB;
         return this;
@@ -1042,6 +1043,34 @@ public class ScriptAssembler {
 
     public ScriptAssembler insertString(String data) {
         script += data;
+        return this;
+    }
+    
+    /**
+     * Convert the argument from a bit array to a byte array and store it in the destination buffer.
+     *
+     * @param data
+     * @return
+     */
+    public ScriptAssembler bitToByte(ScriptDataInterface data) {
+        if (version.getVersionNum() < 8) {
+            version = versionType.version08;
+        }
+        return bitToByte(data, Buffer.TRANSACTION);
+    }
+
+    /**
+     * Convert the argument from a bit array to a byte array and store it in the destination buffer.
+     *
+     * @param data
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public ScriptAssembler bitToByte(ScriptDataInterface data, Buffer destinationBuf) {
+        if (version.getVersionNum() < 8) {
+            version = versionType.version08;
+        }
+        script += compose("BB", data, destinationBuf, 0, 0);
         return this;
     }
 }
