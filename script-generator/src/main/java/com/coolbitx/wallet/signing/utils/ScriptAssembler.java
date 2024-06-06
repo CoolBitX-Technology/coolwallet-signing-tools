@@ -291,7 +291,7 @@ public class ScriptAssembler {
         return this;
     }
 
-    /**＝
+    /**
      * Copy string to destination buffer with switch condition.
      *
      * @param conditionData One byte condition data, number only(
@@ -622,7 +622,7 @@ public class ScriptAssembler {
      * @param max
      * @return
      */
-public ScriptAssembler setBufferInt(ScriptDataInterface data, int min, int max) {
+    public ScriptAssembler setBufferInt(ScriptDataInterface data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         script += new ScriptAssembler().ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError).getScript() + setB;
         return this;
@@ -1053,9 +1053,6 @@ public ScriptAssembler setBufferInt(ScriptDataInterface data, int min, int max) 
      * @return
      */
     public ScriptAssembler bitToByte(ScriptDataInterface data) {
-        if (version.getVersionNum() < 8) {
-            version = versionType.version08;
-        }
         return bitToByte(data, Buffer.TRANSACTION);
     }
 
