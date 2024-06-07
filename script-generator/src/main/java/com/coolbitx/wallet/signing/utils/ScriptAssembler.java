@@ -106,7 +106,8 @@ public class ScriptAssembler {
         version04(4, "04"),
         version05(5, "05"),
         version06(6, "06"),
-        version07(7, "07");
+        version07(7, "07"),
+        version08(8, "08");
         private final int versionNum;
         private final String versionLabel;
 
@@ -1042,6 +1043,31 @@ public class ScriptAssembler {
 
     public ScriptAssembler insertString(String data) {
         script += data;
+        return this;
+    }
+    
+    /**
+     * Convert the argument from a bit array to a byte array and store it in the destination buffer.
+     *
+     * @param data
+     * @return
+     */
+    public ScriptAssembler bitToByte(ScriptDataInterface data) {
+        return bitToByte(data, Buffer.TRANSACTION);
+    }
+
+    /**
+     * Convert the argument from a bit array to a byte array and store it in the destination buffer.
+     *
+     * @param data
+     * @param destinationBuf The destination buffer.
+     * @return
+     */
+    public ScriptAssembler bitToByte(ScriptDataInterface data, Buffer destinationBuf) {
+        if (version.getVersionNum() < 8) {
+            version = versionType.version08;
+        }
+        script += compose("BB", data, destinationBuf, 0, 0);
         return this;
     }
 }
