@@ -571,55 +571,6 @@ public class DotScript {
 
     public static String KSMBondScriptSignature = Strings.padStart("3046022100b6a7b39e3a4a89e3df21d9e6f1fbbb1d5441ab8877432a5348b1640883b2ea9b0221008e5ef4ae778d7e877d208cbf2e890170bfb642789e90878888ab57c6eba639e2", 144, '0');
 
-    public static String getKSMUnbondScript() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData argCallIndex = sac.getArgument(2);
-        ScriptData argAmount = sac.getArgumentRightJustified(10);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
-        ScriptData argNonce = sac.getArgumentRightJustified(5);
-        ScriptData argTip = sac.getArgumentRightJustified(5);
-        ScriptData argSpecVer = sac.getArgument(4);
-        ScriptData argTxVer = sac.getArgument(4);
-        ScriptData argGenesisHash = sac.getArgument(32);
-        ScriptData argBlockHash = sac.getArgument(32);
-
-        String script = new ScriptAssembler()
-                // set coinType to 01b2
-                .setCoinType(0x01b2)
-                // call index
-                .copyArgument(argCallIndex)
-                // value
-                .scaleEncode(argAmount, Buffer.TRANSACTION)
-                // MortalEra
-                .copyArgument(argMortalEra)
-                // nonce
-                .scaleEncode(argNonce, Buffer.TRANSACTION)
-                // tip
-                .scaleEncode(argTip, Buffer.TRANSACTION)
-                // mode
-                .copyString("00")
-                // spec ver
-                .copyArgument(argSpecVer)
-                // tx ver
-                .copyArgument(argTxVer)
-                // genesis hash
-                .copyArgument(argGenesisHash)
-                // block hash
-                .copyArgument(argBlockHash)
-                // metaDataHash
-                .copyString("00")
-                .showMessage("KSM")
-                .showMessage("Unbond")
-                .showAmount(argAmount, 12)
-                .showWrap("PRESS", "BUTToN")
-                // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
-                .setHeader(HashType.Blake2b256, SignType.ECDSA)
-                .getScript();
-        return script;
-    }
-
-    public static String KSMUnbondScriptSignature = Strings.padStart("304502207feb25ae89c5763872178b5c9057f7de904531a5126631e087295557942cedc60221008c23b64933c4c4239f4a118a5242216c5d68d925804ca0e5ad2eda51a1b08cfc", 144, '0');
-
     public static String getKSMBondExtraScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
@@ -668,6 +619,55 @@ public class DotScript {
     }
 
     public static String KSMBondExtraScriptSignature = Strings.padStart("3045022100c795d3f15772dc2d21ff5a5431eb09f02515371ac438402c61846d03ce3ab6a80220396cf63032f75b5e513d36b41b9ec4e8230a30d4629ae0ebdb8661d9fc4a5bc4", 144, '0');
+    
+    public static String getKSMUnbondScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argCallIndex = sac.getArgument(2);
+        ScriptData argAmount = sac.getArgumentRightJustified(10);
+        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argNonce = sac.getArgumentRightJustified(5);
+        ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argSpecVer = sac.getArgument(4);
+        ScriptData argTxVer = sac.getArgument(4);
+        ScriptData argGenesisHash = sac.getArgument(32);
+        ScriptData argBlockHash = sac.getArgument(32);
+
+        String script = new ScriptAssembler()
+                // set coinType to 01b2
+                .setCoinType(0x01b2)
+                // call index
+                .copyArgument(argCallIndex)
+                // value
+                .scaleEncode(argAmount, Buffer.TRANSACTION)
+                // MortalEra
+                .copyArgument(argMortalEra)
+                // nonce
+                .scaleEncode(argNonce, Buffer.TRANSACTION)
+                // tip
+                .scaleEncode(argTip, Buffer.TRANSACTION)
+                // mode
+                .copyString("00")
+                // spec ver
+                .copyArgument(argSpecVer)
+                // tx ver
+                .copyArgument(argTxVer)
+                // genesis hash
+                .copyArgument(argGenesisHash)
+                // block hash
+                .copyArgument(argBlockHash)
+                // metaDataHash
+                .copyString("00")
+                .showMessage("KSM")
+                .showMessage("Unbond")
+                .showAmount(argAmount, 12)
+                .showWrap("PRESS", "BUTToN")
+                // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
+                .setHeader(HashType.Blake2b256, SignType.ECDSA)
+                .getScript();
+        return script;
+    }
+
+    public static String KSMUnbondScriptSignature = Strings.padStart("304502207feb25ae89c5763872178b5c9057f7de904531a5126631e087295557942cedc60221008c23b64933c4c4239f4a118a5242216c5d68d925804ca0e5ad2eda51a1b08cfc", 144, '0');
 
     public static String getKSMNominateSingleHashScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
