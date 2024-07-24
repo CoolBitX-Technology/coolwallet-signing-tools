@@ -257,6 +257,84 @@ public class BtcScript {
 
         String script = new ScriptAssembler()
                 .setCoinType(0x00)
+                //                .copyString("00") // not sure
+                //                .copyString("00") // SIGHASH_ALL_TAPROOT
+                .copyArgument(argReverseVersion)
+                //                .copyArgument(argReverseLockTime)
+                .copyArgument(argHashPrevouts)
+                .copyArgument(argHashSequences)
+                .utxoDataPlaceholder(argZeroPadding)
+                .copyArgument(argReverseSequence)
+                .baseConvert(argUsdtDust, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
+                // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
+                .switchString(argOutputScriptType, Buffer.CACHE1, "1976A914,17A914,160014,220020")
+                .ifEqual(argOutputScriptType, "03",
+                        new ScriptAssembler().copyArgument(argOutputDest32, Buffer.CACHE1).getScript(),
+                        new ScriptAssembler().copyArgument(argOutputDest20, Buffer.CACHE1).getScript())
+                .switchString(argOutputScriptType, Buffer.CACHE1, "88AC,87,[],[]")
+                .copyString("0000000000000000166a146f6d6e69000000000000001f", Buffer.CACHE1)
+                .copyArgument(argOutputAmount, Buffer.CACHE1)
+                // if haveChange
+                .ifEqual(argHaveChange, "01",
+                        new ScriptAssembler()
+                                .baseConvert(argChangeAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
+                                .derivePublicKey(argChangePath, Buffer.CACHE2)
+                                .switchString(argChangeScriptType, Buffer.CACHE1, "1976A914,17A914,160014")
+                                // if P2PKH
+                                .ifEqual(argChangeScriptType, "00",
+                                        new ScriptAssembler().hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1, ScriptAssembler.HashType.SHA256RipeMD160).getScript(),
+                                        "")
+                                // if P2WPKH in P2SH
+                                .ifEqual(argChangeScriptType, "01",
+                                        new ScriptAssembler().copyString("0014", Buffer.CACHE2)
+                                                .hash(ScriptData.getBuffer(Buffer.CACHE2, 0, 33), Buffer.CACHE2, ScriptAssembler.HashType.SHA256RipeMD160)
+                                                .hash(ScriptData.getBuffer(Buffer.CACHE2, 33, 22), Buffer.CACHE1, ScriptAssembler.HashType.SHA256RipeMD160).getScript(),
+                                        "")
+                                .switchString(argChangeScriptType, Buffer.CACHE1, "88AC,87,[]").getScript(), "")
+                .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.DoubleSHA256)
+                .copyArgument(argReverseLockTime)
+                .copyArgument(argReverseHashType)
+                .clearBuffer(Buffer.CACHE1)
+                .clearBuffer(Buffer.CACHE2)
+                .showMessage("BTC")
+                .showMessage("USDT")
+                .insertString(addressScript)
+                .showAmount(argOutputAmount, 8)
+                .showPressButton()
+                .setHeader(ScriptAssembler.HashType.DoubleSHA256, ScriptAssembler.SignType.ECDSA).getScript();
+        return script;
+    }
+
+    public static String USDTScriptSignature = Strings.padStart("3045022076e7c6a62c1c5bb1e1a82d6deb7e12fbbfbd1d757fece058e28cb076281325fe022100adf483e7cc12ae814bd447517dbed3850b6324ab122c9454416916bae6734c80", 144, '0');
+
+    public static String getUSDTTaprootScript(boolean isTestnet) {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argReverseVersion = sac.getArgument(4);
+        ScriptData argHashPrevouts = sac.getArgument(32);
+        ScriptData argHashSequences = sac.getArgument(32);
+        ScriptData argZeroPadding = sac.getArgument(4);
+        // Depending on destination address
+        // P2PKH  = 00 start with 1
+        // P2SH   = 01 start with 3
+        // P2WPKH = 02 start with bc1 and decode to 20bytes
+        // P2WSH  = 03 start with bc1 and decode to 32bytes
+        ScriptData argOutputScriptType = sac.getArgument(1);
+        ScriptData argUsdtDust = sac.getArgument(8);
+        ScriptData argOutputAmount = sac.getArgument(8);
+        ScriptData argOutputDest20 = sac.getArgumentUnion(12, 20);
+        ScriptData argOutputDest32 = sac.getArgument(32);
+        ScriptData argHaveChange = sac.getArgument(1);
+        ScriptData argChangeScriptType = sac.getArgument(1);
+        ScriptData argChangeAmount = sac.getArgument(8);
+        ScriptData argChangePath = sac.getArgument(21);
+        ScriptData argReverseSequence = sac.getArgument(4);
+        ScriptData argReverseLockTime = sac.getArgument(4);
+        ScriptData argReverseHashType = sac.getArgument(4);
+
+        String addressScript = getAddressScript(isTestnet, argOutputScriptType, argOutputDest20, argOutputDest32);
+
+        String script = new ScriptAssembler()
+                .setCoinType(0x00)
                 .copyString("00") // not sure
                 .copyString("00") // SIGHASH_ALL_TAPROOT
                 .copyArgument(argReverseVersion)
@@ -304,6 +382,5 @@ public class BtcScript {
         return script;
     }
 
-    public static String USDTScriptSignature = Strings.padStart("3045022076e7c6a62c1c5bb1e1a82d6deb7e12fbbfbd1d757fece058e28cb076281325fe022100adf483e7cc12ae814bd447517dbed3850b6324ab122c9454416916bae6734c80", 144, '0');
-//    public static String USDTScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String USDTTaprootScriptSignature = Strings.padEnd("FA", 144, '0');
 }
