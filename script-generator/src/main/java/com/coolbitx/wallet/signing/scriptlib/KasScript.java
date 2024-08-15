@@ -78,7 +78,7 @@ public class KasScript {
         ScriptData argReverseOutputScriptPublicKeyLength = sac.getArgument(8);
         ScriptData argOutputScriptPublicKey = sac.getArgument(34);
         ScriptData argHaveChange = sac.getArgument(1);
-        ScriptData argChangeAmount = sac.getArgument(8);
+        ScriptData argReverseChangeAmount = sac.getArgument(8);
         ScriptData argChangePath = sac.getArgument(21);
         ScriptData argReverseLockTime = sac.getArgument(8);
         ScriptData argSubNetwokId = sac.getArgument(20);
@@ -105,13 +105,14 @@ public class KasScript {
                 // if haveChange derive change address
                 .ifEqual(argHaveChange, "01",
                         new ScriptAssembler()
-                                .copyArgument(argChangeAmount, Buffer.CACHE1)
+                                .copyArgument(argReverseChangeAmount, Buffer.CACHE1)
                                 .copyArgument(argReverseOutputScriptionVersion, Buffer.CACHE1)
                                 // Change script publicKey length
                                 .copyString("2200000000000000", Buffer.CACHE1)
                                 // Script publicKey prefix
                                 .copyString("20", Buffer.CACHE1)
                                 .derivePublicKey(argChangePath, Buffer.CACHE2)
+                                // To x only public key
                                 .copyArgument(ScriptData.getBuffer(Buffer.CACHE2, 1,
                                         32), Buffer.CACHE1)
                                 .clearBuffer(Buffer.CACHE2)
