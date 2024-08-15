@@ -32,5 +32,6 @@ public class AllScript {
         IotxScript.listAll();
         AptosScript.listAll();
         VetScript.listAll();
+        KasScript.listAll();
     }
 }

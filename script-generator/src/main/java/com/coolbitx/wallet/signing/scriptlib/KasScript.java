@@ -95,28 +95,35 @@ public class KasScript {
                 ScriptData argZeroPadding = sac.getArgument(4); // workaround for utxoDataPlaceholder
                 String script = new ScriptAssembler()
                                 .setCoinType(0x1b207)
+                                // AllHash
                                 .copyArgument(argReverseVersion)
                                 .copyArgument(argHashPrevouts)
                                 .copyArgument(argHashSequences)
                                 .copyArgument(argHashSigOpCount)
                                 .utxoDataPlaceholder(argZeroPadding)
                                 // Output
-                                .copyArgument(argReverseOutputAmount)
-                                .copyArgument(argReverseOutputScriptionVersion)
-                                .copyArgument(argReverseOutputScriptPublicKeyLength)
-                                .copyArgument(argOutputScriptPublicKey)
-                                // if haveChange
+                                .copyArgument(argReverseOutputAmount, Buffer.CACHE1)
+                                .copyArgument(argReverseOutputScriptionVersion, Buffer.CACHE1)
+                                .copyArgument(argReverseOutputScriptPublicKeyLength, Buffer.CACHE1)
+                                .copyArgument(argOutputScriptPublicKey, Buffer.CACHE1)
+                                // if haveChange derive change address
                                 .ifEqual(argHaveChange, "01",
                                                 new ScriptAssembler()
-                                                                .copyArgument(argChangeAmount)
-                                                                .copyArgument(argReverseOutputScriptionVersion)
+                                                                .copyArgument(argChangeAmount, Buffer.CACHE1)
+                                                                .copyArgument(argReverseOutputScriptionVersion, Buffer.CACHE1)
                                                                 .derivePublicKey(argChangePath, Buffer.CACHE2)
-                                                                .copyString("20")
+                                                                // Change script publicKey length
+                                                                .copyString("22", Buffer.CACHE1)
+                                                                // Script publicKey prefix
+                                                                .copyString("20", Buffer.CACHE1)
                                                                 .copyArgument(ScriptData.getBuffer(Buffer.CACHE2, 1,
-                                                                                32))
-                                                                .copyString("ac").getScript(),
+                                                                                32), Buffer.CACHE1)
+                                                                .clearBuffer(Buffer.CACHE2)
+                                                                // Script publicKey end
+                                                                .copyString("ac", Buffer.CACHE1)
+                                                                .getScript(),
                                                 "")
-                                .clearBuffer(Buffer.CACHE2)
+                                // blake2b hash all outputs            
                                 .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION,
                                                 ScriptAssembler.HashType.Blake2b256)
                                 .copyArgument(argReverseLockTime)
@@ -125,6 +132,7 @@ public class KasScript {
                                 .copyArgument(argPayload)
                                 .copyArgument(argReverseHashType)
                                 .clearBuffer(Buffer.CACHE1)
+                                .clearBuffer(Buffer.CACHE2)
                                 .showMessage("KAS")
                                 .insertString(addressScript)
                                 .baseConvert(argReverseOutputAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset,
@@ -132,7 +140,7 @@ public class KasScript {
                                 .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8)
                                 .clearBuffer(Buffer.CACHE1)
                                 .showPressButton()
-                                .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.SCHNORR)
+                                .setHeader(ScriptAssembler.HashType.Blake2b256, ScriptAssembler.SignType.SCHNORR)
                                 .getScript();
                 return script;
         }
