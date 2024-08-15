@@ -22,7 +22,7 @@ public class KasScript {
         System.out.println("Kas transfer: \n" + getTransferScript(false) + "\n");
     }
 
-    public static String getAddressScript(ScriptData argOutputScriptPublicKey) {
+    public static String getAddressScript(ScriptData argOutputXOnlyPublicKey) {
         String hrp = "kaspa";
         String hrpExpand = "";
         for (int i = 0; i < hrp.length(); i++) {
@@ -34,12 +34,13 @@ public class KasScript {
         }
         String bech32AddressScript = new ScriptAssembler()
                 .copyString(hrpExpand + "00", Buffer.CACHE2)
-                .baseConvert(argOutputScriptPublicKey, Buffer.CACHE2, 55,
-                        ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5) // (34 * 8) / 5 = 55
+                // 32 * 8 / 5 = 51.2 ≈ 52
+                .baseConvert(argOutputXOnlyPublicKey, Buffer.CACHE2, 52,
+                        ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
                 .copyString("000000000000", Buffer.CACHE2)
                 .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
                 .clearBuffer(Buffer.CACHE2)
-                .baseConvert(argOutputScriptPublicKey, Buffer.CACHE2, 55,
+                .baseConvert(argOutputXOnlyPublicKey, Buffer.CACHE2, 52,
                         ScriptAssembler.base32BitcoinCashCharset,
                         ScriptAssembler.bitLeftJustify8to5)
                 .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 8,
@@ -76,6 +77,7 @@ public class KasScript {
         ScriptData argReverseOutputAmount = sac.getArgument(8);
         ScriptData argReverseOutputScriptionVersion = sac.getArgument(2);
         ScriptData argReverseOutputScriptPublicKeyLength = sac.getArgument(8);
+        ScriptData argOutputXOnlyPublicKey = sac.getArgumentUnion(1, 32);
         ScriptData argOutputScriptPublicKey = sac.getArgument(34);
         ScriptData argHaveChange = sac.getArgument(1);
         ScriptData argReverseChangeAmount = sac.getArgument(8);
@@ -86,7 +88,7 @@ public class KasScript {
         ScriptData argPayload = sac.getArgument(32);
         ScriptData argReverseHashType = sac.getArgument(1);
         ScriptData argZeroPadding = sac.getArgument(4); // workaround for utxoDataPlaceholder
-        String addressScript = getAddressScript(argOutputScriptPublicKey);
+        String addressScript = getAddressScript(argOutputXOnlyPublicKey);
 
         
         String script = new ScriptAssembler()
