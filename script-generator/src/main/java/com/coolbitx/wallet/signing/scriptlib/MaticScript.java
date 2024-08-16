@@ -102,7 +102,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(TYPE_RLP)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(
                         argTo,
@@ -174,7 +174,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(TYPE_RLP)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .ifSigned(
                         argTokenInfo,
                         argSign,
@@ -236,7 +236,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(TYPE_RLP)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -276,7 +276,7 @@ accessList :       c0
                 // accessList
                 .copyString("C0")
                 .arrayEnd(TYPE_RLP)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -336,7 +336,7 @@ accessList :       c0
                 .copyString("8080")
                 .arrayEnd(TYPE_RLP)
                 // .rlpList(1)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(
                         argTo,
@@ -407,7 +407,7 @@ b844 a9059cbb
                 .copyString("8080")
                 // .rlpList(2)
                 .arrayEnd(TYPE_RLP)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .ifSigned(
                         argTokenInfo,
                         argSign,
@@ -472,7 +472,7 @@ b844 a9059cbb
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
                 .arrayEnd(TYPE_RLP)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -513,7 +513,7 @@ b844 a9059cbb
                 .rlpString(ScriptData.getDataBufferAll(Buffer.CACHE1))
                 .copyString("8080")
                 .arrayEnd(TYPE_RLP)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -533,7 +533,7 @@ b844 a9059cbb
                 .setCoinType(0x3C)
                 .copyString("19457468657265756D205369676E6564204D6573736167653A0A")
                 .copyArgument(argMessage)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .showWrap("MESSAGE", "")
                 .showPressButton()
                 //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
@@ -555,7 +555,7 @@ b844 a9059cbb
                 .copyString("1901")
                 .copyArgument(argDomainSeparator)
                 .hash(argMessage, Buffer.TRANSACTION, HashType.Keccak256)
-                .showMessage("MATIC")
+                .showMessage("POL")
                 .showWrap("EIP712", "")
                 .showPressButton()
                 //version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
