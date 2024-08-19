@@ -74,6 +74,7 @@ public class KasScript {
         ScriptData argHashPrevouts = sac.getArgument(32);
         ScriptData argHashSequences = sac.getArgument(32);
         ScriptData argHashSigOpCount = sac.getArgument(32);
+        ScriptData argHashOutLength = sac.getArgument(2);
         ScriptData argReverseOutputAmount = sac.getArgument(8);
         ScriptData argReverseOutputScriptionVersion = sac.getArgument(2);
         ScriptData argReverseOutputScriptPublicKeyLength = sac.getArgument(8);
@@ -81,6 +82,8 @@ public class KasScript {
         ScriptData argOutputScriptPublicKey = sac.getArgument(34);
         ScriptData argHaveChange = sac.getArgument(1);
         ScriptData argReverseChangeAmount = sac.getArgument(8);
+        ScriptData argHashKeyLength = sac.getArgument(2);
+        ScriptData argHashKey = sac.getArgumentVariableLength(20);
         ScriptData argChangePath = sac.getArgument(21);
         ScriptData argReverseLockTime = sac.getArgument(8);
         ScriptData argSubNetwokId = sac.getArgument(20);
@@ -100,6 +103,7 @@ public class KasScript {
                 .copyArgument(argHashSigOpCount)
                 .utxoDataPlaceholder(argZeroPadding)
                 // Output
+                .copyArgument(argHashOutLength, Buffer.CACHE1)
                 .copyArgument(argReverseOutputAmount, Buffer.CACHE1)
                 .copyArgument(argReverseOutputScriptionVersion, Buffer.CACHE1)
                 .copyArgument(argReverseOutputScriptPublicKeyLength, Buffer.CACHE1)
@@ -122,9 +126,11 @@ public class KasScript {
                                 .copyString("ac", Buffer.CACHE1)
                                 .getScript(),
                         "")
-                // blake2b hash all outputs            
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION,
-                        ScriptAssembler.HashType.Blake2b256)
+                // blake2b hash all outputs
+                .copyArgument(argHashKeyLength, Buffer.CACHE1)
+                .copyArgument(argHashKey, Buffer.CACHE1)
+                .newHash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION,
+                        ScriptAssembler.HashType.Blake2b256Mac)
                 .copyArgument(argReverseLockTime)
                 .copyArgument(argSubNetwokId)
                 .copyArgument(argReverseGas)

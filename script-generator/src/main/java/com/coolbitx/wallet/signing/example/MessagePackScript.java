@@ -19,8 +19,12 @@ import com.coolbitx.wallet.signing.utils.ScriptRlpData;
 
 public class MessagePackScript {
 
+    public static void main(String[] args) throws Exception {
+        System.out.println("Algorand: \n" + getApplicationCallTransaction3() + "\n");
+    }
+    
     public static void listAll() {
-        System.out.println("Algorand: \n" + getTransferScript() + "\n");
+        System.out.println("Algorand: \n" + getApplicationCallTransaction3() + "\n");
     }
     
     public static String getApplicationCallTransaction3() {

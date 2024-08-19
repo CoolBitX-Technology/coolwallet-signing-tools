@@ -64,7 +64,9 @@ public class ScriptAssembler {
         Blake2b256("0E"),
         Blake2b512("0F"),
         SHA512256("10"),
-        Blake3256("11");
+        Blake3256("11"),
+        Blake2b256Mac("13"),
+        Blake2b512Mac("14");
         private final String hashLabel;
 
         private HashType(String hashLabel) {
@@ -107,7 +109,8 @@ public class ScriptAssembler {
         version05(5, "05"),
         version06(6, "06"),
         version07(7, "07"),
-        version08(8, "08");
+        version08(8, "08"),
+        version09(9, "09");
         private final int versionNum;
         private final String versionLabel;
 
@@ -546,7 +549,7 @@ public class ScriptAssembler {
     }
 
     /**
-     * Bech32 hash data and put the output to destination buffer.
+     * Hash data and put the output to destination buffer.
      *
      * @param data The input data.
      * @param destinationBuf The destination buffer.
@@ -556,6 +559,23 @@ public class ScriptAssembler {
     public ScriptAssembler hash(ScriptDataInterface data, Buffer destinationBuf, HashType hashType) {
         int hashIndex = hashType.toInt();
         script += compose("5A", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
+        return this;
+    }
+    
+     /**
+     * Hash data and put the output to destination buffer.
+     *
+     * @param data The input data.
+     * @param destinationBuf The destination buffer.
+     * @param hashType The parameter is defined in enumeration class HashType
+     * @return
+     */
+    public ScriptAssembler newHash(ScriptDataInterface data, Buffer destinationBuf, HashType hashType) {
+        if (version.getVersionNum() < 9) {
+            version = versionType.version09;
+        }
+        int hashIndex = hashType.toInt();
+        script += compose("5B", data, destinationBuf, 0, 0);
         return this;
     }
 
