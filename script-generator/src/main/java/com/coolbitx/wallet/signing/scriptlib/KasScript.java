@@ -74,6 +74,7 @@ public class KasScript {
         ScriptData argHashPrevouts = sac.getArgument(32);
         ScriptData argHashSequences = sac.getArgument(32);
         ScriptData argHashSigOpCount = sac.getArgument(32);
+        ScriptData argZeroPadding = sac.getArgument(4); // workaround for utxoDataPlaceholder
         ScriptData argHashOutLength = sac.getArgument(2);
         ScriptData argReverseOutputAmount = sac.getArgument(8);
         ScriptData argReverseOutputScriptionVersion = sac.getArgument(2);
@@ -90,7 +91,6 @@ public class KasScript {
         ScriptData argReverseGas = sac.getArgument(8);
         ScriptData argPayload = sac.getArgument(32);
         ScriptData argReverseHashType = sac.getArgument(1);
-        ScriptData argZeroPadding = sac.getArgument(4); // workaround for utxoDataPlaceholder
         String addressScript = getAddressScript(argOutputXOnlyPublicKey);
 
         
