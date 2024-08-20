@@ -83,7 +83,7 @@ public class KasScript {
         ScriptData argHaveChange = sac.getArgument(1);
         ScriptData argReverseChangeAmount = sac.getArgument(8);
         ScriptData argHashKeyLength = sac.getArgument(2);
-        ScriptData argHashKey = sac.getArgumentVariableLength(20);
+        ScriptData argHashKey = sac.getArgumentVariableLength(22);
         ScriptData argChangePath = sac.getArgument(21);
         ScriptData argReverseLockTime = sac.getArgument(8);
         ScriptData argSubNetwokId = sac.getArgument(20);
