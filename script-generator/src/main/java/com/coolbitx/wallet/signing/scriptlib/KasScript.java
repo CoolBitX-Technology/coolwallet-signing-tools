@@ -146,7 +146,7 @@ public class KasScript {
                 .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8)
                 .clearBuffer(Buffer.CACHE1)
                 .showPressButton()
-                .setHeader(ScriptAssembler.HashType.Blake2b256, ScriptAssembler.SignType.SCHNORR)
+                .setHeader(ScriptAssembler.HashType.Blake2b256Mac, ScriptAssembler.SignType.SCHNORR)
                 .getScript();
         return script;
     }
