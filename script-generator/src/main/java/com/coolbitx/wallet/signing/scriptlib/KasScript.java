@@ -90,7 +90,7 @@ public class KasScript {
         ScriptData argSubNetwokId = sac.getArgument(20);
         ScriptData argReverseGas = sac.getArgument(8);
         ScriptData argPayload = sac.getArgument(32);
-        ScriptData argReverseHashType = sac.getArgument(1);
+        ScriptData argHashType = sac.getArgument(1);
         String addressScript = getAddressScript(argOutputXOnlyPublicKey);
 
         
@@ -103,6 +103,7 @@ public class KasScript {
                 .copyArgument(argHashSigOpCount)
                 .utxoDataPlaceholder(argZeroPadding)
                 // Output
+                .copyArgument(argHashType, Buffer.CACHE1)
                 .copyArgument(argHashOutLength, Buffer.CACHE1)
                 .copyArgument(argReverseOutputAmount, Buffer.CACHE1)
                 .copyArgument(argReverseOutputScriptionVersion, Buffer.CACHE1)
@@ -135,7 +136,7 @@ public class KasScript {
                 .copyArgument(argSubNetwokId)
                 .copyArgument(argReverseGas)
                 .copyArgument(argPayload)
-                .copyArgument(argReverseHashType)
+                .copyArgument(argHashType)
                 .clearBuffer(Buffer.CACHE1)
                 .clearBuffer(Buffer.CACHE2)
                 .showMessage("KAS")
