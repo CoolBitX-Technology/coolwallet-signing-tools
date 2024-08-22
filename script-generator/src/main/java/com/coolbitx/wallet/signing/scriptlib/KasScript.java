@@ -23,7 +23,7 @@ public class KasScript {
         System.out.println("Kas transfer: \n" + getTransferScript(false) + "\n");
     }
 
-    public static String getAddressScript(ScriptData argOutputXOnlyPublicKey, ScriptData argOutputPublicKey) {
+    public static String getAddressScript(ScriptData argOutputXOnlyPublicKey) {
         String hrp = "kaspa";
         String hrpExpand = "";
         for (int i = 0; i < hrp.length(); i++) {
@@ -92,7 +92,7 @@ public class KasScript {
         ScriptData argReverseGas = sac.getArgument(8);
         ScriptData argPayload = sac.getArgument(32);
         ScriptData argHashType = sac.getArgument(1);
-        String addressScript = getAddressScript(argOutputXOnlyPublicKey, argOutputScriptPublicKey);
+        String addressScript = getAddressScript(argOutputXOnlyPublicKey);
 
         
         String script = new ScriptAssembler()
