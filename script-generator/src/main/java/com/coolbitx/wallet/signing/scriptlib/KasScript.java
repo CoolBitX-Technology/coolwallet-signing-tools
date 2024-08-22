@@ -78,6 +78,7 @@ public class KasScript {
         ScriptData argHashSequences = sac.getArgument(32);
         ScriptData argHashSigOpCount = sac.getArgument(32);
         ScriptData argZeroPadding = sac.getArgument(4); // workaround for utxoDataPlaceholder
+        ScriptData argNewHashType = sac.getArgument(1);
         ScriptData argHashOutLength = sac.getArgument(2);
         ScriptData argReverseOutputAmount = sac.getArgument(8);
         ScriptData argReverseOutputScriptionVersion = sac.getArgument(2);
@@ -87,13 +88,14 @@ public class KasScript {
         ScriptData argHaveChange = sac.getArgument(1);
         ScriptData argReverseChangeAmount = sac.getArgument(8);
         ScriptData argHashKeyLength = sac.getArgument(2);
-        ScriptData argHashKey = sac.getArgumentVariableLength(22);
+        ScriptData argHashKey = sac.getArgument(22);
         ScriptData argChangePath = sac.getArgument(21);
         ScriptData argReverseLockTime = sac.getArgument(8);
         ScriptData argSubNetwokId = sac.getArgument(20);
         ScriptData argReverseGas = sac.getArgument(8);
         ScriptData argPayload = sac.getArgument(32);
         ScriptData argHashType = sac.getArgument(1);
+        
         String addressScript = getAddressScript(argOutputXOnlyPublicKey);
 
         
@@ -106,7 +108,7 @@ public class KasScript {
                 .copyArgument(argHashSigOpCount)
                 .utxoDataPlaceholder(argZeroPadding)
                 // Output
-                .copyArgument(argHashType, Buffer.CACHE1)
+                .copyArgument(argNewHashType, Buffer.CACHE1)
                 .copyArgument(argHashOutLength, Buffer.CACHE1)
                 .copyArgument(argReverseOutputAmount, Buffer.CACHE1)
                 .copyArgument(argReverseOutputScriptionVersion, Buffer.CACHE1)
