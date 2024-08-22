@@ -46,8 +46,10 @@ public class KasScript {
                 .bchPolymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
                 .clearBuffer(Buffer.CACHE2)
                 // (33 + 5) * 8 / 5 = 60.8 ≈ 61
-                // bech32(convert8To5Bits(version + outputXOnlyPublicKey + checksum)) -> cache2
-                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 61, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)    
+                // bech32(convert8To5Bits(version + outputXOnlyPublicKey)) -> cache2
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 0, 33), Buffer.CACHE2, 53, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)   
+                // bech32(convert8To5Bits(checksum)) -> cache2
+                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1, 33), Buffer.CACHE2, 8, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)    
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .getScript();
         return bech32AddressScript;
@@ -138,10 +140,9 @@ public class KasScript {
                 .copyArgument(argReverseGas)
                 .copyArgument(argPayload)
                 .copyArgument(argHashType)
-                .clearBuffer(Buffer.CACHE1)
-                .clearBuffer(Buffer.CACHE2)
                 .showMessage("KAS")
                 .insertString(addressScript)
+                .clearBuffer(Buffer.CACHE1)
                 .baseConvert(argReverseOutputAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset,
                         ScriptAssembler.littleEndian)
                 .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8)
