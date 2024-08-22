@@ -5,6 +5,7 @@
  */
 package com.coolbitx.wallet.signing.scriptlib;
 
+import com.coolbitx.wallet.signing.utils.Hex;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
@@ -22,32 +23,32 @@ public class KasScript {
         System.out.println("Kas transfer: \n" + getTransferScript(false) + "\n");
     }
 
-    public static String getAddressScript(ScriptData argOutputXOnlyPublicKey) {
+    public static String getAddressScript(ScriptData argOutputXOnlyPublicKey, ScriptData argOutputPublicKey) {
         String hrp = "kaspa";
         String hrpExpand = "";
         for (int i = 0; i < hrp.length(); i++) {
-            hrpExpand += HexUtil.toHexString((hrp.charAt(i) >> 5) & 7, 1);
-        }
-        hrpExpand += "00";
-        for (int i = 0; i < hrp.length(); i++) {
             hrpExpand += HexUtil.toHexString(hrp.charAt(i) & 31, 1);
         }
+        hrpExpand += "00";
         String bech32AddressScript = new ScriptAssembler()
-                .copyString(hrpExpand + "00", Buffer.CACHE2)
-                // 32 * 8 / 5 = 51.2 ≈ 52
-                .baseConvert(argOutputXOnlyPublicKey, Buffer.CACHE2, 52,
-                        ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
-                .copyString("000000000000", Buffer.CACHE2)
-                .bech32Polymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
-                .clearBuffer(Buffer.CACHE2)
-                .baseConvert(argOutputXOnlyPublicKey, Buffer.CACHE2, 52,
-                        ScriptAssembler.base32BitcoinCashCharset,
-                        ScriptAssembler.bitLeftJustify8to5)
-                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 8,
-                        ScriptAssembler.base32BitcoinCashCharset, 0)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .clearBuffer(Buffer.CACHE1)
                 .clearBuffer(Buffer.CACHE2)
+                .copyString(hrpExpand, Buffer.CACHE2)
+                // version + outputXOnlyPublicKey -> cache1
+                .copyString("00", Buffer.CACHE1)
+                .copyArgument(argOutputXOnlyPublicKey, Buffer.CACHE1)
+                // 33 * 8 / 5 = 52.8 ≈ 53
+                // convert8To5Bits(version + outputXOnlyPublicKey) -> cache2
+                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 53,
+                        ScriptAssembler.binary32Charset, ScriptAssembler.bitLeftJustify8to5)
+                .copyString("0000000000000000", Buffer.CACHE2)
+                // calculate checksum -> cache1
+                .bchPolymod(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
+                .clearBuffer(Buffer.CACHE2)
+                // (33 + 5) * 8 / 5 = 60.8 ≈ 61
+                // bech32(convert8To5Bits(version + outputXOnlyPublicKey + checksum)) -> cache2
+                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2, 61, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)    
+                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .getScript();
         return bech32AddressScript;
     }
@@ -91,7 +92,7 @@ public class KasScript {
         ScriptData argReverseGas = sac.getArgument(8);
         ScriptData argPayload = sac.getArgument(32);
         ScriptData argHashType = sac.getArgument(1);
-        String addressScript = getAddressScript(argOutputXOnlyPublicKey);
+        String addressScript = getAddressScript(argOutputXOnlyPublicKey, argOutputScriptPublicKey);
 
         
         String script = new ScriptAssembler()
