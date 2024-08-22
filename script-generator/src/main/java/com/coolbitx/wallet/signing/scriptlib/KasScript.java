@@ -47,9 +47,9 @@ public class KasScript {
                 .clearBuffer(Buffer.CACHE2)
                 // (33 + 5) * 8 / 5 = 60.8 ≈ 61
                 // bech32(convert8To5Bits(version + outputXOnlyPublicKey)) -> cache2
-                .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 0, 33), Buffer.CACHE2, 53, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)   
+                .baseConvert(ScriptData.getBuffer(Buffer.CACHE1, 0, 33), Buffer.CACHE2, 53, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
                 // bech32(convert8To5Bits(checksum)) -> cache2
-                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1, 33), Buffer.CACHE2, 8, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)    
+                .baseConvert(ScriptData.getDataBufferAll(Buffer.CACHE1, 33), Buffer.CACHE2, 8, ScriptAssembler.base32BitcoinCashCharset, ScriptAssembler.bitLeftJustify8to5)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .getScript();
         return bech32AddressScript;
@@ -95,10 +95,9 @@ public class KasScript {
         ScriptData argReverseGas = sac.getArgument(8);
         ScriptData argPayload = sac.getArgument(32);
         ScriptData argHashType = sac.getArgument(1);
-        
+
         String addressScript = getAddressScript(argOutputXOnlyPublicKey);
 
-        
         String script = new ScriptAssembler()
                 .setCoinType(0x1b207)
                 // AllHash
@@ -155,8 +154,7 @@ public class KasScript {
         return script;
     }
 
-//    public static String KASScriptSignature = Strings.padStart(
-//            "",
-//            144, '0');
-     public static String KASScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String KASScriptSignature = Strings.padStart(
+            "3045022100907440fb94c1888ccefc93e50b4f916de123900ab75245f6cc8c5fa42ceef80f02207a2404f273ac008f1eb51dc96e3cda695dca3b3e5b746716feecb22e1021775e",
+            144, '0');
 }
