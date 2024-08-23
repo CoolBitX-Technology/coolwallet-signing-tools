@@ -5,7 +5,6 @@
  */
 package com.coolbitx.wallet.signing.scriptlib;
 
-import com.coolbitx.wallet.signing.utils.Hex;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
