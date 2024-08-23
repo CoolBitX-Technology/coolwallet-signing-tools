@@ -564,6 +564,7 @@ public class ScriptAssembler {
     
      /**
      * Hash data and put the output to destination buffer.
+     * NOTE: todo implement with script rlp data
      *
      * @param data The input data.
      * @param destinationBuf The destination buffer.
@@ -574,7 +575,6 @@ public class ScriptAssembler {
         if (version.getVersionNum() < 9) {
             version = versionType.version09;
         }
-        int hashIndex = hashType.toInt();
         script += compose("5B", data, destinationBuf, 0, 0);
         return this;
     }
