@@ -53,23 +53,28 @@ public class KasScript {
                 .getScript();
         return bech32AddressScript;
     }
-
-//     0000
-//     b9040cd6c2cc517e2684744b61b9defaeb670312759d8a778007ab72c5d06e02
-//     0f99135614633e507969d12522c80f967cff6ebc0436863e02ee42b2b66556fc
-//     8523b0471bcbea04575ccaa635eef9f9114f2890bda54367e5ff8caa3878bf82
-//     e803000000000000
-//     0000
-//     2200000000000000
-//     200a3da6e8c7a8795440e60e4662686bc17cd965780095604c85d8d137e0f48079ac
-//     01
-//     22c8668c00000000
-//     328000002c8001b207800000000000000000000000
-//     0000000000000000
-//     0000000000000000000000000000000000000000
-//     0000000000000000
-//     0000000000000000000000000000000000000000000000000000000000000000
-//     01
+/**
+ * 0000                                                                 // transaction version
+ * b9040cd6c2cc517e2684744b61b9defaeb670312759d8a778007ab72c5d06e02     // previousOutputsHash
+ * 0f99135614633e507969d12522c80f967cff6ebc0436863e02ee42b2b66556fc     // sequencesHash
+ * 8523b0471bcbea04575ccaa635eef9f9114f2890bda54367e5ff8caa3878bf82     // sigOpCountsHash
+ * 00000000                                                             // zeroPadding
+ * 13                                                                   // hashType
+ * 0068                                                                 // totalOutputsLength
+ * e803000000000000                                                     // outputReverseAmount
+ * 0000                                                                 // outputReverseScriptVersion
+ * 2200000000000000                                                     // outputScriptPublicKeyReverseLength
+ * 200a3da6e8c7a8795440e60e4662686bc17cd965780095604c85d8d137e0f48079ac // outputScriptPublicKey
+ * 01                                                                   // haveChange
+ * 22c8668c00000000                                                     // changeReverseAmount
+ * 165472616e73616374696f6e5369676e696e6748617368                       // hashKey: TransactionSigningHash
+ * 328000002c8001b207800000000000000000000000                           // sePath
+ * 0000000000000000                                                     // reverseLockTime
+ * 0000000000000000000000000000000000000000                             // subNetworkId
+ * 0000000000000000                                                     // reverseGas
+ * 0000000000000000000000000000000000000000000000000000000000000000     // payload
+ * 01                                                                   // signType
+ *  **/
     public static String getTransferScript(boolean isTestnet) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argReverseVersion = sac.getArgument(2);
