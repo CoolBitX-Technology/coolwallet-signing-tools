@@ -81,6 +81,16 @@ public class ScriptAssembler {
         public int toInt() {
             return Integer.parseInt(hashLabel, 16);
         }
+        
+         public static HashType fromInt(int type) {
+            String typeString = String.format("%02x", type);
+            for (HashType hashType : HashType.values()) {
+                if (hashType.hashLabel.equals(typeString)) {
+                    return hashType;
+                }
+            }
+            return NONE;
+        }
     }
 
     public enum SignType {
@@ -98,6 +108,16 @@ public class ScriptAssembler {
 
         public String toString() {
             return signLabel;
+        }
+
+        public static SignType fromInt(int type) {
+            String typeString = String.format("%02x", type);
+            for (SignType signType : SignType.values()) {
+                if (signType.signLabel.equals(typeString)) {
+                    return signType;
+                }
+            }
+            return NONE;
         }
     }
 
@@ -561,10 +581,10 @@ public class ScriptAssembler {
         script += compose("5A", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
         return this;
     }
-    
-     /**
-     * Hash data and put the output to destination buffer.
-     * NOTE: todo implement with script rlp data
+
+    /**
+     * Hash data and put the output to destination buffer. NOTE: todo implement
+     * with script rlp data
      *
      * @param data The input data.
      * @param destinationBuf The destination buffer.
@@ -606,9 +626,10 @@ public class ScriptAssembler {
         script += compose("5A", data, destinationBuf, 0xB, 0);
         return this;
     }
-    
+
     /**
-     * Compute Bech3m2 ploymod checksum and put the output to destination buffer.
+     * Compute Bech3m2 ploymod checksum and put the output to destination
+     * buffer.
      *
      * @param data The input data.
      * @param destinationBuf The destination buffer.
@@ -1065,9 +1086,10 @@ public class ScriptAssembler {
         script += data;
         return this;
     }
-    
+
     /**
-     * Convert the argument from a bit array to a byte array and store it in the destination buffer.
+     * Convert the argument from a bit array to a byte array and store it in the
+     * destination buffer.
      *
      * @param data
      * @return
@@ -1077,7 +1099,8 @@ public class ScriptAssembler {
     }
 
     /**
-     * Convert the argument from a bit array to a byte array and store it in the destination buffer.
+     * Convert the argument from a bit array to a byte array and store it in the
+     * destination buffer.
      *
      * @param data
      * @param destinationBuf The destination buffer.
