@@ -7,4 +7,5 @@
 **/nbdist/
 **/.nb-gradle/
 **/node_modules/
+.vscode
 /bin/
