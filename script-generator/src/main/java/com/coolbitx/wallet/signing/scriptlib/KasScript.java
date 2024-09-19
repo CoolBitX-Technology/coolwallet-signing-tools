@@ -122,8 +122,8 @@ public class KasScript {
          * 2200000000000000 // outputScriptPublicKeyReverseLength
          * 01 // haveChange
          * 22c8668c00000000 // changeReverseAmount
-         * 165472616e73616374696f6e5369676e696e6748617368 // hashKey:
-         * TransactionSigningHash
+         * 0016 // hashKey length
+         * 5472616e73616374696f6e5369676e696e6748617368 // hashKey: TransactionSigningHash
          * 328000002c8001b207800000000000000000000000 // sePath
          * 0000000000000000 // reverseLockTime
          * 0000000000000000000000000000000000000000 // subNetworkId
