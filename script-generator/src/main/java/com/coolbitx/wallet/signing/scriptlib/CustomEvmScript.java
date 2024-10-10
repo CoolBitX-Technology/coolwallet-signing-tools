@@ -456,7 +456,6 @@ public class CustomEvmScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         // Chain Information Info
-        ScriptData argChainInfo = sac.getArgumentUnion(0, 7);
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
 
@@ -489,14 +488,17 @@ public class CustomEvmScript {
                 .copyString("C0")
                 .arrayEnd(TYPE_RLP)
                 // txDetail
-                // display chainId
+                // display chainId e.g.: c534352 represent Scroll chainId=534352
+                .copyString(HexUtil.toHexString("c"), Buffer.CACHE2)
                 .baseConvert(
                     argChainId,
-                    Buffer.CACHE1, 00,
+                    Buffer.CACHE1, 0,
                     ScriptAssembler.decimalCharset,
                     ScriptAssembler.zeroInherit)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .clearBuffer(Buffer.CACHE1)
+                .clearBuffer(Buffer.CACHE2)
                 // display toAddress
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(
