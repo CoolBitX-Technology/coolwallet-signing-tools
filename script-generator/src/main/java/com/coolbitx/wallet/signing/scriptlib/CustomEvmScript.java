@@ -447,6 +447,21 @@ public class CustomEvmScript {
             144,
             '0');
 
+    private static ScriptAssembler displayChainId(ScriptAssembler scriptAssembler, ScriptData argChainId) {
+        return scriptAssembler
+                // display chainId e.g.: c534352 represent Scroll chainId=534352
+                .copyString(HexUtil.toHexString("c"), Buffer.CACHE2)
+                .baseConvert(
+                    argChainId,
+                    Buffer.CACHE1, 0,
+                    ScriptAssembler.decimalCharset,
+                    ScriptAssembler.zeroInherit)
+                .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                .clearBuffer(Buffer.CACHE1)
+                .clearBuffer(Buffer.CACHE2);
+    }
+
     public static String getEIP1559TransferScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
@@ -459,7 +474,8 @@ public class CustomEvmScript {
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
 
-        String script = new ScriptAssembler()
+        ScriptAssembler scriptAssembler = new ScriptAssembler();
+        scriptAssembler
                 // set coinType to 3C
                 .setCoinType(coinType)
                 // .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
@@ -486,19 +502,11 @@ public class CustomEvmScript {
                 .copyString("80")
                 // accessList
                 .copyString("C0")
-                .arrayEnd(TYPE_RLP)
-                // txDetail
-                // display chainId e.g.: c534352 represent Scroll chainId=534352
-                .copyString(HexUtil.toHexString("c"), Buffer.CACHE2)
-                .baseConvert(
-                    argChainId,
-                    Buffer.CACHE1, 0,
-                    ScriptAssembler.decimalCharset,
-                    ScriptAssembler.zeroInherit)
-                .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
-                .clearBuffer(Buffer.CACHE1)
-                .clearBuffer(Buffer.CACHE2)
+                .arrayEnd(TYPE_RLP);
+
+        // txDetail
+        // display chainId
+        displayChainId(scriptAssembler, argChainId)
                 // display toAddress
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(
@@ -512,9 +520,9 @@ public class CustomEvmScript {
                 .showAmount(argValue, 18)
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
-        return script;
+                .setHeader(HashType.Keccak256, SignType.ECDSA);
+
+        return scriptAssembler.getScript();
     }
 
     // TODO: use production signature
