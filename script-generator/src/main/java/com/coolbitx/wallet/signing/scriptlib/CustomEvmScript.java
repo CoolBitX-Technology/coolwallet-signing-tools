@@ -22,15 +22,21 @@ public class CustomEvmScript {
     public static void listAll() {
         // System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
         // System.out.println("Evm erc20: \n" + getERC20Script(0x3c) + "\n");
-        // System.out.println("Evm Smart Contract: \n" + getSmartContractScript(0x3c) + "\n");
-        // System.out.println("Evm Smart Contract Segment: \n" + getSmartContractSegmentScript(0x3c) + "\n");
-        // System.out.println("Evm EIP-712 Message: \n" + getMessageScript(0x3c) + "\n");
-        // System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript(0x3c) + "\n");
+        // System.out.println("Evm Smart Contract: \n" + getSmartContractScript(0x3c) +
+        // "\n");
+        // System.out.println("Evm Smart Contract Segment: \n" +
+        // getSmartContractSegmentScript(0x3c) + "\n");
+        // System.out.println("Evm EIP-712 Message: \n" + getMessageScript(0x3c) +
+        // "\n");
+        // System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript(0x3c) +
+        // "\n");
         System.out.println("CustomEvm EIP-1559: \n" + getEIP1559TransferScript(0x3c) + "\n");
-        // System.out.println("Evm EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x3c) + "\n");
-        // System.out.println("Evm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript(0x3c) + "\n");
+        System.out.println("CustomEvm EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x3c) + "\n");
+        // System.out.println("Evm EIP-1559 Smart Contract: \n" +
+        // getEIP1559SmartContractScript(0x3c) + "\n");
         // System.out.println(
-        //         "Evm EIP-1559 Smart Contract Segment: \n" + getEIP1559SmartContractSegmentScript(0x3c) + "\n");
+        // "Evm EIP-1559 Smart Contract Segment: \n" +
+        // getEIP1559SmartContractSegmentScript(0x3c) + "\n");
     }
 
     /*
@@ -93,7 +99,7 @@ public class CustomEvmScript {
         return script;
     }
 
-     // TODO: use production signature
+    // TODO: use production signature
     public static String TransferScriptSignature = Strings.padStart(
             "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
@@ -452,10 +458,10 @@ public class CustomEvmScript {
                 // display chainId e.g.: c534352 represent Scroll chainId=534352
                 .copyString(HexUtil.toHexString("c"), Buffer.CACHE2)
                 .baseConvert(
-                    argChainId,
-                    Buffer.CACHE1, 0,
-                    ScriptAssembler.decimalCharset,
-                    ScriptAssembler.zeroInherit)
+                        argChainId,
+                        Buffer.CACHE1, 0,
+                        ScriptAssembler.decimalCharset,
+                        ScriptAssembler.zeroInherit)
                 .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
                 .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .clearBuffer(Buffer.CACHE1)
@@ -540,26 +546,18 @@ public class CustomEvmScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         // Chain Information Info
-        ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
-        ScriptData argSymbolLength = sac.getArgument(1);
-        ScriptData argSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argLayerLength = sac.getArgument(1);
-        ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argChainSign = sac.getArgument(72);
         // ERC20 Token Info
-        ScriptData argTokenInfo = sac.getArgumentUnion(0, 29);
         ScriptData argDecimal = sac.getArgument(1);
         ScriptData argNameLength = sac.getArgument(1);
         ScriptData argName = sac.getArgumentVariableLength(7);
         ScriptData argContractAddress = sac.getArgument(20);
-        ScriptData argSign = sac.getArgument(72);
 
-        String script = new ScriptAssembler()
+        ScriptAssembler scriptAssembler = new ScriptAssembler();
+        scriptAssembler = scriptAssembler
                 // set coinType to 3C
                 .setCoinType(coinType)
-                .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                 // txType (EIP-2718)
                 .copyString("02")
                 .arrayPointer()
@@ -579,33 +577,17 @@ public class CustomEvmScript {
                 .copyArgument(argValue)
                 // accessList
                 .copyString("C0")
-                .arrayEnd(TYPE_RLP)
-                .ifEqual(
-                        argLayerLength,
-                        "00",
-                        "",
-                        new ScriptAssembler()
-                                .setBufferInt(argLayerLength, 1, 7)
-                                .copyArgument(argLayerSymbol, Buffer.CACHE1)
-                                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                                .clearBuffer(Buffer.CACHE1)
-                                .getScript())
-                .setBufferInt(argSymbolLength, 1, 7)
-                .copyArgument(argSymbol, Buffer.CACHE1)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .clearBuffer(Buffer.CACHE1)
-                .ifSigned(
-                        argTokenInfo,
-                        argSign,
-                        "",
-                        new ScriptAssembler()
-                                .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
-                                .getScript())
+                .arrayEnd(TYPE_RLP);
+
+        displayChainId(scriptAssembler, argChainId)
+                // scriptAssembler
                 // txDetail
+                .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
                 .setBufferInt(argNameLength, 1, 7)
                 .copyArgument(argName, Buffer.CACHE2)
                 .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
                 .clearBuffer(Buffer.CACHE2)
+                // show toAddress
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(
                         argTo,
@@ -614,17 +596,18 @@ public class CustomEvmScript {
                         ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2))
+                // show amount
                 .setBufferInt(argDecimal, 0, 20)
                 .showAmount(argValue, ScriptData.bufInt)
                 .showPressButton()
                 // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
-        return script;
+                .setHeader(HashType.Keccak256, SignType.ECDSA);
+
+        return scriptAssembler.getScript();
     }
 
     public static String EIP1559ERC20ScriptSignature = Strings.padStart(
-            "3044022013322FCE155725E45E0F05E729AD7738FD3C02E8B6FD19979271336C8DACBA4202200E55E9AAD383E50F0AB4FC69246C193CB39DF90C0C81928D67E966035673AA0B",
+            "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
             '0');
 
