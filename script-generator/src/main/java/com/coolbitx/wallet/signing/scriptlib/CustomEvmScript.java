@@ -32,8 +32,7 @@ public class CustomEvmScript {
         // "\n");
         System.out.println("CustomEvm EIP-1559: \n" + getEIP1559TransferScript(0x3c) + "\n");
         System.out.println("CustomEvm EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x3c) + "\n");
-        // System.out.println("Evm EIP-1559 Smart Contract: \n" +
-        // getEIP1559SmartContractScript(0x3c) + "\n");
+        System.out.println("Evm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript(0x3c) + "\n");
         // System.out.println(
         // "Evm EIP-1559 Smart Contract Segment: \n" +
         // getEIP1559SmartContractSegmentScript(0x3c) + "\n");
@@ -620,21 +619,14 @@ public class CustomEvmScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         // Chain Information Info
-        ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
-        ScriptData argSymbolLength = sac.getArgument(1);
-        ScriptData argSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argLayerLength = sac.getArgument(1);
-        ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argChainSign = sac.getArgument(72);
         // Variant Data
         ScriptData argData = sac.getArgumentAll();
 
-        String script = // set coinType to 3C
+        ScriptAssembler scriptAssembler = // set coinType to 3C
                 new ScriptAssembler()
                         .setCoinType(coinType)
-                        .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                         // txType (EIP-2718)
                         .copyString("02")
                         .arrayPointer()
@@ -657,33 +649,20 @@ public class CustomEvmScript {
                         .rlpString(argData)
                         // accessList
                         .copyString("C0")
-                        .arrayEnd(TYPE_RLP)
-                        // txDetail
-                        .ifEqual(
-                                argLayerLength,
-                                "00",
-                                "",
-                                new ScriptAssembler()
-                                        .setBufferInt(argLayerLength, 1, 7)
-                                        .copyArgument(argLayerSymbol, Buffer.CACHE1)
-                                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                                        .clearBuffer(Buffer.CACHE1)
-                                        .getScript())
-                        .setBufferInt(argSymbolLength, 1, 7)
-                        .copyArgument(argSymbol, Buffer.CACHE1)
-                        .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                        .clearBuffer(Buffer.CACHE1)
-                        .showWrap("SMART", "")
-                        .showPressButton()
-                        // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                        .setHeader(HashType.Keccak256, SignType.ECDSA)
-                        .getScript();
+                        .arrayEnd(TYPE_RLP);
 
-        return script;
+        // txDetail
+        return displayChainId(scriptAssembler, argChainId)
+                .showWrap("SMART", "")
+                .showPressButton()
+                // version=04 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
+                .setHeader(HashType.Keccak256, SignType.ECDSA)
+                .getScript();
     }
 
+    // TODO: use production signature
     public static String EIP1559SmartContractScriptSignature = Strings.padStart(
-            "3046022100D5A6DC2AD5987313B5CFF6856CB9363FBCBF7F3F611CF64AE6FBFF7FE459068D022100A61244F5DC81DFB10BBB6C6448E7ED48107539C8D0E4C6C669760D6CFD117021",
+            "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
             '0');
 
