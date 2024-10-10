@@ -20,13 +20,13 @@ public class CustomEvmScript {
     }
 
     public static void listAll() {
-        System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
+        // System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
         // System.out.println("Evm erc20: \n" + getERC20Script(0x3c) + "\n");
         // System.out.println("Evm Smart Contract: \n" + getSmartContractScript(0x3c) + "\n");
         // System.out.println("Evm Smart Contract Segment: \n" + getSmartContractSegmentScript(0x3c) + "\n");
         // System.out.println("Evm EIP-712 Message: \n" + getMessageScript(0x3c) + "\n");
         // System.out.println("Evm EIP-712 Typed Data: \n" + getTypedDataScript(0x3c) + "\n");
-        // System.out.println("Evm EIP-1559: \n" + getEIP1559TransferScript(0x3c) + "\n");
+        System.out.println("CustomEvm EIP-1559: \n" + getEIP1559TransferScript(0x3c) + "\n");
         // System.out.println("Evm EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x3c) + "\n");
         // System.out.println("Evm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript(0x3c) + "\n");
         // System.out.println(
