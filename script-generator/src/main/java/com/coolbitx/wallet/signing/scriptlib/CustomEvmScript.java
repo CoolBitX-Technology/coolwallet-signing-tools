@@ -33,9 +33,8 @@ public class CustomEvmScript {
         System.out.println("CustomEvm EIP-1559: \n" + getEIP1559TransferScript(0x3c) + "\n");
         System.out.println("CustomEvm EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x3c) + "\n");
         System.out.println("Evm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript(0x3c) + "\n");
-        // System.out.println(
-        // "Evm EIP-1559 Smart Contract Segment: \n" +
-        // getEIP1559SmartContractSegmentScript(0x3c) + "\n");
+        System.out
+                .println("Evm EIP-1559 Smart Contract Segment: \n" + getEIP1559SmartContractSegmentScript(0x3c) + "\n");
     }
 
     /*
@@ -676,19 +675,12 @@ public class CustomEvmScript {
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         ScriptData argData = sac.getArgument(4);
         // Chain Information Info
-        ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
-        ScriptData argSymbolLength = sac.getArgument(1);
-        ScriptData argSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argLayerLength = sac.getArgument(1);
-        ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argChainSign = sac.getArgument(72);
 
-        String script = new ScriptAssembler()
+        ScriptAssembler scriptAssembler = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(coinType)
-                .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                 // txType (EIP-2718)
                 .copyString("02")
                 .arrayPointer()
@@ -711,31 +703,20 @@ public class CustomEvmScript {
                 .rlpDataPlaceholder(argData)
                 // accessList
                 .copyString("C0")
-                .arrayEnd(TYPE_RLP)
-                .ifEqual(
-                        argLayerLength,
-                        "00",
-                        "",
-                        new ScriptAssembler()
-                                .setBufferInt(argLayerLength, 1, 7)
-                                .copyArgument(argLayerSymbol, Buffer.CACHE1)
-                                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                                .clearBuffer(Buffer.CACHE1)
-                                .getScript())
-                .setBufferInt(argSymbolLength, 1, 7)
-                .copyArgument(argSymbol, Buffer.CACHE1)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .clearBuffer(Buffer.CACHE1)
+                .arrayEnd(TYPE_RLP);
+
+        displayChainId(scriptAssembler, argChainId)
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256 sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
-        return script;
+                .setHeader(HashType.Keccak256, SignType.ECDSA);
+
+        return scriptAssembler.getScript();
     }
 
+    // TODO: use production signature
     public static String EIP1559SmartContractSegmentScriptSignature = Strings.padStart(
-            "30460221009FCD7C75763F56788FE4293FBACE40FC3ED17228BDEFBC43E5D8E72F4D85197E022100CA7B7BF1118B1FE611C9E422F3C4DEE66A375502F1305D9B6F4BDABAE5CDD2B5",
+            "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
             '0');
 }
