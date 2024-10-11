@@ -20,7 +20,7 @@ public class CustomEvmScript {
     }
 
     public static void listAll() {
-        // System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
+        System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
         // System.out.println("Evm erc20: \n" + getERC20Script(0x3c) + "\n");
         // System.out.println("Evm Smart Contract: \n" + getSmartContractScript(0x3c) +
         // "\n");
@@ -51,7 +51,7 @@ public class CustomEvmScript {
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
 
-        String script = new ScriptAssembler()
+        ScriptAssembler scriptAssembler = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(coinType)
                 .arrayPointer()
@@ -73,11 +73,10 @@ public class CustomEvmScript {
                 .rlpString(argChainId)
                 // r,s
                 .copyString("8080")
-                .arrayEnd(TYPE_RLP)
-                // display chainId
-                // .copyArgument(argChainId, Buffer.CACHE1)
-                // .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                // .clearBuffer(Buffer.CACHE1)
+                .arrayEnd(TYPE_RLP);
+
+        // tx detail
+        displayChainId(scriptAssembler, argChainId, argChainIdLength)
                 .copyString(HexUtil.toHexString("0x"), Buffer.CACHE2)
                 .baseConvert(
                         argTo,
@@ -90,9 +89,8 @@ public class CustomEvmScript {
                 .showPressButton()
                 // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
                 // sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
-        return script;
+                .setHeader(HashType.Keccak256, SignType.ECDSA);
+        return scriptAssembler.getScript();
     }
 
     // TODO: use production signature
