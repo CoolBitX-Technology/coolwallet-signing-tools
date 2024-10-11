@@ -22,8 +22,7 @@ public class CustomEvmScript {
     public static void listAll() {
         System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
         System.out.println("CustomEvm erc20: \n" + getERC20Script(0x3c) + "\n");
-        // System.out.println("Evm Smart Contract: \n" + getSmartContractScript(0x3c) +
-        // "\n");
+        System.out.println("CustomEvm Smart Contract: \n" + getSmartContractScript(0x3c) + "\n");
         // System.out.println("Evm Smart Contract Segment: \n" +
         // getSmartContractSegmentScript(0x3c) + "\n");
         System.out.println("CustomEvm EIP-712 Message: \n" + getMessageScript(0x3c) + "\n");
@@ -179,20 +178,14 @@ public class CustomEvmScript {
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
         // Chain Information Info
-        ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
-        ScriptData argSymbolLength = sac.getArgument(1);
-        ScriptData argSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argLayerLength = sac.getArgument(1);
-        ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argChainSign = sac.getArgument(72);
+        // smart contract data
         ScriptData argData = sac.getArgumentAll();
 
-        String script = new ScriptAssembler()
+        ScriptAssembler scriptAssembler = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(coinType)
-                .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                 .arrayPointer()
                 // nonce
                 .rlpString(argNonce)
@@ -218,33 +211,21 @@ public class CustomEvmScript {
                 .rlpString(argChainId)
                 // r, s
                 .copyString("8080")
-                .arrayEnd(TYPE_RLP)
-                // Display phase
-                .ifEqual(
-                        argLayerLength,
-                        "00",
-                        "",
-                        new ScriptAssembler()
-                                .setBufferInt(argLayerLength, 1, 7)
-                                .copyArgument(argLayerSymbol, Buffer.CACHE1)
-                                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                                .clearBuffer(Buffer.CACHE1)
-                                .getScript())
-                .setBufferInt(argSymbolLength, 1, 7)
-                .copyArgument(argSymbol, Buffer.CACHE1)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .clearBuffer(Buffer.CACHE1)
+                .arrayEnd(TYPE_RLP);
+
+        // Display phase
+        displayChainId(scriptAssembler, argChainId, argChainIdLength)
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
                 // sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
-        return script;
+                .setHeader(HashType.Keccak256, SignType.ECDSA);
+
+        return scriptAssembler.getScript();
     }
 
     public static String SmartContractScriptSignature = Strings.padStart(
-            "30450221008D508FDA3E15A6BF55E681C8960B7DBECB82080C708EC1EC200CA8A37DC6367302203AB71C34F44359FD10508358A2C3953C26D173B06A4876C1DCEEE2657DFC26FF",
+            "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
             '0');
 
