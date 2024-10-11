@@ -21,7 +21,7 @@ public class CustomEvmScript {
 
     public static void listAll() {
         System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
-        // System.out.println("Evm erc20: \n" + getERC20Script(0x3c) + "\n");
+        System.out.println("CustomEvm erc20: \n" + getERC20Script(0x3c) + "\n");
         // System.out.println("Evm Smart Contract: \n" + getSmartContractScript(0x3c) +
         // "\n");
         // System.out.println("Evm Smart Contract Segment: \n" +
@@ -110,24 +110,16 @@ public class CustomEvmScript {
         ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
-        ScriptData argSymbolLength = sac.getArgument(1);
-        ScriptData argSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argLayerLength = sac.getArgument(1);
-        ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argChainSign = sac.getArgument(72);
 
         // ERC 20 Token Info
-        ScriptData argTokenInfo = sac.getArgumentUnion(0, 29);
         ScriptData argDecimal = sac.getArgument(1);
         ScriptData argNameLength = sac.getArgument(1);
         ScriptData argName = sac.getArgumentVariableLength(7);
         ScriptData argContractAddress = sac.getArgument(20);
-        ScriptData argTokenSign = sac.getArgument(72);
 
-        String script = new ScriptAssembler()
+        ScriptAssembler scriptAssembler = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(coinType)
-                .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                 .arrayPointer()
                 .rlpString(argNonce)
                 .rlpString(argGasPrice)
@@ -145,29 +137,11 @@ public class CustomEvmScript {
                 .rlpString(argChainId)
                 // empty r,s
                 .copyString("8080")
-                .arrayEnd(TYPE_RLP)
-                // Show symbol
-                .ifEqual(
-                        argLayerLength,
-                        "00",
-                        "",
-                        new ScriptAssembler()
-                                .setBufferInt(argLayerLength, 1, 7)
-                                .copyArgument(argLayerSymbol, Buffer.CACHE1)
-                                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                                .clearBuffer(Buffer.CACHE1)
-                                .getScript())
-                .setBufferInt(argSymbolLength, 1, 7)
-                .copyArgument(argSymbol, Buffer.CACHE1)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .clearBuffer(Buffer.CACHE1)
-                .ifSigned(
-                        argTokenInfo,
-                        argTokenSign,
-                        "",
-                        new ScriptAssembler()
-                                .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
-                                .getScript())
+                .arrayEnd(TYPE_RLP);
+
+        // tx detail
+        displayChainId(scriptAssembler, argChainId, argChainIdLength)
+                .copyString(HexUtil.toHexString("@"), Buffer.CACHE2)
                 .setBufferInt(argNameLength, 1, 7)
                 .copyArgument(argName, Buffer.CACHE2)
                 .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
@@ -185,13 +159,13 @@ public class CustomEvmScript {
                 .showPressButton()
                 // version=00 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
                 // sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
-        return script;
+                .setHeader(HashType.Keccak256, SignType.ECDSA);
+        return scriptAssembler.getScript();
     }
 
+    // TODO: use production signature
     public static String ERC20ScriptSignature = Strings.padStart(
-            "304402200B343A6EBBD31DE90495CD482D04677B02A3278AF4F546F0865D86C9071C651D02202F666136FEEB43EE85FC93C47E92AB30FF2C8D268FC9DD3CFB1F3E06FFE1D208",
+            "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
             '0');
 
