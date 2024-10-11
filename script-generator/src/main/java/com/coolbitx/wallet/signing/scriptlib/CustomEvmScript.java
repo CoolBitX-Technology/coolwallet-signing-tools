@@ -23,10 +23,11 @@ public class CustomEvmScript {
         System.out.println("CustomEvm: \n" + getTransferScript(0x3c) + "\n");
         System.out.println("CustomEvm erc20: \n" + getERC20Script(0x3c) + "\n");
         System.out.println("CustomEvm Smart Contract: \n" + getSmartContractScript(0x3c) + "\n");
-        // System.out.println("Evm Smart Contract Segment: \n" +
-        // getSmartContractSegmentScript(0x3c) + "\n");
+        System.out.println("CustomEvm Smart Contract Segment: \n" + getSmartContractSegmentScript(0x3c) + "\n");
+
         System.out.println("CustomEvm EIP-712 Message: \n" + getMessageScript(0x3c) + "\n");
         System.out.println("CustomEvm EIP-712 Typed Data: \n" + getTypedDataScript(0x3c) + "\n");
+
         System.out.println("CustomEvm EIP-1559: \n" + getEIP1559TransferScript(0x3c) + "\n");
         System.out.println("CustomEvm EIP-1559 erc20: \n" + getEIP1559ERC20Script(0x3c) + "\n");
         System.out.println("CustomEvm EIP-1559 Smart Contract: \n" + getEIP1559SmartContractScript(0x3c) + "\n");
@@ -224,6 +225,7 @@ public class CustomEvmScript {
         return scriptAssembler.getScript();
     }
 
+    // TODO: use production signature
     public static String SmartContractScriptSignature = Strings.padStart(
             "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
@@ -241,16 +243,10 @@ public class CustomEvmScript {
         ScriptData argChainInfo = sac.getArgumentUnion(0, 23);
         ScriptData argChainIdLength = sac.getArgument(1);
         ScriptData argChainId = sac.getArgumentVariableLength(6);
-        ScriptData argSymbolLength = sac.getArgument(1);
-        ScriptData argSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argLayerLength = sac.getArgument(1);
-        ScriptData argLayerSymbol = sac.getArgumentVariableLength(7);
-        ScriptData argChainSign = sac.getArgument(72);
 
-        String script = new ScriptAssembler()
+        ScriptAssembler scriptAssembler = new ScriptAssembler()
                 // set coinType to 3C
                 .setCoinType(coinType)
-                .ifSigned(argChainInfo, argChainSign, "", ScriptAssembler.throwSEError)
                 .arrayPointer()
                 // nonce
                 .rlpString(argNonce)
@@ -276,33 +272,21 @@ public class CustomEvmScript {
                 .rlpString(argChainId)
                 // r, s
                 .copyString("8080")
-                .arrayEnd(TYPE_RLP)
-                // Display phase
-                .ifEqual(
-                        argLayerLength,
-                        "00",
-                        "",
-                        new ScriptAssembler()
-                                .setBufferInt(argLayerLength, 1, 7)
-                                .copyArgument(argLayerSymbol, Buffer.CACHE1)
-                                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                                .clearBuffer(Buffer.CACHE1)
-                                .getScript())
-                .setBufferInt(argSymbolLength, 1, 7)
-                .copyArgument(argSymbol, Buffer.CACHE1)
-                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-                .clearBuffer(Buffer.CACHE1)
+                .arrayEnd(TYPE_RLP);
+
+        // Display phase
+        displayChainId(scriptAssembler, argChainId, argChainIdLength)
                 .showWrap("SMART", "")
                 .showPressButton()
                 // version=05 ScriptAssembler.hash=06=ScriptAssembler.Keccak256
                 // sign=01=ECDSA
-                .setHeader(HashType.Keccak256, SignType.ECDSA)
-                .getScript();
-        return script;
+                .setHeader(HashType.Keccak256, SignType.ECDSA);
+        return scriptAssembler.getScript();
     }
 
+    // TODO: use production signature
     public static String SmartContractSegmentScriptSignature = Strings.padStart(
-            "3046022100CA24B84A65567CDCDD3FB73770804C4551FF332C360A36203442425730EDBC87022100DCB7E67EA5431A0CC050C8AE85D371A7977FC3F828497EA70287C13020593BD9",
+            "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             144,
             '0');
 
