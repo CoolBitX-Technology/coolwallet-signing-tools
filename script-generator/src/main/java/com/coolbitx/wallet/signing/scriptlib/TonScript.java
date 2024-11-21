@@ -18,6 +18,7 @@ public class TonScript {
     public static void listAll() {
         System.out.println("Ton Transfer: \n" + getTonTransferScript() + "\n");
         System.out.println("Ton Token Transfer: \n" + getTonTokenTransferScript() + "\n");
+        System.out.println("Ton Token Transfer Blind: \n" + getTonTokenTransferBlindScript() + "\n");
     }
 
     public static String getTonTransferScript() {
@@ -455,7 +456,5 @@ public class TonScript {
         return script;
     }
     
-    public static String TonTokenTransferBlindScriptSignature = Strings.padEnd("FA", 144, '0');
-    
-
+    public static String TonTokenTransferBlindScriptSignature = Strings.padStart("3046022100dec0d0eeb203bba1d842868db59088e9efec3de630bc4b82dc223123d76857830221009f7de912cc81ef28c5fe5512be2f641b807ab63ef297f7d26cf3e9dd4bd53ebc", 144, '0');
 }
