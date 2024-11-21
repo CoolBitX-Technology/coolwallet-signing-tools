@@ -16,6 +16,10 @@ import com.google.common.base.Strings;
 
 public class TrxScript {
 
+    public static void main(String[] args) {
+        listAll();
+    }
+
     public static void listAll() {
         System.out.println("Trx: \n" + getTRXScript() + "\n");
         System.out.println("Trx trc20: \n" + getTRC20Script() + "\n");
@@ -265,7 +269,10 @@ public class TrxScript {
         return script;
     }
 
-    public static String TRC20BlindScriptSignature = "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+    public static String TRC20BlindScriptSignature = Strings.padStart(
+        "3045022100ca438fe128c179c664913428fc59d5f889b7b9c206debfd62459b9a7a969cd35022019e126e352737808d01fc16d4cadcac4ed12f1d4dce32527c3a6819e4326235e",
+        144,
+        '0');
 
     public static String getTRXFreezeScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
