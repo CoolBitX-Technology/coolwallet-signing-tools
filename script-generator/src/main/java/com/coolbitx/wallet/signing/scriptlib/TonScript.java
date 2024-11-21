@@ -130,7 +130,7 @@ public class TonScript {
         return script;
     }
 
-    public static String getTonTransferScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String TonTransferScriptSignature = Strings.padStart("304402201d35b6c97c87e8d0c23b50563b37777e50b0294e3145ec0a3c5fd254999bb42402201701065dcd9e91d3c479958e2b24280a589e21f44164fc24085141b6a69ad2bd", 144, '0');
     
     public static String getTonTokenTransferScript() {
 
@@ -312,6 +312,8 @@ public class TonScript {
         return script;
     }
     
+    public static String TonTokenTransferScriptSignature = Strings.padStart("3046022100ee69e94e39ef7095ab2a6d2b20ba04a8ab0eaf9718064ef5a7cba213e7d06396022100e32a7680029a1581f07d6f152e53b03b3ede74492559bfb8de1a26c6be8539aa", 144, '0');
+
     public static String getTonTokenTransferBlindScript() {
 
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
