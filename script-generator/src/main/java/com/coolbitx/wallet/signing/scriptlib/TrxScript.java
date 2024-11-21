@@ -19,6 +19,7 @@ public class TrxScript {
     public static void listAll() {
         System.out.println("Trx: \n" + getTRXScript() + "\n");
         System.out.println("Trx trc20: \n" + getTRC20Script() + "\n");
+        System.out.println("Trx trc20Blind: \n" + getTRC20BlindScript() + "\n");
         System.out.println("Trx Freeze: \n" + getTRXFreezeScript() + "\n");
         System.out.println("Trx Freeze Without Receiver: \n" + getTRXFreezeScriptNoReceiver() + "\n");
         System.out.println("Trx Unfreeze: \n" + getTRXUnfreezeScript() + "\n");
@@ -191,6 +192,80 @@ public class TrxScript {
     }
 
     public static String TRC20ScriptSignature = "0000304402202D928B902A6D63BFD40FCDB4A5BC24977049081248F256D779D869D5A1925688022015E6630A34B4161E342EE855F698F7272AC83B781F273E726DC77DA40C75F86C";
+    
+    public static String getTRC20BlindScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argBlockBytes = sac.getArgument(2);
+        ScriptData argBlockHash = sac.getArgument(8);
+        ScriptData argExpiration = sac.getArgumentRightJustified(10);
+        ScriptData argOwnerAddr = sac.getArgument(20);
+        ScriptData argTokenInfo = sac.getArgumentUnion(0, 29);
+        ScriptData argDecimal = sac.getArgument(1);
+        ScriptData argNameLength = sac.getArgument(1);
+        ScriptData argName = sac.getArgumentVariableLength(7);
+        ScriptData argContractAddr = sac.getArgument(20);
+        ScriptData argSign = sac.getArgument(72);
+        ScriptData argTo = sac.getArgument(20);
+        ScriptData argValue = sac.getArgument(12);
+        ScriptData argTimestamp = sac.getArgumentRightJustified(10);
+        ScriptData argFeeLimit = sac.getArgumentRightJustified(10);
+
+        String script = new ScriptAssembler()
+                // set coinType to C3
+                .setCoinType(0xC3)
+                // ref_block_bytes
+                .copyString("0a").protobuf(argBlockBytes, typeString)
+                // ref_block_hash
+                .copyString("22").protobuf(argBlockHash, typeString)
+                // expiration
+                .copyString("40").protobuf(argExpiration, typeInt)
+                // contract object
+                .copyString("5a").arrayPointer()
+                // contract type
+                .copyString("081f")
+                // parameter object
+                .copyString("12").arrayPointer()
+                // type url
+                .copyString("0a31")
+                .copyString(HexUtil.toHexString(
+                        "type.googleapis.com/protocol.TriggerSmartContract".getBytes()))
+                // value object
+                .copyString("12").arrayPointer()
+                // owner address
+                .copyString("0a")
+                .copyString("41", Buffer.CACHE2)
+                .copyArgument(argOwnerAddr, Buffer.CACHE2)
+                .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+                // contract address
+                .copyString("12").clearBuffer(Buffer.CACHE2).copyString("41", Buffer.CACHE2)
+                .copyArgument(argContractAddr, Buffer.CACHE2)
+                .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+                // data
+                .copyString("22")
+                .clearBuffer(Buffer.CACHE2)
+                .copyString("a9059cbb", Buffer.CACHE2)
+                .copyString("000000000000000000000000", Buffer.CACHE2)
+                .copyArgument(argTo, Buffer.CACHE2)
+                .copyString("0000000000000000000000000000000000000000", Buffer.CACHE2)
+                .copyArgument(argValue, Buffer.CACHE2)
+                .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+                .arrayEnd().arrayEnd().arrayEnd()
+                // timestamp
+                .copyString("70").protobuf(argTimestamp, typeInt)
+                // fee limit
+                .copyString("9001").protobuf(argFeeLimit, typeInt)
+                // display chain
+                .showMessage("TRX")
+                // display smart
+                .showWrap("SMART", "")
+                .showPressButton()
+                // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+                .setHeader(HashType.SHA256, SignType.ECDSA)
+                .getScript();
+        return script;
+    }
+
+    public static String TRC20BlindScriptSignature = "fa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
     public static String getTRXFreezeScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
