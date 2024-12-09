@@ -25,13 +25,18 @@ public class SuiScript {
     
     public static String getSmartContractScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData path = sac.getArgument(21);
         ScriptData rawData = sac.getArgumentAll();
         ScriptAssembler scriptAssembler = new ScriptAssembler()
                 // set coinType to 310
                 .setCoinType(coinType)
                 .arrayPointer()
                 .clearBuffer(ScriptData.Buffer.TRANSACTION)
-                .copyArgument(rawData)
+                .clearBuffer(ScriptData.Buffer.CACHE1)
+//                .copyArgument(path)
+//                .copyString("d532ec7786285eacc5aee62f5fcf74d8542e6a557f29b2794cc6269e96d6188c", ScriptData.Buffer.TRANSACTION)
+                .derivePublicKey(path, ScriptData.Buffer.TRANSACTION)
+//                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
                 .showMessage("SUI")
                 .showWrap("SMART", "")
                 .showPressButton()
@@ -39,8 +44,8 @@ public class SuiScript {
         return scriptAssembler.getScript();
     }
 
-    public static String SmartContractScriptSignature = Strings.padStart(
-            "30450221008bd26f2ae80c316b678433e8e9fa4a1e04d6d87dd1a7be33f7f68867df0c30dd0220708aa67f90928e100ec03c4d350e5c71f96430493d7c86c04171cc105b91811c",
+    public static String SmartContractScriptSignature = Strings.padEnd(
+            "FA",
             144,
             '0');
 
@@ -59,29 +64,32 @@ public class SuiScript {
                 // set coinType to 310
                 .setCoinType(coinType)
                 .arrayPointer()
-                .copyArgument(rawData)
-                .showMessage("SUI")
                 .clearBuffer(ScriptData.Buffer.TRANSACTION)
                 .clearBuffer(ScriptData.Buffer.CACHE1)
-                .setBufferInt(toAddressIndex, 0, 255)
-                .showAddress(ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 64))
-                .copyString(HexUtil.toHexString("0x"), ScriptData.Buffer.CACHE1)
-                .setBufferInt(sentAmountIndex, 0, 255)
-                .baseConvert(
-                        ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 16),
-                        ScriptData.Buffer.CACHE1,
-                        8,
-                        ScriptAssembler.binaryCharset,
-                        ScriptAssembler.inLittleEndian)
-                .showAmount(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1), 9)
-                .clearBuffer(ScriptData.Buffer.CACHE1)
+                .copyArgument(rawData)
+                .showMessage("SUI")
+//                .setBufferInt(toAddressIndex, 0, 255)
+//                .copyString(HexUtil.toHexString("0x"), ScriptData.Buffer.CACHE1)
+//                .copyArgument(ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 64), ScriptData.Buffer.CACHE1)
+//                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
+//                .clearBuffer(ScriptData.Buffer.TRANSACTION)
+//                .copyArgument(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
+//                .clearBuffer(ScriptData.Buffer.CACHE1)
+//                .setBufferInt(sentAmountIndex, 0, 255)
+//                .baseConvert(
+//                        ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 16),
+//                        ScriptData.Buffer.CACHE1,
+//                        8,
+//                        ScriptAssembler.binaryCharset,
+//                        ScriptAssembler.inLittleEndian)
+//                .showAmount(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1), 9)
                 .showPressButton()
                 .setHeader(HashType.NONE, SignType.EDDSA);
         return scriptAssembler.getScript();
     }
 
-    public static String CoinTransferScriptSignature = Strings.padStart(
-            "30450220139187cbe56bd0338fe28b8afeea6880fe0e4a2df26436be074eb527c95f85170221008373a3ee87178a4bce4caedeee955fcfead319d5e951552580f0ef486a0d8671",
+    public static String CoinTransferScriptSignature = Strings.padEnd(
+            "FA",
             144,
             '0');
 
@@ -106,8 +114,8 @@ public class SuiScript {
         return scriptAssembler.getScript();
     }
 
-    public static String TokenTransferScriptSignature = Strings.padStart(
-            "3045022100c36a14ef60bea98590119a621c84fc5962f0e232c5c675a66667617be6403cb2022056cdb47788be550ec25f05474672cdaf115ceffba2a13fb31ab35bd8d7c14c44",
+    public static String TokenTransferScriptSignature = Strings.padEnd(
+            "FA",
             144,
             '0');
 }
