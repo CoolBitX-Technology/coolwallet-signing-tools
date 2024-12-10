@@ -37,8 +37,7 @@ public class SuiScript {
                 .showMessage("SUI")
                 .showWrap("SMART", "")
                 .showPressButton()
-                .setHeader(HashType.Blake2b256, SignType.EDDSA)
-                ;
+                .setHeader(HashType.Blake2b256, SignType.EDDSA);
 
         return scriptAssembler.getScript();
     }
@@ -72,27 +71,27 @@ public class SuiScript {
                 .setBufferInt(toAddressIndex, 0, 32767) // 2^16/2 - 1 for 2 bytes
                 .copyString(HexUtil.toHexString("0x"), ScriptData.Buffer.CACHE1)
                 .baseConvert(
-                    ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 32),
+                        ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 32),
                         ScriptData.Buffer.CACHE1,
                         0,
                         ScriptAssembler.hexadecimalCharset,
                         ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
 
-               // show Amount
-               .clearBuffer(ScriptData.Buffer.CACHE1)
-               .setBufferInt(sentAmountIndex, 0, 32767) // 2^16/2 - 1 for 2 bytes
-               .baseConvert(
-                       ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 8),
-                       ScriptData.Buffer.CACHE1,
-                       8,
-                       ScriptAssembler.binaryCharset,
-                       ScriptAssembler.inLittleEndian)
-               .showAmount(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1), 9)
+                // show Amount
+                .clearBuffer(ScriptData.Buffer.CACHE1)
+                .setBufferInt(sentAmountIndex, 0, 32767) // 2^16/2 - 1 for 2 bytes
+                .baseConvert(
+                        ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 8),
+                        ScriptData.Buffer.CACHE1,
+                        8,
+                        ScriptAssembler.binaryCharset,
+                        ScriptAssembler.inLittleEndian)
+                .showAmount(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1), 9)
 
-               // show Press Button
-               .showPressButton()
-               .setHeader(HashType.Blake2b256, SignType.EDDSA);
+                // show Press Button
+                .showPressButton()
+                .setHeader(HashType.Blake2b256, SignType.EDDSA);
         return scriptAssembler.getScript();
     }
 
@@ -107,18 +106,61 @@ public class SuiScript {
      * 80 80
      */
     public static String getTokenTransferScript(int coinType) {
-        // TODO implement
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData argData = sac.getArgumentAll();
+        ScriptData toAddressIndex = sac.getArgument(2);
+        ScriptData sentAmountIndex = sac.getArgument(2);
+
+        ScriptData tokenInfo = sac.getArgumentUnion(0, 9);
+        ScriptData tokenDecimals = sac.getArgument(1);
+        ScriptData tokenNameLength = sac.getArgument(1);
+        ScriptData tokenName = sac.getArgumentVariableLength(7);
+
+        ScriptData rawData = sac.getArgumentAll();
+
         ScriptAssembler scriptAssembler = new ScriptAssembler()
                 // set coinType to 310
                 .setCoinType(coinType)
                 .arrayPointer()
-                .copyArgument(argData)
+                .clearBuffer(ScriptData.Buffer.TRANSACTION)
+                .clearBuffer(ScriptData.Buffer.CACHE1)
+                .copyArgument(rawData)
+
+                // show main coin symbol
                 .showMessage("SUI")
-                .showWrap("SMART", "")
+
+                // show Token symbol
+                .copyString(HexUtil.toHexString("@"), ScriptData.Buffer.CACHE1)
+                .setBufferInt(tokenNameLength, 1, 7)
+                .copyArgument(tokenName, ScriptData.Buffer.CACHE1)
+                .showMessage(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
+
+                // show to address
+                .clearBuffer(ScriptData.Buffer.CACHE1)
+                .setBufferInt(toAddressIndex, 0, 32767) // 2^16/2 - 1 for 2 bytes
+                .copyString(HexUtil.toHexString("0x"), ScriptData.Buffer.CACHE1)
+                .baseConvert(
+                        ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 32),
+                        ScriptData.Buffer.CACHE1,
+                        0,
+                        ScriptAssembler.hexadecimalCharset,
+                        ScriptAssembler.zeroInherit)
+                .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
+
+                // show Amount
+                .clearBuffer(ScriptData.Buffer.CACHE1)
+                .setBufferInt(sentAmountIndex, 0, 32767) // 2^16/2 - 1 for 2 bytes
+                .baseConvert(
+                        ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 8),
+                        ScriptData.Buffer.CACHE1,
+                        8,
+                        ScriptAssembler.binaryCharset,
+                        ScriptAssembler.inLittleEndian)
+                .setBufferInt(tokenDecimals, 0, 20)
+                .showAmount(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1), ScriptData.bufInt)
+
+                // show Press Button
                 .showPressButton()
-                .setHeader(HashType.SHA512, SignType.EDDSA);
+                .setHeader(HashType.Blake2b256, SignType.EDDSA);
         return scriptAssembler.getScript();
     }
 
