@@ -69,7 +69,7 @@ public class SuiScript {
                 .showMessage("SUI")
 
                 // show Addreess
-                .setBufferInt(toAddressIndex, 0, 256)
+                .setBufferInt(toAddressIndex, 0, 32767) // 2^16/2 - 1 for 2 bytes
                 .copyString(HexUtil.toHexString("0x"), ScriptData.Buffer.CACHE1)
                 .baseConvert(
                     ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 32),
@@ -80,17 +80,15 @@ public class SuiScript {
                 .showAddress(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
 
                // show Amount
-            //    .clearBuffer(ScriptData.Buffer.CACHE1)
-            //    .copyArgument(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1))
-            //    .clearBuffer(ScriptData.Buffer.CACHE1)
-            //    .setBufferInt(sentAmountIndex, 0, 255)
-            //    .baseConvert(
-            //            ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 16),
-            //            ScriptData.Buffer.CACHE1,
-            //            8,
-            //            ScriptAssembler.binaryCharset,
-            //            ScriptAssembler.inLittleEndian)
-            //    .showAmount(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1), 9)
+               .clearBuffer(ScriptData.Buffer.CACHE1)
+               .setBufferInt(sentAmountIndex, 0, 32767) // 2^16/2 - 1 for 2 bytes
+               .baseConvert(
+                       ScriptData.getBuffer(ScriptData.Buffer.TRANSACTION, ScriptData.bufInt, 8),
+                       ScriptData.Buffer.CACHE1,
+                       8,
+                       ScriptAssembler.binaryCharset,
+                       ScriptAssembler.inLittleEndian)
+               .showAmount(ScriptData.getDataBufferAll(ScriptData.Buffer.CACHE1), 9)
 
                // show Press Button
                .showPressButton()
