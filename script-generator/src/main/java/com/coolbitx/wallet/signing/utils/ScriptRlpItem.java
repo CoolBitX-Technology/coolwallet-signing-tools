@@ -9,16 +9,17 @@ package com.coolbitx.wallet.signing.utils;
  *
  * @author Hank Liu (hankliu@coolbitx.com)
  */
-public class ScriptRlpData implements ScriptDataInterface {
+public class ScriptRlpItem implements ScriptDataInterface {
 
     private int rlpLayer = 0;
     private int rlpIndex = 0;
 
-    private ScriptRlpData(int rlpIndex) {
+    private ScriptRlpItem(int rlpLayer, int rlpIndex) {
+        this.rlpLayer = rlpLayer;
         this.rlpIndex = rlpIndex;
     }
 
-    private ScriptRlpData() {
+    public ScriptRlpItem() {
 //        this.rlpLayer = rlpLayer;
 //        this.rlpIndex = rlpIndex;
     }
@@ -44,13 +45,9 @@ public class ScriptRlpData implements ScriptDataInterface {
         return "[" + "rlpLayer=" + rlpLayer + ", rlpIndex=" + rlpIndex + "]";
     }
 
-    public static ScriptRlpData createBuffer(int rlpIndex) {
-        ScriptRlpData item = new ScriptRlpData(rlpIndex);
+    public static ScriptRlpItem createBuffer(int rlpLayer, int rlpIndex) {
+        ScriptRlpItem item = new ScriptRlpItem(rlpLayer, rlpIndex);
         return item;
-    }
-
-    public static MutableScriptData createMutableBuffer(int rlpLayer, int rlpIndex) {
-        return new ScriptRlpData().new MutableScriptData(rlpLayer, rlpIndex);
     }
 
     @Override
@@ -72,32 +69,31 @@ public class ScriptRlpData implements ScriptDataInterface {
     public void setBufferParameter2(int parameter) {
     }
 
-    public class MutableScriptData extends ScriptRlpData implements MutableScriptDataInterface {
-
-        private int rlpLayer_;
-        private int rlpIndex_;
-
-        private MutableScriptData(int rlpLayer, int rlpIndex) {
-            super();
-//            this.rlpLayer = 0;
-//            this.rlpIndex++;
-        }
-
-//        public static MutableScriptData getBuffer1() {
-//            return new ScriptRlpData().new MutableScriptData();
+//    public class MutableScriptData extends ScriptRlpItemData implements MutableScriptDataInterface {
+//
+//        private int rlpLayer;
+//        private int rlpIndex;
+//
+//        private MutableScriptData(int rlpLayer, int rlpIndex) {
+//            super();
+////            this.rlpLayer = 0;
+////            this.rlpIndex++;
 //        }
-        public ScriptRlpData getRlpItemArgument() {
-            return ScriptRlpData.createBuffer(1);
-        }
-
-        @Override
-        public int getDataAmonut() {
-            return 0;
-        }
-
-        @Override
-        public void setDataAmonut(int parameter) {
-        }
-    }
-
+//
+////        public static MutableScriptData getBuffer1() {
+////            return new ScriptRlpData().new MutableScriptData();
+////        }
+//        public ScriptRlpItemData getRlpItemArgument() {
+//            return ScriptRlpItemData.createBuffer(1);
+//        }
+//
+//        @Override
+//        public int getDataAmonut() {
+//            return 0;
+//        }
+//
+//        @Override
+//        public void setDataAmonut(int parameter) {
+//        }
+//    }
 }

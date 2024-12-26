@@ -181,10 +181,10 @@ public class ScriptAssembler {
             }
             addIntParameter(dataBuf.getBufferParameter1());
             addIntParameter(dataBuf.getBufferParameter2());
-        } else if (dataBuf instanceof ScriptRlpData) {
+        } else if (dataBuf instanceof ScriptRlpItem) {
             argType = "01";
 
-            ScriptRlpData dataBuf_ = (ScriptRlpData) dataBuf;
+            ScriptRlpItem dataBuf_ = (ScriptRlpItem) dataBuf;
             firstParameter += "B";
             addIntParameter(dataBuf_.getBufferParameter1());
             firstParameter += "A";
@@ -741,7 +741,7 @@ public class ScriptAssembler {
             trueStatement += skip(falseStatement);
         }
         int argDataLength = argData.getBufferParameter2();
-        if (argData instanceof ScriptRlpData) {
+        if (argData instanceof ScriptRlpItem) {
             argData.setBufferParameter2(expect.length() / 2);
             restore = true;
         } else if (argData instanceof ScriptData) {
