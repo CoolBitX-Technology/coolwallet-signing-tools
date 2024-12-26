@@ -5,6 +5,8 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
+import com.coolbitx.wallet.signing.utils.ScriptRlpData.MutableScriptData;
+
 /**
  * This class is designed for creating diverse script data which is used in
  * generating script in ScriptAssembler class.
@@ -13,24 +15,30 @@ package com.coolbitx.wallet.signing.utils;
  */
 public class ScriptRlpArgumentComposer {
 
-    private int rlpCount;
+    private int rlpLayer;
+    private int rlpIndex;
 
     public ScriptRlpArgumentComposer() {
-        this.rlpCount = 0;
+        this.rlpLayer = 0;
+        this.rlpIndex = 0;
+
     }
 
-    /**
-     * Get an argument which length is determined by argument(Encoded in rlp).
-     *
-     * <code>
-     *   // The argument of address should be:
-     *   // 94(RLP encoded prefix) 2b0b9ae953fca925f0aeb04dec3054b996a05ed1(address in hex)
-     *   ScriptData address = sac.getArgumentRLPItem();
-     * </code>
-     *
-     * @return Buffer data with the rest argument length.
-     */
-    public ScriptRlpData getArgumentRlpItem() {
-        return ScriptRlpData.getBuffer(rlpCount++);
+    public ScriptRlpData getRlpItemArgument() {
+        ScriptRlpData item = ScriptRlpData.createBuffer(rlpIndex);
+        rlpIndex++;
+        return item;
     }
+
+//    public MutableScriptDataInterface getRlpArrayArgument(ScriptRlpData... rlpItems) {
+//        if (rlpItems.length == 0) {
+//
+//        }
+//
+//        return ScriptRlpData.getMultiBuffer(rlpCount++);
+//    }
+    public MutableScriptData getRlpArrayArgument() {
+        return ScriptRlpData.createMutableBuffer(this.rlpLayer, this.rlpIndex);
+    }
+
 }
