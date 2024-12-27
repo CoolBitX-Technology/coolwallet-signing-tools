@@ -159,6 +159,7 @@ public class ScriptAssembler {
 
     private String compose(String command, ScriptDataInterface dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
+        String argVar = "";
         if (dataBuf == null) {
             firstParameter += "0";
         } else if (dataBuf instanceof ScriptData) {
@@ -181,13 +182,15 @@ public class ScriptAssembler {
             }
             addIntParameter(dataBuf.getBufferParameter1());
             addIntParameter(dataBuf.getBufferParameter2());
-        } else if (dataBuf instanceof ScriptRlpItem) {
+        } else if (dataBuf instanceof ScriptRlpItem || dataBuf instanceof ScriptRlpArray) {
             argType = "01";
-
-            ScriptRlpItem dataBuf_ = (ScriptRlpItem) dataBuf;
-            firstParameter += "B";
-            addIntParameter(dataBuf_.getBufferParameter1());
-            firstParameter += "A";
+            byte[] path = ((ScriptRlpData) dataBuf).getPath();
+            argVar = String.format("%02d", path.length);
+            argVar += Hex.encode(path);
+            //            ScriptRlpItem dataBuf_ = (ScriptRlpItem) dataBuf;
+            //            firstParameter += "B";
+            //            addIntParameter(dataBuf_.getBufferParameter0());
+            //            firstParameter += "A";
         } else {
             // Throw some exceptions here.
         }
@@ -212,7 +215,7 @@ public class ScriptAssembler {
 
         addIntParameter(arg0);
         addIntParameter(arg1);
-        return command + firstParameter + secondParameter;
+        return command + firstParameter + secondParameter + argVar;
     }
 
     private void clearParameter() {

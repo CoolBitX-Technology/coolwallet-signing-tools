@@ -16,6 +16,7 @@ public class ScriptRlpArray extends ScriptRlpData {
     private int rlpSubIndex;
 
     public ScriptRlpArray() {
+        super();
         this.rlpLayer = -1;
         this.rlpIndex = 0;
         this.rlpSubIndex = 0;
@@ -24,6 +25,7 @@ public class ScriptRlpArray extends ScriptRlpData {
     }
 
     private ScriptRlpArray(int rlpLayer, int rlpIndex, byte[] path) {
+        super();
         this.rlpLayer = rlpLayer;
         this.rlpIndex = rlpIndex;
         this.rlpSubIndex = 0;

@@ -12,6 +12,7 @@ package com.coolbitx.wallet.signing.utils;
 public class ScriptRlpItem extends ScriptRlpData {
 
     private ScriptRlpItem(int rlpLayer, int rlpIndex, byte[] path) {
+        super();
         this.rlpLayer = rlpLayer;
         this.rlpIndex = rlpIndex;
         this.path = new byte[rlpLayer + 1];

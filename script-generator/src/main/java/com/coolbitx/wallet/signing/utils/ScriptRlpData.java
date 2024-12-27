@@ -36,4 +36,9 @@ public abstract class ScriptRlpData implements ScriptDataInterface {
     public void setBufferParameter2(int parameter) {
         this.rlpIndex = parameter;
     }
+
+    public byte[] getPath() {
+        return this.path;
+    }
+
 }
