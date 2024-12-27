@@ -30,36 +30,47 @@ public class MessagePackScript {
 
     public static String getApplicationCallTransaction3() {
         String TX = HexUtil.toHexString("TX".getBytes());
-        ScriptRlpArray array1 = new ScriptRlpArray();
-        ScriptRlpItem apaaValue0 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue1 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue2 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue3 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue4 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue5 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue6 = array1.getRlpItemArgument();
-        ScriptRlpArray array7 = array1.getRlpArrayArgument();
-        ScriptRlpItem apbbValue0 = array7.getRlpItemArgument();
-        ScriptRlpItem apbbValue1 = array7.getRlpItemArgument();
-        ScriptRlpItem apbbValue2 = array7.getRlpItemArgument();
-        ScriptRlpItem apbbValue3 = array7.getRlpItemArgument();
-        ScriptRlpItem apbbValue4 = array7.getRlpItemArgument();
-        ScriptRlpItem apbbValue5 = array7.getRlpItemArgument();
+        ScriptRlpArray array = new ScriptRlpArray();
+        ScriptRlpItem item0 = array.getRlpItemArgument();
+        ScriptRlpItem item1 = array.getRlpItemArgument();
+        ScriptRlpItem item2 = array.getRlpItemArgument();
+        ScriptRlpItem item3 = array.getRlpItemArgument();
+        ScriptRlpItem item4 = array.getRlpItemArgument();
+        ScriptRlpItem item5 = array.getRlpItemArgument();
+        ScriptRlpItem item6 = array.getRlpItemArgument();
+        ScriptRlpArray array7 = array.getRlpArrayArgument();
+        ScriptRlpItem item7_0 = array7.getRlpItemArgument();
+        ScriptRlpItem item7_1 = array7.getRlpItemArgument();
+        ScriptRlpArray array7_2 = array7.getRlpArrayArgument();
+        ScriptRlpItem item7_2_0 = array7_2.getRlpItemArgument();
+        ScriptRlpItem item7_2_1 = array7_2.getRlpItemArgument();
+        ScriptRlpItem item7_2_2 = array7_2.getRlpItemArgument();
+        ScriptRlpItem item7_3 = array7.getRlpItemArgument();
+        ScriptRlpItem item7_4 = array7.getRlpItemArgument();
+        ScriptRlpItem item7_5 = array7.getRlpItemArgument();
+        ScriptRlpItem item8 = array.getRlpItemArgument();
+        ScriptRlpItem item9 = array.getRlpItemArgument();
+        ScriptRlpItem item10 = array.getRlpItemArgument();
+        ScriptRlpItem item11 = array.getRlpItemArgument();
 
-        ScriptRlpItem apaaValue8 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue9 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue10 = array1.getRlpItemArgument();
-        ScriptRlpItem apaaValue11 = array1.getRlpItemArgument();
-
-        System.out.println("apaaValue0: " + apaaValue0.toString());
-        System.out.println("apaaValue1: " + apaaValue1.toString());
-        System.out.println("apaaValue6: " + apaaValue6.toString());
-        System.out.println("apbbValue1: " + apbbValue1.toString());
-        System.out.println("apbbValue5: " + apbbValue5.toString());
-        System.out.println("apaaValue8: " + apaaValue8.toString());
-        System.out.println("apaaValue11: " + apaaValue11.toString());
+        System.out.println("array: " + array.toString());
+        System.out.println("item0: " + item0.toString());
+        System.out.println("item1: " + item1.toString());
+        System.out.println("item6: " + item6.toString());
+        System.out.println("array7: " + array7.toString());
+        System.out.println("item7_0: " + item7_0.toString());
+        System.out.println("item7_1: " + item7_1.toString());
+        System.out.println("array7_2: " + array7_2.toString());
+        System.out.println("item7_2_0: " + item7_2_0.toString());
+        System.out.println("item7_2_2: " + item7_2_2.toString());
+        System.out.println("item7_5: " + item7_5.toString());
+        System.out.println("item8: " + item8.toString());
+        System.out.println("item11: " + item11.toString());
 
         String script = new ScriptAssembler().setCoinType(0x11B)
+                .copyArgument(item0)
+                .copyArgument(array7)
+                .forloop(array, Buffer.TRANSACTION)
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();
         return script;

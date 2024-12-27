@@ -81,8 +81,8 @@ public class ScriptAssembler {
         public int toInt() {
             return Integer.parseInt(hashLabel, 16);
         }
-        
-         public static HashType fromInt(int type) {
+
+        public static HashType fromInt(int type) {
             String typeString = String.format("%02x", type);
             for (HashType hashType : HashType.values()) {
                 if (hashType.hashLabel.equals(typeString)) {
@@ -289,6 +289,18 @@ public class ScriptAssembler {
      */
     public ScriptAssembler copyArgument(ScriptDataInterface data, Buffer destinationBuf) {
         script += compose("CA", data, destinationBuf, 0, 0);
+        return this;
+    }
+
+    /**
+     * Testing function, implement later
+     *
+     * @param data
+     * @param destinationBuf
+     * @return
+     */
+    public ScriptAssembler forloop(ScriptRlpArray data, Buffer destinationBuf) {
+        script += compose("AA", data, destinationBuf, 0, 0);
         return this;
     }
 
