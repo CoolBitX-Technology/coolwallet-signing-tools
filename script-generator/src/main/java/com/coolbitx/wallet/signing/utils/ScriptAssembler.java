@@ -6,6 +6,10 @@
 package com.coolbitx.wallet.signing.utils;
 
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
+import static com.coolbitx.wallet.signing.utils.ScriptData.Buffer.ARGUMENT;
+import static com.coolbitx.wallet.signing.utils.ScriptData.Buffer.CACHE1;
+import static com.coolbitx.wallet.signing.utils.ScriptData.Buffer.CACHE2;
+import static com.coolbitx.wallet.signing.utils.ScriptData.Buffer.TRANSACTION;
 
 /**
  * This ScriptAssembler class provide all the function to generator single
@@ -183,9 +187,11 @@ public class ScriptAssembler {
             addIntParameter(dataBuf.getBufferParameter1());
             addIntParameter(dataBuf.getBufferParameter2());
         } else if (dataBuf instanceof ScriptRlpItem || dataBuf instanceof ScriptRlpArray) {
+            firstParameter += "A"; // RLP should from ARGUMENT
             argType = "01";
             byte[] path = ((ScriptRlpData) dataBuf).getPath();
             argVar = String.format("%02d", path.length);
+            System.out.println("argVar: " + argVar);
             argVar += Hex.encode(path);
             //            ScriptRlpItem dataBuf_ = (ScriptRlpItem) dataBuf;
             //            firstParameter += "B";

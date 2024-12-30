@@ -21,7 +21,7 @@ public class MessagePackScript {
 
     public static void main(String[] args) throws Exception {
         getApplicationCallTransaction3();
-//        System.out.println("Algorand: \n" + getApplicationCallTransaction3() + "\n");
+        System.out.println("Algorand: \n" + getApplicationCallTransaction3() + "\n");
     }
 
     public static void listAll() {
