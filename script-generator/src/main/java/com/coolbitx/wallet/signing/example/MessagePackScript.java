@@ -69,7 +69,7 @@ public class MessagePackScript {
 
         String script = new ScriptAssembler().setCoinType(0x11B)
                 .copyArgument(item0)
-                .copyArgument(array7)
+//                .copyArgument(array7)
                 .forloop(array, Buffer.TRANSACTION)
                 .setHeader(ScriptAssembler.HashType.NONE, ScriptAssembler.SignType.EDDSA)
                 .getScript();

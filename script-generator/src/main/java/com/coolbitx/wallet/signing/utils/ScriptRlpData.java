@@ -8,7 +8,7 @@ package com.coolbitx.wallet.signing.utils;
  *
  * @author hank.liu
  */
-public abstract class ScriptRlpData implements ScriptDataInterface {
+public abstract class ScriptRlpData extends ScriptObjectAbstract {
 
     protected int rlpLayer;
     protected int rlpIndex;

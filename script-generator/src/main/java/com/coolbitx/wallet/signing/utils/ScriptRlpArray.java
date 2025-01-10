@@ -11,8 +11,12 @@ package com.coolbitx.wallet.signing.utils;
  *
  * @author Hank Liu (hankliu@coolbitx.com)
  */
-public class ScriptRlpArray extends ScriptRlpData {
+//public class ScriptRlpArray extends ScriptRlpData {
+public class ScriptRlpArray extends ScriptArrayAbstract {
 
+    protected int rlpLayer;
+    protected int rlpIndex;
+    protected byte[] path;
     private int rlpSubIndex;
 
     public ScriptRlpArray() {
@@ -57,23 +61,23 @@ public class ScriptRlpArray extends ScriptRlpData {
         return "[Array: " + "rlpLayer=" + rlpLayer + ", rlpIndex=" + rlpIndex + ", path=" + Hex.encode(path) + "]";
     }
 
-//    @Override
-//    public int getBufferParameter1() {
-//        return rlpLayer;
-//    }
-//
-//    @Override
-//    public void setBufferParameter1(int parameter) {
-//        this.rlpLayer = parameter;
-//    }
-//
-//    @Override
-//    public int getBufferParameter2() {
-//        return rlpIndex;
-//    }
-//
-//    @Override
-//    public void setBufferParameter2(int parameter) {
-//        this.rlpIndex = parameter;
-//    }
+    @Override
+    public int getBufferParameter1() {
+        return rlpLayer;
+    }
+
+    @Override
+    public void setBufferParameter1(int parameter) {
+        this.rlpLayer = parameter;
+    }
+
+    @Override
+    public int getBufferParameter2() {
+        return rlpIndex;
+    }
+
+    @Override
+    public void setBufferParameter2(int parameter) {
+        this.rlpIndex = parameter;
+    }
 }

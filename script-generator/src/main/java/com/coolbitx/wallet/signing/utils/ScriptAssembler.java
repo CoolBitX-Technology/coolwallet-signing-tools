@@ -161,12 +161,15 @@ public class ScriptAssembler {
         return this;
     }
 
-    private String compose(String command, ScriptDataInterface dataBuf, Buffer destBuf, int arg0, int arg1) {
+    private String compose(String command, ScriptInterface dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
         String argVar = "";
+        System.out.println("0");
         if (dataBuf == null) {
+            System.out.println("1");
             firstParameter += "0";
         } else if (dataBuf instanceof ScriptData) {
+            System.out.println("2");
             ScriptData dataBuf_ = (ScriptData) dataBuf;
             switch (dataBuf_.bufferType) {
                 case ARGUMENT:
@@ -187,6 +190,7 @@ public class ScriptAssembler {
             addIntParameter(dataBuf.getBufferParameter1());
             addIntParameter(dataBuf.getBufferParameter2());
         } else if (dataBuf instanceof ScriptRlpItem || dataBuf instanceof ScriptRlpArray) {
+            System.out.println("3");
             firstParameter += "A"; // RLP should from ARGUMENT
             argType = "01";
             byte[] path = ((ScriptRlpData) dataBuf).getPath();
@@ -198,6 +202,7 @@ public class ScriptAssembler {
             //            addIntParameter(dataBuf_.getBufferParameter0());
             //            firstParameter += "A";
         } else {
+            System.out.println("4");
             // Throw some exceptions here.
         }
 
@@ -285,7 +290,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler copyArgument(ScriptDataInterface data) {
+    public ScriptAssembler copyArgument(ScriptObjectAbstract data) {
         return copyArgument(data, Buffer.TRANSACTION);
     }
 
@@ -296,7 +301,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler copyArgument(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler copyArgument(ScriptObjectAbstract data, Buffer destinationBuf) {
         script += compose("CA", data, destinationBuf, 0, 0);
         return this;
     }
@@ -308,7 +313,7 @@ public class ScriptAssembler {
      * @param destinationBuf
      * @return
      */
-    public ScriptAssembler forloop(ScriptRlpArray data, Buffer destinationBuf) {
+    public ScriptAssembler forloop(ScriptArrayAbstract data, Buffer destinationBuf) {
         script += compose("AA", data, destinationBuf, 0, 0);
         return this;
     }
@@ -348,7 +353,7 @@ public class ScriptAssembler {
      * "A,B,C,D").
      * @return
      */
-    public ScriptAssembler switchString(ScriptDataInterface conditionData, Buffer destinationBuf, String stringArray) {
+    public ScriptAssembler switchString(ScriptObjectAbstract conditionData, Buffer destinationBuf, String stringArray) {
         String[] strList = stringArray.split(",");
         script += compose("C1", conditionData, destinationBuf, strList.length, 0);
 
@@ -372,7 +377,7 @@ public class ScriptAssembler {
      * @return
      */
     //@Deprecated
-    public ScriptAssembler btcScript(ScriptDataInterface scriptTypeData, int supportType, String content) {
+    public ScriptAssembler btcScript(ScriptObjectAbstract scriptTypeData, int supportType, String content) {
         switch (supportType) {
             case 2:
                 return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914")
@@ -402,7 +407,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler rlpString(ScriptDataInterface data) {
+    public ScriptAssembler rlpString(ScriptObjectAbstract data) {
         return rlpString(data, Buffer.TRANSACTION);
     }
 
@@ -413,7 +418,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler rlpString(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler rlpString(ScriptObjectAbstract data, Buffer destinationBuf) {
         script += compose("C2", data, destinationBuf, 0, 0);
         return this;
     }
@@ -449,7 +454,7 @@ public class ScriptAssembler {
      * @type type: 0 rlp, type: 1 protobuf
      * @return
      */
-    public ScriptAssembler protobufDataPlaceholder(ScriptDataInterface data) {
+    public ScriptAssembler protobufDataPlaceholder(ScriptObjectAbstract data) {
         if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
@@ -463,7 +468,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler rlpDataPlaceholder(ScriptDataInterface data) {
+    public ScriptAssembler rlpDataPlaceholder(ScriptObjectAbstract data) {
         if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
@@ -478,7 +483,7 @@ public class ScriptAssembler {
      * @param destinationBuf
      * @return
      */
-    public ScriptAssembler rlpDataPlaceholder(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler rlpDataPlaceholder(ScriptObjectAbstract data, Buffer destinationBuf) {
         if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
@@ -486,7 +491,7 @@ public class ScriptAssembler {
         return this;
     }
 
-    public ScriptAssembler dataPlaceholder(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler dataPlaceholder(ScriptObjectAbstract data, Buffer destinationBuf) {
         if (version.getVersionNum() < 5) {
             version = versionType.version05;
         }
@@ -500,7 +505,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler utxoDataPlaceholder(ScriptDataInterface data) {
+    public ScriptAssembler utxoDataPlaceholder(ScriptObjectAbstract data) {
         if (version.getVersionNum() < 7) {
             version = versionType.version07;
         }
@@ -515,7 +520,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler checkRegularString(ScriptDataInterface data) {
+    public ScriptAssembler checkRegularString(ScriptObjectAbstract data) {
         script += compose("29", data, null, 0, 0);
         return this;
     }
@@ -528,7 +533,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler copyRegularString(ScriptDataInterface data) {
+    public ScriptAssembler copyRegularString(ScriptObjectAbstract data) {
         return copyRegularString(data, Buffer.TRANSACTION);
     }
 
@@ -541,7 +546,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler copyRegularString(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler copyRegularString(ScriptObjectAbstract data, Buffer destinationBuf) {
         return checkRegularString(data).copyArgument(data, destinationBuf);
     }
 
@@ -559,7 +564,7 @@ public class ScriptAssembler {
      * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return
      */
-    public ScriptAssembler baseConvert(ScriptDataInterface data, Buffer destinationBuf, int outputLimit, String charset, int baseConvertArg) {
+    public ScriptAssembler baseConvert(ScriptObjectAbstract data, Buffer destinationBuf, int outputLimit, String charset, int baseConvertArg) {
         if (outputLimit == 0) {
             outputLimit = 64;
         }
@@ -597,7 +602,7 @@ public class ScriptAssembler {
      * @param hashType The parameter is defined in enumeration class HashType
      * @return
      */
-    public ScriptAssembler hash(ScriptDataInterface data, Buffer destinationBuf, HashType hashType) {
+    public ScriptAssembler hash(ScriptObjectAbstract data, Buffer destinationBuf, HashType hashType) {
         int hashIndex = hashType.toInt();
         script += compose("5A", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
         return this;
@@ -612,7 +617,7 @@ public class ScriptAssembler {
      * @param hashType The parameter is defined in enumeration class HashType
      * @return
      */
-    public ScriptAssembler newHash(ScriptDataInterface data, Buffer destinationBuf, HashType hashType) {
+    public ScriptAssembler newHash(ScriptObjectAbstract data, Buffer destinationBuf, HashType hashType) {
         if (version.getVersionNum() < 9) {
             version = versionType.version09;
         }
@@ -628,7 +633,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler derivePublicKey(ScriptDataInterface pathData, Buffer destinationBuf) {
+    public ScriptAssembler derivePublicKey(ScriptObjectAbstract pathData, Buffer destinationBuf) {
         script += compose("6C", pathData, destinationBuf, 0, 0);
         return this;
     }
@@ -640,7 +645,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler bech32Polymod(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler bech32Polymod(ScriptObjectAbstract data, Buffer destinationBuf) {
         if (version.getVersionNum() < 4) {
             version = versionType.version04;
         }
@@ -656,7 +661,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler bech32mPolymod(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler bech32mPolymod(ScriptObjectAbstract data, Buffer destinationBuf) {
         if (version.getVersionNum() < 4) {
             version = versionType.version04;
         }
@@ -671,7 +676,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler bchPolymod(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler bchPolymod(ScriptObjectAbstract data, Buffer destinationBuf) {
         script += compose("5A", data, destinationBuf, 0xC, 0);
         return this;
     }
@@ -684,7 +689,7 @@ public class ScriptAssembler {
      * @param max
      * @return
      */
-    public ScriptAssembler setBufferInt(ScriptDataInterface data, int min, int max) {
+    public ScriptAssembler setBufferInt(ScriptObjectAbstract data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         script += new ScriptAssembler().ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError).getScript() + setB;
         return this;
@@ -696,7 +701,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler setBufferIntUnsafe(ScriptDataInterface data) {
+    public ScriptAssembler setBufferIntUnsafe(ScriptObjectAbstract data) {
         script += compose("B5", data, null, 0, 0);
         return this;
     }
@@ -707,7 +712,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler setBufferIntFromDataLength(ScriptDataInterface data) {
+    public ScriptAssembler setBufferIntFromDataLength(ScriptObjectAbstract data) {
         script += compose("B1", data, null, 0, 0);
         return this;
     }
@@ -756,7 +761,7 @@ public class ScriptAssembler {
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
-    public ScriptAssembler ifEqual(ScriptDataInterface argData, String expect, String trueStatement, String falseStatement) {
+    public ScriptAssembler ifEqual(ScriptObjectAbstract argData, String expect, String trueStatement, String falseStatement) {
         boolean restore = false;
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
@@ -780,7 +785,7 @@ public class ScriptAssembler {
         return this;
     }
 
-    public ScriptAssembler isEmpty(ScriptDataInterface argData, String trueStatement, String falseStatement) {
+    public ScriptAssembler isEmpty(ScriptObjectAbstract argData, String trueStatement, String falseStatement) {
         if (version.getVersionNum() < 6) {
             version = versionType.version06;
         }
@@ -803,7 +808,7 @@ public class ScriptAssembler {
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
-    public ScriptAssembler ifRange(ScriptDataInterface argData, String min, String max, String trueStatement, String falseStatement) {
+    public ScriptAssembler ifRange(ScriptObjectAbstract argData, String min, String max, String trueStatement, String falseStatement) {
         boolean restore = false;
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
@@ -835,7 +840,7 @@ public class ScriptAssembler {
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
-    public ScriptAssembler ifSigned(ScriptDataInterface argData, ScriptData signData, String trueStatement, String falseStatement) {
+    public ScriptAssembler ifSigned(ScriptObjectAbstract argData, ScriptData signData, String trueStatement, String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -872,7 +877,7 @@ public class ScriptAssembler {
      * @param data The word wanted to show on card.
      * @return
      */
-    public ScriptAssembler showMessage(ScriptDataInterface data) {
+    public ScriptAssembler showMessage(ScriptObjectAbstract data) {
         script += compose("DE", data, null, 0, 0);
         return this;
     }
@@ -896,7 +901,7 @@ public class ScriptAssembler {
      * @param data The transaction address data.
      * @return
      */
-    public ScriptAssembler showAddress(ScriptDataInterface data) {
+    public ScriptAssembler showAddress(ScriptObjectAbstract data) {
         script += compose("DD", data, null, 0, 0);
         return this;
     }
@@ -908,7 +913,7 @@ public class ScriptAssembler {
      * @param decimal The decimal in this transaction.
      * @return
      */
-    public ScriptAssembler showAmount(ScriptDataInterface data, int decimal) {
+    public ScriptAssembler showAmount(ScriptObjectAbstract data, int decimal) {
         script += compose("DA", data, null, decimal, 0);
         return this;
     }
@@ -929,7 +934,7 @@ public class ScriptAssembler {
      * @param wireType
      * @return
      */
-    public ScriptAssembler protobuf(ScriptDataInterface data, int wireType) {
+    public ScriptAssembler protobuf(ScriptObjectAbstract data, int wireType) {
         return protobuf(data, Buffer.TRANSACTION, wireType);
     }
 
@@ -941,7 +946,7 @@ public class ScriptAssembler {
      * @param wireType
      * @return
      */
-    public ScriptAssembler protobuf(ScriptDataInterface data, Buffer destinationBuf, int wireType) {
+    public ScriptAssembler protobuf(ScriptObjectAbstract data, Buffer destinationBuf, int wireType) {
         if (version.getVersionNum() < 3) {
             version = versionType.version03;
         }
@@ -954,7 +959,7 @@ public class ScriptAssembler {
      *
      * @return
      */
-    public ScriptAssembler varint(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler varint(ScriptObjectAbstract data, Buffer destinationBuf) {
         script += compose("A1", data, destinationBuf, 0, 0);
         return this;
     }
@@ -1007,7 +1012,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler scaleEncode(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler scaleEncode(ScriptObjectAbstract data, Buffer destinationBuf) {
         if (version.getVersionNum() < 2) {
             version = versionType.version02;
         }
@@ -1022,7 +1027,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler scaleDecode(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler scaleDecode(ScriptObjectAbstract data, Buffer destinationBuf) {
         script += compose("A3", data, destinationBuf, 0, 0);
         return this;
     }
@@ -1042,7 +1047,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler messagePack(int type, ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler messagePack(int type, ScriptInterface data, Buffer destinationBuf) {
         if (version.getVersionNum() < 6) {
             version = versionType.version06;
         }
@@ -1098,7 +1103,7 @@ public class ScriptAssembler {
      * @param tag
      * @return
      */
-    public ScriptAssembler taggedHash(ScriptDataInterface data, Buffer destinationBuf, Tag tag) {
+    public ScriptAssembler taggedHash(ScriptObjectAbstract data, Buffer destinationBuf, Tag tag) {
         script += compose("AE", data, destinationBuf, tag.toInt(), 0);
         return this;
     }
@@ -1115,7 +1120,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
-    public ScriptAssembler bitToByte(ScriptDataInterface data) {
+    public ScriptAssembler bitToByte(ScriptObjectAbstract data) {
         return bitToByte(data, Buffer.TRANSACTION);
     }
 
@@ -1127,7 +1132,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler bitToByte(ScriptDataInterface data, Buffer destinationBuf) {
+    public ScriptAssembler bitToByte(ScriptObjectAbstract data, Buffer destinationBuf) {
         if (version.getVersionNum() < 8) {
             version = versionType.version08;
         }
