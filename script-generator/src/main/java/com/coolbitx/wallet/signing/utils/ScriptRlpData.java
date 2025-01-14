@@ -14,7 +14,32 @@ public abstract class ScriptRlpData extends ScriptObjectAbstract {
     protected int rlpIndex;
     protected byte[] path;
 
-    public ScriptRlpData() {
+    private static class ScriptRlpDataImpl extends ScriptRlpData {
+
+        private ScriptRlpDataImpl(int rlpLayer, int rlpIndex, byte[] path) {
+            super(rlpLayer, rlpIndex, path);
+        }
+    }
+
+    private ScriptRlpData(int rlpLayer, int rlpIndex, byte[] path) {
+        super();
+        this.rlpLayer = rlpLayer;
+        this.rlpIndex = rlpIndex;
+        this.path = new byte[rlpLayer + 1];
+        if (path != null) {
+            System.arraycopy(path, 0, this.path, 0, path.length);
+        }
+        this.path[rlpLayer] = (byte) rlpIndex;
+    }
+
+    @Override
+    public String toString() {
+        return "[Item: " + "rlpLayer=" + rlpLayer + ", rlpIndex=" + rlpIndex + ", path=" + Hex.encode(path) + "]";
+    }
+
+    public static ScriptRlpData createBuffer(int rlpLayer, int rlpIndex, byte[] path) {
+        ScriptRlpData item = new ScriptRlpDataImpl(rlpLayer, rlpIndex, path);
+        return item;
     }
 
     @Override

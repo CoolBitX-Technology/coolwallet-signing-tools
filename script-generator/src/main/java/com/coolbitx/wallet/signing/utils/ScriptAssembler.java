@@ -164,12 +164,9 @@ public class ScriptAssembler {
     private String compose(String command, ScriptInterface dataBuf, Buffer destBuf, int arg0, int arg1) {
         clearParameter();
         String argVar = "";
-        System.out.println("0");
         if (dataBuf == null) {
-            System.out.println("1");
             firstParameter += "0";
         } else if (dataBuf instanceof ScriptData) {
-            System.out.println("2");
             ScriptData dataBuf_ = (ScriptData) dataBuf;
             switch (dataBuf_.bufferType) {
                 case ARGUMENT:
@@ -189,20 +186,23 @@ public class ScriptAssembler {
             }
             addIntParameter(dataBuf.getBufferParameter1());
             addIntParameter(dataBuf.getBufferParameter2());
-        } else if (dataBuf instanceof ScriptRlpItem || dataBuf instanceof ScriptRlpArray) {
-            System.out.println("3");
+        } else if (dataBuf instanceof ScriptRlpData) {
             firstParameter += "A"; // RLP should from ARGUMENT
             argType = "01";
             byte[] path = ((ScriptRlpData) dataBuf).getPath();
             argVar = String.format("%02d", path.length);
-            System.out.println("argVar: " + argVar);
+            argVar += Hex.encode(path);
+        } else if (dataBuf instanceof ScriptRlpArray) {
+            firstParameter += "A"; // RLP should from ARGUMENT
+            argType = "01";
+            byte[] path = ((ScriptRlpArray) dataBuf).getPath();
+            argVar = String.format("%02d", path.length);
             argVar += Hex.encode(path);
             //            ScriptRlpItem dataBuf_ = (ScriptRlpItem) dataBuf;
             //            firstParameter += "B";
             //            addIntParameter(dataBuf_.getBufferParameter0());
             //            firstParameter += "A";
         } else {
-            System.out.println("4");
             // Throw some exceptions here.
         }
 
@@ -767,7 +767,7 @@ public class ScriptAssembler {
             trueStatement += skip(falseStatement);
         }
         int argDataLength = argData.getBufferParameter2();
-        if (argData instanceof ScriptRlpItem) {
+        if (argData instanceof ScriptRlpData) {
             argData.setBufferParameter2(expect.length() / 2);
             restore = true;
         } else if (argData instanceof ScriptData) {

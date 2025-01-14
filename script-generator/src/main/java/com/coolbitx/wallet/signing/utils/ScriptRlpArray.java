@@ -42,9 +42,9 @@ public class ScriptRlpArray extends ScriptArrayAbstract {
         this.path[rlpLayer] = (byte) rlpIndex;
     }
 
-    public ScriptRlpItem getRlpItemArgument() {
+    public ScriptRlpData getRlpItemArgument() {
         int rlpItemLayer = rlpLayer + 1;
-        ScriptRlpItem item = ScriptRlpItem.createBuffer(rlpItemLayer, rlpSubIndex, path);
+        ScriptRlpData item = ScriptRlpData.createBuffer(rlpItemLayer, rlpSubIndex, path);
         rlpSubIndex++;
         return item;
     }
@@ -79,5 +79,9 @@ public class ScriptRlpArray extends ScriptArrayAbstract {
     @Override
     public void setBufferParameter2(int parameter) {
         this.rlpIndex = parameter;
+    }
+    
+    public byte[] getPath() {
+        return this.path;
     }
 }

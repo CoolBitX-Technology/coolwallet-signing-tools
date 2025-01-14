@@ -15,7 +15,7 @@ import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
 import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptRlpArray;
-import com.coolbitx.wallet.signing.utils.ScriptRlpItem;
+import com.coolbitx.wallet.signing.utils.ScriptRlpData;
 
 public class MessagePackScript {
 
@@ -31,27 +31,27 @@ public class MessagePackScript {
     public static String getApplicationCallTransaction3() {
         String TX = HexUtil.toHexString("TX".getBytes());
         ScriptRlpArray array = new ScriptRlpArray();
-        ScriptRlpItem item0 = array.getRlpItemArgument();
-        ScriptRlpItem item1 = array.getRlpItemArgument();
-        ScriptRlpItem item2 = array.getRlpItemArgument();
-        ScriptRlpItem item3 = array.getRlpItemArgument();
-        ScriptRlpItem item4 = array.getRlpItemArgument();
-        ScriptRlpItem item5 = array.getRlpItemArgument();
-        ScriptRlpItem item6 = array.getRlpItemArgument();
+        ScriptRlpData item0 = array.getRlpItemArgument();
+        ScriptRlpData item1 = array.getRlpItemArgument();
+        ScriptRlpData item2 = array.getRlpItemArgument();
+        ScriptRlpData item3 = array.getRlpItemArgument();
+        ScriptRlpData item4 = array.getRlpItemArgument();
+        ScriptRlpData item5 = array.getRlpItemArgument();
+        ScriptRlpData item6 = array.getRlpItemArgument();
         ScriptRlpArray array7 = array.getRlpArrayArgument();
-        ScriptRlpItem item7_0 = array7.getRlpItemArgument();
-        ScriptRlpItem item7_1 = array7.getRlpItemArgument();
+        ScriptRlpData item7_0 = array7.getRlpItemArgument();
+        ScriptRlpData item7_1 = array7.getRlpItemArgument();
         ScriptRlpArray array7_2 = array7.getRlpArrayArgument();
-        ScriptRlpItem item7_2_0 = array7_2.getRlpItemArgument();
-        ScriptRlpItem item7_2_1 = array7_2.getRlpItemArgument();
-        ScriptRlpItem item7_2_2 = array7_2.getRlpItemArgument();
-        ScriptRlpItem item7_3 = array7.getRlpItemArgument();
-        ScriptRlpItem item7_4 = array7.getRlpItemArgument();
-        ScriptRlpItem item7_5 = array7.getRlpItemArgument();
-        ScriptRlpItem item8 = array.getRlpItemArgument();
-        ScriptRlpItem item9 = array.getRlpItemArgument();
-        ScriptRlpItem item10 = array.getRlpItemArgument();
-        ScriptRlpItem item11 = array.getRlpItemArgument();
+        ScriptRlpData item7_2_0 = array7_2.getRlpItemArgument();
+        ScriptRlpData item7_2_1 = array7_2.getRlpItemArgument();
+        ScriptRlpData item7_2_2 = array7_2.getRlpItemArgument();
+        ScriptRlpData item7_3 = array7.getRlpItemArgument();
+        ScriptRlpData item7_4 = array7.getRlpItemArgument();
+        ScriptRlpData item7_5 = array7.getRlpItemArgument();
+        ScriptRlpData item8 = array.getRlpItemArgument();
+        ScriptRlpData item9 = array.getRlpItemArgument();
+        ScriptRlpData item10 = array.getRlpItemArgument();
+        ScriptRlpData item11 = array.getRlpItemArgument();
 
         System.out.println("array: " + array.toString());
         System.out.println("item0: " + item0.toString());
