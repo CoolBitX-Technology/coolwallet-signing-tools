@@ -9,7 +9,7 @@ package com.coolbitx.wallet.signing.utils;
  *
  * @author Hank Liu (hankliu@coolbitx.com)
  */
-public class ScriptData implements ScriptDataInterface {
+public class ScriptData extends ScriptObjectAbstract {
 
     public enum Buffer {
         ARGUMENT,

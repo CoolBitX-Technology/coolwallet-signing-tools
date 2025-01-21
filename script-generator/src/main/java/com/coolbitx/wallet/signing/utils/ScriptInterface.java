@@ -4,7 +4,7 @@
  */
 package com.coolbitx.wallet.signing.utils;
 
-public interface ScriptDataInterface {
+public interface ScriptInterface {
 
     public int getBufferParameter1();
 
@@ -14,4 +14,7 @@ public interface ScriptDataInterface {
 
     public void setBufferParameter2(int parameter);
 
+    public enum DataType {
+        OBJECT, ARRAY
+    }
 }

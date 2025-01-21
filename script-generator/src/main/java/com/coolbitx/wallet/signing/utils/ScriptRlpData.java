@@ -1,55 +1,69 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.coolbitx.wallet.signing.utils;
 
 /**
  *
- * @author Hank Liu (hankliu@coolbitx.com)
+ * @author hank.liu
  */
-public class ScriptRlpData implements ScriptDataInterface {
+public abstract class ScriptRlpData extends ScriptObjectAbstract {
 
-    public enum Buffer {
-        RLP_ITEM;
+    protected int rlpLayer;
+    protected int rlpIndex;
+    protected byte[] path;
+
+    private static class ScriptRlpDataImpl extends ScriptRlpData {
+
+        private ScriptRlpDataImpl(int rlpLayer, int rlpIndex, byte[] path) {
+            super(rlpLayer, rlpIndex, path);
+        }
     }
 
-
-    protected Buffer bufferType;
-    private int rlpCount;
-
-    private ScriptRlpData(int rlpCount) {
-        this.bufferType = Buffer.RLP_ITEM;
-        this.rlpCount = rlpCount;
+    private ScriptRlpData(int rlpLayer, int rlpIndex, byte[] path) {
+        super();
+        this.rlpLayer = rlpLayer;
+        this.rlpIndex = rlpIndex;
+        this.path = new byte[rlpLayer + 1];
+        if (path != null) {
+            System.arraycopy(path, 0, this.path, 0, path.length);
+        }
+        this.path[rlpLayer] = (byte) rlpIndex;
     }
 
     @Override
     public String toString() {
-        return "[" + "rlpCount=" + rlpCount + "]";
+        return "[Item: " + "rlpLayer=" + rlpLayer + ", rlpIndex=" + rlpIndex + ", path=" + Hex.encode(path) + "]";
     }
 
-    public static ScriptRlpData getBuffer(int rlpCount) {
-        return new ScriptRlpData(rlpCount);
+    public static ScriptRlpData createBuffer(int rlpLayer, int rlpIndex, byte[] path) {
+        ScriptRlpData item = new ScriptRlpDataImpl(rlpLayer, rlpIndex, path);
+        return item;
     }
 
     @Override
     public int getBufferParameter1() {
-        return rlpCount;
+        return rlpLayer;
     }
 
     @Override
     public void setBufferParameter1(int parameter) {
-        this.rlpCount = parameter;
+        this.rlpLayer = parameter;
     }
 
     @Override
     public int getBufferParameter2() {
-        return 0;
+        return rlpIndex;
     }
 
     @Override
     public void setBufferParameter2(int parameter) {
+        this.rlpIndex = parameter;
+    }
+
+    public byte[] getPath() {
+        return this.path;
     }
 
 }
