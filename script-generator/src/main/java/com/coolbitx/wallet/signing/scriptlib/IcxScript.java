@@ -12,8 +12,12 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
+import com.google.common.base.Strings;
 
 public class IcxScript {
+    public static void main(String[] args) {
+        listAll();
+    }
 
     public static void listAll() {
         System.out.println("Icx: \n" + getICXScript() + "\n");
@@ -52,5 +56,11 @@ public class IcxScript {
         return script;
     }
 
-    public static String getICXScriptSignature = "30460221009398B4AA5BF223EA1472164BC4314B925044F15A45273B7E095C7257C68A6180022100E21357341DFB230F8F394FF43427D91F31AFF2A1A4BD776585B86CC74E7962FC";
+    public static String getICXScriptSignature() {
+        return Strings.padStart(
+                "304502204b1911ba2d52c9fb0c87552fc47b31f25e9ae13ab4887d14d467bd3eb84baa26022100dc36343d426045e3f5f0d1223e4ed0d0eab3e6ab33a5d7bbb9de09870f478604",
+                144,
+                '0');
+    }
 }
+
