@@ -609,4 +609,90 @@ public class AdaScript {
 
     public static String ADATransactionScriptSignature = "0000304402202A93139827D7ED463320B2B9D31317EB71CB361FBA3612B7B5E363CAFCCD735C022037657AE592284219D45B236A34346FB797FC3290ED23593C836DDF95CB156CDC";
 
+    public static String getADADRepAbstainScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+
+        ScriptData changeAddressLength = sac.getArgument(1);
+        ScriptData changeAddress = sac.getArgumentVariableLength(90);
+        ScriptData changeAmountLength = sac.getArgument(1);
+        ScriptData changeAmountPrefix = sac.getArgument(1);
+        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+
+        ScriptData feeLength = sac.getArgument(1);
+        ScriptData feePrefix = sac.getArgument(1);
+        ScriptData fee = sac.getArgumentVariableLength(8);
+
+        ScriptData ttlLength = sac.getArgument(1);
+        ScriptData ttlPrefix = sac.getArgument(1);
+        ScriptData ttl = sac.getArgumentVariableLength(8);
+
+        ScriptData stakeKeyHash = sac.getArgument(28);
+
+        ScriptData inputs = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+                .setCoinType(0x0717)
+                // -- payload start --
+                .copyString("a5")
+                // --- intput start ---
+                .copyArgument(inputs)
+                // --- intput end ---
+                // --- output start ---
+                .copyString("01")
+                .ifEqual(changeAmount, "0000000000000000",
+                    // ---- output count start ----
+                    new ScriptAssembler().copyString("80").getScript(),
+                    new ScriptAssembler().copyString("81")
+                    // ---- output count end ----
+                    // --- output change start ---
+                    .copyString("8258")
+                    .copyArgument(changeAddressLength)
+                    .setBufferInt(changeAddressLength, 29, 90)
+                    .copyArgument(changeAddress)
+                    .copyArgument(changeAmountPrefix)
+                    .setBufferInt(changeAmountLength, 0, 8)
+                    .copyArgument(changeAmount).getScript()
+                    // --- output change end ---
+                )
+                // --- output end ---
+                // --- fee start ---
+                .copyString("02")
+                .copyArgument(feePrefix)
+                .setBufferInt(feeLength, 0, 8)
+                .copyArgument(fee)
+                // --- fee end ---
+                //ttl         03 (Uint)
+                //            1a (Uint) 02126ed9
+
+                // --- ttl start ---
+                .copyString("03")
+                .copyArgument(ttlPrefix)
+                .setBufferInt(ttlLength, 0, 8)
+                .copyArgument(ttl)
+                // --- ttl end ---
+                // --- certs start ---
+                //  certs       04 (Uint)
+                //                81 (Array)
+                //      cert1       83 (Array)
+                //        drepType    09 (Uint) - DRep Always Abstain
+                //        credential  82 (Array)
+                //          type        00 (Uint)
+                //          addrKH      58 (Byte) 1c [hash...]
+                //        abstain      81 (Array)
+                //                     02 (Uint)
+                .copyString("048183098200581c")
+                .copyArgument(stakeKeyHash)
+                .copyString("8102")
+                // --- certs end ---
+
+                // -- payload end --
+                .showMessage("ADA")
+                .showMessage("Abstain")
+                .showPressButton()
+                // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+                .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
+                .getScript();
+        return script;
+    }
+
 }
