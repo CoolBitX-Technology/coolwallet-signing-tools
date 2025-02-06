@@ -13,6 +13,7 @@ import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 
+import com.google.common.base.Strings;
 // Address Encode Types
 //
 // 0: Byron address
@@ -32,6 +33,7 @@ public class AdaScript {
         System.out.println("ADA Stake Delegate: \n" + getADAStakeDelegateScript() + "\n");
         System.out.println("ADA Stake Deregister: \n" + getADAStakeDeregisterScript() + "\n");
         System.out.println("ADA Stake Withdraw: \n" + getADAStakeWithdrawScript() + "\n");
+        System.out.println("ADA DRep Abstain: \n" + getADADRepAbstainScript() + "\n");
     }
 
     public static String getShowAddressScript(ScriptData encodeType, ScriptData addrLen, ScriptData addrHex) {
@@ -694,5 +696,10 @@ public class AdaScript {
                 .getScript();
         return script;
     }
+
+    public static String ADADRepAbstainScriptSignature = Strings.padStart(
+        "30450221009d0e8b78ae085fbdd428633a895e2a129b9d2260d6ea181301f170ad9f842c4502207899ac929bcb787a60219a13c34dd0da90f99205debb78115bc9cc5c2410ad9c",
+        144,
+        '0');
 
 }
