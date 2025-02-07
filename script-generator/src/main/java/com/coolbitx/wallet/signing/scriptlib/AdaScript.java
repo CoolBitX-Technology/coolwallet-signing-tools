@@ -673,16 +673,17 @@ public class AdaScript {
                 .copyArgument(ttl)
                 // --- ttl end ---
                 // --- certs start ---
-                //  certs       04 (Uint)
-                //                81 (Array)
-                //      cert1       83 (Array)
-                //        drepType    09 (Uint) - DRep Always Abstain
-                //        credential  82 (Array)
-                //          type        00 (Uint)
-                //          addrKH      58 (Byte) 1c [hash...]
-                //        abstain      81 (Array)
-                //                     02 (Uint)
-                .copyString("048183098200581c")
+                // 04                    // certificates
+                // d90102               // tag(258)
+                // 81                   // Array with length 1
+                //   83                 // Array with length 3
+                //     09              // DRep Always Abstain
+                //     82
+                //       00           // credential type
+                //       581c d5c85e06499c113db681255b6850f54ce0f889648193859399dbf50a  // stake key hash
+                //     81               // Array with length 1
+                //       02            // Always Abstain marker
+                .copyString("04d901028183098200581c")
                 .copyArgument(stakeKeyHash)
                 .copyString("8102")
                 // --- certs end ---
