@@ -699,7 +699,7 @@ public class AdaScript {
     }
 
     public static String ADADRepAbstainScriptSignature = Strings.padStart(
-        "30450221009d0e8b78ae085fbdd428633a895e2a129b9d2260d6ea181301f170ad9f842c4502207899ac929bcb787a60219a13c34dd0da90f99205debb78115bc9cc5c2410ad9c",
+        "3044022009dc4cb3ae3657b1da1451d95198b96e0193a2d6afbe9616bc51cc45cb30d61002206658fada489dbb9c27ab3eb0c6da09ab24e7ea120224fd3ce0f6a9cae1c13e09",
         144,
         '0');
 
