@@ -36,8 +36,8 @@ public class SignScript {
     }
 
     public static String SignECDSAScriptSignature
-            = Strings.padEnd(
-                    "FA",
+            = Strings.padStart(
+                    "304402202d794814ef2c73c255ba1ce6694c598dcd5d730a74739c39d51c76ebe4688be202202b487bad21091b6134a75d6b8fc25b7b2d108f8002b5568b52eafb7090b2d1b4",
                     144,
                     '0');
 }
