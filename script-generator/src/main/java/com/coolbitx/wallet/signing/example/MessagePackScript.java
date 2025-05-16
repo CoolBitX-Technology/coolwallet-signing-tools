@@ -20,8 +20,9 @@ import com.coolbitx.wallet.signing.utils.ScriptRlpData;
 public class MessagePackScript {
 
     public static void main(String[] args) throws Exception {
-        getApplicationCallTransaction3();
-        System.out.println("Algorand: \n" + getApplicationCallTransaction3() + "\n");
+        System.out.println("getTransferScript: \n" + getTransferScript() + "\n");
+        System.out.println("getAddressScript: \n" + getAddressScript() + "\n");
+        System.out.println("getApplicationCallTransaction3: \n" + getApplicationCallTransaction3() + "\n");
     }
 
     public static void listAll() {
@@ -76,7 +77,7 @@ public class MessagePackScript {
         return script;
     }
 
-    public static String ApplicationIDScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String ApplicationCallTransaction3Signature = Strings.padStart("30450220648cb62b48a780464c9599155fd9d291f6dc8a46741bf0585ef235e9041d2e34022100fe58a18a76f0a72a82eb8f6980aa02c263d1a053219d2c3a01f14786d704eaab", 144, '0');
 
     public static String getAddressScript() {
         String TX = HexUtil.toHexString("TX".getBytes());
@@ -112,6 +113,8 @@ public class MessagePackScript {
                 .getScript();
         return script;
     }
+    
+    public static String AddressScriptSignature = Strings.padStart("3045022074ab8b800aa95a9ea840e750daba30f40576aa47ec79974ef14f7b6eef5c3b59022100957509209b881309c0da735db3f831d6785a2381d3d0495be3885db114b507d0", 144, '0');
 
 // JSON format wanted:
 // {
@@ -194,6 +197,6 @@ public class MessagePackScript {
         return script;
     }
 
-    public static String TransferScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String TransferScriptSignature = Strings.padStart("3045022100ad17214b34cad8f17c28a7bc033dedc13425fae307975401fe3d10c69cdcc5b902203b799a86239d913d7960138b0663b8d7c02ca4dc84a8c027bc7598c04c9c3dd5", 144, '0');
 
 }
