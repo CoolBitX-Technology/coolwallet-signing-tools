@@ -250,7 +250,7 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getSignInScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String getSignInScriptSignature = Strings.padStart("3045022100ce2624f80ac5234d77415ca9df9ad153fa1c8baea28497d937e619ce63dddb6302205bb1f1d8aa5a47e5c87c615be03cf0a375c40ed3e19746e3279fd74dbddca82a", 144, '0');
 
     public static String getSignMessageScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -267,7 +267,7 @@ public class SolScript {
                 .getScript();
     }
 
-    public static String getSignMessageScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String getSignMessageScriptSignature = Strings.padStart("30450220482a5109dd908b886d4b8cd8b4bfb43a56c65232d68e4b30798d3cdbb55e31f3022100ee6e9c3d9468a8ad29ca6ac2b08719c7cbe7e857951a1b7ffa62e3445bc1bb10", 144, '0');
 
     public static String getTransferSplToken22Script() {
         return splTransferScript(TxType.TRANSFER);
@@ -522,13 +522,13 @@ public class SolScript {
         ScriptData createAccountLamports = sac.getArgument(8);
         ScriptData createAccountSpace = sac.getArgument(8);
         ScriptData createAccountProgramId = sac.getArgument(32);
-        
+
         ScriptData initializeProgramIdIndex = sac.getArgument(1);
         ScriptData initializeKeyIndicesLength = sac.getArgument(1);
         ScriptData initializeKeyIndices = sac.getArgument(2);
         ScriptData initializeDataLength = sac.getArgument(1);
         ScriptData initializeData = sac.getArgument(116);
-        
+
         ScriptData delegateProgramIdIndex = sac.getArgument(1);
         ScriptData delegateKeyIndicesLength = sac.getArgument(1);
         ScriptData delegateKeyIndex0 = sac.getArgument(1);
@@ -622,7 +622,7 @@ public class SolScript {
 
     public static String getDelegateAndCreateAccountWithSeedScriptSignature = Strings.padStart("3044022026ea0b1c5ab42fc52fa4542db17b9a0a92b42ffc941a53b82ec8cedd7fa4fd1d02200b2edd468c0d6761add53a597774cdc1c5d1599b186a1ade4b2458c559771411", 144, '0');
 
-     public static String getUndelegateScript() {
+    public static String getUndelegateScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData header = sac.getArgument(3);
         ScriptData keysCount = sac.getArgument(1);
