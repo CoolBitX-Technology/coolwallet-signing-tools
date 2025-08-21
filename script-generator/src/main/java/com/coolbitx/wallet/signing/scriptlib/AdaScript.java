@@ -12,6 +12,8 @@ import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
+import com.coolbitx.wallet.signing.utils.ScriptRlpArray;
+import com.coolbitx.wallet.signing.utils.ScriptRlpData;
 import com.google.common.base.Strings;
 
 // Address Encode Types
@@ -173,7 +175,7 @@ public class AdaScript {
         // 01a74ecc
     }
 
-    public static String ADATransactionScriptSignature = Strings.padStart("3045022100F0399524A966B863DF60F0B21095343D4993605BC89EEFB257586467B52CFD9402204AD6EEAE4A6872FC376838AB4216A2C476B154BB3E1674CB9242F7009CA159CA", 144, '0');
+    public static final String ADATransactionScriptSignature = Strings.padStart("3045022100F0399524A966B863DF60F0B21095343D4993605BC89EEFB257586467B52CFD9402204AD6EEAE4A6872FC376838AB4216A2C476B154BB3E1674CB9242F7009CA159CA", 144, '0');
 
     public static String getADAStakeRegistrationScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -258,7 +260,7 @@ public class AdaScript {
         return script;
     }
 
-    public static String ADAStakeRegistrationScriptSignature = Strings.padStart("3045022100D5F4EA82D4CEF766C92B46E531DF8272A68BE84C38914F25D48AF927671F64F7022010C9EE292134B514BB29EDDC33F01D053DDB77F23162E03EEF0D73F4AFB67775", 144, '0');
+    public static final String ADAStakeRegistrationScriptSignature = Strings.padStart("3045022100D5F4EA82D4CEF766C92B46E531DF8272A68BE84C38914F25D48AF927671F64F7022010C9EE292134B514BB29EDDC33F01D053DDB77F23162E03EEF0D73F4AFB67775", 144, '0');
 
     public static String getADAStakeRegistrationAndDelegationScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -354,7 +356,7 @@ public class AdaScript {
         return script;
     }
 
-    public static String ADAStakeRegistrationAndDelegationScriptSignature = Strings.padStart("3046022100C458F53070161F5BD73F9F0BD7FE26CF5D861DFD170F0FE51DEDD97B25B8B808022100FA97152CC285E9B518F18371B617613D56A3A548344206C619D98F169A93841F", 144, '0');
+    public static final String ADAStakeRegistrationAndDelegationScriptSignature = Strings.padStart("3046022100C458F53070161F5BD73F9F0BD7FE26CF5D861DFD170F0FE51DEDD97B25B8B808022100FA97152CC285E9B518F18371B617613D56A3A548344206C619D98F169A93841F", 144, '0');
 
     public static String getADAStakeDelegationScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -443,7 +445,7 @@ public class AdaScript {
         return script;
     }
 
-    public static String ADAStakeDelegationScriptSignature = Strings.padStart("304602210099B45BC4C655C45842B43202275BC267100253609D81F9121C96FC86E3BCC72A022100A17D228C4BA9911D34A90B2B85D3E5A2160F0D07DCBB4D96A4E96264FBD2A1DF", 144, '0');
+    public static final String ADAStakeDelegationScriptSignature = Strings.padStart("304602210099B45BC4C655C45842B43202275BC267100253609D81F9121C96FC86E3BCC72A022100A17D228C4BA9911D34A90B2B85D3E5A2160F0D07DCBB4D96A4E96264FBD2A1DF", 144, '0');
 
     public static String getADAStakeDeregistrationScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -528,7 +530,7 @@ public class AdaScript {
         return script;
     }
 
-    public static String ADAStakeDeregistrationScriptSignature = Strings.padStart("30450221008D1D857FE283FDE0B659C4E89C33D6C1BDD219E06FD18AC02859F8C48AE7BA81022062F39064D0742685564CD1FC8E8C650156AE6F112CFEC21E8A4F8E59DA6F0F12", 144, '0');
+    public static final String ADAStakeDeregistrationScriptSignature = Strings.padStart("30450221008D1D857FE283FDE0B659C4E89C33D6C1BDD219E06FD18AC02859F8C48AE7BA81022062F39064D0742685564CD1FC8E8C650156AE6F112CFEC21E8A4F8E59DA6F0F12", 144, '0');
 
     public static String getADARewardsWithdrawalScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -617,7 +619,7 @@ public class AdaScript {
         return script;
     }
 
-    public static String ADARewardsWithdrawalScriptSignature = Strings.padStart("3044022054BF2BC0FAECDA40CBA09D4C269022A9C5D707D1895039C4D1776941A6012EEC02205DC643B7BA31BE18F9F4D145722FB7B3442E4C5EE2B16064B40B9BD2236F6C80", 144, '0');
+    public static final String ADARewardsWithdrawalScriptSignature = Strings.padStart("3044022054BF2BC0FAECDA40CBA09D4C269022A9C5D707D1895039C4D1776941A6012EEC02205DC643B7BA31BE18F9F4D145722FB7B3442E4C5EE2B16064B40B9BD2236F6C80", 144, '0');
 
     public static String getADAGovernanceVoteDRepAbstainScript() { // Delegated Representative Abstain
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -706,6 +708,81 @@ public class AdaScript {
         return script;
     }
 
-    public static String ADAGovernanceVoteDRepAbstainScriptSignature = Strings.padStart("3044022009dc4cb3ae3657b1da1451d95198b96e0193a2d6afbe9616bc51cc45cb30d61002206658fada489dbb9c27ab3eb0c6da09ab24e7ea120224fd3ce0f6a9cae1c13e09", 144, '0');
+    public static final String ADAGovernanceVoteDRepAbstainScriptSignature = Strings.padStart("3044022009dc4cb3ae3657b1da1451d95198b96e0193a2d6afbe9616bc51cc45cb30d61002206658fada489dbb9c27ab3eb0c6da09ab24e7ea120224fd3ce0f6a9cae1c13e09", 144, '0');
+
+//  [
+//   protected_header,   # 包含演算法資訊（ex: a1 01 26 → Ed25519）
+//   unprotected_header, # 這裡通常是空 {}
+//   payload,            # 你要簽的原始訊息
+//   signature           # 真正的簽章 bytes
+//  ]
+    public static String getADASignMessageScript() {
+        ScriptRlpArray array = new ScriptRlpArray();
+        ScriptRlpData argMessageLength = array.getRlpItemArgument();
+        ScriptRlpData argMessage = array.getRlpItemArgument();
+
+        String script = new ScriptAssembler()
+                .setCoinType(0x0717)
+                .copyString("84")
+                // -- protected_header --
+                .copyString("43")
+                .copyString("a10126")
+                // --- unprotected_header ---
+                .copyString("a0")
+                // --- payload ---
+                .ifRange(argMessageLength, "00", "FF",
+                        new ScriptAssembler().copyString("58").getScript(),
+                        new ScriptAssembler().copyString("59").getScript())
+                .copyArgument(argMessageLength)
+                .copyArgument(argMessage)
+                // --- signature ---
+                .copyString("f6")
+                .showMessage("ADA")
+                .showWrap("MESSAGE", "")
+                .showPressButton()
+                //                // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+                .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
+                .getScript();
+        return script;
+    }
+
+//  [
+//   protected_header,   # 包含演算法資訊（ex: a1 01 26 → Ed25519）
+//   unprotected_header, # 這裡通常是空 {}
+//   payload,            # 你要簽的原始訊息
+//   signature           # 真正的簽章 bytes
+//  ]
+    public static String getADASignMessageScript2() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+
+        ScriptData argMessageLength = sac.getArgument(1);
+        ScriptData argMessage = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+                .setCoinType(0x0717)
+                .copyString("84")
+                // -- protected_header --
+                .copyString("43")
+                .copyString("a10126")
+                // --- unprotected_header ---
+                .copyString("a0")
+                // --- payload ---
+                .ifRange(argMessageLength, "00", "FF",
+                        new ScriptAssembler().copyString("58").getScript(),
+                        new ScriptAssembler().copyString("59").getScript())
+                .copyArgument(argMessageLength)
+                .copyArgument(argMessage)
+                // --- signature ---
+                .copyString("f6")
+                .showMessage("ADA")
+                .showWrap("MESSAGE", "")
+                .showPressButton()
+                //                // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+                .setHeader(HashType.Blake2b256, SignType.BIP32EDDSA)
+                .getScript();
+        return script;
+    }
+
+    public static final String ADASignMessageScriptSignature = Strings.padEnd("FA", 144, '0');
 
 }
