@@ -782,7 +782,51 @@ public class AdaScript {
                 .getScript();
         return script;
     }
-
+    
     public static final String ADASignMessageScriptSignature = Strings.padEnd("FA", 144, '0');
+
+//  [
+//    "Signature1",
+//    protected header,
+//    external_aad,
+//    payload
+//  ]
+    public static String getADASignMessageScript3() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+
+        ScriptData receiverAddressLength = sac.getArgument(1);
+        ScriptData receiverAddress = sac.getArgumentVariableLength(90);
+        ScriptData messagePrefix = sac.getArgumentRightJustified(3);
+        ScriptData message = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+                .setCoinType(0x0717)
+                .copyString("84") // Array with four elements
+                // -- "Signature1" --
+                .copyString("6a") // UTF-8(10 bytes)
+                .copyString(HexUtil.toHexString("Signature1".getBytes()))
+                // --- protected headers ---
+                .copyString("58").copyString("46")
+                .copyString("a2") // Map with two elements
+                .copyString("01").copyString("27") //key: alg = Ed25519
+                .copyString("67").copyString(HexUtil.toHexString("address".getBytes())) // key: address
+                .copyString("58").copyArgument(receiverAddressLength)
+                .setBufferInt(receiverAddressLength, 29, 90)
+                .copyArgument(receiverAddress)
+                // --- external_aad ---
+                .copyString("40")
+                // --- payload ---
+                .copyArgument(messagePrefix)
+                .copyArgument(message)
+                .showMessage("ADA")
+                .showWrap("MESSAGE", "")
+                .showPressButton()
+                //                // version=04 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=03=BIP32EDDSA
+                .setHeader(HashType.NONE, SignType.BIP32EDDSA)
+                .getScript();
+        return script;
+    }
+
+    public static final String ADASignMessageScript3Signature = Strings.padStart("3044022017c4ea35c02e2ce2ffd22c8e01c964fc69916195066af306edd8c894b960e4e302205cb2a8e8d5c57095865f576c1e2749ef57be105dd6ce5a721f50cedbb4e86bf6", 144, '0');
 
 }
