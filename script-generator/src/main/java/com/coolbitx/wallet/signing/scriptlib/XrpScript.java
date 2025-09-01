@@ -111,7 +111,7 @@ public class XrpScript {
                 .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"), Buffer.CACHE1)
                 .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset, ScriptAssembler.zeroInherit)
                 .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
-                .showAmount(argAmount, 6)
+                .showAmount(argAmount, 6) // TODO: Bug here, decimals greater than 2 will display zero.
                 .showPressButton()
                 .setHeader(HashType.SHA512, SignType.ECDSA)
                 .getScript();

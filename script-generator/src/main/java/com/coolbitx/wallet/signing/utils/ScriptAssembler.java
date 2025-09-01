@@ -809,22 +809,23 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler ifRange(ScriptObjectAbstract argData, String min, String max, String trueStatement, String falseStatement) {
-        boolean restore = false;
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        int argDataLength = argData.getBufferParameter2();
-        if (argDataLength == ScriptData.bufInt) {
-            argData.setBufferParameter2(min.length() / 2);
-            restore = true;
+        int compareLength = 0;
+        if (argData instanceof ScriptRlpData) {
+            compareLength = max.length() / 2;
+        } else if (argData instanceof ScriptData) {
+            if (argData.getBufferParameter2() == ScriptData.bufInt) {
+                compareLength = max.length() / 2;
+            } else {
+                compareLength = argData.getBufferParameter2();
+            }
         }
         script += compose("12", argData, null, trueStatement.length() / 2, 0)
-                + HexUtil.rightJustify(min, argDataLength)
-                + HexUtil.rightJustify(max, argDataLength)
+                + HexUtil.rightJustify(min, compareLength)
+                + HexUtil.rightJustify(max, compareLength)
                 + trueStatement + falseStatement;
-        if (restore) {
-            argData.setBufferParameter2(ScriptData.bufInt);
-        }
         return this;
     }
 
