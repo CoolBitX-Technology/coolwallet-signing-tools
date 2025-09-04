@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Spotless Format",
+            "type": "shell",
+            "command": "mvn",
+            "args": [
+                "spotless:apply"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Run Spotless to format all Java files"
+        },
+        {
+            "label": "Spotless Check",
+            "type": "shell",
+            "command": "mvn",
+            "args": [
+                "spotless:check"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Check if files are formatted correctly"
+        }
+    ]
+}
