@@ -127,7 +127,7 @@ public class EvmScript {
     public static String getERC20Script(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgument(12);
+        ScriptData argValue = sac.getArgument(32);
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
@@ -161,7 +161,6 @@ public class EvmScript {
                 // data, Length = 68
                 .copyString("80B844a9059cbb000000000000000000000000")
                 .copyArgument(argTo)
-                .copyString("0000000000000000000000000000000000000000")
                 .copyArgument(argValue)
                 // chainId v
                 .setBufferInt(argChainIdLength, 1, 6).rlpString(argChainId)
@@ -198,16 +197,19 @@ public class EvmScript {
         return script;
     }
 
-    public static String ERC20ScriptSignature = Strings.padStart(
-            "304402200B343A6EBBD31DE90495CD482D04677B02A3278AF4F546F0865D86C9071C651D02202F666136FEEB43EE85FC93C47E92AB30FF2C8D268FC9DD3CFB1F3E06FFE1D208",
+    public static String ERC20ScriptSignature = Strings.padEnd(
+            "FA",
             144, '0');
+    // public static String ERC20ScriptSignature = Strings.padStart(
+    // "304402200B343A6EBBD31DE90495CD482D04677B02A3278AF4F546F0865D86C9071C651D02202F666136FEEB43EE85FC93C47E92AB30FF2C8D268FC9DD3CFB1F3E06FFE1D208",
+    // 144, '0');
 
     private static final String emptyAddress = "0000000000000000000000000000000000000000";
 
     public static String getSmartContractScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgumentRightJustified(10);
+        ScriptData argValue = sac.getArgumentRightJustified(32);
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
@@ -264,14 +266,17 @@ public class EvmScript {
         return script;
     }
 
-    public static String SmartContractScriptSignature = Strings.padStart(
-            "30450221008D508FDA3E15A6BF55E681C8960B7DBECB82080C708EC1EC200CA8A37DC6367302203AB71C34F44359FD10508358A2C3953C26D173B06A4876C1DCEEE2657DFC26FF",
+    public static String SmartContractScriptSignature = Strings.padEnd(
+            "FA",
             144, '0');
+    // public static String SmartContractScriptSignature = Strings.padStart(
+    // "30450221008D508FDA3E15A6BF55E681C8960B7DBECB82080C708EC1EC200CA8A37DC6367302203AB71C34F44359FD10508358A2C3953C26D173B06A4876C1DCEEE2657DFC26FF",
+    // 144, '0');
 
     public static String getSmartContractSegmentScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgumentRightJustified(10);
+        ScriptData argValue = sac.getArgumentRightJustified(32);
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
@@ -328,14 +333,17 @@ public class EvmScript {
         return script;
     }
 
-    public static String SmartContractSegmentScriptSignature = Strings.padStart(
-            "3046022100CA24B84A65567CDCDD3FB73770804C4551FF332C360A36203442425730EDBC87022100DCB7E67EA5431A0CC050C8AE85D371A7977FC3F828497EA70287C13020593BD9",
+    public static String SmartContractSegmentScriptSignature = Strings.padEnd(
+            "FA",
             144, '0');
+    // public static String SmartContractSegmentScriptSignature = Strings.padStart(
+    // "3046022100CA24B84A65567CDCDD3FB73770804C4551FF332C360A36203442425730EDBC87022100DCB7E67EA5431A0CC050C8AE85D371A7977FC3F828497EA70287C13020593BD9",
+    // 144, '0');
 
     public static String getStakingScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgumentRightJustified(10);
+        ScriptData argValue = sac.getArgumentRightJustified(32);
         ScriptData argGasPrice = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
         ScriptData argNonce = sac.getArgumentRightJustified(8);
@@ -457,9 +465,12 @@ public class EvmScript {
         return script;
     }
 
-    public static String StakingScriptSignature = Strings.padStart(
-            "3045022005FBACF5D29A4A9C002D72EA9174D578505194048CB2BDD6517A31D3124D6346022100C1CBC312F9B62B0AF03E74671C63688BF984D08494191CCC7277BFB87B859226",
+    public static String StakingScriptSignature = Strings.padEnd(
+            "FA",
             144, '0');
+    // public static String StakingScriptSignature = Strings.padStart(
+    // "3045022005FBACF5D29A4A9C002D72EA9174D578505194048CB2BDD6517A31D3124D6346022100C1CBC312F9B62B0AF03E74671C63688BF984D08494191CCC7277BFB87B859226",
+    // 144, '0');
 
     public static String getTypedDataScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -618,7 +629,7 @@ public class EvmScript {
     public static String getEIP1559ERC20Script(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgument(12);
+        ScriptData argValue = sac.getArgument(32);
         ScriptData argGasTipCap = sac.getArgumentRightJustified(10);
         ScriptData argGasFeeCap = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
@@ -655,7 +666,6 @@ public class EvmScript {
                 // data, Length = 68
                 .copyString("80B844a9059cbb000000000000000000000000")
                 .copyArgument(argTo)
-                .copyString("0000000000000000000000000000000000000000")
                 .copyArgument(argValue)
                 // accessList
                 .copyString("C0").arrayEnd(TYPE_RLP)
@@ -690,14 +700,17 @@ public class EvmScript {
         return script;
     }
 
-    public static String EIP1559ERC20ScriptSignature = Strings.padStart(
-            "3044022013322FCE155725E45E0F05E729AD7738FD3C02E8B6FD19979271336C8DACBA4202200E55E9AAD383E50F0AB4FC69246C193CB39DF90C0C81928D67E966035673AA0B",
+    public static String EIP1559ERC20ScriptSignature = Strings.padEnd(
+            "FA",
             144, '0');
+    // public static String EIP1559ERC20ScriptSignature = Strings.padStart(
+    // "3044022013322FCE155725E45E0F05E729AD7738FD3C02E8B6FD19979271336C8DACBA4202200E55E9AAD383E50F0AB4FC69246C193CB39DF90C0C81928D67E966035673AA0B",
+    // 144, '0');
 
     public static String getEIP1559SmartContractScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgumentRightJustified(10);
+        ScriptData argValue = sac.getArgumentRightJustified(32);
         ScriptData argGasTipCap = sac.getArgumentRightJustified(10);
         ScriptData argGasFeeCap = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
@@ -761,14 +774,18 @@ public class EvmScript {
         return script;
     }
 
-    public static String EIP1559SmartContractScriptSignature = Strings.padStart(
-            "3046022100D5A6DC2AD5987313B5CFF6856CB9363FBCBF7F3F611CF64AE6FBFF7FE459068D022100A61244F5DC81DFB10BBB6C6448E7ED48107539C8D0E4C6C669760D6CFD117021",
+    public static String EIP1559SmartContractScriptSignature = Strings.padEnd(
+            "FA",
             144, '0');
+
+    // public static String EIP1559SmartContractScriptSignature = Strings.padStart(
+    // "3046022100D5A6DC2AD5987313B5CFF6856CB9363FBCBF7F3F611CF64AE6FBFF7FE459068D022100A61244F5DC81DFB10BBB6C6448E7ED48107539C8D0E4C6C669760D6CFD117021",
+    // 144, '0');
 
     public static String getEIP1559SmartContractSegmentScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argTo = sac.getArgument(20);
-        ScriptData argValue = sac.getArgumentRightJustified(10);
+        ScriptData argValue = sac.getArgumentRightJustified(32);
         ScriptData argGasTipCap = sac.getArgumentRightJustified(10);
         ScriptData argGasFeeCap = sac.getArgumentRightJustified(10);
         ScriptData argGasLimit = sac.getArgumentRightJustified(10);
@@ -818,7 +835,12 @@ public class EvmScript {
         return script;
     }
 
-    public static String EIP1559SmartContractSegmentScriptSignature = Strings.padStart(
-            "30460221009FCD7C75763F56788FE4293FBACE40FC3ED17228BDEFBC43E5D8E72F4D85197E022100CA7B7BF1118B1FE611C9E422F3C4DEE66A375502F1305D9B6F4BDABAE5CDD2B5",
+    public static String EIP1559SmartContractSegmentScriptSignature = Strings.padEnd(
+            "FA",
             144, '0');
+
+    // public static String EIP1559SmartContractSegmentScriptSignature =
+    // Strings.padStart(
+    // "30460221009FCD7C75763F56788FE4293FBACE40FC3ED17228BDEFBC43E5D8E72F4D85197E022100CA7B7BF1118B1FE611C9E422F3C4DEE66A375502F1305D9B6F4BDABAE5CDD2B5",
+    // 144, '0');
 }
