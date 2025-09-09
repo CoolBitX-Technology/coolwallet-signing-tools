@@ -197,12 +197,9 @@ public class EvmScript {
         return script;
     }
 
-    public static String ERC20ScriptSignature = Strings.padEnd(
-            "FA",
+    public static String ERC20ScriptSignature = Strings.padStart(
+            "304402200f45a33ec5750da823dd773f5bd3958a97dcd6ea0e2896a54a15a49efdc446890220539981e43f04c0eebd687ae781ab4452920a07a3160ab3f0073e0c36bba46b53",
             144, '0');
-    // public static String ERC20ScriptSignature = Strings.padStart(
-    // "304402200B343A6EBBD31DE90495CD482D04677B02A3278AF4F546F0865D86C9071C651D02202F666136FEEB43EE85FC93C47E92AB30FF2C8D268FC9DD3CFB1F3E06FFE1D208",
-    // 144, '0');
 
     private static final String emptyAddress = "0000000000000000000000000000000000000000";
 
@@ -266,12 +263,9 @@ public class EvmScript {
         return script;
     }
 
-    public static String SmartContractScriptSignature = Strings.padEnd(
-            "FA",
+    public static String SmartContractScriptSignature = Strings.padStart(
+            "3045022036460fbbbea6ebf35164e8b2349b4771bb54268b02b402886c3d624f22abe8dc0221009c54f207054b846e4db3f246c8a8488900ccecddde23f156a163bc4010be398e",
             144, '0');
-    // public static String SmartContractScriptSignature = Strings.padStart(
-    // "30450221008D508FDA3E15A6BF55E681C8960B7DBECB82080C708EC1EC200CA8A37DC6367302203AB71C34F44359FD10508358A2C3953C26D173B06A4876C1DCEEE2657DFC26FF",
-    // 144, '0');
 
     public static String getSmartContractSegmentScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -333,12 +327,9 @@ public class EvmScript {
         return script;
     }
 
-    public static String SmartContractSegmentScriptSignature = Strings.padEnd(
-            "FA",
+    public static String SmartContractSegmentScriptSignature = Strings.padStart(
+            "30440220210db0e1ad0ddf7c9eae51378fcdfb72a7cba7bcda40088e083cfef6872e106c02206db6d97608d4d841e6a028675f2f7349a4be44f1294314c3b784efb12a38e645",
             144, '0');
-    // public static String SmartContractSegmentScriptSignature = Strings.padStart(
-    // "3046022100CA24B84A65567CDCDD3FB73770804C4551FF332C360A36203442425730EDBC87022100DCB7E67EA5431A0CC050C8AE85D371A7977FC3F828497EA70287C13020593BD9",
-    // 144, '0');
 
     public static String getStakingScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -465,12 +456,9 @@ public class EvmScript {
         return script;
     }
 
-    public static String StakingScriptSignature = Strings.padEnd(
-            "FA",
+    public static String StakingScriptSignature = Strings.padStart(
+            "30440220210db0e1ad0ddf7c9eae51378fcdfb72a7cba7bcda40088e083cfef6872e106c02206db6d97608d4d841e6a028675f2f7349a4be44f1294314c3b784efb12a38e645",
             144, '0');
-    // public static String StakingScriptSignature = Strings.padStart(
-    // "3045022005FBACF5D29A4A9C002D72EA9174D578505194048CB2BDD6517A31D3124D6346022100C1CBC312F9B62B0AF03E74671C63688BF984D08494191CCC7277BFB87B859226",
-    // 144, '0');
 
     public static String getTypedDataScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -700,12 +688,9 @@ public class EvmScript {
         return script;
     }
 
-    public static String EIP1559ERC20ScriptSignature = Strings.padEnd(
-            "FA",
+    public static String EIP1559ERC20ScriptSignature = Strings.padStart(
+            "304402202cd03f441747493d3178196ba6b2a8ffc4bf76ee17aa3ef6c5b722213fba7cb502202c5e2d415a1ac0b801c3822a702012741c5248f5c7dff3960a7fc06c801c5020",
             144, '0');
-    // public static String EIP1559ERC20ScriptSignature = Strings.padStart(
-    // "3044022013322FCE155725E45E0F05E729AD7738FD3C02E8B6FD19979271336C8DACBA4202200E55E9AAD383E50F0AB4FC69246C193CB39DF90C0C81928D67E966035673AA0B",
-    // 144, '0');
 
     public static String getEIP1559SmartContractScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -774,13 +759,9 @@ public class EvmScript {
         return script;
     }
 
-    public static String EIP1559SmartContractScriptSignature = Strings.padEnd(
-            "FA",
+    public static String EIP1559SmartContractScriptSignature = Strings.padStart(
+            "304402203c7299aef5c6997111cc6d341a64fbe3ab6bc1f80418d7ba31063591c6fa7baa02204f9dde7140e4b4a6e90bb4d311ad8ab915380db11bf0273f96aeb35a36379605",
             144, '0');
-
-    // public static String EIP1559SmartContractScriptSignature = Strings.padStart(
-    // "3046022100D5A6DC2AD5987313B5CFF6856CB9363FBCBF7F3F611CF64AE6FBFF7FE459068D022100A61244F5DC81DFB10BBB6C6448E7ED48107539C8D0E4C6C669760D6CFD117021",
-    // 144, '0');
 
     public static String getEIP1559SmartContractSegmentScript(int coinType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -835,12 +816,7 @@ public class EvmScript {
         return script;
     }
 
-    public static String EIP1559SmartContractSegmentScriptSignature = Strings.padEnd(
-            "FA",
+    public static String EIP1559SmartContractSegmentScriptSignature = Strings.padStart(
+            "3046022100bfe5406897646ffd16967c4fcd0fb1dc998edcdc82e1e8f0b210c7aaf975509102210085e9cf36c40b9d357a379e62ebb54ebdba88474261bd196a5f5a1d150d03853b",
             144, '0');
-
-    // public static String EIP1559SmartContractSegmentScriptSignature =
-    // Strings.padStart(
-    // "30460221009FCD7C75763F56788FE4293FBACE40FC3ED17228BDEFBC43E5D8E72F4D85197E022100CA7B7BF1118B1FE611C9E422F3C4DEE66A375502F1305D9B6F4BDABAE5CDD2B5",
-    // 144, '0');
 }
