@@ -352,32 +352,17 @@ public class EvmScript {
         // FANTOM staking display
         String StakingDisplay = new ScriptAssembler().copyArgument(argData, Buffer.CACHE1)
                 .ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "9fa6dd35", // Delegate
-                        new ScriptAssembler().showWrap("Delgt", "")
-                                .getScript(),
-                        new ScriptAssembler().ifEqual(ScriptData
-                                .getBuffer(Buffer.CACHE1, 0, 4),
-                                "0962ef79", // Withdraw
-                                new ScriptAssembler()
-                                        .showWrap("Withdr",
-                                                "")
-                                        .getScript(),
-                                new ScriptAssembler().ifEqual(
-                                        ScriptData.getBuffer(
-                                                Buffer.CACHE1,
-                                                0,
-                                                4),
-                                        "4f864df4", // Undelegate
+                        new ScriptAssembler().showWrap("Delgt", "").getScript(),
+                        new ScriptAssembler()
+                                .ifEqual(ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "0962ef79", // Withdraw
+                                        new ScriptAssembler().showWrap("Withdr", "").getScript(),
                                         new ScriptAssembler()
-                                                .showWrap("Undelgt",
-                                                        "")
-                                                .getScript(),
-                                        ScriptAssembler.throwSEError) // Other
-                                                                      // command
-                                                                      // should
-                                                                      // use
-                                                                      // smart
-                                                                      // script
-                                        .getScript())
+                                                .ifEqual(
+                                                        ScriptData.getBuffer(Buffer.CACHE1, 0, 4), "4f864df4", // Undelegate
+                                                        new ScriptAssembler().showWrap("Undelgt", "").getScript(),
+                                                        // Other command should use smart script
+                                                        ScriptAssembler.throwSEError)
+                                                .getScript())
                                 .getScript())
                 // Display validator ID
                 .copyString("494420", Buffer.CACHE2)
@@ -457,7 +442,7 @@ public class EvmScript {
     }
 
     public static String StakingScriptSignature = Strings.padStart(
-            "30440220210db0e1ad0ddf7c9eae51378fcdfb72a7cba7bcda40088e083cfef6872e106c02206db6d97608d4d841e6a028675f2f7349a4be44f1294314c3b784efb12a38e645",
+            "30450220386d58dbab4565d879af935264c705f85eebcca333cb707693e6a1759d1fb1d8022100e985a20657520597e11a3ca1e5c8b3da1d3932e03f6e6e21b4a1a033955ae052",
             144, '0');
 
     public static String getTypedDataScript(int coinType) {
