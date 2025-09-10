@@ -21,8 +21,11 @@
         "editor.detectIndentation": false
     },
     "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml",
         "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
         "editor.tabSize": 2,
-        "editor.insertSpaces": true
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false
     },
 }

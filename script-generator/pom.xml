@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>coolbitx.coolwallets</groupId>
   <artifactId>coolwallet-signing-sdk</artifactId>
@@ -51,7 +53,7 @@
             </googleJavaFormat>
 
             <!-- Remove unused imports -->
-            <removeUnusedImports/>
+            <removeUnusedImports />
 
             <!-- License header from existing file -->
             <licenseHeader>
@@ -78,8 +80,8 @@
           </pom>
         </configuration>
 
-                        <!-- Optional: Auto-format during compile phase - DISABLED for now -->
-                <!--
+        <!-- Optional: Auto-format during compile phase - DISABLED for now -->
+        <!--
                 <executions>
                     <execution>
                         <goals>
