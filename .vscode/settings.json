@@ -1,0 +1,31 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    // 全域格式化
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    // Java 格式化設定
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.format.settings.profile": "CoolWalletJavaStyle",
+    // 存檔時執行的動作
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+    },
+    // Maven 整合
+    "java.saveActions.organizeImports": true,
+    // 檔案特定設定
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java",
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false
+    },
+}

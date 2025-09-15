@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles version="21">
+  <profile kind="CodeFormatterProfile" name="CoolWalletJavaStyle" version="21">
+    <!-- 使用空白，不用 tab -->
+    <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space"/>
+    <!-- 每階層縮排 4 -->
+    <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4"/>
+    <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4"/>
+
+    <!-- 【關鍵】延續縮排（換行時）用 1 個縮排單位（=4），避免變成 8 -->
+    <setting id="org.eclipse.jdt.core.formatter.continuation_indentation" value="1"/>
+    <setting id="org.eclipse.jdt.core.formatter.continuation_indentation_for_array_initializer" value="1"/>
+
+    <!-- 其他常見偏好，可按需調整 -->
+    <setting id="org.eclipse.jdt.core.formatter.align_with_spaces" value="true"/>
+    <setting id="org.eclipse.jdt.core.formatter.join_wrapped_lines" value="true"/>
+    <setting id="org.eclipse.jdt.core.formatter.wrap_before_binary_operator" value="true"/>
+  </profile>
+</profiles>
