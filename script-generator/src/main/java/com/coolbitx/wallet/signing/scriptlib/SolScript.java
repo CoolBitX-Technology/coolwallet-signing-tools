@@ -217,7 +217,7 @@ public class SolScript {
     }
 
     public static String getTransferSplToken22ScriptSignature = Strings.padStart(
-        "30450221008ca60fc77d2ab62548366000044c4972ae2f6cca5716472bb78483cc5064cb7b022075ad4281dc8cded2139b5cd414305d10c55c2625c9dae47ec0c5a113e8752551",
+        "304402205671655342687abb29a7e8aa4754e37f9b5d5841b0cca514ad85582e08f633bf0220278585a59fd11d6728a0582365c790a14eedf5e2bde39d68c402e5c827520c83",
         144, '0');
 
     public static String getTransferSplToken22WithComputeBudgetScript() {
@@ -225,7 +225,7 @@ public class SolScript {
     }
 
     public static String getTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart(
-        "3046022100f7bcc7b763b598a4aa43ace333e3416b45307190b5e9bcff45c9415d3caf4ee8022100bb990f958b7c12f13bd25b8ad5f5cd1a49cd89d4cae9f45b85adff699f747285",
+        "3046022100d2c497232419b42a67303108a9572b849c8e76db92c8aa877bda1733dedf3ca0022100a8088de1f75bd6ba8a519a717d8658812a21a7714f49a7af2c8c43f89cd09f1d",
         144, '0');
 
     public static String getCreateAndTransferSplToken22Script() {
@@ -233,7 +233,7 @@ public class SolScript {
     }
 
     public static String getCreateAndTransferSplTokenScriptSignature = Strings.padStart(
-        "30460221009d7b2401e110fd30b7db32f60bbc0aefd1d2ff71a75f470c005348f59ce113080221009dd281a9dd7951e93013787694433dc74104a4dd663cf7c5d8c2a6be4335fcdf",
+        "3046022100c12fa464f736ac82b5b486285a024f8f176f5300b2abee69076568eb97eba806022100fafd08f6d8836b6a659cd9e433231fdcd8e77c731fc28a6073fa9fc5bf438e59",
         144, '0');
 
     public static String getCreateAndTransferSplToken22WithComputeBudgetScript() {
@@ -241,22 +241,31 @@ public class SolScript {
     }
 
     public static String getCreateAndTransferSplToken22WithComputeBudgetScriptSignature = Strings.padStart(
-        "304402205b763b3e3dc745dadda5f6fbddd2af9990bcc0fd7b32a1ab97d4af14d31ae6230220203177f933a507026a145c796ea8b4b1fe221eda157f0dda28bdb7290da9ee53",
+        "304502202bb3bdc762ca5fa9ac99d4156c78f178b375b6e8bb60071a5163e909d2db9ae4022100ca2639ddfc83ce9ff05a1d8728ec42bfcabd590a3b6c6ca924b09b1195a0ace2",
         144, '0');
 
     private static String splTransferScript(TxType txType) {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData header = sac.getArgument(3);
         ScriptData keysCount = sac.getArgument(1);
-        // SplTxType.TRANSFER
-        // to other : [ownerAccount, toAssociateAccount, fromAssociateAccount,
-        // tokenAccount, tokenProgramId]
-        // to self : [ownerAccount, fromAssociateAccount, tokenAccount, tokenProgramId]
-        // SplTxType.TRANSFER_WITH_COMPUTE_BUDGET
-        // to other : [ownerAccount, toAssociateAccount, fromAssociateAccount,
-        // computeBudgetProgramId, tokenAccount, tokenProgramId]
-        // to self : [ownerAccount, fromAssociateAccount, computeBudgetProgramId,
-        // tokenAccount, tokenProgramId]
+        /*
+         * Account arrays for different transaction types:
+         * 
+         * TRANSFER to other: [ownerAccount, toAssociateAccount, fromAssociateAccount,
+         * tokenAccount, tokenProgramId] Note: toAssociateAccount and
+         * fromAssociateAccount order may be swapped
+         * 
+         * TRANSFER to self: [ownerAccount, fromAssociateAccount, tokenAccount,
+         * tokenProgramId] (toAssociateAccount = fromAssociateAccount)
+         * 
+         * TRANSFER_WITH_COMPUTE_BUDGET to other: [ownerAccount, toAssociateAccount,
+         * fromAssociateAccount, computeBudgetProgramId, tokenAccount, tokenProgramId]
+         * Note: toAssociateAccount and fromAssociateAccount order may be swapped
+         * 
+         * TRANSFER_WITH_COMPUTE_BUDGET to self: [ownerAccount, fromAssociateAccount,
+         * computeBudgetProgramId, tokenAccount, tokenProgramId] (toAssociateAccount =
+         * fromAssociateAccount)
+         */
         ScriptData publicKey0 = sac.getArgument(32);
         ScriptData publicKey1 = sac.getArgument(32);
         ScriptData publicKey2 = sac.getArgument(32);
@@ -311,8 +320,13 @@ public class SolScript {
         }
         ScriptData tokenProgramIdIndex = sac.getArgument(1);
         ScriptData keyIndicesLength = sac.getArgument(1);
-        ScriptData keyIndices = sac.getArgument(4); // [from token address, contract address, to token address, owner
-                                                    // address]
+        // [from token address, contract address, to token address, owner address]
+        ScriptData keyIndices = sac.getArgumentUnion(0, 4);
+        ScriptData fromTokenIndex = sac.getArgument(1);
+        ScriptData contractIndex = sac.getArgument(1);
+        ScriptData toTokenIndex = sac.getArgument(1);
+        ScriptData ownerIndex = sac.getArgument(1);
+        // ScriptData keyIndices = sac.getArgument(4);
         ScriptData dataLength = sac.getArgument(1);
         ScriptData tokenInstruction = sac.getArgument(1); // 0C for TransferChecked
         ScriptData tokenAmount = sac.getArgument(8);
@@ -325,20 +339,12 @@ public class SolScript {
         ScriptData tokenAddr = sac.getArgument(32);
         ScriptData tokenSign = sac.getArgument(72);
 
-        ScriptAssembler script = new ScriptAssembler().setCoinType(0x01f5).copyArgument(header) // numRequiredSignatures(1B)
-                                                                                                // numReadonlySignedAccounts(1B)
-                                                                                                // numReadonlyUnsignedAccounts(1B)
-            .copyArgument(keysCount);
-        // transfer token to other [ownerAccount, toAssociateAccount,
-        // fromAssociateAccount, tokenAccount, tokenProgramId]
-        // transfer token to self [ownerAccount, fromAssociateAccount, tokenAccount,
-        // tokenProgramId], toAssociateAccount = fromAssociateAccount
-        // transfer token with compute budget to other [ownerAccount,
-        // toAssociateAccount, fromAssociateAccount, computeBudgetProgramId,
-        // tokenAccount, tokenProgramId]
-        // transfer token with compute budget to self fromAssociateAccount,
-        // computeBudgetProgramId, tokenAccount, tokenProgramId], toAssociateAccount =
-        // fromAssociateAccount
+        ScriptAssembler script = new ScriptAssembler().setCoinType(0x01f5)
+            // numRequiredSignatures(1B)
+            // numReadonlySignedAccounts(1B)
+            // numReadonlyUnsignedAccounts(1B)
+            .copyArgument(header).copyArgument(keysCount);
+
         if (txType == TxType.TRANSFER || txType == TxType.TRANSFER_WITH_COMPUTE_BUDGET) {
             script.copyArgument(publicKey0).copyArgument(publicKey1).copyArgument(publicKey2).copyArgument(publicKey3)
                 .ifEqual(publicKey4, EMPTY_PUBLIC_KEY, "", new ScriptAssembler().copyArgument(publicKey4).getScript())
@@ -395,7 +401,16 @@ public class SolScript {
                 new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
             .setBufferInt(tokenNameLength, 1, 7).copyArgument(tokenName, Buffer.CACHE2)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2)).clearBuffer(Buffer.CACHE2)
-            .baseConvert(publicKey1, Buffer.CACHE2, 0, ScriptAssembler.base58Charset, ScriptAssembler.zeroInherit)
+            .ifEqual(toTokenIndex, "01",
+                new ScriptAssembler().baseConvert(publicKey1, Buffer.CACHE2, 0, ScriptAssembler.base58Charset,
+                    ScriptAssembler.zeroInherit).getScript(),
+                "")
+            .ifEqual(toTokenIndex, "02",
+                new ScriptAssembler().baseConvert(publicKey2, Buffer.CACHE2, 0, ScriptAssembler.base58Charset,
+                    ScriptAssembler.zeroInherit).getScript(),
+                "")
+            // .baseConvert(publicKey1, Buffer.CACHE2, 0, ScriptAssembler.base58Charset,
+            // ScriptAssembler.zeroInherit)
             .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2)).clearBuffer(Buffer.CACHE2)
             .baseConvert(tokenAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.inLittleEndian)
             .setBufferInt(tokenDecimals, 0, 20)
