@@ -8,9 +8,9 @@ package com.coolbitx.wallet.signing.scriptlib;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
-import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.coolbitx.wallet.signing.utils.ScriptRlpArray;
 import com.coolbitx.wallet.signing.utils.ScriptRlpData;
@@ -36,37 +36,19 @@ public class XrpScript {
         ScriptData argTag = sac.getArgument(4);
         ScriptData argFlags = sac.getArgument(4);
 
-        String script = new ScriptAssembler()
-                .setCoinType(0x90)
-                .copyString("5354580012000022")
-                .copyArgument(argFlags)
-                .copyString("24")
-                .copyArgument(argSequence)
-                .copyString("2E")
-                .copyArgument(argTag)
-                .copyString("201B")
-                .copyArgument(argLastLedgerSequence)
-                .copyString("6140")
-                .copyArgument(argAmount)
-                .copyString("6840")
-                .copyArgument(argFee)
-                .copyString("7321")
-                .copyArgument(argPublicKey)
-                .copyString("8114")
-                .copyArgument(argAccount)
-                .copyString("8314")
-                .copyArgument(argDest)
-                .showMessage("XRP")
-                .copyString("00", Buffer.CACHE2)
-                .copyArgument(argDest, Buffer.CACHE2)
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
-                .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"), Buffer.CACHE1)
-                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset, ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
-                .showAmount(argAmount, 6)
-                .showPressButton()
-                .setHeader(HashType.SHA512, SignType.ECDSA)
-                .getScript();
+        String script = new ScriptAssembler().setCoinType(0x90).copyString("5354580012000022").copyArgument(argFlags)
+            .copyString("24").copyArgument(argSequence).copyString("2E").copyArgument(argTag).copyString("201B")
+            .copyArgument(argLastLedgerSequence).copyString("6140").copyArgument(argAmount).copyString("6840")
+            .copyArgument(argFee).copyString("7321").copyArgument(argPublicKey).copyString("8114")
+            .copyArgument(argAccount).copyString("8314").copyArgument(argDest).showMessage("XRP")
+            .copyString("00", Buffer.CACHE2).copyArgument(argDest, Buffer.CACHE2)
+            .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
+            .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
+                Buffer.CACHE1)
+            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset,
+                ScriptAssembler.zeroInherit)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53)).showAmount(argAmount, 6).showPressButton()
+            .setHeader(HashType.SHA512, SignType.ECDSA).getScript();
         return script;
     }
 
@@ -84,37 +66,19 @@ public class XrpScript {
         ScriptRlpData argTag = array.getRlpItemArgument();
         ScriptRlpData argFlags = array.getRlpItemArgument();
 
-        String script = new ScriptAssembler()
-                .setCoinType(0x90)
-                .copyString("5354580012000022")
-                .copyArgument(argFlags)
-                .copyString("24")
-                .copyArgument(argSequence)
-                .copyString("2E")
-                .copyArgument(argTag)
-                .copyString("201B")
-                .copyArgument(argLastLedgerSequence)
-                .copyString("6140")
-                .copyArgument(argAmount)
-                .copyString("6840")
-                .copyArgument(argFee)
-                .copyString("7321")
-                .copyArgument(argPublicKey)
-                .copyString("8114")
-                .copyArgument(argAccount)
-                .copyString("8314")
-                .copyArgument(argDest)
-                .showMessage("XRP")
-                .copyString("00", Buffer.CACHE2)
-                .copyArgument(argDest, Buffer.CACHE2)
-                .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
-                .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"), Buffer.CACHE1)
-                .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset, ScriptAssembler.zeroInherit)
-                .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
-                .showAmount(argAmount, 6) // TODO: Bug here, decimals greater than 2 will display zero.
-                .showPressButton()
-                .setHeader(HashType.SHA512, SignType.ECDSA)
-                .getScript();
+        String script = new ScriptAssembler().setCoinType(0x90).copyString("5354580012000022").copyArgument(argFlags)
+            .copyString("24").copyArgument(argSequence).copyString("2E").copyArgument(argTag).copyString("201B")
+            .copyArgument(argLastLedgerSequence).copyString("6140").copyArgument(argAmount).copyString("6840")
+            .copyArgument(argFee).copyString("7321").copyArgument(argPublicKey).copyString("8114")
+            .copyArgument(argAccount).copyString("8314").copyArgument(argDest).showMessage("XRP")
+            .copyString("00", Buffer.CACHE2).copyArgument(argDest, Buffer.CACHE2)
+            .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
+            .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
+                Buffer.CACHE1)
+            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset,
+                ScriptAssembler.zeroInherit)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53)).showAmount(argAmount, 6).showPressButton()
+            .setHeader(HashType.SHA512, SignType.ECDSA).getScript();
         return script;
     }
 

@@ -6,6 +6,7 @@
     // Java 格式化設定
     "java.format.settings.url": ".vscode/java-formatter.xml",
     "java.format.settings.profile": "CoolWalletJavaStyle",
+    "java.format.comments.enabled": false,
     // 存檔時執行的動作
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit",
