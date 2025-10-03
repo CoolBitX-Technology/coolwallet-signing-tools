@@ -114,14 +114,11 @@ public class AdaScript {
             // ---- output count end ----
             )
             // --- output receive start ---
-            .copyString("8258").copyArgument(receiverAddressLength).setBufferInt(receiverAddressLength, 29, 90) // Shelley
-                                                                                                                // max :
-                                                                                                                // 57,
-                                                                                                                // Byron
-                                                                                                                // max :
-                                                                                                                // 83
-            .copyArgument(receiverAddress).copyArgument(receiverAmountPrefix).setBufferInt(receiverAmountLength, 0, 8)
-            .copyArgument(receiverAmount)
+            .copyString("8258").copyArgument(receiverAddressLength)
+            // Shelley max : 57,
+            // Byron max : 83
+            .setBufferInt(receiverAddressLength, 29, 90).copyArgument(receiverAddress)
+            .copyArgument(receiverAmountPrefix).setBufferInt(receiverAmountLength, 0, 8).copyArgument(receiverAmount)
             // --- output receive end ---
             .ifEqual(changeAmount, "0000000000000000", "",
                 // --- output change start ---
