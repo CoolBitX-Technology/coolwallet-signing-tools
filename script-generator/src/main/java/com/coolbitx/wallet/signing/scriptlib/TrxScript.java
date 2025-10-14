@@ -33,6 +33,8 @@ public class TrxScript {
         System.out.println("Trx Freeze V2: \n" + getTRXFreezeV2Script() + "\n");
         System.out.println("Trx Unfreeze V2: \n" + getTRXUnfreezeV2Script() + "\n");
         System.out.println("Trx Cancel All Unfreeze V2: \n" + getTRXCancelAllUnfreezeV2Script() + "\n");
+        System.out.println("Trx Withdraw Expire Unfreeze: \n" + getTRXWithdrawExpireUnfreezeScript() + "\n");
+        System.out.println("Trx Smart Contract: \n" + getTRXSmartContractScript() + "\n");
     }
 
     private static int typeString = 2;
@@ -739,4 +741,65 @@ public class TrxScript {
     public static String TRXWithdrawExpireUnfreezeScriptSignature = Strings.padStart(
         "3046022100abfa3c6ac84c20fe91d630b7f83c822fa6e037e7bb6de2d17eba4e3997f9fa9a022100dc45c119c277363849e08c181d8f61a80795ddd30469d4fb3091ccd6af6a7fe5",
         144, '0');
+
+    public static String getTRXSmartContractScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argBlockBytes = sac.getArgument(2);
+        ScriptData argBlockHash = sac.getArgument(8);
+        ScriptData argExpiration = sac.getArgumentRightJustified(10);
+        ScriptData argOwnerAddr = sac.getArgument(20);
+        ScriptData argContractAddr = sac.getArgument(20);
+        ScriptData argCallValue = sac.getArgument(12);
+        ScriptData argTimestamp = sac.getArgumentRightJustified(10);
+        ScriptData argFeeLimit = sac.getArgumentRightJustified(10);
+        ScriptData argData = sac.getArgumentAll();
+
+        String script = new ScriptAssembler()
+            // set coinType to C3
+            .setCoinType(0xC3)
+            // ref_block_bytes
+            .copyString("0a").protobuf(argBlockBytes, typeString)
+            // ref_block_hash
+            .copyString("22").protobuf(argBlockHash, typeString)
+            // expiration
+            .copyString("40").protobuf(argExpiration, typeInt)
+            // contract object
+            .copyString("5a").arrayPointer()
+            // contract type
+            .copyString("081f")
+            // parameter object
+            .copyString("12").arrayPointer()
+            // type url
+            .copyString("0a31")
+            .copyString(HexUtil.toHexString("type.googleapis.com/protocol.TriggerSmartContract".getBytes()))
+            // value object
+            .copyString("12").arrayPointer()
+            // owner address
+            .copyString("0a").copyString("41", Buffer.CACHE2).copyArgument(argOwnerAddr, Buffer.CACHE2)
+            .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+            // contract address
+            .copyString("12").clearBuffer(Buffer.CACHE2).copyString("41", Buffer.CACHE2)
+            .copyArgument(argContractAddr, Buffer.CACHE2)
+            .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+            // call value
+            // .copyString("18").protobuf(argCallValue, typeInt)
+            // data
+            .copyString("22").protobuf(argData, typeString).arrayEnd().arrayEnd().arrayEnd()
+            // timestamp
+            .copyString("70").protobuf(argTimestamp, typeInt)
+            // fee limit
+            .copyString("9001").protobuf(argFeeLimit, typeInt)
+            // display chain
+            .showMessage("TRX")
+            // display smart
+            .showWrap("SMART", "")
+            // show press button
+            .showPressButton()
+            // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+            .setHeader(HashType.SHA256, SignType.ECDSA).getScript();
+        return script;
+    }
+
+    public static String TRXSmartContractScriptSignature = Strings.padEnd("FA", 144, '0');
+
 }
