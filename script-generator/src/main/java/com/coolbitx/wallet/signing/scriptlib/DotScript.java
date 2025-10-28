@@ -443,10 +443,14 @@ public class DotScript {
         ScriptData argMortalEra = sac.getArgumentRightJustified(5);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
             // set coinType to 01b2
@@ -463,8 +467,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -474,7 +482,10 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").showMessage("KSM").copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("KSM").copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
             .copyString("02", Buffer.CACHE2).copyArgument(argToAddr, Buffer.CACHE2)
             .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.Blake2b512)
             .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
@@ -487,7 +498,7 @@ public class DotScript {
     }
 
     public static String KSMScriptSignature = Strings.padStart(
-        "3046022100ffb62a7ac5004f19c55b13f1808fb9cec8c40466af088f0431a4f09ac7b6b7bb022100b8ff56cdd0e177451a908e2d787c69a3c244dc6c1de3eff0efd542859c671fd6",
+        "3046022100fd348ead9393f92a2fd3a0310ad5ff6dd9ad4de99c5d44052bd6a810c5fbb2d2022100bba36f9bcc75ef1af7fc101d4aefcbee8f4cd4f5f9b487c066e24b3b59fbed97",
         144, '0');
 
     public static String getKSMBondScript() {
