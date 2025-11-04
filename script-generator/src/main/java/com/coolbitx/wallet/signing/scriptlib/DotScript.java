@@ -490,8 +490,7 @@ public class DotScript {
             .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.Blake2b512)
             .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                 ScriptAssembler.zeroInherit)
-            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1)).showAmount(argAmount, 12)
-            .showWrap("PRESS", "BUTToN")
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1)).showAmount(argAmount, 12).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
@@ -550,7 +549,7 @@ public class DotScript {
             .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
                 new ScriptAssembler().copyString("00").getScript(),
                 new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
-            .showMessage("KSM").showMessage("Bond").showAmount(argAmount, 12).showWrap("PRESS", "BUTToN")
+            .showMessage("KSM").showMessage("Bond").showAmount(argAmount, 12).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
@@ -607,7 +606,7 @@ public class DotScript {
             .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
                 new ScriptAssembler().copyString("00").getScript(),
                 new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
-            .showMessage("KSM").showMessage("BondExt").showAmount(argMaxAdditional, 12).showWrap("PRESS", "BUTToN")
+            .showMessage("KSM").showMessage("BondExt").showAmount(argMaxAdditional, 12).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
@@ -664,7 +663,7 @@ public class DotScript {
             .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
                 new ScriptAssembler().copyString("00").getScript(),
                 new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
-            .showMessage("KSM").showMessage("Unbond").showAmount(argAmount, 12).showWrap("PRESS", "BUTToN")
+            .showMessage("KSM").showMessage("Unbond").showAmount(argAmount, 12).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
@@ -724,7 +723,7 @@ public class DotScript {
             .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
                 new ScriptAssembler().copyString("00").getScript(),
                 new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
-            .showMessage("KSM").showMessage("Nomint").showWrap("PRESS", "BUTToN")
+            .showMessage("KSM").showMessage("Nomint").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
@@ -789,7 +788,7 @@ public class DotScript {
             .hash(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE2, HashType.Blake2b256)
             .clearBuffer(Buffer.TRANSACTION)
             .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION).showMessage("KSM")
-            .showMessage("Nomint").showWrap("PRESS", "BUTToN")
+            .showMessage("Nomint").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
@@ -848,7 +847,7 @@ public class DotScript {
             .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
                 new ScriptAssembler().copyString("00").getScript(),
                 new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
-            .showMessage("KSM").showMessage("Withdr").showWrap("PRESS", "BUTToN")
+            .showMessage("KSM").showMessage("Withdr").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
@@ -903,7 +902,7 @@ public class DotScript {
             .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
                 new ScriptAssembler().copyString("00").getScript(),
                 new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
-            .showMessage("KSM").showMessage("Chill").showWrap("PRESS", "BUTToN")
+            .showMessage("KSM").showMessage("Chill").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
