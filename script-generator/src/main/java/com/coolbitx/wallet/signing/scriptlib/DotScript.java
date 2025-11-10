@@ -45,13 +45,17 @@ public class DotScript {
         ScriptData argCallIndex = sac.getArgument(2);
         ScriptData argToAddr = sac.getArgument(32);
         ScriptData argAmount = sac.getArgumentRightJustified(10);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
             // set coinType to 0162
@@ -68,8 +72,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -79,20 +87,22 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").showMessage("DOT").copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("DOT").copyString(HexUtil.toHexString("SS58PRE".getBytes()), Buffer.CACHE2)
             .copyString("00", Buffer.CACHE2).copyArgument(argToAddr, Buffer.CACHE2)
             .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.Blake2b512)
             .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 7, 35), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                 ScriptAssembler.zeroInherit)
-            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1)).showAmount(argAmount, 10)
-            .showWrap("PRESS", "BUTToN")
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1)).showAmount(argAmount, 10).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
     }
 
     public static String DOTScriptSignature = Strings.padStart(
-        "30450221009c565247e07f7cf0c23f2ff92e24a81800b849a7fce4c7198d8a7b5a49ae009b02204fcaffcf743adc77cf38f3688617c1b4507488c63020aadd69c01b5588910b66",
+        "3044022062cd0da208b6e10d2c206fb3a06220a127a88b394be8e371895e8b7de34ec85602202d3e7f3bfed7ddcb886a0784faed2b99ca70c118e8d3654eb49817188e9736de",
         144, '0');
 
     public static String getDOTBondScript() {
@@ -100,13 +110,17 @@ public class DotScript {
         ScriptData argCallIndex = sac.getArgument(2);
         ScriptData argAmount = sac.getArgumentRightJustified(10);
         ScriptData argPayeeType = sac.getArgument(1);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
             // set coinType to 0162
@@ -123,8 +137,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -133,29 +151,34 @@ public class DotScript {
             .copyArgument(argGenesisHash)
             // block hash
             .copyArgument(argBlockHash)
-            // metaDataHash
-            .copyString("00").showMessage("DOT").showMessage("Bond").showAmount(argAmount, 10)
-            .showWrap("PRESS", "BUTToN")
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("DOT").showMessage("Bond").showAmount(argAmount, 10).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
     }
 
     public static String DOTBondScriptSignature = Strings.padStart(
-        "3045022062eb23c4525f7aac3165a19ce9c6c2ddb1093a9335451682fcafad340a01aa40022100b9face959049ee49a95a2a98f830d88b1bba65fe4d2ad61f7045d4de7a45dda1",
+        "30440220568e3a5b99a59b4a6fa89df9302bfd7c9071d79961f5945915cda6d5cc6ad3ec02205be773ed609ce766c4d537134a2bf81f45b24e9112b289701bec08b45555b6f1",
         144, '0');
 
     public static String getDOTBondExtraScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
         ScriptData argMaxAdditional = sac.getArgumentRightJustified(10);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
             // set coinType to 0162
@@ -170,8 +193,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -181,28 +208,34 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").showMessage("DOT").showMessage("BondExt").showAmount(argMaxAdditional, 10)
-            .showWrap("PRESS", "BUTToN")
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("DOT").showMessage("BondExt").showAmount(argMaxAdditional, 10).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
     }
 
     public static String DOTBondExtraScriptSignature = Strings.padStart(
-        "3046022100efca7ebba545a200be03115608b63971a4ef6947476cd0bd56e4644be1028ba0022100b2084f6b13340ffb793d5aa49f3dfd19179614555a58b0d094a7c5acdb17b12a",
+        "3046022100db71ce117f4670c7c01f3bd4c192b15e89a910f1df0fbe29d386dfb1832a7b80022100f756692f82c876beb8b98a8af20d23aaccb63c849cdb3fe8270a5b53f85d5b5b",
         144, '0');
 
     public static String getDOTUnbondScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
         ScriptData argAmount = sac.getArgumentRightJustified(10);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
             // set coinType to 0162
@@ -217,8 +250,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -228,29 +265,33 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").showMessage("DOT").showMessage("Unbond").showAmount(argAmount, 10)
-            .showWrap("PRESS", "BUTToN")
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("DOT").showMessage("Unbond").showAmount(argAmount, 10).showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
     }
 
     public static String DOTUnbondScriptSignature = Strings.padStart(
-        "3045022047d26e1225ed4dd84af0b0618e88c75c6cb764b856b523525f3a9fc0d9513efa02210099a497e9586fd95f4c482545dfde737fd196255f83e01cc01ac4ae11cf10f813",
+        "30440220556740baa474fb9dd90416c734a69eefb27c77633260a483055a0d59b9c3e4c302202632e749aee62ada9e7e2d76eeae3263bf11cff1b38533348e73140deca4efa5",
         144, '0');
 
     public static String getDOTNominateSingleHashScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
-        // ScriptData argTargetCount = sac.getBufer(1);
-        // ScriptData argTargetAddr = sac.getArgumentRightJustified(512);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
         ScriptData argTargetCount = sac.getArgument(1);
         ScriptData argTargetAddrs = sac.getArgumentAll();
 
@@ -269,8 +310,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -280,14 +325,17 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").showMessage("DOT").showMessage("Nomint").showWrap("PRESS", "BUTToN")
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("DOT").showMessage("Nomint").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
     }
 
     public static String DOTNominateSingleHashScriptSignature = Strings.padStart(
-        "30450220607247af076ff32bc032bb8b46bcf34b161e32908191acb9d3d0a2382ccc90df022100d6058bf876a5660d76be18b826a0baa541953f1d6d3eaa27787a56c9b13b96d8",
+        "3044022040740b746887633fcf14b7839284629624f4f752dc1723771ce2b955a83fdbca02200825ee3e8b3e7d20b35468013e78a1e8ef66e4ce807e5082ff0f33b7deab1008",
         144, '0');
 
     public static String getDOTNominateDoubleHashScript() {
@@ -295,13 +343,17 @@ public class DotScript {
         ScriptData argCallIndex = sac.getArgument(2);
         // ScriptData argTargetCount = sac.getBufer(1);
         // ScriptData argTargetAddr = sac.getArgumentRightJustified(512);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
         ScriptData argTargetCount = sac.getArgument(1);
         ScriptData argTargetAddrs = sac.getArgumentAll();
 
@@ -320,8 +372,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -331,30 +387,37 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").hash(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE2, HashType.Blake2b256)
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .hash(ScriptData.getDataBufferAll(Buffer.TRANSACTION), Buffer.CACHE2, HashType.Blake2b256)
             .clearBuffer(Buffer.TRANSACTION)
             .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.TRANSACTION).showMessage("DOT")
-            .showMessage("Nomint").showWrap("PRESS", "BUTToN")
+            .showMessage("Nomint").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
     }
 
     public static String DOTNominateDoubleHashScriptSignature = Strings.padStart(
-        "3045022100defb254d89d891d10fe2cfd775304470bb6d36358e6c7c5671798af58aed2b5902200e62740d9c487274ad0789cd6144fe6cbd7e87a26b2ba4612909dc8ab52c5904",
+        "3044022008b855108278aa1591ecef25b996c8c9f0c9e183d38c9e281f673af4c64cf0d902202d887bdc556c247cc3c2dc88b6e39fc63985bb22bebbfb7930cae88408ffdfd3",
         144, '0');
 
     public static String getDOTWithdrawScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
         ScriptData argSlashingSpansNum = sac.getArgument(4);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
             // set coinType to 0162
@@ -371,8 +434,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -382,26 +449,34 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").showMessage("DOT").showMessage("Withdr").showWrap("PRESS", "BUTToN")
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("DOT").showMessage("Withdr").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
+
     }
 
     public static String DOTWithdrawScriptSignature = Strings.padStart(
-        "3046022100824b324fb91724ded545287851555722a3362f3e4d11954d3cce2a387e1c7955022100c755f164f781c94c161bb58fe1b25b61fcdcaeb18b0059887a0441f2c9a22512",
+        "3045022100d656e1a567c08b3ee65387b4acd07b7e70838221b0f0f4c54f18998a851766cf02204f24766f4d3919a2b9877cc9f35a8cc9269b44bd09ab4f5ede8529e4b8f1b082",
         144, '0');
 
     public static String getDOTChillScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
         ScriptData argCallIndex = sac.getArgument(2);
-        ScriptData argMortalEra = sac.getArgumentRightJustified(5);
+        ScriptData argMortalEra = sac.getArgument(2);
         ScriptData argNonce = sac.getArgumentRightJustified(5);
         ScriptData argTip = sac.getArgumentRightJustified(5);
+        ScriptData argAssetIdLength = sac.getArgument(1);
+        ScriptData argAssetId = sac.getArgumentVariableLength(4);
+        ScriptData argMode = sac.getArgument(1);
         ScriptData argSpecVer = sac.getArgument(4);
         ScriptData argTxVer = sac.getArgument(4);
         ScriptData argGenesisHash = sac.getArgument(32);
         ScriptData argBlockHash = sac.getArgument(32);
+        ScriptData argMetaDataHash = sac.getArgument(32);
 
         String script = new ScriptAssembler()
             // set coinType to 0162
@@ -414,8 +489,12 @@ public class DotScript {
             .scaleEncode(argNonce, Buffer.TRANSACTION)
             // tip
             .scaleEncode(argTip, Buffer.TRANSACTION)
+            // AssetId
+            .ifEqual(argAssetIdLength, "00", new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").setBufferInt(argAssetIdLength, 0, 4)
+                    .scaleEncode(argAssetId, Buffer.TRANSACTION).getScript())
             // mode
-            .copyString("00")
+            .copyArgument(argMode)
             // spec ver
             .copyArgument(argSpecVer)
             // tx ver
@@ -425,14 +504,17 @@ public class DotScript {
             // block hash
             .copyArgument(argBlockHash)
             // metaDataHash
-            .copyString("00").showMessage("DOT").showMessage("Chill").showWrap("PRESS", "BUTToN")
+            .ifEqual(argMetaDataHash, "0000000000000000000000000000000000000000000000000000000000000000",
+                new ScriptAssembler().copyString("00").getScript(),
+                new ScriptAssembler().copyString("01").copyArgument(argMetaDataHash).getScript())
+            .showMessage("DOT").showMessage("Chill").showPressButton()
             // version=02 ScriptAssembler.hash=0E=ScriptAssembler.Blake2b256 sign=01=ECDSA
             .setHeader(HashType.Blake2b256, SignType.ECDSA).getScript();
         return script;
     }
 
     public static String DOTChillScriptSignature = Strings.padStart(
-        "30440220650736bcaf307a1c96e943731858589cf9a8771e72c2f9aaae24a32c6770feb2022066e7e2d153a0e5c9f905d74dab17b0a8326ecca38d20e67cfc960af78a6169d4",
+        "3046022100d689da3b206f4f13ee5a443999552614d21533c21c2ce32d25c8fc3a5643b97702210087c93edb352c2b4d24ff42eaecff04d3e9f16d397fb9acdb19e9278f00b319ed",
         144, '0');
 
     public static String getKSMScript() {
