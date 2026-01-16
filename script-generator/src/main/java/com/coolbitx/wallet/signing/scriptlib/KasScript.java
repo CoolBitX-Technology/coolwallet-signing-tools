@@ -162,14 +162,14 @@ public class KasScript {
             // blake2b hash all outputs
             .copyArgument(argHashKeyLength, Buffer.CACHE1).copyArgument(argHashKey, Buffer.CACHE1)
             .newHash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION,
-                ScriptAssembler.HashType.Blake2b256Mac)
+                ScriptAssembler.AdvancedHashType.Blake2b256Mac)
             .copyArgument(argReverseLockTime).copyArgument(argSubNetwokId).copyArgument(argReverseGas)
             .copyArgument(argPayload).copyArgument(argHashType).showMessage("KAS").insertString(addressScript)
             .clearBuffer(Buffer.CACHE1)
             .baseConvert(argReverseOutputAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset,
                 ScriptAssembler.littleEndian)
             .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 8).clearBuffer(Buffer.CACHE1).showPressButton()
-            .setHeader(ScriptAssembler.HashType.Blake2b256Mac, ScriptAssembler.SignType.SCHNORR).getScript();
+            .setHeader(ScriptAssembler.AdvancedHashType.Blake2b256Mac, ScriptAssembler.SignType.SCHNORR).getScript();
         return script;
     }
 

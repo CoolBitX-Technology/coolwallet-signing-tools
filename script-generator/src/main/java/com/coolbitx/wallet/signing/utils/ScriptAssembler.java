@@ -48,10 +48,14 @@ public class ScriptAssembler {
         return script;
     }
 
-    public enum HashType {
+    public interface AlgorithmType {
+        String toString();
+    }
+
+    public enum HashType implements AlgorithmType {
         NONE("00"), SHA1("01"), SHA256("02"), SHA512("03"), SHA3256("04"), SHA3512("05"), Keccak256("06"),
         Keccak512("07"), RipeMD160("08"), SHA256RipeMD160("09"), CRC16("0A"), DoubleSHA256("0D"), Blake2b256("0E"),
-        Blake2b512("0F"), SHA512256("10"), Blake3256("11"), Blake2b256Mac("13"), Blake2b512Mac("14");
+        Blake2b512("0F"), SHA512256("10"), Blake3256("11");
 
         private final String hashLabel;
 
@@ -71,6 +75,35 @@ public class ScriptAssembler {
         public static HashType fromInt(int type) {
             String typeString = String.format("%02x", type);
             for (HashType hashType : HashType.values()) {
+                if (hashType.hashLabel.equals(typeString)) {
+                    return hashType;
+                }
+            }
+            return NONE;
+        }
+    }
+
+    public enum AdvancedHashType implements AlgorithmType {
+        NONE("00"), Blake2b256Mac("13"), Blake2b512Mac("14"), Blake2b256Personal("15"), Blake2b512Personal("16");
+
+        private final String hashLabel;
+
+        private AdvancedHashType(String hashLabel) {
+            this.hashLabel = hashLabel;
+        }
+
+        @Override
+        public String toString() {
+            return hashLabel;
+        }
+
+        public int toInt() {
+            return Integer.parseInt(hashLabel, 16);
+        }
+
+        public static AdvancedHashType fromInt(int type) {
+            String typeString = String.format("%02x", type);
+            for (AdvancedHashType hashType : AdvancedHashType.values()) {
                 if (hashType.hashLabel.equals(typeString)) {
                     return hashType;
                 }
@@ -124,7 +157,7 @@ public class ScriptAssembler {
         }
     }
 
-    public ScriptAssembler setHeader(HashType hash, SignType sign) {
+    public ScriptAssembler setHeader(AlgorithmType hash, SignType sign) {
         if (!argType.equals("01")) {
             script = "03" + version.versionLabel + hash + sign + script;
         } else {
@@ -349,7 +382,7 @@ public class ScriptAssembler {
      * @param content
      * @return
      */
-    // @Deprecated
+    @Deprecated
     public ScriptAssembler btcScript(ScriptObjectAbstract scriptTypeData, int supportType, String content) {
         switch (supportType) {
         case 2:
@@ -591,7 +624,8 @@ public class ScriptAssembler {
      * @param hashType       The parameter is defined in enumeration class HashType
      * @return
      */
-    public ScriptAssembler newHash(ScriptObjectAbstract data, Buffer destinationBuf, HashType hashType) {
+    @Deprecated
+    public ScriptAssembler newHash(ScriptObjectAbstract data, Buffer destinationBuf, AdvancedHashType hashType) {
         if (version.getVersionNum() < 9) {
             version = versionType.version09;
         }
