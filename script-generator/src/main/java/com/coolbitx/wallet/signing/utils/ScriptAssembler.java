@@ -509,11 +509,26 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
+    @Deprecated
     public ScriptAssembler utxoDataPlaceholder(ScriptObjectAbstract data) {
         if (version.getVersionNum() < 7) {
             version = versionType.version07;
         }
         script += compose("C4", data, Buffer.TRANSACTION, 2, 0);
+        return this;
+    }
+
+    /**
+     * Send utxo data place holder length.
+     *
+     * @param data
+     * @return
+     */
+    public ScriptAssembler utxoDataPlaceholder() {
+        if (version.getVersionNum() < 7) {
+            version = versionType.version07;
+        }
+        script += compose("C4", null, Buffer.TRANSACTION, 2, 0);
         return this;
     }
 
@@ -630,6 +645,12 @@ public class ScriptAssembler {
             version = versionType.version09;
         }
         script += compose("5B", data, destinationBuf, 0, 0);
+        return this;
+    }
+
+    public ScriptAssembler advancedHash(ScriptRlpArray data, Buffer destinationBuf, AdvancedHashType hashType) {
+        int hashIndex = hashType.toInt();
+        script += compose("5C", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
         return this;
     }
 
