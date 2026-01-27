@@ -35,12 +35,12 @@ public class ScriptAssembler {
     private versionType version;
     private String script;
     private String firstParameter, secondParameter;
-    private String argType = "00";
+    private String reserveType = "00";
 
     public ScriptAssembler() {
         this.version = versionType.version00;
         this.script = "";
-        argType = "00";
+        reserveType = "00";
         clearParameter();
     }
 
@@ -158,10 +158,10 @@ public class ScriptAssembler {
     }
 
     public ScriptAssembler setHeader(AlgorithmType hash, SignType sign) {
-        if (!argType.equals("01")) {
+        if (!reserveType.equals("01")) {
             script = "03" + version.versionLabel + hash + sign + script;
         } else {
-            script = "05" + version.versionLabel + hash + sign + "00" + argType + script;
+            script = "05" + version.versionLabel + hash + sign + "00" + reserveType + script;
         }
         return this;
     }
@@ -192,14 +192,12 @@ public class ScriptAssembler {
             addIntParameter(dataBuf.getBufferParameter1());
             addIntParameter(dataBuf.getBufferParameter2());
         } else if (dataBuf instanceof ScriptRlpData) {
-            firstParameter += "A"; // RLP should from ARGUMENT
-            argType = "01";
+            firstParameter += "B";
             byte[] path = ((ScriptRlpData) dataBuf).getPath();
             argVar = String.format("%02d", path.length);
             argVar += Hex.encode(path);
         } else if (dataBuf instanceof ScriptRlpArray) {
             firstParameter += "A"; // RLP should from ARGUMENT
-            argType = "01";
             byte[] path = ((ScriptRlpArray) dataBuf).getPath();
             argVar = String.format("%02d", path.length);
             argVar += Hex.encode(path);
@@ -394,7 +392,8 @@ public class ScriptAssembler {
         case 4:
             return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014,220020")
                 // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
-                .insertString(content).switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]"); // switch
+                .insertString(content)
+                .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]"); // switch
                                                                                                           // redeemScript
                                                                                                           // end
         case 79:
@@ -719,8 +718,8 @@ public class ScriptAssembler {
     public ScriptAssembler setBufferInt(ScriptObjectAbstract data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         script += new ScriptAssembler()
-            .ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError).getScript()
-            + setB;
+            .ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError)
+            .getScript() + setB;
         return this;
     }
 
