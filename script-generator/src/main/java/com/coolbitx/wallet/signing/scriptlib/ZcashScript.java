@@ -29,7 +29,7 @@ public class ZcashScript {
             .switchString(argOutputScriptType, Buffer.CACHE2, !isTestnet ? "1CB8,1CBD" : "1D25,1CBA") // t1,t3:tm,t2
             .copyArgument(argOutputDest, Buffer.CACHE2)
             .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.HashType.DoubleSHA256)
-            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
+            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 26), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
                 ScriptAssembler.zeroInherit)
             .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
             .getScript();
@@ -50,6 +50,7 @@ public class ZcashScript {
         ScriptRlpData argChangeAmount = array.getRlpItemArgument();
         ScriptRlpData argChangeScriptType = array.getRlpItemArgument();
         ScriptRlpData argChangePath = array.getRlpItemArgument();
+        ScriptRlpData argOutputHashPersonal = array.getRlpItemArgument();
 
         ScriptRlpData argLockTime = array.getRlpItemArgument();
         ScriptRlpData argExpiryHeight = array.getRlpItemArgument();
@@ -57,12 +58,11 @@ public class ZcashScript {
 
         String addressScript = getAddressScript(isTestnet, argOutputScriptType, argOutputDest);
 
-        String script = new ScriptAssembler().setCoinType(0x00)
+        String script = new ScriptAssembler().setCoinType(0x85)
             .copyArgument(argReverseVersion)
             .copyArgument(argReverseGroupId)
             .copyArgument(argHashPrevouts)
             .copyArgument(argHashSequences)
-
             .baseConvert(argOutputAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
             // switch redeemScript P2PKH=00,P2SH=01
             .switchString(argOutputScriptType, Buffer.CACHE1, "1976A914,17A914")
@@ -85,7 +85,8 @@ public class ZcashScript {
                     .copyString("88AC", Buffer.CACHE1)
                     .getScript(),
                 "")
-            .hash(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.TRANSACTION, ScriptAssembler.HashType.DoubleSHA256)
+            .advancedHash(ScriptData.getDataBufferAll(Buffer.CACHE1), argOutputHashPersonal, Buffer.TRANSACTION,
+                ScriptAssembler.AdvancedHashType.Blake2b256Personal)
             .copyString("0000000000000000000000000000000000000000000000000000000000000000") // Hash JoinSplits
             .copyString("0000000000000000000000000000000000000000000000000000000000000000") // Hash ShieldedSpends
             .copyString("0000000000000000000000000000000000000000000000000000000000000000") // Hash ShieldedOutputs
@@ -100,7 +101,7 @@ public class ZcashScript {
             .insertString(addressScript)
             .showAmount(argOutputAmount, 8)
             .showPressButton()
-            .setHeader(ScriptAssembler.HashType.DoubleSHA256, ScriptAssembler.SignType.ECDSA)
+            .setHeader(ScriptAssembler.AdvancedHashType.Blake2b256Personal, ScriptAssembler.SignType.ECDSA)
             .getScript();
         return script;
     }
