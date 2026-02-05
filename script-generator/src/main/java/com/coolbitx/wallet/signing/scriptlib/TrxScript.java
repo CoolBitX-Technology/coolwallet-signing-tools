@@ -8,9 +8,9 @@ package com.coolbitx.wallet.signing.scriptlib;
 import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
-import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
 import com.google.common.base.Strings;
 
@@ -33,6 +33,7 @@ public class TrxScript {
         System.out.println("Trx Freeze V2: \n" + getTRXFreezeV2Script() + "\n");
         System.out.println("Trx Unfreeze V2: \n" + getTRXUnfreezeV2Script() + "\n");
         System.out.println("Trx Cancel All Unfreeze V2: \n" + getTRXCancelAllUnfreezeV2Script() + "\n");
+        System.out.println("Trx Two Transfers: \n" + getTrxTwoTransferScript() + "\n");
     }
 
     private static int typeString = 2;
@@ -923,4 +924,132 @@ public class TrxScript {
     }
 
     public static String TRXWithdrawExpireUnfreezeScriptSignature = Strings.padStart("3046022100abfa3c6ac84c20fe91d630b7f83c822fa6e037e7bb6de2d17eba4e3997f9fa9a022100dc45c119c277363849e08c181d8f61a80795ddd30469d4fb3091ccd6af6a7fe5", 144, '0');
+
+    private static String getTrxTwoTransferScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+
+        ScriptData argIsTrc20 = sac.getArgument(1); // 00: false, 01: true
+
+        // coin transfer arguments
+        ScriptData argBlockBytes = sac.getArgument(2);
+        ScriptData argBlockHash = sac.getArgument(8);
+        ScriptData argExpiration = sac.getArgumentRightJustified(10);
+        ScriptData argOwnerAddr = sac.getArgument(21);
+        ScriptData argToAddr = sac.getArgument(21);
+        ScriptData argAmount = sac.getArgumentRightJustified(10);
+        ScriptData argTimestamp = sac.getArgumentRightJustified(10);
+
+        // token transfer arguments
+        ScriptData argTokenInfo = sac.getArgumentUnion(0, 29);
+        ScriptData argDecimal = sac.getArgument(1);
+        ScriptData argNameLength = sac.getArgument(1);
+        ScriptData argName = sac.getArgumentVariableLength(7);
+        ScriptData argContractAddr = sac.getArgument(20);
+        ScriptData argSign = sac.getArgument(72);
+        ScriptData argTo = sac.getArgument(20);
+        ScriptData argValue = sac.getArgument(12);
+        ScriptData argFeeLimit = sac.getArgumentRightJustified(10);
+
+        // coin transfer script
+        String trxScript = new ScriptAssembler()
+            // set coinType to C3
+            .setCoinType(0xC3)
+            // ref_block_bytes
+            .copyString("0a").protobuf(argBlockBytes, typeString)
+            // ref_block_hash
+            .copyString("22").protobuf(argBlockHash, typeString)
+            // expiration
+            .copyString("40").protobuf(argExpiration, typeInt)
+            // contract object
+            .copyString("5a").arrayPointer()
+            // contract type
+            .copyString("0801")
+            // parameter object
+            .copyString("12").arrayPointer()
+            // type url
+            .copyString("0a2d")
+            .copyString(HexUtil.toHexString("type.googleapis.com/protocol.TransferContract".getBytes()))
+            // value object
+            .copyString("12").arrayPointer()
+            // owner address
+            .copyString("0a").protobuf(argOwnerAddr, typeString)
+            // to address
+            .copyString("12").protobuf(argToAddr, typeString)
+            // amount
+            .copyString("18").protobuf(argAmount, typeInt).arrayEnd().arrayEnd().arrayEnd()
+            // timestamp
+            .copyString("70").protobuf(argTimestamp, typeInt).showMessage("TRX").copyArgument(argToAddr, Buffer.CACHE2)
+            .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
+            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
+                ScriptAssembler.zeroInherit)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1)).showAmount(argAmount, 6)
+            .showWrap("PRESS", "BUTToN")
+            // .setHeader(HashType.SHA256, SignType.ECDSA)
+            .getScript();
+
+        // token transfer script
+        String trc20Script = new ScriptAssembler()
+            // set coinType to C3
+            .setCoinType(0xC3)
+            // ref_block_bytes
+            .copyString("0a").protobuf(argBlockBytes, typeString)
+            // ref_block_hash
+            .copyString("22").protobuf(argBlockHash, typeString)
+            // expiration
+            .copyString("40").protobuf(argExpiration, typeInt)
+            // contract object
+            .copyString("5a").arrayPointer()
+            // contract type
+            .copyString("081f")
+            // parameter object
+            .copyString("12").arrayPointer()
+            // type url
+            .copyString("0a31")
+            .copyString(HexUtil.toHexString("type.googleapis.com/protocol.TriggerSmartContract".getBytes()))
+            // value object
+            .copyString("12").arrayPointer()
+            // owner address
+            .copyString("0a").copyString("41", Buffer.CACHE2).copyArgument(argOwnerAddr, Buffer.CACHE2)
+            .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+            // contract address
+            .copyString("12").clearBuffer(Buffer.CACHE2).copyString("41", Buffer.CACHE2)
+            .copyArgument(argContractAddr, Buffer.CACHE2)
+            .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString)
+            // data
+            .copyString("22").clearBuffer(Buffer.CACHE2).copyString("a9059cbb", Buffer.CACHE2)
+            .copyString("000000000000000000000000", Buffer.CACHE2).copyArgument(argTo, Buffer.CACHE2)
+            .copyString("0000000000000000000000000000000000000000", Buffer.CACHE2).copyArgument(argValue, Buffer.CACHE2)
+            .protobuf(ScriptData.getDataBufferAll(Buffer.CACHE2), typeString).arrayEnd().arrayEnd().arrayEnd()
+            // timestamp
+            .copyString("70").protobuf(argTimestamp, typeInt)
+            // fee limit
+            .copyString("9001").protobuf(argFeeLimit, typeInt)
+            // display chain
+            .showMessage("TRX")
+            // display token
+            .clearBuffer(Buffer.CACHE2)
+            .ifSigned(argTokenInfo, argSign, "",
+                new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
+            .setBufferInt(argNameLength, 1, 7).copyArgument(argName, Buffer.CACHE2)
+            .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2))
+            // display to address
+            .clearBuffer(Buffer.CACHE2).copyString("41", Buffer.CACHE2).copyArgument(argTo, Buffer.CACHE2)
+            .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
+            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
+                ScriptAssembler.zeroInherit)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+            // display amount
+            .setBufferInt(argDecimal, 0, 20).showAmount(argValue, ScriptData.bufInt).showPressButton()
+            // version=03 ScriptAssembler.hash=02=ScriptAssembler.SHA256 sign=01=ECDSA
+            // .setHeader(HashType.SHA256, SignType.ECDSA)
+            .getScript();
+
+
+        String script = new ScriptAssembler()
+        .ifEqual(argIsTrc20, "01" , trc20Script, trxScript)
+        .setHeader(HashType.SHA256, SignType.ECDSA)
+        .getScript();
+
+        return script;
+    }
 }
