@@ -35,12 +35,12 @@ public class ScriptAssembler {
     private versionType version;
     private String script;
     private String firstParameter, secondParameter;
-    private String argType = "00";
+    private String reserveType = "00";
 
     public ScriptAssembler() {
         this.version = versionType.version00;
         this.script = "";
-        argType = "00";
+        reserveType = "00";
         clearParameter();
     }
 
@@ -48,10 +48,15 @@ public class ScriptAssembler {
         return script;
     }
 
-    public enum HashType {
+    public interface AlgorithmType {
+
+        String toString();
+    }
+
+    public enum HashType implements AlgorithmType {
         NONE("00"), SHA1("01"), SHA256("02"), SHA512("03"), SHA3256("04"), SHA3512("05"), Keccak256("06"),
         Keccak512("07"), RipeMD160("08"), SHA256RipeMD160("09"), CRC16("0A"), DoubleSHA256("0D"), Blake2b256("0E"),
-        Blake2b512("0F"), SHA512256("10"), Blake3256("11"), Blake2b256Mac("13"), Blake2b512Mac("14");
+        Blake2b512("0F"), SHA512256("10"), Blake3256("11");
 
         private final String hashLabel;
 
@@ -71,6 +76,35 @@ public class ScriptAssembler {
         public static HashType fromInt(int type) {
             String typeString = String.format("%02x", type);
             for (HashType hashType : HashType.values()) {
+                if (hashType.hashLabel.equals(typeString)) {
+                    return hashType;
+                }
+            }
+            return NONE;
+        }
+    }
+
+    public enum AdvancedHashType implements AlgorithmType {
+        NONE("00"), Blake2b256Mac("13"), Blake2b512Mac("14"), Blake2b256Personal("15"), Blake2b512Personal("16");
+
+        private final String hashLabel;
+
+        private AdvancedHashType(String hashLabel) {
+            this.hashLabel = hashLabel;
+        }
+
+        @Override
+        public String toString() {
+            return hashLabel;
+        }
+
+        public int toInt() {
+            return Integer.parseInt(hashLabel, 16);
+        }
+
+        public static AdvancedHashType fromInt(int type) {
+            String typeString = String.format("%02x", type);
+            for (AdvancedHashType hashType : AdvancedHashType.values()) {
                 if (hashType.hashLabel.equals(typeString)) {
                     return hashType;
                 }
@@ -124,11 +158,11 @@ public class ScriptAssembler {
         }
     }
 
-    public ScriptAssembler setHeader(HashType hash, SignType sign) {
-        if (!argType.equals("01")) {
+    public ScriptAssembler setHeader(AlgorithmType hash, SignType sign) {
+        if (!reserveType.equals("01")) {
             script = "03" + version.versionLabel + hash + sign + script;
         } else {
-            script = "05" + version.versionLabel + hash + sign + "00" + argType + script;
+            script = "05" + version.versionLabel + hash + sign + "00" + reserveType + script;
         }
         return this;
     }
@@ -159,14 +193,12 @@ public class ScriptAssembler {
             addIntParameter(dataBuf.getBufferParameter1());
             addIntParameter(dataBuf.getBufferParameter2());
         } else if (dataBuf instanceof ScriptRlpData) {
-            firstParameter += "A"; // RLP should from ARGUMENT
-            argType = "01";
+            firstParameter += "B";
             byte[] path = ((ScriptRlpData) dataBuf).getPath();
             argVar = String.format("%02d", path.length);
             argVar += Hex.encode(path);
         } else if (dataBuf instanceof ScriptRlpArray) {
-            firstParameter += "A"; // RLP should from ARGUMENT
-            argType = "01";
+            firstParameter += "B";
             byte[] path = ((ScriptRlpArray) dataBuf).getPath();
             argVar = String.format("%02d", path.length);
             argVar += Hex.encode(path);
@@ -180,7 +212,7 @@ public class ScriptAssembler {
 
         if (null == destBuf) {
             firstParameter += "7"; // This parameter should be 0, but it would affect existing scripts, so it's
-                                   // kept as is
+            // kept as is
         } else {
             switch (destBuf) {
             case TRANSACTION:
@@ -316,14 +348,14 @@ public class ScriptAssembler {
     /**
      * Copy string to destination buffer with switch condition.
      *
-     * @param conditionData  One byte condition data, number only(
-     *                       "00","01","02"...). For example, if the condition data
-     *                       is "01", will copy the second(start from zero) string
-     *                       in the stringArray to destination buffer. If
-     *                       conditionData is greater the the size of stringArray or
-     *                       less zero will throw 0x6A0D error.
+     * @param conditionData One byte condition data, number only(
+     * "00","01","02"...). For example, if the condition data is "01", will copy
+     * the second(start from zero) string in the stringArray to destination
+     * buffer. If conditionData is greater the the size of stringArray or less
+     * zero will throw 0x6A0D error.
      * @param destinationBuf The destination buffer.
-     * @param stringArray    The string array concatenate with comma(ex. "A,B,C,D").
+     * @param stringArray The string array concatenate with comma(ex.
+     * "A,B,C,D").
      * @return
      */
     public ScriptAssembler switchString(ScriptObjectAbstract conditionData, Buffer destinationBuf, String stringArray) {
@@ -349,7 +381,7 @@ public class ScriptAssembler {
      * @param content
      * @return
      */
-    // @Deprecated
+    @Deprecated
     public ScriptAssembler btcScript(ScriptObjectAbstract scriptTypeData, int supportType, String content) {
         switch (supportType) {
         case 2:
@@ -361,9 +393,9 @@ public class ScriptAssembler {
         case 4:
             return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014,220020")
                 // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
-                .insertString(content).switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]"); // switch
-                                                                                                          // redeemScript
-                                                                                                          // end
+                .insertString(content)
+                // switch redeemScript end
+                .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]");
         case 79:
             return switchString(scriptTypeData, Buffer.TRANSACTION, "3F76A914,3DA914").insertString(content)
                 .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
@@ -476,6 +508,7 @@ public class ScriptAssembler {
      * @param data
      * @return
      */
+    @Deprecated
     public ScriptAssembler utxoDataPlaceholder(ScriptObjectAbstract data) {
         if (version.getVersionNum() < 7) {
             version = versionType.version07;
@@ -485,8 +518,22 @@ public class ScriptAssembler {
     }
 
     /**
-     * Check whether the data is in range of asc-ii code encode (0x20~0x7e, except
-     * 0x23(")) or not.
+     * Send utxo data place holder length.
+     *
+     * @param data
+     * @return
+     */
+    public ScriptAssembler utxoDataPlaceholder() {
+        if (version.getVersionNum() < 7) {
+            version = versionType.version07;
+        }
+        script += compose("C4", null, Buffer.TRANSACTION, 2, 0);
+        return this;
+    }
+
+    /**
+     * Check whether the data is in range of asc-ii code encode (0x20~0x7e,
+     * except 0x23(")) or not.
      *
      * @param data
      * @return
@@ -497,9 +544,9 @@ public class ScriptAssembler {
     }
 
     /**
-     * Copy buffer data and put the output to transaction buffer. At the same time
-     * will check whether the data is in range of asc-ii code encode (0x20~0x7e,
-     * except 0x23(")) or not.
+     * Copy buffer data and put the output to transaction buffer. At the same
+     * time will check whether the data is in range of asc-ii code encode
+     * (0x20~0x7e, except 0x23(")) or not.
      *
      * @param data
      * @return
@@ -509,9 +556,9 @@ public class ScriptAssembler {
     }
 
     /**
-     * Copy buffer data and put the output to destination buffer. At the same time
-     * will check whether the data is in range of asc-ii code encode (0x20~0x7e,
-     * except 0x23(")) or not.
+     * Copy buffer data and put the output to destination buffer. At the same
+     * time will check whether the data is in range of asc-ii code encode
+     * (0x20~0x7e, except 0x23(")) or not.
      *
      * @param data
      * @param destinationBuf The destination buffer.
@@ -524,16 +571,15 @@ public class ScriptAssembler {
     /**
      * Convert the data encode and put the output to destination buffer.
      *
-     * @param data           The data should to encode.
+     * @param data The data should to encode.
      * @param destinationBuf The destination of the encoded data.
-     * @param outputLimit    The limit length of encoded result.
-     * @param charset        The name of the charset requested: "binaryCharset",
-     *                       "hexadecimalCharset", "bcdCharset", "decimalCharset",
-     *                       "binary32Charset", "base32BitcoinCashCharset",
-     *                       "base58Charset", "extentetCharset".
-     * @param baseConvertArg The number of the base-cenoding requested: leftJustify
-     *                       = 0x01, littleEndian = 0x02, zeroInherit = 0x04,
-     *                       bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
+     * @param outputLimit The limit length of encoded result.
+     * @param charset The name of the charset requested: "binaryCharset",
+     * "hexadecimalCharset", "bcdCharset", "decimalCharset", "binary32Charset",
+     * "base32BitcoinCashCharset", "base58Charset", "extentetCharset".
+     * @param baseConvertArg The number of the base-cenoding requested:
+     * leftJustify = 0x01, littleEndian = 0x02, zeroInherit = 0x04,
+     * bitLeftJustify8to5 = 0x08, inLittleEndian = 0x10.
      * @return
      */
     public ScriptAssembler baseConvert(ScriptObjectAbstract data, Buffer destinationBuf, int outputLimit,
@@ -571,9 +617,9 @@ public class ScriptAssembler {
     /**
      * Hash data and put the output to destination buffer.
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
-     * @param hashType       The parameter is defined in enumeration class HashType
+     * @param hashType The parameter is defined in enumeration class HashType
      * @return
      */
     public ScriptAssembler hash(ScriptObjectAbstract data, Buffer destinationBuf, HashType hashType) {
@@ -583,15 +629,16 @@ public class ScriptAssembler {
     }
 
     /**
-     * Hash data and put the output to destination buffer. NOTE: todo implement with
-     * script rlp data
+     * Hash data and put the output to destination buffer. 
+     * NOTE: replaced by advancedHash
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
-     * @param hashType       The parameter is defined in enumeration class HashType
+     * @param hashType The parameter is defined in enumeration class HashType
      * @return
      */
-    public ScriptAssembler newHash(ScriptObjectAbstract data, Buffer destinationBuf, HashType hashType) {
+    @Deprecated
+    public ScriptAssembler newHash(ScriptObjectAbstract data, Buffer destinationBuf, AdvancedHashType hashType) {
         if (version.getVersionNum() < 9) {
             version = versionType.version09;
         }
@@ -600,9 +647,33 @@ public class ScriptAssembler {
     }
 
     /**
-     * Derive public key by derive path and put the output to destination buffer.
+     * Hash data and put the output to destination buffer
      *
-     * @param pathData       Derive path.
+     * @param data The input data should be rlp encoded. And the first item should be the data to hash, the second item should be the context to hash.
+     * @param destinationBuf The destination buffer.
+     * @param hashType The parameter is defined in enumeration class
+     * AdvancedHashType
+     * @return
+     */
+    public ScriptAssembler advancedHash(ScriptRlpArray data, Buffer destinationBuf, AdvancedHashType hashType) {
+        int hashIndex = hashType.toInt();
+        script += compose("5C", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
+        return this;
+    }
+
+    public ScriptAssembler advancedHash(ScriptObjectAbstract data, ScriptObjectAbstract key, Buffer destinationBuf,
+        AdvancedHashType hashType) {
+        int hashIndex = hashType.toInt();
+        script += compose("5D", key, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
+        script += compose("5A", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
+        return this;
+    }
+
+    /**
+     * Derive public key by derive path and put the output to destination
+     * buffer.
+     *
+     * @param pathData Derive path.
      * @param destinationBuf The destination buffer.
      * @return
      */
@@ -614,7 +685,7 @@ public class ScriptAssembler {
     /**
      * Compute Bech32 ploymod checksum and put the output to destination buffer.
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
      * @return
      */
@@ -627,9 +698,10 @@ public class ScriptAssembler {
     }
 
     /**
-     * Compute Bech3m2 ploymod checksum and put the output to destination buffer.
+     * Compute Bech3m2 ploymod checksum and put the output to destination
+     * buffer.
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
      * @return
      */
@@ -644,7 +716,7 @@ public class ScriptAssembler {
     /**
      * Compute BCH ploymod checksum and put the output to destination buffer.
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
      * @return
      */
@@ -664,8 +736,8 @@ public class ScriptAssembler {
     public ScriptAssembler setBufferInt(ScriptObjectAbstract data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         script += new ScriptAssembler()
-            .ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError).getScript()
-            + setB;
+            .ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError)
+            .getScript() + setB;
         return this;
     }
 
@@ -706,9 +778,8 @@ public class ScriptAssembler {
      * Padding zero to the destination buffer.
      *
      * @param destinationBuf Destination buffer.
-     * @param base           The number of padding zero is the base minus the
-     *                       remainder of bufferInt divided by base(base -
-     *                       (bufferInt % base)).
+     * @param base The number of padding zero is the base minus the remainder of
+     * bufferInt divided by base(base - (bufferInt % base)).
      * @return
      */
     public ScriptAssembler paddingZero(Buffer destinationBuf, int base) {
@@ -730,9 +801,9 @@ public class ScriptAssembler {
      * If argData equals to expect, the the card execute the trueStatement,
      * otherwise execute the falseStatement.
      *
-     * @param argData        Requirement.
-     * @param expect         Analyzing conditions.
-     * @param trueStatement  The script wanna execute when the status is true.
+     * @param argData Requirement.
+     * @param expect Analyzing conditions.
+     * @param trueStatement The script wanna execute when the status is true.
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
@@ -772,13 +843,13 @@ public class ScriptAssembler {
     }
 
     /**
-     * If the value of argData lies between min and max(min ≤ argData ≤ max) then
-     * run trueStatement; if not, please run falseStatement.
+     * If the value of argData lies between min and max(min ≤ argData ≤ max)
+     * then run trueStatement; if not, please run falseStatement.
      *
-     * @param argData        Requirement.
-     * @param min            The min value of the range.
-     * @param max            The max value of the range.
-     * @param trueStatement  The script wanna execute when the status is true.
+     * @param argData Requirement.
+     * @param min The min value of the range.
+     * @param max The max value of the range.
+     * @param trueStatement The script wanna execute when the status is true.
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
@@ -803,14 +874,14 @@ public class ScriptAssembler {
     }
 
     /**
-     * Use CoolBitX public key to verify that the signature is valid or not. If the
-     * result is true, the the card execute the trueStatement, otherwise execute the
-     * falseStatement.
+     * Use CoolBitX public key to verify that the signature is valid or not. If
+     * the result is true, the the card execute the trueStatement, otherwise
+     * execute the falseStatement.
      *
-     * @param argData        Requirement.
-     * @param signData       The encoded ECDSA(CBKey) signature. Signing:
-     *                       SHA256(argData).
-     * @param trueStatement  The script wanna execute when the status is true.
+     * @param argData Requirement.
+     * @param signData The encoded ECDSA(CBKey) signature. Signing:
+     * SHA256(argData).
+     * @param trueStatement The script wanna execute when the status is true.
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
@@ -885,7 +956,7 @@ public class ScriptAssembler {
     /**
      * Show transaction amount on card.
      *
-     * @param data    The transaction amount data.
+     * @param data The transaction amount data.
      * @param decimal The decimal in this transaction.
      * @return
      */
@@ -906,7 +977,7 @@ public class ScriptAssembler {
     /**
      * Protobuf decode data put the output to transaction buffer.
      *
-     * @param data     The input data.
+     * @param data The input data.
      * @param wireType
      * @return
      */
@@ -917,7 +988,7 @@ public class ScriptAssembler {
     /**
      * Protobuf decode data put the output to destination buffer.
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
      * @param wireType
      * @return
@@ -969,7 +1040,8 @@ public class ScriptAssembler {
      * Encode data from the last position point in arrayPointer function with
      * specified encoding.
      *
-     * @param type 0: protobuf, 1: rlp, 2: message pack map, 3: message pack array
+     * @param type 0: protobuf, 1: rlp, 2: message pack map, 3: message pack
+     * array
      * @return
      */
     public ScriptAssembler arrayEnd(int type) {
@@ -983,7 +1055,7 @@ public class ScriptAssembler {
     /**
      * Scale decode data and put the output to destination buffer.
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
      * @return
      */
@@ -998,7 +1070,7 @@ public class ScriptAssembler {
     /**
      * Scale encode data and put the output to destination buffer.
      *
-     * @param data           The input data.
+     * @param data The input data.
      * @param destinationBuf The destination buffer.
      * @return
      */
@@ -1015,11 +1087,10 @@ public class ScriptAssembler {
     /**
      * Message pack encode data and put the output to destination buffer.
      *
-     * @param type           0: Int, 1: String, 2: Boolean
-     * @param data           The input data. When type equals to Int, data is
-     *                       Hexadecimal. Type equals to String, data is ascii code
-     *                       staing. Type equals to Boolean, 0x00 means false, 0x01
-     *                       means true.
+     * @param type 0: Int, 1: String, 2: Boolean
+     * @param data The input data. When type equals to Int, data is Hexadecimal.
+     * Type equals to String, data is ascii code staing. Type equals to Boolean,
+     * 0x00 means false, 0x01 means true.
      * @param destinationBuf The destination buffer.
      * @return
      */
@@ -1035,8 +1106,8 @@ public class ScriptAssembler {
      * Message pack string type encode data and put the output to destination
      * buffer.
      *
-     * @param data           The input data. Only support String, data is ascii code
-     *                       staing.
+     * @param data The input data. Only support String, data is ascii code
+     * staing.
      * @param destinationBuf The destination buffer.
      * @return
      */
