@@ -5,15 +5,19 @@
  */
 package com.coolbitx.wallet.signing.scriptlib;
 
+import com.coolbitx.wallet.signing.utils.HexUtil;
 import com.coolbitx.wallet.signing.utils.ScriptArgumentComposer;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler;
-import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.HashType;
 import com.coolbitx.wallet.signing.utils.ScriptAssembler.SignType;
+import com.coolbitx.wallet.signing.utils.ScriptData;
 import com.coolbitx.wallet.signing.utils.ScriptData.Buffer;
-import com.coolbitx.wallet.signing.utils.HexUtil;
 
 public class XtzScript {
+
+    public static void main(String[] args) throws Exception {
+        listAll();
+    }
 
     public static void listAll() {
         System.out.println("XTZ Reveal: \n" + getTezosRevealScript() + "\n");
@@ -63,6 +67,8 @@ public class XtzScript {
                 .protobuf(argStorageLimit, typeInt)
                 // public key (33 Bytes)
                 .copyArgument(argPublicKey)
+                // presence_of_proof = false (no proof for non-tz4)
+                .copyString("00")
                 // Step 4. Define which parts of the arguments shall be showed on the screen to be validated.
                 .showMessage("XTZ")
                 .showMessage("Reveal")
