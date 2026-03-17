@@ -106,6 +106,6 @@ public class ZcashScript {
         return script;
     }
 
-    public static String ZECScriptSignature = Strings.padStart("3046022100a3204ca844ac7f31333226607b1c86a71940850ef75d4cb7ad25b4fd49cef0ba022100d6b6d7fd5aec8e77a837ec70a7a7419b343a49b0dfa6263c8b6ad196cc32e90d", 144, '0');
+    public static String ZECScriptSignature = Strings.padStart("3046022100eebe7b79978d11b265ceb3977a683df311d7d3a4844fc513a611d8ea20fb6d42022100ea45cb25c9aa448d693ec06334ee47a90f5dfdf84e868198cf957754c4547213", 144, '0');
 
 }

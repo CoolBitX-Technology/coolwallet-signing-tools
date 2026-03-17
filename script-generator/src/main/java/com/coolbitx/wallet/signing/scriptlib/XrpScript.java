@@ -24,6 +24,7 @@ public class XrpScript {
 
     public static void listAll() {
         System.out.println("Xrp: \n" + getXRPScript() + "\n");
+        System.out.println("Xrp new script: \n" + getXRPNewScript() + "\n");
         System.out.println("Xrp RLP: \n" + getXRPRlpArgumentScript() + "\n");
     }
 
@@ -76,7 +77,75 @@ public class XrpScript {
         return script;
     }
 
-    public static String XRPScriptSignature = "0000304402206B2A707864EB98033BF83A80E8FDD7FCF903CC059ABC0E4FBB317040B6E9AD1D02203DCD2BDC4480B88DB0D9DC74948BAF6BD62203E90AE39990978999ABEAEABA63";
+    public static String XRPScriptSignature = Strings.padStart(
+        "304402206B2A707864EB98033BF83A80E8FDD7FCF903CC059ABC0E4FBB317040B6E9AD1D02203DCD2BDC4480B88DB0D9DC74948BAF6BD62203E90AE39990978999ABEAEABA63",
+        144, '0');
+
+    public static String getXRPNewScript() {
+        ScriptRlpArray array = new ScriptRlpArray();
+        ScriptRlpData argFlags = array.getRlpItemArgument();
+        ScriptRlpData argSequence = array.getRlpItemArgument();
+        ScriptRlpData argDestinationTag = array.getRlpItemArgument();
+        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument();
+        ScriptRlpData argAmount = array.getRlpItemArgument();
+        ScriptRlpData argFee = array.getRlpItemArgument();
+        ScriptRlpData argPublicKey = array.getRlpItemArgument();
+        ScriptRlpData argAccount = array.getRlpItemArgument();
+        ScriptRlpData argDest = array.getRlpItemArgument();
+        ScriptRlpArray argMemos = array.getRlpArrayArgument();
+        ScriptRlpData argMemoData = argMemos.getRlpItemArgument();
+        ScriptRlpData argMemoType = argMemos.getRlpItemArgument();
+        ScriptRlpData argMemoFormat = argMemos.getRlpItemArgument();
+
+        String script = new ScriptAssembler().setCoinType(0x90)
+            .copyString("53545800")
+            .copyString("12") // TransactionType
+            .copyString("0000")
+            .isEmpty(argFlags, "", new ScriptAssembler().copyString("22").copyArgument(argFlags).getScript()) // Flags
+            .copyString("24") // Sequence
+            .copyArgument(argSequence)
+            .isEmpty(argDestinationTag, "",
+                new ScriptAssembler().copyString("2E").copyArgument(argDestinationTag).getScript()) // DestinationTag
+            .copyString("201B") // LastLedgerSequence, although optional, is strongly recommended
+            .copyArgument(argLastLedgerSequence)
+            .copyString("6140") // Amount
+            .copyArgument(argAmount)
+            .copyString("6840") // Fee
+            .copyArgument(argFee)
+            .copyString("7321") // SigningPubKey
+            .copyArgument(argPublicKey)
+            .copyString("8114") // Account
+            .copyArgument(argAccount)
+            .copyString("8314") // Destination
+            .copyArgument(argDest)
+            .isEmpty(argMemos, "", new ScriptAssembler().copyString("F9")
+                .copyString("EA")
+                .isEmpty(argMemoData, "", new ScriptAssembler().copyString("7C").copyArgument(argMemoData).getScript())
+                .isEmpty(argMemoType, "", new ScriptAssembler().copyString("7D").copyArgument(argMemoType).getScript())
+                .isEmpty(argMemoFormat, "",
+                    new ScriptAssembler().copyString("7E").copyArgument(argMemoFormat).getScript())
+                .copyString("E1")
+                .copyString("F1")
+                .getScript())
+            .showMessage("XRP")
+            .copyString("00", Buffer.CACHE2)
+            .copyArgument(argDest, Buffer.CACHE2)
+            .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
+            .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
+                Buffer.CACHE1)
+            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset,
+                ScriptAssembler.zeroInherit)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
+            .showAmount(argAmount, 6)
+            .showPressButton()
+            .setHeader(HashType.SHA512, SignType.ECDSA)
+            .getScript();
+        return script;
+    }
+
+    public static String XRPNewScriptSignature = Strings.padStart(
+        "304402207c10ec80d90b59e09f586c1ac76b0b7aba8d9bfc2c554ce3d9430b5590a5a1530220719885ad5cc9fde206739b20744b800d0b215af302f8a820f5b4ac307f9d08c8",
+        144, '0');
 
     public static String getXRPRlpArgumentScript() {
         ScriptRlpArray array = new ScriptRlpArray();
