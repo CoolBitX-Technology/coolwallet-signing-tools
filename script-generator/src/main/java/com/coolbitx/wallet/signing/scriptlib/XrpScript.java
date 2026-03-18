@@ -93,8 +93,8 @@ public class XrpScript {
         ScriptRlpData argAccount = array.getRlpItemArgument(); // 20 bytes
         ScriptRlpData argDest = array.getRlpItemArgument(); // 20 bytes
         ScriptRlpArray argMemos = array.getRlpArrayArgument(); // variable array of bytes or null
-        ScriptRlpData argMemoData = argMemos.getRlpItemArgument(); // variable bytes or null
         ScriptRlpData argMemoType = argMemos.getRlpItemArgument(); // variable byte or null
+        ScriptRlpData argMemoData = argMemos.getRlpItemArgument(); // variable bytes or null
         ScriptRlpData argMemoFormat = argMemos.getRlpItemArgument(); // variable byte or null
 
         String script = new ScriptAssembler().setCoinType(0x90)
@@ -144,7 +144,7 @@ public class XrpScript {
     }
 
     public static String XRPNewScriptSignature = Strings.padStart(
-        "304402207c10ec80d90b59e09f586c1ac76b0b7aba8d9bfc2c554ce3d9430b5590a5a1530220719885ad5cc9fde206739b20744b800d0b215af302f8a820f5b4ac307f9d08c8",
+        "3044022011a087b28a0011597df3e6b495d7601a972022ad7233fe3e1e98d10b00d0b3f9022020e3b9b6c2f2b44decc1b33388dc44b5dedf095a73e43914c4a1959f5a055ecb",
         144, '0');
 
     public static String getXRPRlpArgumentScript() {
