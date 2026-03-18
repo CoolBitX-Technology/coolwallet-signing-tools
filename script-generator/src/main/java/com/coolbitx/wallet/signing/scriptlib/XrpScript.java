@@ -83,19 +83,19 @@ public class XrpScript {
 
     public static String getXRPNewScript() {
         ScriptRlpArray array = new ScriptRlpArray();
-        ScriptRlpData argFlags = array.getRlpItemArgument();
-        ScriptRlpData argSequence = array.getRlpItemArgument();
-        ScriptRlpData argDestinationTag = array.getRlpItemArgument();
-        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument();
-        ScriptRlpData argAmount = array.getRlpItemArgument();
-        ScriptRlpData argFee = array.getRlpItemArgument();
-        ScriptRlpData argPublicKey = array.getRlpItemArgument();
-        ScriptRlpData argAccount = array.getRlpItemArgument();
-        ScriptRlpData argDest = array.getRlpItemArgument();
-        ScriptRlpArray argMemos = array.getRlpArrayArgument();
-        ScriptRlpData argMemoData = argMemos.getRlpItemArgument();
-        ScriptRlpData argMemoType = argMemos.getRlpItemArgument();
-        ScriptRlpData argMemoFormat = argMemos.getRlpItemArgument();
+        ScriptRlpData argFlags = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argDestinationTag = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argAmount = array.getRlpItemArgument(); // 7 bytes
+        ScriptRlpData argFee = array.getRlpItemArgument(); // 7 bytes
+        ScriptRlpData argPublicKey = array.getRlpItemArgument(); // 33 bytes
+        ScriptRlpData argAccount = array.getRlpItemArgument(); // 20 bytes
+        ScriptRlpData argDest = array.getRlpItemArgument(); // 20 bytes
+        ScriptRlpArray argMemos = array.getRlpArrayArgument(); // variable array of bytes or null
+        ScriptRlpData argMemoData = argMemos.getRlpItemArgument(); // variable bytes or null
+        ScriptRlpData argMemoType = argMemos.getRlpItemArgument(); // variable byte or null
+        ScriptRlpData argMemoFormat = argMemos.getRlpItemArgument(); // variable byte or null
 
         String script = new ScriptAssembler().setCoinType(0x90)
             .copyString("53545800")
@@ -120,8 +120,8 @@ public class XrpScript {
             .copyArgument(argDest)
             .isEmpty(argMemos, "", new ScriptAssembler().copyString("F9")
                 .copyString("EA")
-                .isEmpty(argMemoData, "", new ScriptAssembler().copyString("7C").copyArgument(argMemoData).getScript())
-                .isEmpty(argMemoType, "", new ScriptAssembler().copyString("7D").copyArgument(argMemoType).getScript())
+                .isEmpty(argMemoType, "", new ScriptAssembler().copyString("7C").copyArgument(argMemoType).getScript())
+                .isEmpty(argMemoData, "", new ScriptAssembler().copyString("7D").copyArgument(argMemoData).getScript())
                 .isEmpty(argMemoFormat, "",
                     new ScriptAssembler().copyString("7E").copyArgument(argMemoFormat).getScript())
                 .copyString("E1")
