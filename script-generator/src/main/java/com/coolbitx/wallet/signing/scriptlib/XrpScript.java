@@ -23,8 +23,9 @@ public class XrpScript {
     }
 
     public static void listAll() {
-        System.out.println("Xrp: \n" + getXRPScript() + "\n");
+        System.out.println("Xrp script: \n" + getXRPScript() + "\n");
         System.out.println("Xrp new script: \n" + getXRPNewScript() + "\n");
+        System.out.println("Xrp sign message script: \n" + getXRPMessageScript() + "\n");
         System.out.println("Xrp RLP: \n" + getXRPRlpArgumentScript() + "\n");
     }
 
@@ -145,6 +146,24 @@ public class XrpScript {
 
     public static String XRPNewScriptSignature = Strings.padStart(
         "3044022011a087b28a0011597df3e6b495d7601a972022ad7233fe3e1e98d10b00d0b3f9022020e3b9b6c2f2b44decc1b33388dc44b5dedf095a73e43914c4a1959f5a055ecb",
+        144, '0');
+
+    public static String getXRPMessageScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argMessage = sac.getArgumentAll();
+
+        String script = new ScriptAssembler().setCoinType(0x90)
+            .copyArgument(argMessage)
+            .showMessage("XRP")
+            .showWrap("MESSAGE", "")
+            .showPressButton()
+            .setHeader(HashType.SHA512, SignType.ECDSA)
+            .getScript();
+        return script;
+    }
+
+    public static String XRPMessageScriptSignature = Strings.padStart(
+        "304502203cb23566193592ff71e7a5bb347d97f2107e2cf1036cf435088a0f30bf78929d022100ed230715a43903adae1dd2b63fcb39259f827e7b528b193b51d4819e8eb230d9",
         144, '0');
 
     public static String getXRPRlpArgumentScript() {
