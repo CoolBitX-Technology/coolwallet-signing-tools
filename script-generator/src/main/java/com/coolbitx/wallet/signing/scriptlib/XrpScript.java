@@ -26,7 +26,6 @@ public class XrpScript {
         System.out.println("Xrp script: \n" + getXRPScript() + "\n");
         System.out.println("Xrp new script: \n" + getXRPNewScript() + "\n");
         System.out.println("Xrp sign message script: \n" + getXRPMessageScript() + "\n");
-        System.out.println("Xrp RLP: \n" + getXRPRlpArgumentScript() + "\n");
     }
 
     public static String getXRPScript() {
@@ -153,6 +152,7 @@ public class XrpScript {
         ScriptData argMessage = sac.getArgumentAll();
 
         String script = new ScriptAssembler().setCoinType(0x90)
+            .copyString("16585250205369676E6564204D6573736167653A0A") // \x16XRP Signed Message:\n
             .copyArgument(argMessage)
             .showMessage("XRP")
             .showWrap("MESSAGE", "")
@@ -163,56 +163,7 @@ public class XrpScript {
     }
 
     public static String XRPMessageScriptSignature = Strings.padStart(
-        "304502203cb23566193592ff71e7a5bb347d97f2107e2cf1036cf435088a0f30bf78929d022100ed230715a43903adae1dd2b63fcb39259f827e7b528b193b51d4819e8eb230d9",
+        "3045022100c506a4230844357bfb3ca1fe11c811302da05a7dc56de044dd149ce4f5471aa90220670efa881aaf65da22517348ca4ce4f1f5cbf3b793da377a050293b6ec13d1d4",
         144, '0');
-
-    public static String getXRPRlpArgumentScript() {
-        ScriptRlpArray array = new ScriptRlpArray();
-        ScriptRlpData argAccount = array.getRlpItemArgument();
-        ScriptRlpData argPublicKey = array.getRlpItemArgument();
-        ScriptRlpData argDest = array.getRlpItemArgument();
-        ScriptRlpData argAmount = array.getRlpItemArgument();
-        ScriptRlpData argFee = array.getRlpItemArgument();
-        ScriptRlpData argSequence = array.getRlpItemArgument();
-        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument();
-        ScriptRlpData argTag = array.getRlpItemArgument();
-        ScriptRlpData argFlags = array.getRlpItemArgument();
-
-        String script = new ScriptAssembler().setCoinType(0x90)
-            .copyString("5354580012000022")
-            .copyArgument(argFlags)
-            .copyString("24")
-            .copyArgument(argSequence)
-            .copyString("2E")
-            .copyArgument(argTag)
-            .copyString("201B")
-            .copyArgument(argLastLedgerSequence)
-            .copyString("6140")
-            .copyArgument(argAmount)
-            .copyString("6840")
-            .copyArgument(argFee)
-            .copyString("7321")
-            .copyArgument(argPublicKey)
-            .copyString("8114")
-            .copyArgument(argAccount)
-            .copyString("8314")
-            .copyArgument(argDest)
-            .showMessage("XRP")
-            .copyString("00", Buffer.CACHE2)
-            .copyArgument(argDest, Buffer.CACHE2)
-            .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
-            .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
-                Buffer.CACHE1)
-            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset,
-                ScriptAssembler.zeroInherit)
-            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
-            .showAmount(argAmount, 6)
-            .showPressButton()
-            .setHeader(HashType.SHA512, SignType.ECDSA)
-            .getScript();
-        return script;
-    }
-
-    public static String XRPRlpArgumentScriptSignature = Strings.padEnd("FA", 144, '0');
 
 }
