@@ -139,7 +139,8 @@ public class ScriptAssembler {
 
     public static enum versionType {
         version00(0, "00"), version02(2, "02"), version03(3, "03"), version04(4, "04"), version05(5, "05"),
-        version06(6, "06"), version07(7, "07"), version08(8, "08"), version09(9, "09");
+        version06(6, "06"), version07(7, "07"), version08(8, "08"), version09(9, "09"), version10(10, "0A"),
+        version11(11, "0B");
 
         private final int versionNum;
         private final String versionLabel;
@@ -663,6 +664,9 @@ public class ScriptAssembler {
 
     public ScriptAssembler advancedHash(ScriptObjectAbstract data, ScriptObjectAbstract key, Buffer destinationBuf,
         AdvancedHashType hashType) {
+        if (version.getVersionNum() < 10) {
+            version = versionType.version10;
+        }
         int hashIndex = hashType.toInt();
         script += compose("5D", key, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
         script += compose("5A", data, destinationBuf, hashIndex & 0xf, hashIndex >>> 4);
@@ -831,10 +835,16 @@ public class ScriptAssembler {
         return this;
     }
 
-    public ScriptAssembler isEmpty(ScriptObjectAbstract argData, String trueStatement, String falseStatement) {
+    public ScriptAssembler isEmpty(ScriptInterface argData, String trueStatement, String falseStatement) {
         if (version.getVersionNum() < 6) {
             version = versionType.version06;
         }
+        if (argData instanceof ScriptRlpArray) {
+            if (version.getVersionNum() < 11) {
+                version = versionType.version11;
+            }
+        }
+
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -1094,7 +1104,7 @@ public class ScriptAssembler {
      * @param destinationBuf The destination buffer.
      * @return
      */
-    public ScriptAssembler messagePack(int type, ScriptInterface data, Buffer destinationBuf) {
+    public ScriptAssembler messagePack(int type, ScriptObjectAbstract data, Buffer destinationBuf) {
         if (version.getVersionNum() < 6) {
             version = versionType.version06;
         }

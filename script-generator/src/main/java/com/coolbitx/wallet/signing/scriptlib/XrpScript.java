@@ -23,8 +23,9 @@ public class XrpScript {
     }
 
     public static void listAll() {
-        System.out.println("Xrp: \n" + getXRPScript() + "\n");
-        System.out.println("Xrp RLP: \n" + getXRPRlpArgumentScript() + "\n");
+        System.out.println("Xrp script: \n" + getXRPScript() + "\n");
+        System.out.println("Xrp new script: \n" + getXRPNewScript() + "\n");
+        System.out.println("Xrp sign message script: \n" + getXRPMessageScript() + "\n");
     }
 
     public static String getXRPScript() {
@@ -76,39 +77,56 @@ public class XrpScript {
         return script;
     }
 
-    public static String XRPScriptSignature = "0000304402206B2A707864EB98033BF83A80E8FDD7FCF903CC059ABC0E4FBB317040B6E9AD1D02203DCD2BDC4480B88DB0D9DC74948BAF6BD62203E90AE39990978999ABEAEABA63";
+    public static String XRPScriptSignature = Strings.padStart(
+        "304402206B2A707864EB98033BF83A80E8FDD7FCF903CC059ABC0E4FBB317040B6E9AD1D02203DCD2BDC4480B88DB0D9DC74948BAF6BD62203E90AE39990978999ABEAEABA63",
+        144, '0');
 
-    public static String getXRPRlpArgumentScript() {
+    public static String getXRPNewScript() {
         ScriptRlpArray array = new ScriptRlpArray();
-        ScriptRlpData argAccount = array.getRlpItemArgument();
-        ScriptRlpData argPublicKey = array.getRlpItemArgument();
-        ScriptRlpData argDest = array.getRlpItemArgument();
-        ScriptRlpData argAmount = array.getRlpItemArgument();
-        ScriptRlpData argFee = array.getRlpItemArgument();
-        ScriptRlpData argSequence = array.getRlpItemArgument();
-        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument();
-        ScriptRlpData argTag = array.getRlpItemArgument();
-        ScriptRlpData argFlags = array.getRlpItemArgument();
+        ScriptRlpData argFlags = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argDestinationTag = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argAmount = array.getRlpItemArgument(); // 7 bytes
+        ScriptRlpData argFee = array.getRlpItemArgument(); // 7 bytes
+        ScriptRlpData argPublicKey = array.getRlpItemArgument(); // 33 bytes
+        ScriptRlpData argAccount = array.getRlpItemArgument(); // 20 bytes
+        ScriptRlpData argDest = array.getRlpItemArgument(); // 20 bytes
+        ScriptRlpArray argMemos = array.getRlpArrayArgument(); // variable array of bytes or null
+        ScriptRlpData argMemoType = argMemos.getRlpItemArgument(); // variable byte or null
+        ScriptRlpData argMemoData = argMemos.getRlpItemArgument(); // variable bytes or null
+        ScriptRlpData argMemoFormat = argMemos.getRlpItemArgument(); // variable byte or null
 
         String script = new ScriptAssembler().setCoinType(0x90)
-            .copyString("5354580012000022")
-            .copyArgument(argFlags)
-            .copyString("24")
+            .copyString("53545800")
+            .copyString("12") // TransactionType
+            .copyString("0000")
+            .isEmpty(argFlags, "", new ScriptAssembler().copyString("22").copyArgument(argFlags).getScript()) // Flags
+            .copyString("24") // Sequence
             .copyArgument(argSequence)
-            .copyString("2E")
-            .copyArgument(argTag)
-            .copyString("201B")
+            .isEmpty(argDestinationTag, "",
+                new ScriptAssembler().copyString("2E").copyArgument(argDestinationTag).getScript()) // DestinationTag
+            .copyString("201B") // LastLedgerSequence, although optional, is strongly recommended
             .copyArgument(argLastLedgerSequence)
-            .copyString("6140")
+            .copyString("6140") // Amount
             .copyArgument(argAmount)
-            .copyString("6840")
+            .copyString("6840") // Fee
             .copyArgument(argFee)
-            .copyString("7321")
+            .copyString("7321") // SigningPubKey
             .copyArgument(argPublicKey)
-            .copyString("8114")
+            .copyString("8114") // Account
             .copyArgument(argAccount)
-            .copyString("8314")
+            .copyString("8314") // Destination
             .copyArgument(argDest)
+            .isEmpty(argMemos, "", new ScriptAssembler().copyString("F9")
+                .copyString("EA")
+                .isEmpty(argMemoType, "", new ScriptAssembler().copyString("7C").copyArgument(argMemoType).getScript())
+                .isEmpty(argMemoData, "", new ScriptAssembler().copyString("7D").copyArgument(argMemoData).getScript())
+                .isEmpty(argMemoFormat, "",
+                    new ScriptAssembler().copyString("7E").copyArgument(argMemoFormat).getScript())
+                .copyString("E1")
+                .copyString("F1")
+                .getScript())
             .showMessage("XRP")
             .copyString("00", Buffer.CACHE2)
             .copyArgument(argDest, Buffer.CACHE2)
@@ -125,6 +143,27 @@ public class XrpScript {
         return script;
     }
 
-    public static String XRPRlpArgumentScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String XRPNewScriptSignature = Strings.padStart(
+        "3044022011a087b28a0011597df3e6b495d7601a972022ad7233fe3e1e98d10b00d0b3f9022020e3b9b6c2f2b44decc1b33388dc44b5dedf095a73e43914c4a1959f5a055ecb",
+        144, '0');
+
+    public static String getXRPMessageScript() {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+        ScriptData argMessage = sac.getArgumentAll();
+
+        String script = new ScriptAssembler().setCoinType(0x90)
+            .copyString("16585250205369676E6564204D6573736167653A0A") // \x16XRP Signed Message:\n
+            .copyArgument(argMessage)
+            .showMessage("XRP")
+            .showWrap("MESSAGE", "")
+            .showPressButton()
+            .setHeader(HashType.SHA512, SignType.ECDSA)
+            .getScript();
+        return script;
+    }
+
+    public static String XRPMessageScriptSignature = Strings.padStart(
+        "3045022100c506a4230844357bfb3ca1fe11c811302da05a7dc56de044dd149ce4f5471aa90220670efa881aaf65da22517348ca4ce4f1f5cbf3b793da377a050293b6ec13d1d4",
+        144, '0');
 
 }
