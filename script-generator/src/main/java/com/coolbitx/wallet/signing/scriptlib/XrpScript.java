@@ -26,6 +26,7 @@ public class XrpScript {
         System.out.println("XRP script: \n" + getXRPScript() + "\n");
         System.out.println("XRP new script: \n" + getXRPNewScript() + "\n");
         System.out.println("XRP sign message script: \n" + getXRPMessageScript() + "\n");
+        System.out.println("XRP IOU RLUSD trust set script: \n" + getXRPRLUSDTrustSetScript() + "\n");
         System.out.println("XRP IOU trust set script: \n" + getXRPTrustSetScript() + "\n");
     }
 
@@ -167,52 +168,100 @@ public class XrpScript {
         "3045022100c506a4230844357bfb3ca1fe11c811302da05a7dc56de044dd149ce4f5471aa90220670efa881aaf65da22517348ca4ce4f1f5cbf3b793da377a050293b6ec13d1d4",
         144, '0');
 
-    public static String getXRPTrustSetScript() {
-        ScriptArgumentComposer sac = new ScriptArgumentComposer();
-        ScriptData argSequence = sac.getArgument(4);
-        ScriptData argLastLedgerSequence = sac.getArgument(4);
-        ScriptData argLimitAmount = sac.getArgument(8);
-        ScriptData argPadding = sac.getArgument(1);
-        ScriptData argFee = sac.getArgument(7);
-        ScriptData argPublicKey = sac.getArgument(33);
-        ScriptData argAccount = sac.getArgument(20);
-        // IOU Info
-        ScriptData argTokenInfo = sac.getArgumentUnion(0, 41);
-        ScriptData argNameLength = sac.getArgument(1);
-        ScriptData argName = sac.getArgumentVariableLength(20);
-        ScriptData argIssuerAccount = sac.getArgument(20);
-        ScriptData argTokenSign = sac.getArgument(72);
+    public static String getXRPRLUSDTrustSetScript() {
+        ScriptRlpArray array = new ScriptRlpArray();
+        ScriptRlpData argFlags = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argDestinationTag = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argLimitAmount = array.getRlpItemArgument(); // 8 bytes
+        ScriptRlpData argFee = array.getRlpItemArgument(); // 7 bytes
+        ScriptRlpData argPublicKey = array.getRlpItemArgument(); // 33 bytes
+        ScriptRlpData argAccount = array.getRlpItemArgument(); // 20 bytes
 
         String script = new ScriptAssembler().setCoinType(0x90)
             .copyString("53545800")
-            .copyString("120014")
-            .copyString("24")
+            .copyString("12") // TransactionType
+            .copyString("0014")
+            .isEmpty(argFlags, "", new ScriptAssembler().copyString("22").copyArgument(argFlags).getScript()) // Flags
+            .copyString("24") // Sequence
             .copyArgument(argSequence)
-            .copyString("201B")
+            .isEmpty(argDestinationTag, "", // DestinationTag
+                new ScriptAssembler().copyString("2E").copyArgument(argDestinationTag).getScript())
+            .copyString("201B") // LastLedgerSequence, although optional, is strongly recommended
             .copyArgument(argLastLedgerSequence)
-            .ifSigned(argTokenInfo, argTokenSign, "", ScriptAssembler.throwSEError)
-            .copyString("63")// [value][currency][issuer AccountID]
+            .copyString("63")
             .copyArgument(argLimitAmount)
-            .setBufferIntFromDataLength(argIssuerAccount)
-            .copyArgument(argName)
-            .copyArgument(argIssuerAccount)
-            .copyString("6840")
+            .copyString("524C555344000000000000000000000000000000")
+            .copyString("E5E961C6A025C9404AA7B662DD1DF975BE75D13E")
+            .copyString("6840") // Fee
             .copyArgument(argFee)
-            .copyString("7321")
+            .copyString("7321") // SigningPubKey
             .copyArgument(argPublicKey)
-            .copyString("8114")
+            .copyString("8114") // Account
             .copyArgument(argAccount)
             .showMessage("XRP")
             .showMessage("TRUST")
-            .setBufferInt(argNameLength, 1, 7)
-            .copyArgument(argName, Buffer.CACHE1)
-            .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
-            .clearBuffer(Buffer.CACHE1)
+            .showMessage("RLUSD")
+            .copyString("724D78434B62454477717237365175686553554D64454766344239784A386D354465", Buffer.CACHE1)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+            .showPressButton()
+            .setHeader(HashType.SHA512, SignType.ECDSA)
+            .getScript();
+        return script;
+    }
+
+    public static String XRPRLUSDTrustSetScriptSignature = Strings.padStart(
+        "304502200751b793863ee64da47c7352cabda8a7be3ae63d10e75cb543d16c40bce60480022100d631f5d53d233516b86dae5c4a523973894ca28655af391e1b3d03f0279b31df",
+        144, '0');
+
+    public static String getXRPTrustSetScript() {
+        ScriptRlpArray array = new ScriptRlpArray();
+        ScriptRlpData argFlags = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argDestinationTag = array.getRlpItemArgument(); // 4 bytes or null
+        ScriptRlpData argLastLedgerSequence = array.getRlpItemArgument(); // 4 bytes
+        ScriptRlpData argLimitAmount = array.getRlpItemArgument(); // 8 bytes
+        ScriptRlpData argFee = array.getRlpItemArgument(); // 7 bytes
+        ScriptRlpData argPublicKey = array.getRlpItemArgument(); // 33 bytes
+        ScriptRlpData argAccount = array.getRlpItemArgument(); // 20 bytes
+        // IOU Info
+        ScriptRlpData argTokenInfo = array.getRlpItemArgument(); // 48 bytes[nameLength(1B)][name(padding zero)(7B)][tokenCode(20B)][issuerAccount(20B)]
+
+        String script = new ScriptAssembler().setCoinType(0x90)
+            .copyString("53545800")
+            .copyString("12") // TransactionType
+            .copyString("0014")
+            .isEmpty(argFlags, "", new ScriptAssembler().copyString("22").copyArgument(argFlags).getScript()) // Flags
+            .copyString("24") // Sequence
+            .copyArgument(argSequence)
+            .isEmpty(argDestinationTag, "", // DestinationTag
+                new ScriptAssembler().copyString("2E").copyArgument(argDestinationTag).getScript())
+            .copyString("201B") // LastLedgerSequence, although optional, is strongly recommended
+            .copyArgument(argLastLedgerSequence)
+            .copyArgument(argTokenInfo, Buffer.CACHE1)
+            .copyString("63")
+            .copyArgument(argLimitAmount)
+            .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 8, 40))
+            .copyString("6840") // Fee
+            .copyArgument(argFee)
+            .copyString("7321") // SigningPubKey
+            .copyArgument(argPublicKey)
+            .copyString("8114") // Account
+            .copyArgument(argAccount)
+            .showMessage("XRP")
+            .showMessage("TRUST")
+            .copyString(HexUtil.toHexString("@"), Buffer.CACHE1)
+            .setBufferInt(ScriptData.getBuffer(Buffer.CACHE1, 0, 1), 1, 7)
+            .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 1, ScriptData.bufInt), Buffer.CACHE1)
+            .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1, 48))
             .copyString("00", Buffer.CACHE2)
-            .copyArgument(argIssuerAccount, Buffer.CACHE2)
+            .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 28, 20), Buffer.CACHE2)
             .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
+            .clearBuffer(Buffer.CACHE1)
             .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
                 Buffer.CACHE1)
+
             .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset,
                 ScriptAssembler.zeroInherit)
             .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
@@ -223,6 +272,62 @@ public class XrpScript {
     }
 
     public static String XRPTrustSetScriptSignature = Strings.padStart(
-        "3045022100b1986907b0895be91ae1b9d3318f6bd62b130d55dc12d6298fd15fda7271426502202666797aa929d8c519abb9a8c34697c79fb0f344c1f962fce5a12a7a527ffe35",
+        "3046022100a13acf6e4e0be56b54a11ff62988c51cec49b8fa2fcf27fd81ab705f0f26855c022100e5f04deaaa0e431447f4defe11b15f24df7a95266efb55956029b07491d2da71",
         144, '0');
+
+    // public static String getXRPTrustSetScript() {
+    //     ScriptArgumentComposer sac = new ScriptArgumentComposer();
+    //     ScriptData argSequence = sac.getArgument(4);
+    //     ScriptData argLastLedgerSequence = sac.getArgument(4);
+    //     ScriptData argLimitAmount = sac.getArgument(8);
+    //     ScriptData argPadding = sac.getArgument(1);
+    //     ScriptData argFee = sac.getArgument(7);
+    //     ScriptData argPublicKey = sac.getArgument(33);
+    //     ScriptData argAccount = sac.getArgument(20);
+    //     // IOU Info
+    //     ScriptData argTokenInfo = sac.getArgumentUnion(0, 41);
+    //     ScriptData argNameLength = sac.getArgument(1);
+    //     ScriptData argName = sac.getArgumentVariableLength(20);
+    //     ScriptData argIssuerAccount = sac.getArgument(20);
+    //     ScriptData argTokenSign = sac.getArgument(72);
+
+    //     String script = new ScriptAssembler().setCoinType(0x90)
+    //         .copyString("53545800")
+    //         .copyString("120014")
+    //         .copyString("24")
+    //         .copyArgument(argSequence)
+    //         .copyString("201B")
+    //         .copyArgument(argLastLedgerSequence)
+    //         .ifSigned(argTokenInfo, argTokenSign, "", ScriptAssembler.throwSEError)
+    //         .copyString("63")// [value][currency][issuer AccountID]
+    //         .copyArgument(argLimitAmount)
+    //         .setBufferIntFromDataLength(argIssuerAccount)
+    //         .copyArgument(argName)
+    //         .copyArgument(argIssuerAccount)
+    //         .copyString("6840")
+    //         .copyArgument(argFee)
+    //         .copyString("7321")
+    //         .copyArgument(argPublicKey)
+    //         .copyString("8114")
+    //         .copyArgument(argAccount)
+    //         .showMessage("XRP")
+    //         .showMessage("TRUST")
+    //         .setBufferInt(argNameLength, 1, 7)
+    //         .copyArgument(argName, Buffer.CACHE1)
+    //         .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1))
+    //         .clearBuffer(Buffer.CACHE1)
+    //         .copyString("00", Buffer.CACHE2)
+    //         .copyArgument(argIssuerAccount, Buffer.CACHE2)
+    //         .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
+    //         .copyString(HexUtil.toHexString("rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"),
+    //             Buffer.CACHE1)
+    //         .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 25), Buffer.CACHE2, 45, ScriptAssembler.cache1Charset,
+    //             ScriptAssembler.zeroInherit)
+    //         .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
+    //         .showPressButton()
+    //         .setHeader(HashType.SHA512, SignType.ECDSA)
+    //         .getScript();
+    //     return script;
+    // }
+
 }
