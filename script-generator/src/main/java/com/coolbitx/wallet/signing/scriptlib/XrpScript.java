@@ -293,8 +293,6 @@ public class XrpScript {
         ScriptRlpData argMemoType = argMemos.getRlpItemArgument(); // variable byte or null
         ScriptRlpData argMemoData = argMemos.getRlpItemArgument(); // variable bytes or null
         ScriptRlpData argMemoFormat = argMemos.getRlpItemArgument(); // variable byte or null
-        // IOU Info
-        ScriptRlpData argTokenInfo = array.getRlpItemArgument(); // 48 bytes[nameLength(1B)][name(padding zero)(7B)][tokenCode(20B)][issuerAccount(20B)]
 
         String script = new ScriptAssembler().setCoinType(0x90)
             .copyString("53545800")
@@ -315,8 +313,8 @@ public class XrpScript {
             .copyArgument(argAmount, Buffer.CACHE2)
             .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
             .clearBuffer(Buffer.CACHE2)
-            .copyArgument(argTokenInfo, Buffer.CACHE2)
-            .copyArgument(ScriptData.getBuffer(Buffer.CACHE2, 8, 40), Buffer.CACHE1)
+            .copyString("524C555344000000000000000000000000000000", Buffer.CACHE1)
+            .copyString("E5E961C6A025C9404AA7B662DD1DF975BE75D13E", Buffer.CACHE1)
             .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1))
             .copyString("6840") // Fee
             .copyArgument(argFee)
@@ -339,7 +337,6 @@ public class XrpScript {
                 .getScript())
             .showMessage("XRP")
             .showMessage("RLUSD")
-            .clearBuffer(Buffer.CACHE2)
             .copyString("00", Buffer.CACHE2)
             .copyArgument(argDest, Buffer.CACHE2)
             .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, HashType.DoubleSHA256)
@@ -363,7 +360,7 @@ public class XrpScript {
     }
 
     public static String XRPIOURLUSDScriptSignature = Strings.padStart(
-        "304502206313724dbc74d985c680c1da43a089528be296a11f52783befd047b228e71108022100cf162503867a0a2f9ec0e58714af1db614c426cff24e6f45854c5a7ce8cec0de",
+        "3045022100a27f3abf1a1563f61349ae2d5127fb625167ca63e7e5b99413f234a99b5b9bf002206e24954c586017b5d941b38e64f0d49ec73b71e23f87dd30bc05c5f658cd0528",
         144, '0');
 
     public static String getXRPIOUScript() {
