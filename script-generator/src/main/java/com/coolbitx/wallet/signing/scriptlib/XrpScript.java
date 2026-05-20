@@ -318,8 +318,6 @@ public class XrpScript {
             .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1))
             .copyString("6840") // Fee
             .copyArgument(argFee)
-            .copyString("69") // SendMax
-            .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1))
             .copyString("7321") // SigningPubKey
             .copyArgument(argPublicKey)
             .copyString("8114") // Account
@@ -360,7 +358,7 @@ public class XrpScript {
     }
 
     public static String XRPIOURLUSDScriptSignature = Strings.padStart(
-        "3045022100a27f3abf1a1563f61349ae2d5127fb625167ca63e7e5b99413f234a99b5b9bf002206e24954c586017b5d941b38e64f0d49ec73b71e23f87dd30bc05c5f658cd0528",
+        "3045022100e64ef2d9bf63dd025b91b5ae28b3b0ddc2d0f0fcb9be99c9abe7f332ad15f17a02200cc1d3a049190e8a31385c586f78efefd6c5b6d21cd02ba3497ec6154518710b",
         144, '0');
 
     public static String getXRPIOUScript() {
@@ -406,8 +404,6 @@ public class XrpScript {
             .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1))
             .copyString("6840") // Fee
             .copyArgument(argFee)
-            .copyString("69") // SendMax
-            .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1))
             .copyString("7321") // SigningPubKey
             .copyArgument(argPublicKey)
             .copyString("8114") // Account
@@ -452,7 +448,7 @@ public class XrpScript {
     }
 
     public static String XRPIOUScriptSignature = Strings.padStart(
-        "30450220362cde66c17cac9ccc34594297727550db246ce42d422b2e88b6da1485821489022100f8a4d4bbedd7121afdb87487475ec1692f6fd3c42d37df804d5933dbfd009017",
+        "30460221009d110b11b2f090b9b3048a4f11c6d428cf778fbfe9a4484860ee95d914ab63a5022100e1e2989a647d5d6740035cc70c6abfaff3c204fb88cd1e796db444a22ed3c052",
         144, '0');
 
 }
