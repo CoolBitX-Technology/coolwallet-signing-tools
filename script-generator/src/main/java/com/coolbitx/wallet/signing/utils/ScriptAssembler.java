@@ -889,18 +889,18 @@ public class ScriptAssembler {
      * execute the falseStatement.
      *
      * @param argData Requirement.
-     * @param signData The encoded ECDSA(CBKey) signature. Signing:
+     * @param argSign The encoded ECDSA(CBKey) signature. Signing:
      * SHA256(argData).
      * @param trueStatement The script wanna execute when the status is true.
      * @param falseStatement The script wanna execute when the status is false.
      * @return
      */
-    public ScriptAssembler ifSigned(ScriptObjectAbstract argData, ScriptData signData, String trueStatement,
+    public ScriptAssembler ifSigned(ScriptObjectAbstract argData, ScriptData argSign, String trueStatement,
         String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
-        script += compose("11", argData, null, trueStatement.length() / 2, signData.getBufferParameter1())
+        script += compose("11", argData, null, trueStatement.length() / 2, argSign.getBufferParameter1())
             + trueStatement + falseStatement;
         return this;
     }
