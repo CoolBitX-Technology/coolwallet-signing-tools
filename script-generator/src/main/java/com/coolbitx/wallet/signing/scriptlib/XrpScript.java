@@ -306,13 +306,15 @@ public class XrpScript {
             .copyString("201B") // LastLedgerSequence, although optional, is strongly recommended
             .copyArgument(argLastLedgerSequence)
             .copyString("61") // Amount
-            .copyString("0101", Buffer.CACHE2)
-            .ifRange(argDeciaml, "08", "16", new ScriptAssembler().switchString(argDeciaml, Buffer.CACHE2,
-                "[],[],[],[],[],[],[],[],0001000101000001,0001000101000000,0001000100010101,0001000100010100,0001000100010001,0001000100010000,0001000100000101,0001000100000100,0001000100000001,0001000100000000,0001000001010101,0001000001010100,0001000001010001,0001000001010000,0001000001000101")
-                .getScript(), ScriptAssembler.throwSEError)
-            .copyArgument(argAmount, Buffer.CACHE2)
-            .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
-            .clearBuffer(Buffer.CACHE2)
+            .ifEqual(argDeciaml, "00", new ScriptAssembler().copyString("8000000000000000", Buffer.CACHE1).getScript(),
+                new ScriptAssembler().copyString("0101", Buffer.CACHE2)
+                    .ifRange(argDeciaml, "08", "16", new ScriptAssembler().switchString(argDeciaml, Buffer.CACHE2,
+                        "[],[],[],[],[],[],[],[],0001000101000001,0001000101000000,0001000100010101,0001000100010100,0001000100010001,0001000100010000,0001000100000101,0001000100000100,0001000100000001,0001000100000000,0001000001010101,0001000001010100,0001000001010001,0001000001010000,0001000001000101")
+                        .getScript(), ScriptAssembler.throwSEError)
+                    .copyArgument(argAmount, Buffer.CACHE2)
+                    .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
+                    .clearBuffer(Buffer.CACHE2)
+                    .getScript())
             .copyString("524C555344000000000000000000000000000000", Buffer.CACHE1)
             .copyString("E5E961C6A025C9404AA7B662DD1DF975BE75D13E", Buffer.CACHE1)
             .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -346,11 +348,16 @@ public class XrpScript {
             .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
             .clearBuffer(Buffer.CACHE1)
             .clearBuffer(Buffer.CACHE2)
-            .copyString("0000", Buffer.CACHE1)
-            .copyArgument(argAmount, Buffer.CACHE1)
-            .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
-            .setBufferInt(argDeciaml, 8, 22)
-            .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE2), ScriptData.bufInt)
+            .ifEqual(argDeciaml, "00",
+                new ScriptAssembler().copyString("00", Buffer.CACHE1)
+                    .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 0)
+                    .getScript(),
+                new ScriptAssembler().copyString("0000", Buffer.CACHE1)
+                    .copyArgument(argAmount, Buffer.CACHE1)
+                    .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
+                    .setBufferInt(argDeciaml, 8, 22)
+                    .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE2), ScriptData.bufInt)
+                    .getScript())
             .showPressButton()
             .setHeader(HashType.SHA512, SignType.ECDSA)
             .getScript();
@@ -358,7 +365,7 @@ public class XrpScript {
     }
 
     public static String XRPIOURLUSDScriptSignature = Strings.padStart(
-        "3045022100e64ef2d9bf63dd025b91b5ae28b3b0ddc2d0f0fcb9be99c9abe7f332ad15f17a02200cc1d3a049190e8a31385c586f78efefd6c5b6d21cd02ba3497ec6154518710b",
+        "304502203bb5a2c869d19ad8d1e9ba0401e0e7fc300f29a1271816dd5eb668e0e8686556022100a21a66938342f4795d4f207758a77e0ffa24efa158c66064dce5f6fc8e8c9b50",
         144, '0');
 
     public static String getXRPIOUScript() {
@@ -392,13 +399,15 @@ public class XrpScript {
             .copyString("201B") // LastLedgerSequence, although optional, is strongly recommended
             .copyArgument(argLastLedgerSequence)
             .copyString("61") // Amount
-            .copyString("0101", Buffer.CACHE2)
-            .ifRange(argDeciaml, "08", "16", new ScriptAssembler().switchString(argDeciaml, Buffer.CACHE2,
-                "[],[],[],[],[],[],[],[],0001000101000001,0001000101000000,0001000100010101,0001000100010100,0001000100010001,0001000100010000,0001000100000101,0001000100000100,0001000100000001,0001000100000000,0001000001010101,0001000001010100,0001000001010001,0001000001010000,0001000001000101")
-                .getScript(), ScriptAssembler.throwSEError)
-            .copyArgument(argAmount, Buffer.CACHE2)
-            .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
-            .clearBuffer(Buffer.CACHE2)
+            .ifEqual(argDeciaml, "00", new ScriptAssembler().copyString("8000000000000000", Buffer.CACHE1).getScript(),
+                new ScriptAssembler().copyString("0101", Buffer.CACHE2)
+                    .ifRange(argDeciaml, "08", "16", new ScriptAssembler().switchString(argDeciaml, Buffer.CACHE2,
+                        "[],[],[],[],[],[],[],[],0001000101000001,0001000101000000,0001000100010101,0001000100010100,0001000100010001,0001000100010000,0001000100000101,0001000100000100,0001000100000001,0001000100000000,0001000001010101,0001000001010100,0001000001010001,0001000001010000,0001000001000101")
+                        .getScript(), ScriptAssembler.throwSEError)
+                    .copyArgument(argAmount, Buffer.CACHE2)
+                    .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE1)
+                    .clearBuffer(Buffer.CACHE2)
+                    .getScript())
             .copyArgument(argTokenInfo, Buffer.CACHE2)
             .copyArgument(ScriptData.getBuffer(Buffer.CACHE2, 8, 40), Buffer.CACHE1)
             .copyArgument(ScriptData.getDataBufferAll(Buffer.CACHE1))
@@ -436,11 +445,16 @@ public class XrpScript {
             .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE2, 53))
             .clearBuffer(Buffer.CACHE1)
             .clearBuffer(Buffer.CACHE2)
-            .copyString("0000", Buffer.CACHE1)
-            .copyArgument(argAmount, Buffer.CACHE1)
-            .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
-            .setBufferInt(argDeciaml, 8, 22)
-            .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE2), ScriptData.bufInt)
+            .ifEqual(argDeciaml, "00",
+                new ScriptAssembler().copyString("00", Buffer.CACHE1)
+                    .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE1), 0)
+                    .getScript(),
+                new ScriptAssembler().copyString("0000", Buffer.CACHE1)
+                    .copyArgument(argAmount, Buffer.CACHE1)
+                    .bitToByte(ScriptData.getDataBufferAll(Buffer.CACHE1), Buffer.CACHE2)
+                    .setBufferInt(argDeciaml, 8, 22)
+                    .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE2), ScriptData.bufInt)
+                    .getScript())
             .showPressButton()
             .setHeader(HashType.SHA512, SignType.ECDSA)
             .getScript();
@@ -448,7 +462,7 @@ public class XrpScript {
     }
 
     public static String XRPIOUScriptSignature = Strings.padStart(
-        "30460221009d110b11b2f090b9b3048a4f11c6d428cf778fbfe9a4484860ee95d914ab63a5022100e1e2989a647d5d6740035cc70c6abfaff3c204fb88cd1e796db444a22ed3c052",
+        "304502204d2a7f6b2f9a4a3c537709b493f3f6db1838be39961f2619523074e8854d939d022100c38dfb198fb414171dad27ce59d1ca358454777cbae0aae29ac70da104ff7e11",
         144, '0');
 
 }
