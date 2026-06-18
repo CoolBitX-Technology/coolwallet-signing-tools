@@ -93,7 +93,7 @@ public class TonScript {
                 .clearBuffer(Buffer.CACHE1)
 
                 // show message on card
-                .showMessage("TON")
+                .showMessage("GRAM")
                 
                 // show receiver address
                 .ifEqual( 
@@ -263,7 +263,7 @@ public class TonScript {
                 .clearBuffer(Buffer.CACHE1)
 
                 // show chain
-                .showMessage("TON")
+                .showMessage("GRAM")
                 
                 // show token
                 .ifSigned(
@@ -445,7 +445,7 @@ public class TonScript {
                 .clearBuffer(Buffer.CACHE1)
 
                 // show chain
-                .showMessage("TON")
+                .showMessage("GRAM")
                 
                 // display smart
                 .showWrap("SMART", "")
