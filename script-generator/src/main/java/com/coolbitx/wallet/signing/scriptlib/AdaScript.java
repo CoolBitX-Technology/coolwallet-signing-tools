@@ -73,14 +73,43 @@ public class AdaScript {
             .clearBuffer(Buffer.CACHE1).getScript();
     }
 
+    // Change output bytes shared by every ADA tx type: 8258 <addrLen> <addr> <value-blob>.
+    // value-blob is a pre-encoded CBOR value supplied in the argument: a bare uint for an
+    // ADA-only change, or 82 <lovelace> <multiasset_map> when the change carries native
+    // tokens. Encoding the value upstream lets one change layout serve both cases, so a UTXO
+    // holding tokens can be spent without a dedicated script — the tokens ride back in change.
+    //
+    // changeValueLength uses setBufferIntUnsafe (no on-card range check): the value field is
+    // up to 200 bytes, but the card's 1-byte range comparator can't take a bound >= 128, so a
+    // setBufferInt(.., 0, 200) guard throws for every value. The SDK already rejects a change
+    // value over 200 bytes in getChangeArgument, so the guard is redundant here anyway.
+    public static String getChangeOutputScript(ScriptData changeAddressLength, ScriptData changeAddress,
+        ScriptData changeValueLength, ScriptData changeValue) {
+        return new ScriptAssembler().copyString("8258").copyArgument(changeAddressLength)
+            .setBufferInt(changeAddressLength, 29, 90).copyArgument(changeAddress)
+            .setBufferIntUnsafe(changeValueLength).copyArgument(changeValue).getScript();
+    }
+
+    // Output section for staking txs (no receiver output): output map key 01, then the array
+    // count 80 (no change) or 81 (change only) followed by the change output. Change presence
+    // keys on changeAddressLength == 00 because the value-blob layout has no separate amount.
+    public static String getStakingOutputSectionScript(ScriptData changeAddressLength, ScriptData changeAddress,
+        ScriptData changeValueLength, ScriptData changeValue) {
+        return new ScriptAssembler().copyString("01").ifEqual(changeAddressLength, "00",
+            new ScriptAssembler().copyString("80").getScript(),
+            new ScriptAssembler().copyString("81")
+                .insertString(getChangeOutputScript(changeAddressLength, changeAddress, changeValueLength, changeValue))
+                .getScript())
+            .getScript();
+    }
+
     public static String getADATransactionScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeAmountLength = sac.getArgument(1);
-        ScriptData changeAmountPrefix = sac.getArgument(1);
-        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+        ScriptData changeValueLength = sac.getArgument(1);
+        ScriptData changeValue = sac.getArgumentVariableLength(200);
 
         ScriptData receiverAddressEncodeType = sac.getArgument(1);
         ScriptData receiverAddressLength = sac.getArgument(1);
@@ -108,10 +137,9 @@ public class AdaScript {
             .copyArgument(inputs)
             // --- intput end ---
             // --- output start ---
-            .copyString("01").ifEqual(changeAmount, "0000000000000000",
-                // ---- output count start ----
+            // output count: 1 (receiver only) when no change, 2 when change present
+            .copyString("01").ifEqual(changeAddressLength, "00",
                 new ScriptAssembler().copyString("81").getScript(), new ScriptAssembler().copyString("82").getScript()
-            // ---- output count end ----
             )
             // --- output receive start ---
             .copyString("8258").copyArgument(receiverAddressLength)
@@ -120,14 +148,11 @@ public class AdaScript {
             .setBufferInt(receiverAddressLength, 29, 90).copyArgument(receiverAddress)
             .copyArgument(receiverAmountPrefix).setBufferInt(receiverAmountLength, 0, 8).copyArgument(receiverAmount)
             // --- output receive end ---
-            .ifEqual(changeAmount, "0000000000000000", "",
-                // --- output change start ---
-                new ScriptAssembler().copyString("8258").copyArgument(changeAddressLength)
-                    .setBufferInt(changeAddressLength, 29, 90).copyArgument(changeAddress)
-                    .copyArgument(changeAmountPrefix).setBufferInt(changeAmountLength, 0, 8).copyArgument(changeAmount)
-                    .getScript()
-            // --- output change end ---
+            // --- output change start (skipped when changeAddressLength == 00) ---
+            .ifEqual(changeAddressLength, "00", "",
+                getChangeOutputScript(changeAddressLength, changeAddress, changeValueLength, changeValue)
             )
+            // --- output change end ---
             // --- output end ---
             // --- fee start ---
             .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
@@ -163,9 +188,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeAmountLength = sac.getArgument(1);
-        ScriptData changeAmountPrefix = sac.getArgument(1);
-        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+        ScriptData changeValueLength = sac.getArgument(1);
+        ScriptData changeValue = sac.getArgumentVariableLength(200);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -186,16 +210,7 @@ public class AdaScript {
             .copyArgument(inputs)
             // --- intput end ---
             // --- output start ---
-            .copyString("01").ifEqual(changeAmount, "0000000000000000",
-                // ---- output count start ----
-                new ScriptAssembler().copyString("80").getScript(), new ScriptAssembler().copyString("81")
-                    // ---- output count end ----
-                    // --- output change start ---
-                    .copyString("8258").copyArgument(changeAddressLength).setBufferInt(changeAddressLength, 29, 90)
-                    .copyArgument(changeAddress).copyArgument(changeAmountPrefix).setBufferInt(changeAmountLength, 0, 8)
-                    .copyArgument(changeAmount).getScript()
-            // --- output change end ---
-            )
+            .insertString(getStakingOutputSectionScript(changeAddressLength, changeAddress, changeValueLength, changeValue))
             // --- output end ---
             // --- fee start ---
             .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
@@ -234,9 +249,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeAmountLength = sac.getArgument(1);
-        ScriptData changeAmountPrefix = sac.getArgument(1);
-        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+        ScriptData changeValueLength = sac.getArgument(1);
+        ScriptData changeValue = sac.getArgumentVariableLength(200);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -258,16 +272,7 @@ public class AdaScript {
             .copyArgument(inputs)
             // --- intput end ---
             // --- output start ---
-            .copyString("01").ifEqual(changeAmount, "0000000000000000",
-                // ---- output count start ----
-                new ScriptAssembler().copyString("80").getScript(), new ScriptAssembler().copyString("81")
-                    // ---- output count end ----
-                    // --- output change start ---
-                    .copyString("8258").copyArgument(changeAddressLength).setBufferInt(changeAddressLength, 29, 90)
-                    .copyArgument(changeAddress).copyArgument(changeAmountPrefix).setBufferInt(changeAmountLength, 0, 8)
-                    .copyArgument(changeAmount).getScript()
-            // --- output change end ---
-            )
+            .insertString(getStakingOutputSectionScript(changeAddressLength, changeAddress, changeValueLength, changeValue))
             // --- output end ---
             // --- fee start ---
             .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
@@ -313,9 +318,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeAmountLength = sac.getArgument(1);
-        ScriptData changeAmountPrefix = sac.getArgument(1);
-        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+        ScriptData changeValueLength = sac.getArgument(1);
+        ScriptData changeValue = sac.getArgumentVariableLength(200);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -337,16 +341,7 @@ public class AdaScript {
             .copyArgument(inputs)
             // --- intput end ---
             // --- output start ---
-            .copyString("01").ifEqual(changeAmount, "0000000000000000",
-                // ---- output count start ----
-                new ScriptAssembler().copyString("80").getScript(), new ScriptAssembler().copyString("81")
-                    // ---- output count end ----
-                    // --- output change start ---
-                    .copyString("8258").copyArgument(changeAddressLength).setBufferInt(changeAddressLength, 29, 90)
-                    .copyArgument(changeAddress).copyArgument(changeAmountPrefix).setBufferInt(changeAmountLength, 0, 8)
-                    .copyArgument(changeAmount).getScript()
-            // --- output change end ---
-            )
+            .insertString(getStakingOutputSectionScript(changeAddressLength, changeAddress, changeValueLength, changeValue))
             // --- output end ---
             // --- fee start ---
             .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
@@ -386,9 +381,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeAmountLength = sac.getArgument(1);
-        ScriptData changeAmountPrefix = sac.getArgument(1);
-        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+        ScriptData changeValueLength = sac.getArgument(1);
+        ScriptData changeValue = sac.getArgumentVariableLength(200);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -409,16 +403,7 @@ public class AdaScript {
             .copyArgument(inputs)
             // --- intput end ---
             // --- output start ---
-            .copyString("01").ifEqual(changeAmount, "0000000000000000",
-                // ---- output count start ----
-                new ScriptAssembler().copyString("80").getScript(), new ScriptAssembler().copyString("81")
-                    // ---- output count end ----
-                    // --- output change start ---
-                    .copyString("8258").copyArgument(changeAddressLength).setBufferInt(changeAddressLength, 29, 90)
-                    .copyArgument(changeAddress).copyArgument(changeAmountPrefix).setBufferInt(changeAmountLength, 0, 8)
-                    .copyArgument(changeAmount).getScript()
-            // --- output change end ---
-            )
+            .insertString(getStakingOutputSectionScript(changeAddressLength, changeAddress, changeValueLength, changeValue))
             // --- output end ---
             // --- fee start ---
             .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
@@ -457,9 +442,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeAmountLength = sac.getArgument(1);
-        ScriptData changeAmountPrefix = sac.getArgument(1);
-        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+        ScriptData changeValueLength = sac.getArgument(1);
+        ScriptData changeValue = sac.getArgumentVariableLength(200);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -484,16 +468,7 @@ public class AdaScript {
             .copyArgument(inputs)
             // --- intput end ---
             // --- output start ---
-            .copyString("01").ifEqual(changeAmount, "0000000000000000",
-                // ---- output count start ----
-                new ScriptAssembler().copyString("80").getScript(), new ScriptAssembler().copyString("81")
-                    // ---- output count end ----
-                    // --- output change start ---
-                    .copyString("8258").copyArgument(changeAddressLength).setBufferInt(changeAddressLength, 29, 90)
-                    .copyArgument(changeAddress).copyArgument(changeAmountPrefix).setBufferInt(changeAmountLength, 0, 8)
-                    .copyArgument(changeAmount).getScript()
-            // --- output change end ---
-            )
+            .insertString(getStakingOutputSectionScript(changeAddressLength, changeAddress, changeValueLength, changeValue))
             // --- output end ---
             // --- fee start ---
             .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
@@ -531,9 +506,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeAmountLength = sac.getArgument(1);
-        ScriptData changeAmountPrefix = sac.getArgument(1);
-        ScriptData changeAmount = sac.getArgumentVariableLength(8);
+        ScriptData changeValueLength = sac.getArgument(1);
+        ScriptData changeValue = sac.getArgumentVariableLength(200);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -554,16 +528,7 @@ public class AdaScript {
             .copyArgument(inputs)
             // --- intput end ---
             // --- output start ---
-            .copyString("01").ifEqual(changeAmount, "0000000000000000",
-                // ---- output count start ----
-                new ScriptAssembler().copyString("80").getScript(), new ScriptAssembler().copyString("81")
-                    // ---- output count end ----
-                    // --- output change start ---
-                    .copyString("8258").copyArgument(changeAddressLength).setBufferInt(changeAddressLength, 29, 90)
-                    .copyArgument(changeAddress).copyArgument(changeAmountPrefix).setBufferInt(changeAmountLength, 0, 8)
-                    .copyArgument(changeAmount).getScript()
-            // --- output change end ---
-            )
+            .insertString(getStakingOutputSectionScript(changeAddressLength, changeAddress, changeValueLength, changeValue))
             // --- output end ---
             // --- fee start ---
             .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
