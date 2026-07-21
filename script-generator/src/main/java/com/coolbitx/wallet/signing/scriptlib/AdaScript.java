@@ -30,6 +30,8 @@ public class AdaScript {
 
     public static void listAll() {
         System.out.println("ADA Transfer: \n" + getADATransactionScript() + "\n");
+        System.out.println("ADA Token Transfer: \n" + getADATokenTransferScript() + "\n");
+        System.out.println("ADA Token Transfer Blind: \n" + getADATokenTransferBlindScript() + "\n");
         System.out.println("ADA Stake Registration: \n" + getADAStakeRegistrationScript() + "\n");
         System.out
             .println("ADA Stake Registration And Delegation: \n" + getADAStakeRegistrationAndDelegationScript() + "\n");
@@ -79,10 +81,10 @@ public class AdaScript {
     // tokens. Encoding the value upstream lets one change layout serve both cases, so a UTXO
     // holding tokens can be spent without a dedicated script — the tokens ride back in change.
     //
-    // changeValueLength uses setBufferIntUnsafe (no on-card range check): the value field is
-    // up to 200 bytes, but the card's 1-byte range comparator can't take a bound >= 128, so a
-    // setBufferInt(.., 0, 200) guard throws for every value. The SDK already rejects a change
-    // value over 200 bytes in getChangeArgument, so the guard is redundant here anyway.
+    // changeValueLength is a 2-byte field (value blob is up to 1024 bytes, so 1 byte / max 255
+    // no longer suffices) read via setBufferIntUnsafe (no on-card range check). The SDK already
+    // rejects a change value over 1024 bytes in getChangeArgument, so an on-card guard would be
+    // redundant. 1024 bytes holds ~25 distinct-policy tokens (or ~120 sharing a policy) in change.
     public static String getChangeOutputScript(ScriptData changeAddressLength, ScriptData changeAddress,
         ScriptData changeValueLength, ScriptData changeValue) {
         return new ScriptAssembler().copyString("8258").copyArgument(changeAddressLength)
@@ -103,13 +105,25 @@ public class AdaScript {
             .getScript();
     }
 
+    // "ADA" label + the min-ADA (lovelace) amount at 6 decimals. Shared by the normal and blind
+    // token-transfer displays: the lovelace is always small enough for the SE to render, so it is
+    // shown even when the (possibly huge) token amount is blinded out as SMART.
+    public static String getShowLovelaceScript(ScriptData lovelacePrefix, ScriptData lovelaceLength,
+        ScriptData lovelace) {
+        return new ScriptAssembler().showMessage("ADA")
+            .ifRange(lovelacePrefix, "00", "17",
+                new ScriptAssembler().showAmount(lovelacePrefix, 6).getScript(),
+                new ScriptAssembler().setBufferInt(lovelaceLength, 1, 8).showAmount(lovelace, 6).getScript())
+            .getScript();
+    }
+
     public static String getADATransactionScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeValueLength = sac.getArgument(1);
-        ScriptData changeValue = sac.getArgumentVariableLength(200);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
 
         ScriptData receiverAddressEncodeType = sac.getArgument(1);
         ScriptData receiverAddressLength = sac.getArgument(1);
@@ -183,13 +197,158 @@ public class AdaScript {
         "3045022100F0399524A966B863DF60F0B21095343D4993605BC89EEFB257586467B52CFD9402204AD6EEAE4A6872FC376838AB4216A2C476B154BB3E1674CB9242F7009CA159CA",
         144, '0');
 
+    // Native-token transfer: the receiver output carries exactly one native token (per the SDK
+    // "one token per tx, the rest becomes change" rule). Unlike the plain transfer whose receiver
+    // value is a bare lovelace uint, here the value is [lovelace, multiasset] where multiasset is a
+    // single-policy / single-asset map:
+    //     8258 <addrLen> <addr> 82 <lovelace> a1 581c<policyId> a1 <assetNameCbor> <tokenAmount>
+    // The change output is unchanged (still the shared value-blob layout, which may itself carry the
+    // leftover tokens as change). Because the to-address is external, the token bytes in the receiver
+    // output are security-critical, so the card must show the user WHICH token and HOW MUCH. The
+    // token identity+metadata (decimals, symbol, policyId, assetNameCbor) is verified against a
+    // CoolBitX-key signature via ifSigned: a verified token shows its symbol, an unverified one is
+    // shown with a leading "@". The very bytes that are signature-checked (policyId, assetNameCbor)
+    // are the same bytes copied into the body, so a tampered token can never display a trusted symbol.
+    public static String getADATokenTransferScript() {
+        return tokenTransferScript(false);
+    }
+
+    // Blind variant for amounts the SE can't render (a displayed integer >= 1e8): the body bytes are
+    // identical to the normal script; only the display changes to "ADA -> SMART -> PRESS". The SDK
+    // switches to this script when the human-readable token amount reaches 1e8 (see coin-ada index.ts).
+    public static String getADATokenTransferBlindScript() {
+        return tokenTransferScript(true);
+    }
+
+    // Shared arguments + body for both token-transfer variants; `blind` selects the display tail only,
+    // so the two scripts always build the exact same signed body from the exact same argument layout.
+    private static String tokenTransferScript(boolean blind) {
+        ScriptArgumentComposer sac = new ScriptArgumentComposer();
+
+        ScriptData changeAddressLength = sac.getArgument(1);
+        ScriptData changeAddress = sac.getArgumentVariableLength(90);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+
+        ScriptData receiverAddressEncodeType = sac.getArgument(1);
+        ScriptData receiverAddressLength = sac.getArgument(1);
+        ScriptData receiverAddress = sac.getArgumentVariableLength(90);
+        ScriptData lovelaceLength = sac.getArgument(1);
+        ScriptData lovelacePrefix = sac.getArgument(1);
+        ScriptData lovelace = sac.getArgumentVariableLength(8);
+
+        // Token info: one contiguous, fixed-width block so ifSigned can hash it as a union. Layout:
+        // decimals(1) + symbolLength(1) + symbol(7) + policyId(28) + assetNameCborLength(1) +
+        // assetNameCbor(34) = 72 bytes. symbol and assetNameCbor sit in fixed slots (zero-padded on
+        // the right); their real length is carried by the *Length fields. The SDK signs SHA256 of
+        // exactly these 72 bytes with the CoolBitX key.
+        ScriptData tokenInfo = sac.getArgumentUnion(0, 72);
+        ScriptData tokenDecimals = sac.getArgument(1);
+        ScriptData tokenSymbolLength = sac.getArgument(1);
+        ScriptData tokenSymbol = sac.getArgumentVariableLength(7);
+        ScriptData policyId = sac.getArgument(28);
+        ScriptData assetNameCborLength = sac.getArgument(1);
+        ScriptData assetNameCbor = sac.getArgumentVariableLength(34);
+        ScriptData tokenSign = sac.getArgument(72);
+
+        ScriptData tokenAmountLength = sac.getArgument(1);
+        ScriptData tokenAmountPrefix = sac.getArgument(1);
+        ScriptData tokenAmount = sac.getArgumentVariableLength(8);
+
+        ScriptData feeLength = sac.getArgument(1);
+        ScriptData feePrefix = sac.getArgument(1);
+        ScriptData fee = sac.getArgumentVariableLength(8);
+
+        ScriptData ttlLength = sac.getArgument(1);
+        ScriptData ttlPrefix = sac.getArgument(1);
+        ScriptData ttl = sac.getArgumentVariableLength(8);
+
+        ScriptData inputs = sac.getArgumentAll();
+
+        ScriptAssembler asm = new ScriptAssembler().setCoinType(0x0717)
+            // not supported address encode type
+            .ifRange(receiverAddressEncodeType, "00", "02", "", ScriptAssembler.throwSEError)
+            // -- payload start --
+            .copyString("a4")
+            // --- input start ---
+            .copyArgument(inputs)
+            // --- input end ---
+            // --- output start ---
+            // output count: 1 (receiver only) when no change, 2 when change present
+            .copyString("01").ifEqual(changeAddressLength, "00",
+                new ScriptAssembler().copyString("81").getScript(), new ScriptAssembler().copyString("82").getScript()
+            )
+            // --- output receive start ---
+            .copyString("8258").copyArgument(receiverAddressLength)
+            // Shelley max : 57, Byron max : 83
+            .setBufferInt(receiverAddressLength, 29, 90).copyArgument(receiverAddress)
+            // value = [lovelace, multiasset]
+            .copyString("82")
+            .copyArgument(lovelacePrefix).setBufferInt(lovelaceLength, 0, 8).copyArgument(lovelace)
+            // multiasset: one policy, one asset under it
+            .copyString("a1").copyString("581c").copyArgument(policyId)
+            .copyString("a1").setBufferInt(assetNameCborLength, 1, 34).copyArgument(assetNameCbor)
+            .copyArgument(tokenAmountPrefix).setBufferInt(tokenAmountLength, 0, 8).copyArgument(tokenAmount)
+            // --- output receive end ---
+            // --- output change start (skipped when changeAddressLength == 00) ---
+            .ifEqual(changeAddressLength, "00", "",
+                getChangeOutputScript(changeAddressLength, changeAddress, changeValueLength, changeValue)
+            )
+            // --- output change end ---
+            // --- output end ---
+            // --- fee start ---
+            .copyString("02").copyArgument(feePrefix).setBufferInt(feeLength, 0, 8).copyArgument(fee)
+            // --- fee end ---
+            // --- ttl start ---
+            .copyString("03").copyArgument(ttlPrefix).setBufferInt(ttlLength, 0, 8).copyArgument(ttl)
+            // --- ttl end / payload end ---
+            .showMessage("ADA");
+
+        if (blind) {
+            // Full blind, matching every other chain's token blind sign (TON/TRC20/ERC20/Cronos/...):
+            // the token symbol, receiver address and amounts are all replaced by one SMART page. Used
+            // when the token amount would exceed what the SE can render; body bytes are unchanged.
+            asm.showWrap("SMART", "");
+        } else {
+            asm
+                // -- show token symbol: verified official token shows its symbol, otherwise "@" prefix --
+                .clearBuffer(Buffer.CACHE2)
+                .ifSigned(tokenInfo, tokenSign, "",
+                    new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
+                .setBufferInt(tokenSymbolLength, 1, 7).copyArgument(tokenSymbol, Buffer.CACHE2)
+                .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE2)).clearBuffer(Buffer.CACHE2)
+                // -- show receiver address --
+                .insertString(getShowAddressScript(receiverAddressEncodeType, receiverAddressLength, receiverAddress))
+                // -- show token amount: decimals come from the (signed) metadata, so the amount is staged
+                //    into CACHE2 and shown with decimals from bufferInt. Small values live in the CBOR
+                //    prefix byte (<= 0x17); larger ones in the value bytes. --
+                .ifRange(tokenAmountPrefix, "00", "17",
+                    new ScriptAssembler().setBufferInt(tokenDecimals, 0, 20)
+                        .showAmount(tokenAmountPrefix, ScriptData.bufInt).getScript(),
+                    new ScriptAssembler().setBufferInt(tokenAmountLength, 1, 8).copyArgument(tokenAmount, Buffer.CACHE2)
+                        .setBufferInt(tokenDecimals, 0, 20)
+                        .showAmount(ScriptData.getDataBufferAll(Buffer.CACHE2), ScriptData.bufInt)
+                        .clearBuffer(Buffer.CACHE2).getScript())
+                // -- show lovelace label + amount (min-ADA leaving the wallet) --
+                .insertString(getShowLovelaceScript(lovelacePrefix, lovelaceLength, lovelace));
+        }
+
+        // version=04 hash=0E=Blake2b256 sign=03=BIP32EDDSA
+        return asm.showPressButton().setHeader(HashType.Blake2b256, SignType.BIP32EDDSA).getScript();
+    }
+
+    public static final String ADATokenTransferScriptSignature = Strings.padStart("3044022037343941cf0b51a99297524c9fe2e0270bf02fb3a2d11c791bb2fd8146d448cb022025d7e3ef97f35283aa677463836e8e4ce8cb38b1cc1ecfb8b92936506ef0a8cf", 144, '0');
+
+    // Signed by CoolBitX; paste the produced signature (see coin-ada params.ts TOKEN_TRANSFER_BLIND).
+    public static final String ADATokenTransferBlindScriptSignature = Strings.padStart("", 144, '0');
+
     public static String getADAStakeRegistrationScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeValueLength = sac.getArgument(1);
-        ScriptData changeValue = sac.getArgumentVariableLength(200);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -249,8 +408,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeValueLength = sac.getArgument(1);
-        ScriptData changeValue = sac.getArgumentVariableLength(200);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -318,8 +477,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeValueLength = sac.getArgument(1);
-        ScriptData changeValue = sac.getArgumentVariableLength(200);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -381,8 +540,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeValueLength = sac.getArgument(1);
-        ScriptData changeValue = sac.getArgumentVariableLength(200);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -442,8 +601,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeValueLength = sac.getArgument(1);
-        ScriptData changeValue = sac.getArgumentVariableLength(200);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -506,8 +665,8 @@ public class AdaScript {
 
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
-        ScriptData changeValueLength = sac.getArgument(1);
-        ScriptData changeValue = sac.getArgumentVariableLength(200);
+        ScriptData changeValueLength = sac.getArgument(2);
+        ScriptData changeValue = sac.getArgumentVariableLength(1024);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
