@@ -194,7 +194,7 @@ public class AdaScript {
     }
 
     public static final String ADATransactionScriptSignature = Strings.padStart(
-        "3045022100F0399524A966B863DF60F0B21095343D4993605BC89EEFB257586467B52CFD9402204AD6EEAE4A6872FC376838AB4216A2C476B154BB3E1674CB9242F7009CA159CA",
+        "3045022100d0f91da94578a94dfb36f4c48f2dcb0f539a5d10801aa88ac8b727300cc861810220406e5722461dbafda58027220377ab514b361b70f29e26748f88497b37379deb",
         144, '0');
 
     // Native-token transfer: the receiver output carries exactly one native token (per the SDK
@@ -337,10 +337,9 @@ public class AdaScript {
         return asm.showPressButton().setHeader(HashType.Blake2b256, SignType.BIP32EDDSA).getScript();
     }
 
-    public static final String ADATokenTransferScriptSignature = Strings.padStart("3044022037343941cf0b51a99297524c9fe2e0270bf02fb3a2d11c791bb2fd8146d448cb022025d7e3ef97f35283aa677463836e8e4ce8cb38b1cc1ecfb8b92936506ef0a8cf", 144, '0');
+    public static final String ADATokenTransferScriptSignature = Strings.padStart("3045022100d9afc0a2d579f0d1d61243ad758888af13e8b147c816c2a76f2322b24fe6d4e6022038bf456f6f5d4db47d2c57eadeb9b864f3d8f956691441043e59ec1ddabacdce", 144, '0');
 
-    // Signed by CoolBitX; paste the produced signature (see coin-ada params.ts TOKEN_TRANSFER_BLIND).
-    public static final String ADATokenTransferBlindScriptSignature = Strings.padStart("", 144, '0');
+    public static final String ADATokenTransferBlindScriptSignature = Strings.padStart("304602210096bb33f72f8056b90d8945e64366d8c087d3acc7288673c627e7149c45c71041022100958dc351e731ed909ed1f20b3a4f589a916933e1527af6e0881451207cf9ffa6", 144, '0');
 
     public static String getADAStakeRegistrationScript() {
         ScriptArgumentComposer sac = new ScriptArgumentComposer();
@@ -400,7 +399,7 @@ public class AdaScript {
     }
 
     public static final String ADAStakeRegistrationScriptSignature = Strings.padStart(
-        "3045022100D5F4EA82D4CEF766C92B46E531DF8272A68BE84C38914F25D48AF927671F64F7022010C9EE292134B514BB29EDDC33F01D053DDB77F23162E03EEF0D73F4AFB67775",
+        "3044022062d8f402f5ea4aa034c624c9a03680490ca57d213743d67877d3c6e896726016022047fddd68f98ba707b5f34561bf885ecd23306ebe96251a7dafb8e8077fcea073",
         144, '0');
 
     public static String getADAStakeRegistrationAndDelegationScript() {
@@ -469,7 +468,7 @@ public class AdaScript {
     }
 
     public static final String ADAStakeRegistrationAndDelegationScriptSignature = Strings.padStart(
-        "3046022100C458F53070161F5BD73F9F0BD7FE26CF5D861DFD170F0FE51DEDD97B25B8B808022100FA97152CC285E9B518F18371B617613D56A3A548344206C619D98F169A93841F",
+        "3043021f4372c71ee74aa5cbdb5f6bfdef55e01d7610df5507df9d157b18a74c3d504c022003eb0f7eddeedb348db7e32e7bea59d329aa778aaa3f5dc8808dc2a6502a8cd5",
         144, '0');
 
     public static String getADAStakeDelegationScript() {
@@ -532,7 +531,7 @@ public class AdaScript {
     }
 
     public static final String ADAStakeDelegationScriptSignature = Strings.padStart(
-        "304602210099B45BC4C655C45842B43202275BC267100253609D81F9121C96FC86E3BCC72A022100A17D228C4BA9911D34A90B2B85D3E5A2160F0D07DCBB4D96A4E96264FBD2A1DF",
+        "3046022100fd6b647d4882b11ee9ad5bdf9e2a2ab9967edaadf2d0851fe5f02563d974a4d1022100884b7770d1ba24f4c0702fb74b1757e1ebae342fa6d68c5f8982ce80f6d31ffa",
         144, '0');
 
     public static String getADAStakeDeregistrationScript() {
@@ -593,7 +592,7 @@ public class AdaScript {
     }
 
     public static final String ADAStakeDeregistrationScriptSignature = Strings.padStart(
-        "30450221008D1D857FE283FDE0B659C4E89C33D6C1BDD219E06FD18AC02859F8C48AE7BA81022062F39064D0742685564CD1FC8E8C650156AE6F112CFEC21E8A4F8E59DA6F0F12",
+        "30440220081976b1fbe7181fc3ff16b6514ecf86b4ce74d126853c8f08463791c4a0c7a8022024758fab5decadf8d14a01e980b7867390248e0b3f7ffb6e03573aea4942ebe6",
         144, '0');
 
     public static String getADARewardsWithdrawalScript() {
@@ -657,7 +656,7 @@ public class AdaScript {
     }
 
     public static final String ADARewardsWithdrawalScriptSignature = Strings.padStart(
-        "3044022054BF2BC0FAECDA40CBA09D4C269022A9C5D707D1895039C4D1776941A6012EEC02205DC643B7BA31BE18F9F4D145722FB7B3442E4C5EE2B16064B40B9BD2236F6C80",
+        "3045022012241ac33675a95019439698107a0dfc4e2c816c1dba0e25a8d0314cf13e7f87022100cc36c421209d9bfd2cf88d6ddce5825143888c98fb526f040a0421bd7bc7ed61",
         144, '0');
 
     public static String getADAGovernanceVoteDRepAbstainScript() { // Delegated Representative Abstain
@@ -722,7 +721,7 @@ public class AdaScript {
     }
 
     public static final String ADAGovernanceVoteDRepAbstainScriptSignature = Strings.padStart(
-        "3044022009dc4cb3ae3657b1da1451d95198b96e0193a2d6afbe9616bc51cc45cb30d61002206658fada489dbb9c27ab3eb0c6da09ab24e7ea120224fd3ce0f6a9cae1c13e09",
+        "30440220027e3327ee64cdbdf534b6bfa99d3024db5e6f8742fcdcbe7f2eef8e5c186cba0220567011d3066ac42c0ad6fada8e8e7632ef3afb5036cde623cebfe1cb13b6391b",
         144, '0');
 
     // [
