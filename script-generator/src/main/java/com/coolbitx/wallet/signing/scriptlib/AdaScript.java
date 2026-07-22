@@ -81,10 +81,10 @@ public class AdaScript {
     // tokens. Encoding the value upstream lets one change layout serve both cases, so a UTXO
     // holding tokens can be spent without a dedicated script — the tokens ride back in change.
     //
-    // changeValueLength is a 2-byte field (value blob is up to 1024 bytes, so 1 byte / max 255
+    // changeValueLength is a 2-byte field (value blob is up to 2048 bytes, so 1 byte / max 255
     // no longer suffices) read via setBufferIntUnsafe (no on-card range check). The SDK already
-    // rejects a change value over 1024 bytes in getChangeArgument, so an on-card guard would be
-    // redundant. 1024 bytes holds ~25 distinct-policy tokens (or ~120 sharing a policy) in change.
+    // rejects a change value over 2048 bytes in getChangeArgument, so an on-card guard would be
+    // redundant. 2048 bytes holds ~50 distinct-policy tokens (or ~250 sharing a policy) in change.
     public static String getChangeOutputScript(ScriptData changeAddressLength, ScriptData changeAddress,
         ScriptData changeValueLength, ScriptData changeValue) {
         return new ScriptAssembler().copyString("8258").copyArgument(changeAddressLength)
@@ -123,7 +123,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData receiverAddressEncodeType = sac.getArgument(1);
         ScriptData receiverAddressLength = sac.getArgument(1);
@@ -228,7 +228,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData receiverAddressEncodeType = sac.getArgument(1);
         ScriptData receiverAddressLength = sac.getArgument(1);
@@ -348,7 +348,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -409,7 +409,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -478,7 +478,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -541,7 +541,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -602,7 +602,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
@@ -666,7 +666,7 @@ public class AdaScript {
         ScriptData changeAddressLength = sac.getArgument(1);
         ScriptData changeAddress = sac.getArgumentVariableLength(90);
         ScriptData changeValueLength = sac.getArgument(2);
-        ScriptData changeValue = sac.getArgumentVariableLength(1024);
+        ScriptData changeValue = sac.getArgumentVariableLength(2048);
 
         ScriptData feeLength = sac.getArgument(1);
         ScriptData feePrefix = sac.getArgument(1);
