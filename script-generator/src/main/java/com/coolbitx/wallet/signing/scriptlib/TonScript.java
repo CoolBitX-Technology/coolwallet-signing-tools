@@ -127,7 +127,7 @@ public class TonScript {
     }
 
     public static String TonTransferScriptSignature = Strings.padStart(
-        "304402201d35b6c97c87e8d0c23b50563b37777e50b0294e3145ec0a3c5fd254999bb42402201701065dcd9e91d3c479958e2b24280a589e21f44164fc24085141b6a69ad2bd",
+        "3045022100de086deb9f808ca2e79fc65bd997f4e2aea14ae4e4248391e44a8bd88366d80c02201b8cadd8f7febf0354944fb14e7df84ae173c94640dbc1f414e9cc449551a8a7",
         144, '0');
 
     public static String getTonTokenTransferScript() {
@@ -306,7 +306,7 @@ public class TonScript {
     }
 
     public static String TonTokenTransferScriptSignature = Strings.padStart(
-        "3046022100ee69e94e39ef7095ab2a6d2b20ba04a8ab0eaf9718064ef5a7cba213e7d06396022100e32a7680029a1581f07d6f152e53b03b3ede74492559bfb8de1a26c6be8539aa",
+        "3046022100d0630cfe9475864419a624f7e1ea27a4641002d727585251a68954cd5e1062c7022100bbbd3c7ba8994033428fbadd1008141956bd969acba7d565d2fccb72104f71cc",
         144, '0');
 
     public static String getTonTokenTransferBlindScript() {
@@ -452,6 +452,6 @@ public class TonScript {
     }
 
     public static String TonTokenTransferBlindScriptSignature = Strings.padStart(
-        "3046022100dec0d0eeb203bba1d842868db59088e9efec3de630bc4b82dc223123d76857830221009f7de912cc81ef28c5fe5512be2f641b807ab63ef297f7d26cf3e9dd4bd53ebc",
+        "304502210083a872e9a8e0b2b2a5da839847f95f2a071a4ab5cf3c2b2b013e01c65aa13220022053390a033c4967a79a47ddd462cb4506c2ff3986f6fa30810395622c9c8e0d84",
         144, '0');
 }
