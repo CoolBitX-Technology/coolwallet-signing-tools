@@ -256,7 +256,7 @@ public class XrpScript {
             .showMessage("XRP")
             .showMessage("TRUST")
             .ifSigned(argTokenInfoEntry, "",
-                new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
+                new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE1).getScript())
             .setBufferInt(ScriptData.getBuffer(Buffer.CACHE1, 0, 1), 1, 7)
             .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 1, ScriptData.bufInt), Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1, 48))
@@ -277,7 +277,7 @@ public class XrpScript {
     }
 
     public static String XRPTrustSetNewScriptSignature = Strings.padStart(
-        "304402200bd61b116aa54d49529dfe6fb731babc18f0f70f367c6cc46fbc2aaa00aa52cb022009f9db489195d41449abc4a009454a06f635e0b544befa27ab4b331c57e271a6",
+        "3045022100947549f82cc152b67d084bbd05d93f3a16130abf9d06d8ce5529df31ca844b4d02200db10fcb774db8fce786855ee689c995c5f0653ba00aacedb4a98a05c9bad7d3",
         144, '0');
 
     public static String getXRPIOURLUSDScript() {
