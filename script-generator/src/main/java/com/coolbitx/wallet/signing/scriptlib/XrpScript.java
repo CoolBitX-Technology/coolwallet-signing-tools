@@ -27,7 +27,7 @@ public class XrpScript {
         System.out.println("XRP new script: \n" + getXRPNewScript() + "\n");
         System.out.println("XRP sign message script: \n" + getXRPMessageScript() + "\n");
         System.out.println("XRP IOU RLUSD trust set script: \n" + getXRPRLUSDTrustSetScript() + "\n");
-        System.out.println("XRP IOU trust set script: \n" + getXRPTrustSetScript() + "\n");
+        System.out.println("XRP IOU trust set new script: \n" + getXRPTrustSetNewScript() + "\n");
         System.out.println("XRP IOU RLUSD tx script: \n" + getXRPIOURLUSDScript() + "\n");
         System.out.println("XRP IOU new tx script: \n" + getXRPIOUNewScript() + "\n");
     }
@@ -217,7 +217,7 @@ public class XrpScript {
         "304502200751b793863ee64da47c7352cabda8a7be3ae63d10e75cb543d16c40bce60480022100d631f5d53d233516b86dae5c4a523973894ca28655af391e1b3d03f0279b31df",
         144, '0');
 
-    public static String getXRPTrustSetScript() {
+    public static String getXRPTrustSetNewScript() {
         ScriptRlpArray array = new ScriptRlpArray();
         ScriptRlpData argFlags = array.getRlpItemArgument(); // 4 bytes or null
         ScriptRlpData argSequence = array.getRlpItemArgument(); // 4 bytes
@@ -228,7 +228,9 @@ public class XrpScript {
         ScriptRlpData argPublicKey = array.getRlpItemArgument(); // 33 bytes
         ScriptRlpData argAccount = array.getRlpItemArgument(); // 20 bytes
         // IOU Info
-        ScriptRlpData argTokenInfo = array.getRlpItemArgument(); // 48 bytes[nameLength(1B)][name(padding zero)(7B)][tokenCode(20B)][issuerAccount(20B)]
+        ScriptRlpArray argTokenInfoEntry = array.getRlpArrayArgument();
+        ScriptRlpData argTokenInfo = argTokenInfoEntry.getRlpItemArgument(); // 48 bytes[nameLength(1B)][name(padding zero)(7B)][tokenCode(20B)][issuerAccount(20B)]
+        ScriptRlpData argTokenInfoSign = argTokenInfoEntry.getRlpItemArgument(); // signature, front-padded with zero to 72 bytes
 
         String script = new ScriptAssembler().setCoinType(0x90)
             .copyString("53545800")
@@ -253,7 +255,8 @@ public class XrpScript {
             .copyArgument(argAccount)
             .showMessage("XRP")
             .showMessage("TRUST")
-            .copyString(HexUtil.toHexString("@"), Buffer.CACHE1)
+            .ifSigned(argTokenInfoEntry, "",
+                new ScriptAssembler().copyString(HexUtil.toHexString("@"), Buffer.CACHE2).getScript())
             .setBufferInt(ScriptData.getBuffer(Buffer.CACHE1, 0, 1), 1, 7)
             .copyArgument(ScriptData.getBuffer(Buffer.CACHE1, 1, ScriptData.bufInt), Buffer.CACHE1)
             .showMessage(ScriptData.getDataBufferAll(Buffer.CACHE1, 48))
@@ -273,9 +276,7 @@ public class XrpScript {
         return script;
     }
 
-    public static String XRPTrustSetScriptSignature = Strings.padStart(
-        "3046022100a13acf6e4e0be56b54a11ff62988c51cec49b8fa2fcf27fd81ab705f0f26855c022100e5f04deaaa0e431447f4defe11b15f24df7a95266efb55956029b07491d2da71",
-        144, '0');
+    public static String XRPTrustSetNewScriptSignature = Strings.padEnd("FA", 144, '0');
 
     public static String getXRPIOURLUSDScript() {
         ScriptRlpArray array = new ScriptRlpArray();
