@@ -276,7 +276,9 @@ public class XrpScript {
         return script;
     }
 
-    public static String XRPTrustSetNewScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String XRPTrustSetNewScriptSignature = Strings.padStart(
+        "304402200bd61b116aa54d49529dfe6fb731babc18f0f70f367c6cc46fbc2aaa00aa52cb022009f9db489195d41449abc4a009454a06f635e0b544befa27ab4b331c57e271a6",
+        144, '0');
 
     public static String getXRPIOURLUSDScript() {
         ScriptRlpArray array = new ScriptRlpArray();
@@ -465,6 +467,8 @@ public class XrpScript {
         return script;
     }
 
-    public static String XRPIOUNewScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String XRPIOUNewScriptSignature = Strings.padStart(
+        "3045022009186c9a45c9eea3b1068471b082867ec9113e4c855ea059690c60a5b18abca4022100b599ff41b122c13bd7b71eccbccf063560fe2f99493e6c9a583b296845ac8c67",
+        144, '0');
 
 }
