@@ -176,19 +176,19 @@ public class ScriptAssembler {
         } else if (dataBuf instanceof ScriptData) {
             ScriptData dataBuf_ = (ScriptData) dataBuf;
             switch (dataBuf_.bufferType) {
-            case ARGUMENT:
-                firstParameter += "A";
-                break;
-            case TRANSACTION:
-                firstParameter += "7";
-                break;
-            case CACHE1:
-                firstParameter += "E";
-                break;
-            case CACHE2:
-                firstParameter += "F";
-                break;
-            default:
+                case ARGUMENT:
+                    firstParameter += "A";
+                    break;
+                case TRANSACTION:
+                    firstParameter += "7";
+                    break;
+                case CACHE1:
+                    firstParameter += "E";
+                    break;
+                case CACHE2:
+                    firstParameter += "F";
+                    break;
+                default:
                 // Throw some exceptions here.
             }
             addIntParameter(dataBuf.getBufferParameter1());
@@ -216,16 +216,16 @@ public class ScriptAssembler {
             // kept as is
         } else {
             switch (destBuf) {
-            case TRANSACTION:
-                firstParameter += "7";
-                break;
-            case CACHE1:
-                firstParameter += "E";
-                break;
-            case CACHE2:
-                firstParameter += "F";
-                break;
-            default:
+                case TRANSACTION:
+                    firstParameter += "7";
+                    break;
+                case CACHE1:
+                    firstParameter += "E";
+                    break;
+                case CACHE2:
+                    firstParameter += "F";
+                    break;
+                default:
                 // Throw some exceptions here.
             }
         }
@@ -241,40 +241,40 @@ public class ScriptAssembler {
 
     private void addIntParameter(int i) {
         switch (i) {
-        case 0:
-            firstParameter += "0";
-            break;
-        case 1:
-            firstParameter += "1";
-            break;
-        case 20:
-            firstParameter += "2";
-            break;
-        case 32:
-            firstParameter += "5";
-            break;
-        case 64:
-            firstParameter += "6";
-            break;
-        case ScriptData.bufInt:
-            firstParameter += "B";
-            break;
-        case ScriptData.max:
-            firstParameter += "9";
-            break;
-        default:
-            if (i < 0 || i >= 256) {
-                if (i < 0) {
-                    i = 0x10000 + i;
+            case 0:
+                firstParameter += "0";
+                break;
+            case 1:
+                firstParameter += "1";
+                break;
+            case 20:
+                firstParameter += "2";
+                break;
+            case 32:
+                firstParameter += "5";
+                break;
+            case 64:
+                firstParameter += "6";
+                break;
+            case ScriptData.bufInt:
+                firstParameter += "B";
+                break;
+            case ScriptData.max:
+                firstParameter += "9";
+                break;
+            default:
+                if (i < 0 || i >= 256) {
+                    if (i < 0) {
+                        i = 0x10000 + i;
+                    }
+                    firstParameter += "D";
+                    secondParameter += HexUtil.toHexString(i / 256, 1);
+                    secondParameter += HexUtil.toHexString(i % 256, 1);
+                } else {
+                    firstParameter += "C";
+                    secondParameter += HexUtil.toHexString(i, 1);
                 }
-                firstParameter += "D";
-                secondParameter += HexUtil.toHexString(i / 256, 1);
-                secondParameter += HexUtil.toHexString(i % 256, 1);
-            } else {
-                firstParameter += "C";
-                secondParameter += HexUtil.toHexString(i, 1);
-            }
-            break;
+                break;
         }
     }
 
@@ -385,23 +385,23 @@ public class ScriptAssembler {
     @Deprecated
     public ScriptAssembler btcScript(ScriptObjectAbstract scriptTypeData, int supportType, String content) {
         switch (supportType) {
-        case 2:
-            return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914").insertString(content)
-                .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
-        case 3:
-            return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014").insertString(content)
-                .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[]");
-        case 4:
-            return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014,220020")
-                // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
-                .insertString(content)
-                // switch redeemScript end
-                .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]");
-        case 79:
-            return switchString(scriptTypeData, Buffer.TRANSACTION, "3F76A914,3DA914").insertString(content)
-                .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
-        default:
-            return insertString("XX");
+            case 2:
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914").insertString(content)
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
+            case 3:
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014").insertString(content)
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[]");
+            case 4:
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "1976A914,17A914,160014,220020")
+                        // switch redeemScript P2PKH=00,P2SH=01,P2WPKH=02,P2WSH=03
+                        .insertString(content)
+                        // switch redeemScript end
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87,[],[]");
+            case 79:
+                return switchString(scriptTypeData, Buffer.TRANSACTION, "3F76A914,3DA914").insertString(content)
+                        .switchString(scriptTypeData, Buffer.TRANSACTION, "88AC,87");
+            default:
+                return insertString("XX");
         }
     }
 
@@ -584,7 +584,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler baseConvert(ScriptObjectAbstract data, Buffer destinationBuf, int outputLimit,
-        String charset, int baseConvertArg) {
+            String charset, int baseConvertArg) {
         if (outputLimit == 0) {
             outputLimit = 64;
         }
@@ -611,7 +611,7 @@ public class ScriptAssembler {
             return this;
         }
         script += compose("BA", data, destinationBuf, outputLimit, HexUtil.toInt(charsetIndex))
-            + HexUtil.toHexString(baseConvertArg, 1);
+                + HexUtil.toHexString(baseConvertArg, 1);
         return this;
     }
 
@@ -630,8 +630,8 @@ public class ScriptAssembler {
     }
 
     /**
-     * Hash data and put the output to destination buffer. 
-     * NOTE: replaced by advancedHash
+     * Hash data and put the output to destination buffer. NOTE: replaced by
+     * advancedHash
      *
      * @param data The input data.
      * @param destinationBuf The destination buffer.
@@ -650,7 +650,9 @@ public class ScriptAssembler {
     /**
      * Hash data and put the output to destination buffer
      *
-     * @param data The input data should be rlp encoded. And the first item should be the data to hash, the second item should be the context to hash.
+     * @param data The input data should be rlp encoded. And the first item
+     * should be the data to hash, the second item should be the context to
+     * hash.
      * @param destinationBuf The destination buffer.
      * @param hashType The parameter is defined in enumeration class
      * AdvancedHashType
@@ -663,7 +665,7 @@ public class ScriptAssembler {
     }
 
     public ScriptAssembler advancedHash(ScriptObjectAbstract data, ScriptObjectAbstract key, Buffer destinationBuf,
-        AdvancedHashType hashType) {
+            AdvancedHashType hashType) {
         if (version.getVersionNum() < 10) {
             version = versionType.version10;
         }
@@ -740,8 +742,8 @@ public class ScriptAssembler {
     public ScriptAssembler setBufferInt(ScriptObjectAbstract data, int min, int max) {
         String setB = compose("B5", data, null, 0, 0);
         script += new ScriptAssembler()
-            .ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError)
-            .getScript() + setB;
+                .ifRange(data, HexUtil.toHexString(min, 1), HexUtil.toHexString(max, 1), "", throwSEError)
+                .getScript() + setB;
         return this;
     }
 
@@ -812,7 +814,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler ifEqual(ScriptObjectAbstract argData, String expect, String trueStatement,
-        String falseStatement) {
+            String falseStatement) {
         boolean restore = false;
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
@@ -828,7 +830,7 @@ public class ScriptAssembler {
             }
         }
         script += compose("1A", argData, null, trueStatement.length() / 2, 0)
-            + HexUtil.rightJustify(expect, Math.abs(argData.getBufferParameter2())) + trueStatement + falseStatement;
+                + HexUtil.rightJustify(expect, Math.abs(argData.getBufferParameter2())) + trueStatement + falseStatement;
         if (restore) {
             argData.setBufferParameter2(argDataLength);
         }
@@ -864,7 +866,7 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler ifRange(ScriptObjectAbstract argData, String min, String max, String trueStatement,
-        String falseStatement) {
+            String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
@@ -879,7 +881,7 @@ public class ScriptAssembler {
             }
         }
         script += compose("12", argData, null, trueStatement.length() / 2, 0) + HexUtil.rightJustify(min, compareLength)
-            + HexUtil.rightJustify(max, compareLength) + trueStatement + falseStatement;
+                + HexUtil.rightJustify(max, compareLength) + trueStatement + falseStatement;
         return this;
     }
 
@@ -896,12 +898,22 @@ public class ScriptAssembler {
      * @return
      */
     public ScriptAssembler ifSigned(ScriptObjectAbstract argData, ScriptData argSign, String trueStatement,
-        String falseStatement) {
+            String falseStatement) {
         if (!falseStatement.equals("")) {
             trueStatement += skip(falseStatement);
         }
         script += compose("11", argData, null, trueStatement.length() / 2, argSign.getBufferParameter1())
-            + trueStatement + falseStatement;
+                + trueStatement + falseStatement;
+        return this;
+    }
+
+    public ScriptAssembler ifSigned(ScriptArrayAbstract argData, String trueStatement,
+            String falseStatement) {
+        if (!falseStatement.equals("")) {
+            trueStatement += skip(falseStatement);
+        }
+        script += compose("11", argData, null, trueStatement.length() / 2, 0)
+                + trueStatement + falseStatement;
         return this;
     }
 
@@ -947,7 +959,7 @@ public class ScriptAssembler {
      */
     public ScriptAssembler showWrap(String data0, String data1) {
         script += compose("D2", null, null, data0.length(), data1.length()) + HexUtil.toHexString(data0)
-            + HexUtil.toHexString(data1);
+                + HexUtil.toHexString(data1);
         return this;
         // }
     }
