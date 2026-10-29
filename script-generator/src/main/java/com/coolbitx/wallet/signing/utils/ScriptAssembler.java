@@ -140,7 +140,7 @@ public class ScriptAssembler {
     public static enum versionType {
         version00(0, "00"), version02(2, "02"), version03(3, "03"), version04(4, "04"), version05(5, "05"),
         version06(6, "06"), version07(7, "07"), version08(8, "08"), version09(9, "09"), version10(10, "0A"),
-        version11(11, "0B");
+        version11(11, "0B"), version13(13, "0D");
 
         private final int versionNum;
         private final String versionLabel;
@@ -529,6 +529,18 @@ public class ScriptAssembler {
             version = versionType.version07;
         }
         script += compose("C4", null, Buffer.TRANSACTION, 2, 0);
+        return this;
+    }
+
+    /**
+     * Start the UTXO section: the script stops here, and the SE runs the rest of
+     * the script once per UTXO (80AA).
+     */
+    public ScriptAssembler utxoSection() {
+        if (version.getVersionNum() < 13) {
+            version = versionType.version13;
+        }
+        script += compose("C9", null, null, 0, 0);
         return this;
     }
 
