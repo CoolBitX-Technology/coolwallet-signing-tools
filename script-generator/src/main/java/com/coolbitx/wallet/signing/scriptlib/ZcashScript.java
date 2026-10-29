@@ -44,6 +44,10 @@ public class ZcashScript {
         System.out.println("Zcash v5 transparent transaction: \n" + getZECV5Script(false) + "\n");
     }
 
+    /**
+     * @deprecated Used only by the v4 script; remove with getZECScript.
+     */
+    @Deprecated
     public static String getAddressScript(boolean isTestnet, ScriptObjectAbstract argOutputScriptType,
         ScriptObjectAbstract argOutputDest) {
         String addressScript = new ScriptAssembler()
@@ -57,6 +61,11 @@ public class ZcashScript {
         return addressScript;
     }
 
+    /**
+     * @deprecated v4 transactions are no longer valid once NU7 activates (around 2026-11-05); remove after that, along
+     * with getAddressScript and ZECScriptSignature. Use getZECV5Script.
+     */
+    @Deprecated
     public static String getZECScript(boolean isTestnet) {
         ScriptRlpArray array = new ScriptRlpArray();
         ScriptRlpData argReverseVersion = array.getRlpItemArgument();
@@ -157,7 +166,7 @@ public class ZcashScript {
         ScriptRlpData argLockTime = array.getRlpItemArgument();
         ScriptRlpData argExpiryHeight = array.getRlpItemArgument();
 
-        String addressScript = getAddressScript(isTestnet, argOutputScriptType, argOutputDest);
+        String addressScript = getV5AddressScript(isTestnet, argOutputScriptType, argOutputDest);
 
         String script = new ScriptAssembler().setCoinType(0x85)
             // T.1 header digest
@@ -175,7 +184,8 @@ public class ZcashScript {
             .baseConvert(argOutputAmount, Buffer.CACHE1, 8, ScriptAssembler.binaryCharset, ScriptAssembler.littleEndian)
             // switch redeemScript P2PKH=00,P2SH=01
             .switchString(argOutputScriptType, Buffer.CACHE1, "1976A914,17A914")
-            .copyArgument(argOutputDest, Buffer.CACHE1)
+            // the same 20 bytes as the address shown (getV5AddressScript)
+            .baseConvert(argOutputDest, Buffer.CACHE1, 20, ScriptAssembler.binaryCharset, 0)
             .switchString(argOutputScriptType, Buffer.CACHE1, "88AC,87")
             // if haveChange
             .ifEqual(argHaveChange, "01",
@@ -264,8 +274,29 @@ public class ZcashScript {
             .getScript();
     }
 
-    public static String ZECV5ScriptSignature = Strings.padStart("304502206eca55bc35151e5bfb7f56024ce1ccc59672877b2397e87d58c496591edf8993022100ccdd3045fbb39565e9cfbc954dee22a2785723c8d174d5feca67f9f9e01463c1", 144, '0');
+    /**
+     * Like getAddressScript, but the destination is converted to exactly 20 bytes (longer: 6B02) instead of copied as
+     * is. The address shows only the first 26 bytes of prefix | destination | checksum, so a longer destination would
+     * let the host choose the checksum shown and put bytes in the outputs digest that the user never sees.
+     */
+    private static String getV5AddressScript(boolean isTestnet, ScriptObjectAbstract argOutputScriptType,
+        ScriptObjectAbstract argOutputDest) {
+        return new ScriptAssembler()
+            .switchString(argOutputScriptType, Buffer.CACHE2, !isTestnet ? "1CB8,1CBD" : "1D25,1CBA") // t1,t3:tm,t2
+            .baseConvert(argOutputDest, Buffer.CACHE2, 20, ScriptAssembler.binaryCharset, 0)
+            .hash(ScriptData.getDataBufferAll(Buffer.CACHE2), Buffer.CACHE2, ScriptAssembler.HashType.DoubleSHA256)
+            .baseConvert(ScriptData.getBuffer(Buffer.CACHE2, 0, 26), Buffer.CACHE1, 0, ScriptAssembler.base58Charset,
+                ScriptAssembler.zeroInherit)
+            .showAddress(ScriptData.getDataBufferAll(Buffer.CACHE1))
+            .getScript();
+    }
 
-    public static String ZECScriptSignature = Strings.padStart("3046022100eebe7b79978d11b265ceb3977a683df311d7d3a4844fc513a611d8ea20fb6d42022100ea45cb25c9aa448d693ec06334ee47a90f5dfdf84e868198cf957754c4547213", 144, '0');
+    public static String ZECV5ScriptSignature = Strings.padStart("304502202a197556ad97eed71cb6c7166f08e7fd513e396821506ec34848e04ba774680e022100a7f347ecb608a3e0a1afb344d133e25e0eb67fb25d185d067dc2a4c642a1dd22", 144, '0');
+
+    /**
+     * @deprecated The signature of the v4 script; remove with getZECScript.
+     */
+    @Deprecated
+    public static String ZECScriptSignature =Strings.padStart("3046022100eebe7b79978d11b265ceb3977a683df311d7d3a4844fc513a611d8ea20fb6d42022100ea45cb25c9aa448d693ec06334ee47a90f5dfdf84e868198cf957754c4547213", 144, '0');
 
 }
