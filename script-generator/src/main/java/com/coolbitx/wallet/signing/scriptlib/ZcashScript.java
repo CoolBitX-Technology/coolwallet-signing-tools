@@ -264,7 +264,7 @@ public class ZcashScript {
             .getScript();
     }
 
-    public static String ZECV5ScriptSignature = Strings.padEnd("FA", 144, '0');
+    public static String ZECV5ScriptSignature = Strings.padStart("304502206eca55bc35151e5bfb7f56024ce1ccc59672877b2397e87d58c496591edf8993022100ccdd3045fbb39565e9cfbc954dee22a2785723c8d174d5feca67f9f9e01463c1", 144, '0');
 
     public static String ZECScriptSignature = Strings.padStart("3046022100eebe7b79978d11b265ceb3977a683df311d7d3a4844fc513a611d8ea20fb6d42022100ea45cb25c9aa448d693ec06334ee47a90f5dfdf84e868198cf957754c4547213", 144, '0');
 
